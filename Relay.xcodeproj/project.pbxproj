@@ -693,7 +693,7 @@
 		7D2CD64E214C3C9C004E957A /* hello.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5E2044AAB400CD42F8 /* hello.aifc */; };
 		7D2CD64F214C3C9C004E957A /* hello-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A632044AAB400CD42F8 /* hello-quiet.aifc */; };
 		7D2CD650214C3C9C004E957A /* input.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A602044AAB400CD42F8 /* input.aifc */; };
-		7D2CD651214C3C9C004E957A /* forsta_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D7705C72114E5C300B40BB9 /* forsta_splash.png */; };
+		7D2CD651214C3C9C004E957A /* forsta_splash2.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D7705C72114E5C300B40BB9 /* forsta_splash2.png */; };
 		7D2CD652214C3C9C004E957A /* input-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A732044AAB600CD42F8 /* input-quiet.aifc */; };
 		7D2CD653214C3C9C004E957A /* keys.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A612044AAB400CD42F8 /* keys.aifc */; };
 		7D2CD654214C3C9C004E957A /* keys-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5D2044AAB400CD42F8 /* keys-quiet.aifc */; };
@@ -748,7 +748,7 @@
 		7D7705C02114CD4B00B40BB9 /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4509E7991DD653700025A59F /* WebRTC.framework */; };
 		7D7705C42114D8E700B40BB9 /* ValidationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7705C12114D8E600B40BB9 /* ValidationViewController.swift */; };
 		7D7705C52114D8E700B40BB9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7705C22114D8E600B40BB9 /* LoginViewController.swift */; };
-		7D7705C82114E5C300B40BB9 /* forsta_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D7705C72114E5C300B40BB9 /* forsta_splash.png */; };
+		7D7705C82114E5C300B40BB9 /* forsta_splash2.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D7705C72114E5C300B40BB9 /* forsta_splash2.png */; };
 		7D7DBD12215DB50200AE6C7F /* AnnouncementDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7DBD10215DB50200AE6C7F /* AnnouncementDetailViewController.m */; };
 		7D7DBD13215DB50200AE6C7F /* AnnouncementDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7DBD10215DB50200AE6C7F /* AnnouncementDetailViewController.m */; };
 		7D7DBD14215DB50200AE6C7F /* FLAnnouncementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7DBD11215DB50200AE6C7F /* FLAnnouncementViewController.m */; };
@@ -1518,7 +1518,7 @@
 		7D7121012118D7E800C56034 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		7D7705C12114D8E600B40BB9 /* ValidationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationViewController.swift; sourceTree = "<group>"; };
 		7D7705C22114D8E600B40BB9 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		7D7705C72114E5C300B40BB9 /* forsta_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forsta_splash.png; sourceTree = "<group>"; };
+		7D7705C72114E5C300B40BB9 /* forsta_splash2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forsta_splash2.png; sourceTree = "<group>"; };
 		7D7DBD0E215DB50200AE6C7F /* AnnouncementDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnnouncementDetailViewController.h; sourceTree = "<group>"; };
 		7D7DBD0F215DB50200AE6C7F /* FLAnnouncementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnnouncementViewController.h; sourceTree = "<group>"; };
 		7D7DBD10215DB50200AE6C7F /* AnnouncementDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnnouncementDetailViewController.m; sourceTree = "<group>"; };
@@ -2797,7 +2797,7 @@
 		B633C4FD1A1D190B0059AC12 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				7D7705C72114E5C300B40BB9 /* forsta_splash.png */,
+				7D7705C72114E5C300B40BB9 /* forsta_splash2.png */,
 				AD83FF461A73428300B5C81A /* audio_play_button_blue.png */,
 				AD83FF381A73426500B5C81A /* audio_pause_button_blue.png */,
 				AD83FF391A73426500B5C81A /* audio_pause_button_blue@2x.png */,
@@ -3513,7 +3513,7 @@
 				7D2CD64E214C3C9C004E957A /* hello.aifc in Resources */,
 				7D2CD64F214C3C9C004E957A /* hello-quiet.aifc in Resources */,
 				7D2CD650214C3C9C004E957A /* input.aifc in Resources */,
-				7D2CD651214C3C9C004E957A /* forsta_splash.png in Resources */,
+				7D2CD651214C3C9C004E957A /* forsta_splash2.png in Resources */,
 				7D2CD652214C3C9C004E957A /* input-quiet.aifc in Resources */,
 				7D2CD653214C3C9C004E957A /* keys.aifc in Resources */,
 				7D2CD654214C3C9C004E957A /* keys-quiet.aifc in Resources */,
@@ -3602,7 +3602,7 @@
 				45B74A772044AAB600CD42F8 /* hello.aifc in Resources */,
 				45B74A7C2044AAB600CD42F8 /* hello-quiet.aifc in Resources */,
 				45B74A792044AAB600CD42F8 /* input.aifc in Resources */,
-				7D7705C82114E5C300B40BB9 /* forsta_splash.png in Resources */,
+				7D7705C82114E5C300B40BB9 /* forsta_splash2.png in Resources */,
 				45B74A8C2044AAB600CD42F8 /* input-quiet.aifc in Resources */,
 				45B74A7A2044AAB600CD42F8 /* keys.aifc in Resources */,
 				45B74A762044AAB600CD42F8 /* keys-quiet.aifc in Resources */,
