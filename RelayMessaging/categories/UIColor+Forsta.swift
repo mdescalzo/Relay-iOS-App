@@ -43,7 +43,7 @@ extension UIColor {
                  UIColor.FL_darkBlue2(),
                  UIColor.FL_mediumDarkBlue2(),
                  UIColor.FL_mediumBlue2(),
-                 UIColor.FL_mediumLightBlue2(),
+//                 UIColor.FL_mediumLightBlue2(),
 //                 UIColor.FL_lightBlue2(),
 //                 UIColor.FL_lightYellow(),
                  UIColor.FL_mediumLightYellow(),
@@ -91,24 +91,65 @@ extension UIColor {
     }
     
     public class func FL_darkGreen() -> UIColor {
-        return UIColor.color(hex: "#919904")
+        return UIColor.color(hex: "#08721f")
     }
     
     public class func FL_mediumDarkGreen() -> UIColor {
-        return UIColor.color(hex: "#90B718")
+        return UIColor.color(hex: "#089d1f")
     }
     
     public class func FL_mediumGreen() -> UIColor {
-        return UIColor.color(hex: "#AFD23F")
+        return UIColor.color(hex: "#83ce21")
     }
     
     public class func FL_mediumLightGreen() -> UIColor {
-        return UIColor.color(hex: "#BED868")
+        return UIColor.color(hex: "#a5d759")
     }
     
     public class func FL_lightGreen() -> UIColor {
-        return UIColor.color(hex: "#DEEF95")
+        return UIColor.color(hex: "#a2dc6c")
     }
+
+//    public class func FL_darkGreen() -> UIColor {
+//        return UIColor.color(hex: "#0f6327")
+//    }
+//
+//    public class func FL_mediumDarkGreen() -> UIColor {
+//        return UIColor.color(hex: "#0f9f27")
+//    }
+//
+//    public class func FL_mediumGreen() -> UIColor {
+//        return UIColor.color(hex: "#59c323")
+//    }
+//
+//    public class func FL_mediumLightGreen() -> UIColor {
+//        return UIColor.color(hex: "#64c214")
+//    }
+//
+//    public class func FL_lightGreen() -> UIColor {
+//        return UIColor.color(hex: "#a9de54")
+//    }
+
+    
+//    public class func FL_darkGreen() -> UIColor {
+//        return UIColor.color(hex: "#919904")
+//    }
+//
+//    public class func FL_mediumDarkGreen() -> UIColor {
+//        return UIColor.color(hex: "#90B718")
+//    }
+//
+//    public class func FL_mediumGreen() -> UIColor {
+//        return UIColor.color(hex: "#AFD23F")
+//    }
+//
+//    public class func FL_mediumLightGreen() -> UIColor {
+//        return UIColor.color(hex: "#BED868")
+//    }
+//
+//    public class func FL_lightGreen() -> UIColor {
+//        return UIColor.color(hex: "#DEEF95")
+//    }
     
     public class func FL_darkRed() -> UIColor {
         return UIColor.color(hex: "#9A4422")
@@ -135,19 +176,19 @@ extension UIColor {
     }
     
     public class func FL_mediumDarkBlue1() -> UIColor {
-        return UIColor.color(hex: "#0a76af")
+        return UIColor.color(hex: "#0f5a84")
     }
     
     public class func FL_mediumBlue1() -> UIColor {
-        return UIColor.color(hex: "#2bace2")
+        return UIColor.color(hex: "#0f759f")
     }
     
     public class func FL_mediumLightBlue1() -> UIColor {
-        return UIColor.color(hex: "#6abde9")
+        return UIColor.color(hex: "#1e8cbb")
     }
     
     public class func FL_lightBlue1() -> UIColor {
-        return UIColor.color(hex: "#9ccce0")
+        return UIColor.color(hex: "#61a8d4")
     }
     
     public class func FL_darkBlue2() -> UIColor {
