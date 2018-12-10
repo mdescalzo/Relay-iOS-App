@@ -85,7 +85,7 @@ class ControlMessageManager : NSObject
     static private func handleCallOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard #available(iOS 10.0, *) else {
-            Logger.info("\(self.tag): Ignoring callOffer controler message due to iOS version.")
+            Logger.info("\(self.tag): Ignoring callOffer control message due to iOS version.")
             return
         }
         
@@ -103,6 +103,10 @@ class ControlMessageManager : NSObject
         let peerId = dataBlob?.object(forKey: "peerId") as? String
         let offer = dataBlob?.object(forKey: "offer") as? NSDictionary
         
+        guard originator != TSAccountManager.localUID() else {
+            Logger.info("\(self.tag): Ignoring callOffer control message from self.")
+            return
+        }
         
         guard threadId != nil && callId != nil && members != nil && originator != nil && peerId != nil && offer != nil else {
             Logger.debug("Received callOffer message missing required objects.")
