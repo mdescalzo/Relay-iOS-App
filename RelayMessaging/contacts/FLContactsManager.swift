@@ -70,7 +70,7 @@ import RelayServiceKit
         
         var cacheKey: NSString? = nil
         
-        let useGravatars: Bool = Environment.preferences().useGravatars
+        let useGravatars: Bool = Environment.preferences().useGravatars()
         
         if useGravatars {
             cacheKey = "gravatar:\(recipientId)" as NSString

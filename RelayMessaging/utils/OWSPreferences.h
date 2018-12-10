@@ -61,10 +61,8 @@ extern NSString *const OWSPreferencesCallLoggingDidChangeNotification;
 - (BOOL)hasGeneratedThumbnails;
 - (void)setHasGeneratedThumbnails:(BOOL)value;
 
-@property BOOL useGravatars;
-
-//-(BOOL)useGravatars;
-//-(void)setUseGravatars:(BOOL)value;
+-(BOOL)useGravatars;
+-(void)setUseGravatars:(BOOL)value;
 
 #pragma mark Callkit
 

@@ -73,10 +73,10 @@ NS_ASSUME_NONNULL_BEGIN
     [self.avatarView autoPinEdgeToSuperviewMargin:ALEdgeTop relation:NSLayoutRelationGreaterThanOrEqual];
     [self.avatarView autoPinEdgeToSuperviewMargin:ALEdgeBottom relation:NSLayoutRelationGreaterThanOrEqual];
     
-    [Environment.preferences addObserver:self
-                              forKeyPath:@"useGravatars"
-                                 options:NSKeyValueObservingOptionNew
-                                 context:NULL];
+//    [Environment.preferences addObserver:self
+//                              forKeyPath:@"useGravatars"
+//                                 options:NSKeyValueObservingOptionNew
+//                                 context:NULL];
 
     self.nameLabel = [UILabel new];
     self.nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -508,15 +508,15 @@ NS_ASSUME_NONNULL_BEGIN
     self.nameLabel.attributedText = name;
 }
 
-#pragma mark - KVO implementation
--(void)observeValueForKeyPath:(nullable NSString *)keyPath
-                     ofObject:(nullable id)object
-                       change:(nullable NSDictionary<NSKeyValueChangeKey,id> *)change
-                      context:(nullable void *)context {
-    if ([keyPath isEqualToString:@"useGravatars"]) {
-        [self updateAvatarView];
-    }
-}
+//#pragma mark - KVO implementation
+//-(void)observeValueForKeyPath:(nullable NSString *)keyPath
+//                     ofObject:(nullable id)object
+//                       change:(nullable NSDictionary<NSKeyValueChangeKey,id> *)change
+//                      context:(nullable void *)context {
+//    if ([keyPath isEqualToString:@"useGravatars"]) {
+//        [self updateAvatarView];
+//    }
+//}
 
 @end
 
