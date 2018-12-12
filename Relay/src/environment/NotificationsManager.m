@@ -235,11 +235,15 @@
 
                    NSString *alertBodyString = @"";
 
-                   NSString *authorName = [thread title];
+                   NSString *authorName = [thread displayName];
                    switch (self.notificationPreviewType) {
                        case NotificationNamePreview:
                        case NotificationNameNoPreview:
-                           alertBodyString = [NSString stringWithFormat:@"%@: %@", authorName, messageText];
+                           if (authorName.length > 0) {
+                               alertBodyString = [NSString stringWithFormat:@"%@: %@", authorName, messageText];
+                           } else {
+                               alertBodyString = messageText;
+                           }
                            break;
                        case NotificationNoNameNoPreview:
                            alertBodyString = messageText;
