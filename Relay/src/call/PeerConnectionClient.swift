@@ -896,7 +896,8 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
                 return
             }
             guard stream.videoTracks.count > 0 else {
-                owsFail("\(strongSelf.logTag) in \(#function) didAdd stream missing stream.")
+                Logger.debug("No video track to update.")
+//                owsFail("\(strongSelf.logTag) in \(#function) didAdd stream missing stream.")
                 return
             }
             let remoteVideoTrack = stream.videoTracks[0]

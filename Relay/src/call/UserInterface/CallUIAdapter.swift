@@ -23,6 +23,7 @@ protocol CallUIAdaptee {
     func declineCall(_ call: RelayCall)
     func recipientAcceptedCall(_ call: RelayCall)
     func localHangupCall(_ call: RelayCall)
+//    func otherOwnedDeviceAnswered(_ call: RelayCall)
     func remoteDidHangupCall(_ call: RelayCall)
     func remoteBusy(_ call: RelayCall)
     func failCall(_ call: RelayCall, error: CallError)
@@ -215,6 +216,13 @@ extension CallUIAdaptee {
 
         adaptee.localHangupCall(call)
     }
+    
+//    internal func otherOwnedDeviceAnswered(_ call: RelayCall) {
+//        SwiftAssertIsOnMainThread(#function)
+//        
+//        adaptee.localHangupCall(call)
+//    }
+
 
     internal func failCall(_ call: RelayCall, error: CallError) {
         SwiftAssertIsOnMainThread(#function)

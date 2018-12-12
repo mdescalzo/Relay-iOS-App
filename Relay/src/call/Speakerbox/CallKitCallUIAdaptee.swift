@@ -375,7 +375,7 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
     func provider(_ provider: CXProvider, timedOutPerforming action: CXAction) {
         SwiftAssertIsOnMainThread(#function)
 
-        owsFail("\(TAG) Timed out \(#function) while performing \(action)")
+        Logger.debug("\(TAG) Timed out \(#function) while performing \(action)")
 
         // React to the action timeout if necessary, such as showing an error UI.
     }

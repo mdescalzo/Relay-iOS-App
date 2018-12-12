@@ -132,7 +132,7 @@ class ControlMessageManager : NSObject
     static private func handleCallAcceptOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         Logger.debug("Received callAcceptOffer message: \(message.forstaPayload)")
-
+        
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.debug("Received callAcceptOffer message with no data object.")
             return
@@ -157,9 +157,21 @@ class ControlMessageManager : NSObject
             Logger.debug("Received callAcceptOffer message without session description.")
             return
         }
+        
+        guard let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as? String else {
+            Logger.info("Received callAcceptOffer message with no threadId.")
+            return
+        }
 
+
+        // If the callAccept came from self, another device picked up.  Stop local processing.
+        guard message.authorId != TSAccountManager.localUID() else {
+            Logger.info("Received call accept offer from another device.  Ignoring")
+            return
+        }
+        
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedAnswer(forCallId: callId, peerId: peerId, sessionDescription: sdp)
+            TextSecureKitEnv.shared().callMessageHandler.receivedAnswer(withThreadId: threadId, callId: callId, peerId: peerId, sessionDescription: sdp)
         }
     }
     
@@ -168,22 +180,23 @@ class ControlMessageManager : NSObject
     {
         Logger.debug("Received callLeave message: \(message.forstaPayload)")
 
-        let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary
-        
-        guard dataBlob != nil else {
+        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.info("Received callLeave message with no data object.")
             return
         }
         
-        let callId = dataBlob?.object(forKey: "callId") as? String
+        guard let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as? String else {
+            Logger.info("Received callLeave message with no threadId.")
+            return
+        }
         
-        guard callId != nil else {
+        guard let callId = dataBlob.object(forKey: "callId") as? String else {
             Logger.info("Received callLeave message without callId.")
             return
         }
         
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedHangup(withCallId: callId!)
+            TextSecureKitEnv.shared().callMessageHandler.receivedHangup(withThreadId: threadId, callId: callId)
         }
     }
     

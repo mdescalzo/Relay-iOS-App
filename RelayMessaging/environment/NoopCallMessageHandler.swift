@@ -6,14 +6,14 @@ import RelayServiceKit
 
 @objc
 public class NoopCallMessageHandler: NSObject, OWSCallMessageHandler {
-    public func receivedAnswer(forCallId callId: String, peerId: String, sessionDescription: String) {
+    public func receivedAnswer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
         owsFail("\(self.logTag) in \(#function).")
     }
     
     public func receivedHangup(withCallId callId: String) {
         owsFail("\(self.logTag) in \(#function).")
     }
-        
+    
     public func receivedIceUpdate(withThreadId threadId: String, sessionDescription sdp: String, sdpMid: String, sdpMLineIndex: Int32) {
         owsFail("\(self.logTag) in \(#function).")
     }
@@ -38,7 +38,7 @@ public class NoopCallMessageHandler: NSObject, OWSCallMessageHandler {
         owsFail("\(self.logTag) in \(#function).")
     }
 
-    public func receivedHangup(_ hangup: OWSSignalServiceProtosCallMessageHangup, from callerId: String) {
+    public func receivedHangup(withThreadId threadId: String, callId: String) {
         owsFail("\(self.logTag) in \(#function).")
     }
 
