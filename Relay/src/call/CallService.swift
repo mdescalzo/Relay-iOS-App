@@ -1164,7 +1164,7 @@ private class SignalCallData: NSObject {
             call.callRecord = callRecord
         }
 
-        // Currently we just handle this as a hangup. But we could offer more descriptive action. e.g. DataChannel message
+        // Currently we just handle this as a hangup. But we could offer more descriptive action.
         handleLocalHungupCall(call)
     }
 

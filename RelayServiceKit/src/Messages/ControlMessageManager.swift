@@ -85,7 +85,7 @@ class ControlMessageManager : NSObject
     static private func handleCallOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard #available(iOS 10.0, *) else {
-            Logger.info("\(self.tag): Ignoring callOffer controler message due to iOS version.")
+            Logger.info("\(self.tag): Ignoring callOffer control message due to iOS version.")
             return
         }
         
@@ -103,6 +103,10 @@ class ControlMessageManager : NSObject
         let peerId = dataBlob?.object(forKey: "peerId") as? String
         let offer = dataBlob?.object(forKey: "offer") as? NSDictionary
         
+        guard originator != TSAccountManager.localUID() else {
+            Logger.info("\(self.tag): Ignoring callOffer control message from self.")
+            return
+        }
         
         guard threadId != nil && callId != nil && members != nil && originator != nil && peerId != nil && offer != nil else {
             Logger.debug("Received callOffer message missing required objects.")
@@ -128,7 +132,7 @@ class ControlMessageManager : NSObject
     static private func handleCallAcceptOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         Logger.debug("Received callAcceptOffer message: \(message.forstaPayload)")
-
+        
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.debug("Received callAcceptOffer message with no data object.")
             return
@@ -153,9 +157,21 @@ class ControlMessageManager : NSObject
             Logger.debug("Received callAcceptOffer message without session description.")
             return
         }
+        
+        guard let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as? String else {
+            Logger.info("Received callAcceptOffer message with no threadId.")
+            return
+        }
 
+
+        // If the callAccept came from self, another device picked up.  Stop local processing.
+        guard message.authorId != TSAccountManager.localUID() else {
+            Logger.info("Received call accept offer from another device.  Ignoring")
+            return
+        }
+        
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedAnswer(forCallId: callId, peerId: peerId, sessionDescription: sdp)
+            TextSecureKitEnv.shared().callMessageHandler.receivedAnswer(withThreadId: threadId, callId: callId, peerId: peerId, sessionDescription: sdp)
         }
     }
     
@@ -164,22 +180,23 @@ class ControlMessageManager : NSObject
     {
         Logger.debug("Received callLeave message: \(message.forstaPayload)")
 
-        let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary
-        
-        guard dataBlob != nil else {
+        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.info("Received callLeave message with no data object.")
             return
         }
         
-        let callId = dataBlob?.object(forKey: "callId") as? String
+        guard let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as? String else {
+            Logger.info("Received callLeave message with no threadId.")
+            return
+        }
         
-        guard callId != nil else {
+        guard let callId = dataBlob.object(forKey: "callId") as? String else {
             Logger.info("Received callLeave message without callId.")
             return
         }
         
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedHangup(withCallId: callId!)
+            TextSecureKitEnv.shared().callMessageHandler.receivedHangup(withThreadId: threadId, callId: callId)
         }
     }
     
