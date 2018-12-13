@@ -155,7 +155,9 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     // acceptable.
     [TSOutgoingMessage.dbMigrationConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         TSThread *thread = [self threadWithTransaction:transaction];
-        recipientIds = [thread participantIds];
+        NSMutableArray *participants = thread.participantIds.mutableCopy;
+        [participants removeObject:TSAccountManager.localUID];
+        recipientIds = [NSArray arrayWithArray:participants];
     }];
 
     NSNumber *_Nullable wasDelivered = [coder decodeObjectForKey:@"wasDelivered"];
@@ -315,7 +317,10 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
             localUID,
         ];
     } else {
-        recipientIds = [thread participantIds];
+        NSMutableArray *participants = thread.participantIds.mutableCopy;
+        NSString *localId = TSAccountManager.localUID;
+        [participants removeObject:TSAccountManager.localUID];
+        recipientIds = [NSArray arrayWithArray:participants];
     }
     for (NSString *recipientId in recipientIds) {
         TSOutgoingMessageRecipientState *recipientState = [TSOutgoingMessageRecipientState new];
