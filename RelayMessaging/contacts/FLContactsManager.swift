@@ -109,7 +109,7 @@ import RelayServiceKit
                                                  diameter: 128,
                                                  contactsManager: self).build()
             recipient.defaultImage = image
-            recipient.save()
+            self.save(recipient: recipient)
         }
         self.avatarCache.setObject(image!, forKey: cacheKey!)
         return image
@@ -259,7 +259,7 @@ import RelayServiceKit
                                         self.readWriteConnection .asyncReadWrite({ (transaction) in
                                             for userDict: Dictionary<String, Any> in resultsArray {
                                                 if let recipient: RelayRecipient = self.recipient(fromDictionary: userDict, transaction: transaction){
-                                                    recipient.save(with: transaction)
+                                                    self.save(recipient: recipient, with: transaction)
                                                 }
                                             }
                                         })
@@ -273,18 +273,14 @@ import RelayServiceKit
     @objc public func tag(withId uuid: String) -> FLTag? {
         
         // Check the cache
-        var atag:FLTag? = tagCache.object(forKey: uuid as NSString)
-        
-        // Check the db
-        if atag == nil {
-            self.readWriteConnection.read { (transaction) in
-                atag = self.tag(withId: uuid, transaction: transaction)
-                if atag != nil {
-                    self.tagCache.setObject(atag!, forKey: atag?.uniqueId as! NSString);
-                }
-            }
+        if let atag:FLTag = tagCache.object(forKey: uuid as NSString) {
+            return atag
+        } else if let atag = self.tag(withId: uuid) {
+            self.tagCache.setObject(atag, forKey: atag.uniqueId as NSString);
+            return atag
+        } else {
+            return nil
         }
-        return atag
     }
     
     @objc public func tag(withId uuid: String, transaction: YapDatabaseReadTransaction) -> FLTag? {
@@ -393,9 +389,9 @@ import RelayServiceKit
             Logger.error("Attempt to create recipient with a nil tag!  Recipient: \(recipient.uniqueId)")
             self.remove(recipient: recipient, with: transaction)
             return nil
-//        } else {
-//            Logger.debug("Saving updated recipient: \(recipient.uniqueId)")
-//            self.save(recipient: recipient, with: transaction)
+        } else {
+            Logger.debug("Saving updated recipient: \(recipient.uniqueId)")
+            self.save(recipient: recipient, with: transaction)
         }
         
         return recipient
@@ -412,7 +408,6 @@ import RelayServiceKit
     }
     
     private func validateNonOrgRecipients() {
-        
         let nonOrgRecipients = RelayRecipient.allObjectsInCollection().filter() {
             if let recipient = ($0 as? RelayRecipient) {
                 return (recipient.orgID != TSAccountManager.selfRecipient().orgID ||
@@ -421,10 +416,17 @@ import RelayServiceKit
             } else {
                 return false
             }
+            } as! [RelayRecipient]
+        
+        if nonOrgRecipients.count > 0 {
+            var recipientIds = [String]()
+            for recipient in nonOrgRecipients {
+                recipientIds.append(recipient.uniqueId)
+            }
+            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                                 object: self,
+                                                                 userInfo: ["userIds" : recipientIds])
         }
-        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                             object: self,
-                                                             userInfo: ["userIds" : nonOrgRecipients])
     }
 
     
@@ -457,7 +459,7 @@ import RelayServiceKit
     }
 
     @objc public func save(recipient: RelayRecipient) {
-        self.readWriteConnection .readWrite { (transaction) in
+        self.readWriteConnection.readWrite { (transaction) in
             self.save(recipient: recipient, with: transaction)
         }
     }
@@ -466,6 +468,7 @@ import RelayServiceKit
         recipient.save(with: transaction)
         if let aTag = recipient.flTag {
             aTag.save(with: transaction)
+            self.tagCache.setObject(aTag, forKey: aTag.uniqueId as NSString)
         }
         self.recipientCache.setObject(recipient, forKey: recipient.uniqueId as NSString)
     }
@@ -599,7 +602,7 @@ import RelayServiceKit
             let cacheKey = "gravatar:\(recipientId)" as NSString
             self.avatarCache.setObject(gravatarImage, forKey: cacheKey)
             recipient.gravatarImage = gravatarImage
-            recipient.save()
+            self.save(recipient: recipient)
         }
     }
     
