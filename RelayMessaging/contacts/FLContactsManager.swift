@@ -275,7 +275,7 @@ import RelayServiceKit
         // Check the cache
         if let atag:FLTag = tagCache.object(forKey: uuid as NSString) {
             return atag
-        } else if let atag = self.tag(withId: uuid) {
+        } else if let atag = FLTag.fetch(uniqueId: uuid) {
             self.tagCache.setObject(atag, forKey: atag.uniqueId as NSString);
             return atag
         } else {
