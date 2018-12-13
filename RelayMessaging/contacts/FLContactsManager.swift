@@ -279,6 +279,9 @@ import RelayServiceKit
             self.tagCache.setObject(atag, forKey: atag.uniqueId as NSString);
             return atag
         } else {
+            // TODO: Build notification path for tag updates
+//            postNotificationNameAsync(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+//                                            object: self, userInfo: ["userIds" : [userId]])
             return nil
         }
     }
@@ -295,30 +298,25 @@ import RelayServiceKit
             // TODO: Build notification path for tag updates
 //            postNotificationNameAsync(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
 //                                            object: self, userInfo: ["userIds" : [userId]])
+            return nil
         }
-        return nil
     }
 
     @objc public func recipient(withId userId: String) -> RelayRecipient? {
-        
-        // Check the cache
-        var recipient:RelayRecipient? = recipientCache.object(forKey: userId as NSString)
-        
-        // Check the db
-        if recipient == nil {
-            self.readWriteConnection.read { (transaction) in
-                recipient = self.recipient(withId: userId, transaction: transaction)
-                if recipient != nil {
-                    self.recipientCache.setObject(recipient!, forKey: recipient?.uniqueId as! NSString);
-                }
-            }
+        if let recipient:RelayRecipient = recipientCache.object(forKey: userId as NSString) {
+            return recipient
+        } else if let recipient = RelayRecipient.fetch(uniqueId: userId) {
+            self.recipientCache.setObject(recipient, forKey: recipient.uniqueId as NSString);
+            return recipient
+        } else {
+            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                                 object: self,
+                                                                 userInfo: ["userIds" : [userId]])
+            return nil
         }
-        return recipient
     }
     
     @objc public func recipient(withId userId: String, transaction: YapDatabaseReadTransaction) -> RelayRecipient? {
-
-        // Check the cache
         if let recipient:RelayRecipient = recipientCache.object(forKey: userId as NSString) {
             return recipient
         } else if let recipient: RelayRecipient = RelayRecipient.fetch(uniqueId: userId, transaction: transaction) {
@@ -328,8 +326,8 @@ import RelayServiceKit
             NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
                                             object: self,
                                             userInfo: ["userIds" : [userId]])
+            return nil
         }
-        return nil
     }
 
     @objc public func recipient(fromDictionary userDict: Dictionary<String, Any>) -> RelayRecipient? {
