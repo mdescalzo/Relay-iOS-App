@@ -318,7 +318,6 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
         ];
     } else {
         NSMutableArray *participants = thread.participantIds.mutableCopy;
-        NSString *localId = TSAccountManager.localUID;
         [participants removeObject:TSAccountManager.localUID];
         recipientIds = [NSArray arrayWithArray:participants];
     }

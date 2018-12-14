@@ -27,30 +27,6 @@ import YapDatabase
     @objc public var isMonitor = false
     @objc public var isActive = false
     
-//    fileprivate var gravatarImageBacker: UIImage?
-//    @objc public var gravatarImage: UIImage?  {
-//        get {
-//            guard gravatarHash != nil else { return nil }
-//            
-//            guard gravatarImageBacker == nil else { return gravatarImageBacker }
-//            
-//            let gravatarURLString = String(format: RelayRecipient.kGravatarURLFormat, gravatarHash!)
-//            if let aURL = URL.init(string: gravatarURLString) {
-//                guard let gravarData = try? Data(contentsOf: aURL) else {
-//                    Logger.error("Unable to parse Gravatar image with has: \(String(describing: gravatarHash))")
-//                    return nil
-//                }
-//                
-//                if let newImage = UIImage(data: gravarData) {
-//                    gravatarImageBacker = newImage
-//                    return gravatarImageBacker
-//                }
-//            }
-//            return nil
-//        }
-//    }
-
-    
     fileprivate var _devices = NSOrderedSet()
     @objc public var devices: NSOrderedSet {
         get {
@@ -121,13 +97,13 @@ import YapDatabase
             if tagDict != nil {
                 recipient.flTag = FLTag.getOrCreateTag(with: tagDict!, transaction: transaction)
                 recipient.flTag?.recipientIds = NSCountedSet.init(array: [recipient.uniqueId])
-                if recipient.flTag?.tagDescription?.count == 0 {
+
+                if recipient.flTag?.tagDescription == nil || recipient.flTag?.tagDescription?.count == 0  {
                     recipient.flTag?.tagDescription = recipient.fullName()
                 }
-                if recipient.flTag?.orgSlug.count == 0 {
+                if recipient.flTag?.orgSlug == nil || recipient.flTag?.orgSlug.count == 0 {
                     recipient.flTag?.orgSlug = recipient.orgSlug!
                 }
-//                Environment.shared.contactsManager.saveTag(recipient?.flTag, withTransaction: transaction)
                 return recipient
             } else {
                 Logger.debug("Missing tagDictionary for Recipient: \(String(describing: recipient.uniqueId))")

@@ -228,19 +228,20 @@ const CGFloat kContactCellAvatarTextMargin = 12;
     NSString *tagId = self.tagId;
     
     if (recipientId.length > 0) {
-        UIColor *color = [Theme conversationColorForString:self.recipientId];
-        self.avatarView.image = [[[OWSContactAvatarBuilder alloc] initWithSignalId:recipientId
-                                                                             color:color
-                                                                          diameter:kContactCellAvatarSize
-                                                                   contactsManager:FLContactsManager.shared] build];
+        self.avatarView.image = [contactsManager avatarImageRecipientId:recipientId];
     } else if (tagId.length > 0) {
-        UIColor *color = [Theme conversationColorForString:self.tagId];
-        self.avatarView.image = [[[OWSContactAvatarBuilder alloc] initWithSignalId:tagId
-                                                                             color:color
-                                                                          diameter:kContactCellAvatarSize
-                                                                   contactsManager:FLContactsManager.shared] build];
+        // Hoops to make sure we use the same avatar for single recipient tags
+        FLTag *atag = [contactsManager tagWithId:tagId];
+        if (atag.recipientIds.count == 1) {
+            self.avatarView.image = [contactsManager avatarImageRecipientId:[atag.recipientIds anyObject]];
+        } else {
+            self.avatarView.image = [[[OWSContactAvatarBuilder alloc] initWithNonSignalName:atag.tagDescription
+                                                                                  colorSeed:tagId
+                                                                                   diameter:kContactCellAvatarSize
+                                                                            contactsManager:contactsManager] build];
+        }
     } else {
-        OWSFail(@"%@ recipientId should not be nil", self.logTag);
+        OWSFail(@"%@ recipientId & tagId should not be nil", self.logTag);
         self.avatarView.image = nil;
         return;
     }

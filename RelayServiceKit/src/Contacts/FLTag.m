@@ -111,9 +111,7 @@
 -(NSString *)displaySlug
 {
     NSString *slugDisplayString = [NSString stringWithFormat:@"@%@", self.slug];
-//    if (![TSAccountManager.sharedInstance.selfRecipient.flTag.orgSlug isEqualToString:self.orgSlug]) {
         slugDisplayString = [slugDisplayString stringByAppendingString:[NSString stringWithFormat:@":%@", self.orgSlug]];
-//    }
     return slugDisplayString;
 }
 
@@ -121,15 +119,6 @@
 {
     _avatar = nil;
     return _avatar;
-}
-
--(NSString *)tagDescription
-{
-    if (_tagDescription.length > 0) {
-        return _tagDescription;
-    } else {
-        return self.displaySlug;
-    }
 }
 
 + (NSString *)collection
