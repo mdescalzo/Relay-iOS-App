@@ -318,9 +318,10 @@ NS_ASSUME_NONNULL_BEGIN
                          envelope:(SSKEnvelope *)envelope
                       transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    TSThread *contactThread = [TSThread getOrCreateThreadWithId:envelope.source transaction:transaction];
+    TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID]
+                                                       transaction:transaction];
     [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForErrorMessage:errorMessage
-                                                                          thread:contactThread
+                                                                          thread:thread
                                                                      transaction:transaction];
 }
 
