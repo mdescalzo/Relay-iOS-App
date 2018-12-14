@@ -115,12 +115,15 @@ import RelayServiceKit
         return image
     }
     
+    private let serialLookupQueue = DispatchQueue(label: "contactsManagerLookupQueue")
+    
     private let readConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     private let readWriteConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     private var latestRecipientsById: [AnyHashable : Any] = [:]
     private var activeRecipientsBacker: [ RelayRecipient ] = []
     private var visibleRecipientsPredicate: NSCompoundPredicate?
     private var pendingTagIds = Set<String>()
+    private var pendingRecipientIds = Set<String>()
     private let avatarCache: NSCache<NSString, UIImage>
     private let recipientCache: NSCache<NSString, RelayRecipient>
     private let tagCache: NSCache<NSString, FLTag>
@@ -135,23 +138,7 @@ import RelayServiceKit
         tagCache = NSCache<NSString, FLTag>()
 
         super.init()
-
-        // Prepopulate the caches?
-//        DispatchQueue.global(qos: .default).async(execute: {
-//            self.readConnection.asyncRead({ transaction in
-//                RelayRecipient.enumerateCollectionObjects(with: transaction, using: { object, stop in
-//                    if let recipient = object as? RelayRecipient {
-//                        self.recipientCache.setObject(recipient, forKey: recipient.uniqueId! as NSString)
-//                    }
-//                })
-//                FLTag.enumerateCollectionObjects(with: transaction, using: { object, stop in
-//                    if let aTag = object as? FLTag {
-//                        self.tagCache.setObject(aTag, forKey: aTag.uniqueId! as NSString)
-//                    }
-//                })
-//            })
-//        })
-
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.processRecipientsBlob),
                                                name: NSNotification.Name(rawValue: FLCCSMUsersUpdated),
@@ -210,41 +197,24 @@ import RelayServiceKit
             let contact2 = obj2 as? RelayRecipient
             
             // Use lastname sorting
-//            let firstNameOrdering = false // ABPersonGetSortOrdering() == kABPersonCompositeNameFormatFirstNameFirst ? YES : NO;
-//
-//            if firstNameOrdering {
-//                return (contact1?.firstName.caseInsensitiveCompare(contact2?.firstName ?? ""))!
-//            } else {
             return (contact1?.lastName!.caseInsensitiveCompare(contact2?.lastName ?? ""))!
-//            }
-        }    }
-        
+        }
+    }
+    
     @objc public func doAfterEnvironmentInitSetup() {
     }
 
     @objc public func handleRecipientRefresh(notification: Notification) {
         if let payloadArray: Array<String> = notification.userInfo!["userIds"] as? Array<String> {
-            var lookupString: String = ""
-            for uid: String in payloadArray {
-                if UUID.init(uuidString: uid) != nil {
-                    if lookupString.count == 0 {
-                        lookupString = uid
-                    } else {
-                        lookupString.append(",\(uid)")
-                    }
-                }
-            }
-            if lookupString.count > 0 {
-                DispatchQueue.global(qos: .background).async {
-                    self.ccsmFetchRecipients(uids: lookupString)
-                }
+            self.serialLookupQueue.async {
+                self.ccsmFetchRecipients(uids: payloadArray)
             }
         }
     }
     
     @objc public func handleTagRefresh(notification: Notification) {
         if let payloadArray: Array<String> = notification.userInfo!["tagIds"] as? Array<String> {
-            DispatchQueue.global(qos: .background).async {
+            self.serialLookupQueue.async {
                 for uid: String in payloadArray {
                     self.ccsmFetchTag(tagId: uid)
                 }
@@ -270,7 +240,7 @@ import RelayServiceKit
 
         // Ensure there isn't already a lookup taking place fo this id
         guard !self.pendingTagIds.contains(tagId) else {
-            Logger.debug("Lookup pending for tagId: \(tagId)")
+            Logger.debug("Skippinig lookup for pending tagId: \(tagId)")
             return
         }
         
@@ -295,30 +265,59 @@ import RelayServiceKit
     }
 
     
-    fileprivate func ccsmFetchRecipients(uids: String) {
+    fileprivate func ccsmFetchRecipients(uids: [String]) {
         
         // must not execute on main thread
         assert(!Thread.isMainThread)
         
-        let homeURL = Bundle.main.object(forInfoDictionaryKey: "CCSM_Home_URL") as! String
-        let url = "\(homeURL)/v1/directory/user/?id_in=\(uids)"
+        var idsToLookup = [String]()
+        for uid in uids {
+            if !self.pendingRecipientIds.contains(uid) {
+                idsToLookup.append(uid)
+                self.pendingRecipientIds.insert(uid)
+            } else {
+                Logger.debug("Skipping lookup for pending id: \(uid)")
+            }
+        }
         
-        CCSMCommManager.getThing(url,
-                                 success: { (payload) in
-                                    
-                                    if let resultsArray: Array = payload?["results"] as? Array<Dictionary<String, Any>> {
-                                        self.readWriteConnection .asyncReadWrite({ (transaction) in
-                                            for userDict: Dictionary<String, Any> in resultsArray {
-                                                if let recipient = RelayRecipient.getOrCreateRecipient(withUserDictionary: userDict as NSDictionary, transaction: transaction) {
-                                                    self.save(recipient: recipient, with: transaction)
+        var lookupString: String = ""
+        for uid in idsToLookup {
+            if UUID.init(uuidString: uid) != nil {
+                if lookupString.count == 0 {
+                    lookupString = uid
+                } else {
+                    lookupString.append(",\(uid)")
+                }
+            }
+        }
+        if lookupString.count > 0 {
+            
+            let homeURL = Bundle.main.object(forInfoDictionaryKey: "CCSM_Home_URL") as! String
+            let url = "\(homeURL)/v1/directory/user/?id_in=\(uids)"
+            
+            CCSMCommManager.getThing(url,
+                                     success: { (payload) in
+                                        
+                                        if let resultsArray: Array = payload?["results"] as? Array<Dictionary<String, Any>> {
+                                            self.readWriteConnection .asyncReadWrite({ (transaction) in
+                                                for userDict: Dictionary<String, Any> in resultsArray {
+                                                    if let recipient = RelayRecipient.getOrCreateRecipient(withUserDictionary: userDict as NSDictionary, transaction: transaction) {
+                                                        self.save(recipient: recipient, with: transaction)
+                                                    }
                                                 }
-                                            }
-                                        })
-                                    }
-        }, failure: { (error) in
-            Logger.debug("CCSM User lookup failed with error: \(String(describing: error?.localizedDescription))")
-        })
-        
+                                            })
+                                        }
+                                        for uid in idsToLookup {
+                                            self.pendingRecipientIds.remove(uid)
+                                        }
+            }, failure: { (error) in
+                Logger.debug("CCSM User lookup failed with error: \(String(describing: error?.localizedDescription))")
+                for uid in idsToLookup {
+                    self.pendingRecipientIds.remove(uid)
+                }
+            })
+            
+        }
     }
     
     @objc public func tag(withId uuid: String) -> FLTag? {
