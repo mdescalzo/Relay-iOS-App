@@ -73,10 +73,10 @@ NS_ASSUME_NONNULL_BEGIN
 //                                             selector:@selector(signalAccountsDidChange:)
 //                                                 name:OWSContactsManagerSignalAccountsDidChangeNotification
 //                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(blockedPhoneNumbersDidChange:)
-                                                 name:kNSNotificationName_BlockedPhoneNumbersDidChange
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(blockedPhoneNumbersDidChange:)
+//                                                 name:kNSNotificationName_BlockedPhoneNumbersDidChange
+//                                               object:nil];
 }
 
 - (void)dealloc
@@ -103,8 +103,26 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Contacts
 -(NSArray<FLTag *> *)relayTags
 {
-    return FLContactsManager.shared.allTags;
+    if ([self.delegate respondsToSelector:@selector(shouldHideLocalNumber)] && [self.delegate shouldHideLocalNumber]) {
+        NSMutableArray<FLTag *> *tags = [FLContactsManager.shared.allTags mutableCopy];
+        [tags removeObject:TSAccountManager.selfRecipient.flTag];
+        return [NSArray arrayWithArray:tags];
+    } else {
+        return FLContactsManager.shared.allTags;
+    }
 }
+
+-(NSArray<RelayRecipient *> *)relayRecipients
+{
+    if ([self.delegate respondsToSelector:@selector(shouldHideLocalNumber)] && [self.delegate shouldHideLocalNumber]) {
+        NSMutableArray<RelayRecipient *> *recipients = [FLContactsManager.shared.allRecipients mutableCopy];
+        [recipients removeObject:TSAccountManager.selfRecipient];
+        return [NSArray arrayWithArray:recipients];
+    } else {
+        return FLContactsManager.shared.allRecipients;
+    }
+}
+
 //- (nullable SignalAccount *)fetchSignalAccountForRecipientId:(NSString *)recipientId
 //{
 //    OWSAssertIsOnMainThread();
@@ -134,27 +152,20 @@ NS_ASSUME_NONNULL_BEGIN
 //    return NO;
 //}
 
-//- (BOOL)isCurrentUser:(SignalAccount *)signalAccount
-//{
-//    OWSAssertIsOnMainThread();
-//
-//    NSString *localNumber = [TSAccountManager localUID];
-//    if ([signalAccount.recipientId isEqualToString:localNumber]) {
-//        return YES;
-//    }
-//
-//    for (PhoneNumber *phoneNumber in signalAccount.contact.parsedPhoneNumbers) {
-//        if ([[phoneNumber toE164] isEqualToString:localNumber]) {
-//            return YES;
-//        }
-//    }
-//
-//    return NO;
-//}
-
-- (NSString *)localUID
+- (BOOL)isCurrentUser:(FLTag *)relayTag
 {
-    return [TSAccountManager localUID];
+    OWSAssertIsOnMainThread();
+
+    if ([relayTag.uniqueId isEqualToString:TSAccountManager.selfRecipient.flTag.uniqueId]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+-(NSString *)localUID
+{
+    return TSAccountManager.localUID;
 }
 
 - (BOOL)isRecipientIdBlocked:(NSString *)recipientId
