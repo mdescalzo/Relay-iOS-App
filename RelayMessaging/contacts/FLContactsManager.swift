@@ -120,7 +120,7 @@ import RelayServiceKit
     private var latestRecipientsById: [AnyHashable : Any] = [:]
     private var activeRecipientsBacker: [ RelayRecipient ] = []
     private var visibleRecipientsPredicate: NSCompoundPredicate?
-    
+    private var pendingTagIds = Set<String>()
     private let avatarCache: NSCache<NSString, UIImage>
     private let recipientCache: NSCache<NSString, RelayRecipient>
     private let tagCache: NSCache<NSString, FLTag>
@@ -163,6 +163,10 @@ import RelayServiceKit
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.handleRecipientRefresh(notification:)),
                                                name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.handleTagRefresh(notification:)),
+                                               name: NSNotification.Name(rawValue: FLTagsNeedRefreshNotification),
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.fetchGravtarForRecipient(notification:)),
@@ -238,11 +242,58 @@ import RelayServiceKit
         }
     }
     
+    @objc public func handleTagRefresh(notification: Notification) {
+        if let payloadArray: Array<String> = notification.userInfo!["tagIds"] as? Array<String> {
+            DispatchQueue.global(qos: .background).async {
+                for uid: String in payloadArray {
+                    self.ccsmFetchTag(tagId: uid)
+                }
+            }
+        }
+    }
+    
     fileprivate func updateRecipients(userIds: Array<String>) {
         NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
                                                              object: self,
                                                              userInfo: ["userIds" : userIds])
     }
+
+    fileprivate func updateTags(tagIds: Array<String>) {
+        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLTagsNeedRefreshNotification),
+                                                             object: self,
+                                                             userInfo: ["tagIds" : tagIds])
+    }
+
+    fileprivate func ccsmFetchTag(tagId: String) {
+        // must not execute on main thread
+        assert(!Thread.isMainThread)
+
+        // Ensure there isn't already a lookup taking place fo this id
+        guard !self.pendingTagIds.contains(tagId) else {
+            Logger.debug("Lookup pending for tagId: \(tagId)")
+            return
+        }
+        
+        self.pendingTagIds.insert(tagId)
+        let homeURL = Bundle.main.object(forInfoDictionaryKey: "CCSM_Home_URL") as! String
+        let urlString = "\(homeURL)/v1/tag/\(tagId)/"
+        
+        CCSMCommManager.getThing(urlString,
+                                 success: { (payload) in
+                                    if let _: String = payload?["id"] as? String {
+                                        self.readWriteConnection .asyncReadWrite({ (transaction) in
+                                            if let newTag: FLTag = FLTag.getOrCreateTag(with: payload!, transaction: transaction){
+                                                self.save(tag: newTag, with: transaction)
+                                            }
+                                        })
+                                    }
+                                    self.pendingTagIds.remove(tagId)
+        }, failure: { (error) in
+            Logger.debug("CCSM User lookup failed with error: \(String(describing: error?.localizedDescription))")
+            self.pendingTagIds.remove(tagId)
+        })
+    }
+
     
     fileprivate func ccsmFetchRecipients(uids: String) {
         
@@ -258,7 +309,7 @@ import RelayServiceKit
                                     if let resultsArray: Array = payload?["results"] as? Array<Dictionary<String, Any>> {
                                         self.readWriteConnection .asyncReadWrite({ (transaction) in
                                             for userDict: Dictionary<String, Any> in resultsArray {
-                                                if let recipient: RelayRecipient = self.recipient(fromDictionary: userDict, transaction: transaction){
+                                                if let recipient = RelayRecipient.getOrCreateRecipient(withUserDictionary: userDict as NSDictionary, transaction: transaction) {
                                                     self.save(recipient: recipient, with: transaction)
                                                 }
                                             }
@@ -279,9 +330,8 @@ import RelayServiceKit
             self.tagCache.setObject(atag, forKey: atag.uniqueId as NSString);
             return atag
         } else {
-            // TODO: Build notification path for tag updates
-//            postNotificationNameAsync(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-//                                            object: self, userInfo: ["userIds" : [userId]])
+            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                            object: self, userInfo: [ "tagIds" : [uuid] ])
             return nil
         }
     }
@@ -295,9 +345,8 @@ import RelayServiceKit
             tagCache.setObject(atag, forKey: uuid as NSString)
             return atag
         } else {
-            // TODO: Build notification path for tag updates
-//            postNotificationNameAsync(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-//                                            object: self, userInfo: ["userIds" : [userId]])
+            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLTagsNeedRefreshNotification),
+                                                                 object: self, userInfo: [ "tagIds" : [uuid] ])
             return nil
         }
     }
@@ -311,7 +360,7 @@ import RelayServiceKit
         } else {
             NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
                                                                  object: self,
-                                                                 userInfo: ["userIds" : [userId]])
+                                                                 userInfo: [ "userIds" : [userId] ])
             return nil
         }
     }
@@ -325,75 +374,75 @@ import RelayServiceKit
         } else {
             NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
                                             object: self,
-                                            userInfo: ["userIds" : [userId]])
+                                            userInfo: [ "userIds" : [userId] ])
             return nil
         }
     }
 
-    @objc public func recipient(fromDictionary userDict: Dictionary<String, Any>) -> RelayRecipient? {
-        var recipient: RelayRecipient? = nil
-        self.readWriteConnection.readWrite({ transaction in
-            recipient = self.recipient(fromDictionary: userDict, transaction: transaction)
-        })
-        return recipient
-    }
+//    @objc public func recipient(fromDictionary userDict: Dictionary<String, Any>) -> RelayRecipient? {
+//        var recipient: RelayRecipient? = nil
+//        self.readWriteConnection.readWrite({ transaction in
+//            recipient = self.recipient(fromDictionary: userDict, transaction: transaction)
+//        })
+//        return recipient
+//    }
     
-    func recipient(fromDictionary userDict: Dictionary<String, Any>, transaction: YapDatabaseReadWriteTransaction) -> RelayRecipient? {
-
-        guard let uuid = NSUUID.init(uuidString:(userDict["id"] as? String)!) else {
-           Logger.debug("Attempt to build recipient with malformed dictionary.")
-            return nil
-        }
-        
-        guard let tagDict = userDict["tag"] as? [AnyHashable : Any] else {
-            Logger.debug("Missing tagDictionary for Recipient: \(uuid.uuidString)")
-            return nil
-        }
-
-        let uidString = uuid.uuidString.lowercased()
-        
-        let recipient = RelayRecipient.getOrBuildUnsavedRecipient(forRecipientId: uidString, transaction: transaction)
-        
-        recipient.isActive = (Int(truncating: userDict["is_active"] as? NSNumber ?? 0)) == 1 ? true : false
-        if !recipient.isActive {
-            Logger.info("Removing inactive user: \(uidString)")
-            self.remove(recipient: recipient, with: transaction)
-            return nil
-        }
-        
-        recipient.firstName = userDict["first_name"] as? String
-        recipient.lastName = userDict["last_name"] as? String
-        recipient.email = userDict["email"] as? String
-        recipient.phoneNumber = userDict["phone"] as? String
-        recipient.gravatarHash = userDict["gravatar_hash"] as? String
-        recipient.isMonitor = (Int(truncating: userDict["is_monitor"] as? NSNumber ?? 0)) == 1 ? true : false
-        
-        let orgDict = userDict["org"] as? [AnyHashable : Any]
-        if orgDict != nil {
-            recipient.orgID = orgDict!["id"] as? String
-            recipient.orgSlug = orgDict!["slug"] as? String
-        } else {
-            Logger.debug("Missing orgDictionary for Recipient: \(self.description)")
-        }
-        recipient.flTag = FLTag.getOrCreateTag(with: tagDict, transaction: transaction)
-        recipient.flTag?.recipientIds = Set<AnyHashable>([recipient.uniqueId]) as? NSCountedSet
-        if recipient.flTag?.tagDescription?.count == 0 {
-            recipient.flTag?.tagDescription = recipient.fullName()
-        }
-        if recipient.flTag?.orgSlug.count == 0 {
-            recipient.flTag?.orgSlug = recipient.orgSlug!
-        }
-        if recipient.flTag == nil {
-            Logger.error("Attempt to create recipient with a nil tag!  Recipient: \(recipient.uniqueId)")
-            self.remove(recipient: recipient, with: transaction)
-            return nil
-        } else {
-            Logger.debug("Saving updated recipient: \(recipient.uniqueId)")
-            self.save(recipient: recipient, with: transaction)
-        }
-        
-        return recipient
-    }
+//    func recipient(fromDictionary userDict: Dictionary<String, Any>, transaction: YapDatabaseReadWriteTransaction) -> RelayRecipient? {
+//
+//        guard let uuid = NSUUID.init(uuidString:(userDict["id"] as? String)!) else {
+//           Logger.debug("Attempt to build recipient with malformed dictionary.")
+//            return nil
+//        }
+//
+//        guard let tagDict = userDict["tag"] as? [AnyHashable : Any] else {
+//            Logger.debug("Missing tagDictionary for Recipient: \(uuid.uuidString)")
+//            return nil
+//        }
+//
+//        let uidString = uuid.uuidString.lowercased()
+//
+//        let recipient = RelayRecipient.getOrBuildUnsavedRecipient(forRecipientId: uidString, transaction: transaction)
+//
+//        recipient.isActive = (Int(truncating: userDict["is_active"] as? NSNumber ?? 0)) == 1 ? true : false
+//        if !recipient.isActive {
+//            Logger.info("Removing inactive user: \(uidString)")
+//            self.remove(recipient: recipient, with: transaction)
+//            return nil
+//        }
+//
+//        recipient.firstName = userDict["first_name"] as? String
+//        recipient.lastName = userDict["last_name"] as? String
+//        recipient.email = userDict["email"] as? String
+//        recipient.phoneNumber = userDict["phone"] as? String
+//        recipient.gravatarHash = userDict["gravatar_hash"] as? String
+//        recipient.isMonitor = (Int(truncating: userDict["is_monitor"] as? NSNumber ?? 0)) == 1 ? true : false
+//
+//        let orgDict = userDict["org"] as? [AnyHashable : Any]
+//        if orgDict != nil {
+//            recipient.orgID = orgDict!["id"] as? String
+//            recipient.orgSlug = orgDict!["slug"] as? String
+//        } else {
+//            Logger.debug("Missing orgDictionary for Recipient: \(self.description)")
+//        }
+//        recipient.flTag = FLTag.getOrCreateTag(with: tagDict, transaction: transaction)
+//        recipient.flTag?.recipientIds = Set<AnyHashable>([recipient.uniqueId]) as? NSCountedSet
+//        if recipient.flTag?.tagDescription == nil || recipient.flTag?.tagDescription?.count == 0  {
+//            recipient.flTag?.tagDescription = recipient.fullName()
+//        }
+//        if recipient.flTag?.orgSlug == nil || recipient.flTag?.orgSlug.count == 0 {
+//            recipient.flTag?.orgSlug = recipient.orgSlug!
+//        }
+//        if recipient.flTag == nil {
+//            Logger.error("Attempt to create recipient with a nil tag!  Recipient: \(recipient.uniqueId)")
+//            self.remove(recipient: recipient, with: transaction)
+//            return nil
+//        } else {
+//            Logger.debug("Saving updated recipient: \(recipient.uniqueId)")
+//            self.save(recipient: recipient, with: transaction)
+//        }
+//
+//        return recipient
+//    }
 
     
     @objc public func refreshCCSMRecipients() {
