@@ -276,17 +276,11 @@ OWSNavigationView>
 //                  }
 //                  customRowHeight:UITableViewAutomaticDimension
 //                  actionBlock:^{
-////                      SignalAccount *_Nullable signalAccount =
-////                      [contactsViewHelper fetchSignalAccountForRecipientId:recipientId];
 //                      BOOL isPreviousMember = [weakSelf.previousMemberRecipientIds containsObject:recipientId];
 //                      BOOL isBlocked = [contactsViewHelper isRecipientIdBlocked:recipientId];
 //                      if (isPreviousMember) {
 //                          if (isBlocked) {
-////                              if (signalAccount) {
-////                                  [weakSelf showUnblockAlertForSignalAccount:signalAccount];
-////                              } else {
 //                                  [weakSelf showUnblockAlertForRecipientId:recipientId];
-////                              }
 //                          } else {
 //                              [OWSAlerts
 //                               showAlertWithTitle:
