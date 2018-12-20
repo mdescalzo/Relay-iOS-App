@@ -664,13 +664,15 @@ import RelayServiceKit
                                                         self.recipientCache.removeObject(forKey: recipientId as NSString)
                                                         
                                                         // Touch any threads which contain the recipient
-                                                        for obj in TSThread.allObjectsInCollection() {
-                                                            if let thread = obj as? TSThread {
-                                                                if thread.participantIds.contains(recipientId) {
-                                                                    thread.touch()
+                                                        self.readWriteConnection.asyncReadWrite({ (transaction) in
+                                                            for obj in TSThread.allObjectsInCollection() {
+                                                                if let thread = obj as? TSThread {
+                                                                    if thread.participantIds.contains(recipientId) {
+                                                                        thread.touch(with: transaction)
+                                                                    }
                                                                 }
                                                             }
-                                                        }
+                                                        })
                                                         
             }
             
