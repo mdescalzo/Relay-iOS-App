@@ -1053,8 +1053,15 @@ NS_ASSUME_NONNULL_BEGIN
         if (messageRefString.length > 0) {
             TSMessage *parentMessage = [TSMessage fetchObjectWithUniqueID:messageRefString transaction:transaction];
             
-            quotedMessage = [[TSQuotedMessage alloc] initWithTimestamp:envelope.timestamp
-                                                              authorId:envelope.source
+            NSString *authorId = @"Unknown user";
+            if ([parentMessage isKindOfClass:[TSOutgoingMessage class]]) {
+                authorId = [TSAccountManager localUID];
+            } else if ([parentMessage isKindOfClass:[TSIncomingMessage class]]) {
+                authorId = [(TSIncomingMessage *)parentMessage authorId];
+            }
+            
+            quotedMessage = [[TSQuotedMessage alloc] initWithTimestamp:parentMessage.timestamp
+                                                              authorId:authorId
                                                              messageId:messageRefString
                                                                   body:parentMessage.plainTextBody
                                          receivedQuotedAttachmentInfos:nil];
