@@ -17,6 +17,9 @@ import Foundation
 
     fileprivate let imageCache = NSCache<NSString, UIImage>()
     
+    fileprivate let dbReadConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    fileprivate let dbReadWriteConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    
     @objc public override init() {
         super.init()
         
@@ -38,19 +41,25 @@ import Foundation
         if let image = self.imageCache.object(forKey: threadId as NSString) {
             return image
         } else {
-            if let thread = TSThread.fetch(uniqueId: threadId) {
-                if let image = thread.image {
-                    // thread has assigned image
+            var thread: TSThread?
+            self.dbReadConnection.read { (transaction) in
+                thread = TSThread.fetch(uniqueId: threadId, transaction: transaction)
+            }
+            guard thread != nil else {
+                Logger.debug("Attempt to retrieve unknown thread: \(threadId)")
+                return nil
+            }
+            
+            if let image = thread!.image {
+                // thread has assigned image
+                self.imageCache.setObject(image, forKey: threadId as NSString)
+                return image
+            } else if thread!.isOneOnOne {
+                // one-on-one, use other avatar
+                if let image = TextSecureKitEnv.shared().contactsManager.avatarImageRecipientId(thread!.otherParticipantId!) {
                     self.imageCache.setObject(image, forKey: threadId as NSString)
                     return image
-                } else if thread.isOneOnOne {
-                    // one-on-one, use other avatar
-                    if let image = TextSecureKitEnv.shared().contactsManager.avatarImageRecipientId(thread.otherParticipantId!) {
-                        self.imageCache.setObject(image, forKey: threadId as NSString)
-                        return image
-                    }
                 }
-                
             }
         }
         // Return default avatar
@@ -113,14 +122,11 @@ import Foundation
 //        }
 //    }
     
-    // MARK: - db modifications
-    private let readConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
-
     @objc func yapDatabaseModified(notification: Notification?) {
         
         DispatchQueue.global(qos: .background).async {
-            let notifications = self.readConnection.beginLongLivedReadTransaction()
-            self.readConnection.enumerateChangedKeys(inCollection: TSThread.collection(),
+            let notifications = self.dbReadConnection.beginLongLivedReadTransaction()
+            self.dbReadConnection.enumerateChangedKeys(inCollection: TSThread.collection(),
                                                      in: notifications) { (threadId, stop) in
                                                         // Remove cached image
                                                         self.imageCache.removeObject(forKey: threadId as NSString)
