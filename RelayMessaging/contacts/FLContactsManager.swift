@@ -293,13 +293,13 @@ import RelayServiceKit
         if lookupString.count > 0 {
             
             let homeURL = Bundle.main.object(forInfoDictionaryKey: "CCSM_Home_URL") as! String
-            let url = "\(homeURL)/v1/directory/user/?id_in=\(uids)"
+            let url = "\(homeURL)/v1/directory/user/?id_in=\(lookupString)"
             
             CCSMCommManager.getThing(url,
                                      success: { (payload) in
                                         
                                         if let resultsArray: Array = payload?["results"] as? Array<Dictionary<String, Any>> {
-                                            self.readWriteConnection .asyncReadWrite({ (transaction) in
+                                            self.readWriteConnection.asyncReadWrite({ (transaction) in
                                                 for userDict: Dictionary<String, Any> in resultsArray {
                                                     if let recipient = RelayRecipient.getOrCreateRecipient(withUserDictionary: userDict as NSDictionary, transaction: transaction) {
                                                         self.save(recipient: recipient, with: transaction)
