@@ -18,6 +18,7 @@
 #import <RelayMessaging/UIView+OWS.h>
 
 @import WebKit;
+@import URLEmbeddedView;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -1003,39 +1004,21 @@ NS_ASSUME_NONNULL_BEGIN
 {
     OWSAssert(self.viewItem.hasUrl);
     
-    WKWebViewConfiguration *config = WKWebViewConfiguration.new;
-    config.allowsInlineMediaPlayback = YES;
-    config.requiresUserActionForMediaPlayback = YES;
-    
-    
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
+    URLEmbeddedView *webView = URLEmbeddedView.new;
+    [webView loadWithURLString:self.viewItem.urlString completion:nil];
 
-    webView.contentMode = UIViewContentModeScaleAspectFill;
-    
+//    WKWebView *webView = [WKWebView new];
+//    webView.contentMode = UIViewContentModeScaleAspectFill;
 //    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.viewItem.urlString]];
-//
 //    [webView loadRequest:request];
 
-    __weak OWSMessageBubbleView *weakSelf = self;
+//    __weak OWSMessageBubbleView *weakSelf = self;
     self.loadCellContentBlock = ^{
-        OWSMessageBubbleView *strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
-        OWSCAssert(strongSelf.bodyMediaView == webView);
-
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strongSelf.viewItem.urlString]];
-
-        [webView loadRequest:request];
+        // Do nothing.
     };
     
     self.unloadCellContentBlock = ^{
-        OWSMessageBubbleView *strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
-        OWSCAssert(strongSelf.bodyMediaView == webView);
-        [webView stopLoading];
+        // Do nothing.
     };
     
     return webView;
@@ -1237,7 +1220,7 @@ NS_ASSUME_NONNULL_BEGIN
             result = CGSizeMake(maxMessageWidth, [OWSContactShareView bubbleHeight]);
             break;
         case MessageCellType_WebPreview:
-            result = CGSizeRound(CGSizeMake(maxMessageWidth, maxMessageWidth*0.75));
+            result = CGSizeRound(CGSizeMake(maxMessageWidth, maxMessageWidth * 0.3));
             break;
     }
 
