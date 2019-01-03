@@ -17,6 +17,9 @@
 #import "Relay-Swift.h"
 #import <RelayMessaging/UIView+OWS.h>
 
+@import WebKit;
+@import URLEmbeddedView;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OWSMessageBubbleView () <OWSQuotedMessageViewDelegate, OWSContactShareButtonsViewDelegate>
@@ -323,6 +326,9 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_ContactShare:
             bodyMediaView = [self loadViewForContactShare];
             break;
+        case MessageCellType_WebPreview:
+            bodyMediaView = [self loadViewForWebPreview];
+            break;
     }
 
     if (bodyMediaView) {
@@ -601,6 +607,7 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Video:
+        case MessageCellType_WebPreview:
             return YES;
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_GenericAttachment:
@@ -993,6 +1000,30 @@ NS_ASSUME_NONNULL_BEGIN
     return stillImageView;
 }
 
+-(UIView *)loadViewForWebPreview
+{
+    OWSAssert(self.viewItem.hasUrl);
+    
+    URLEmbeddedView *webView = URLEmbeddedView.new;
+    [webView loadWithURLString:self.viewItem.urlString completion:nil];
+
+//    WKWebView *webView = [WKWebView new];
+//    webView.contentMode = UIViewContentModeScaleAspectFill;
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.viewItem.urlString]];
+//    [webView loadRequest:request];
+
+//    __weak OWSMessageBubbleView *weakSelf = self;
+    self.loadCellContentBlock = ^{
+        // Do nothing.
+    };
+    
+    self.unloadCellContentBlock = ^{
+        // Do nothing.
+    };
+    
+    return webView;
+}
+
 - (UIView *)loadViewForGenericAttachment
 {
     OWSAssert(self.viewItem.attachmentStream);
@@ -1187,6 +1218,9 @@ NS_ASSUME_NONNULL_BEGIN
             OWSAssert(self.viewItem.contactShare);
 
             result = CGSizeMake(maxMessageWidth, [OWSContactShareView bubbleHeight]);
+            break;
+        case MessageCellType_WebPreview:
+            result = CGSizeRound(CGSizeMake(maxMessageWidth, maxMessageWidth * 0.3));
             break;
     }
 
@@ -1571,6 +1605,11 @@ NS_ASSUME_NONNULL_BEGIN
         }
         case OWSMessageCellType_ContactShare:
             [self.delegate didTapContactShareViewItem:self.viewItem];
+            break;
+        case MessageCellType_WebPreview:
+            OWSAssert(self.viewItem.hasUrl);
+            
+            [self.delegate didTapWebPreviewViewItem:self.viewItem];
             break;
     }
 }

@@ -52,6 +52,8 @@ typedef NS_ENUM(NSUInteger, OWSMessageGestureLocation) {
 - (void)didTapShowAddToContactUIForContactShare:(ContactShareViewModel *)contactShare
     NS_SWIFT_NAME(didTapShowAddToContactUI(forContactShare:));
 
+-(void)didTapWebPreviewViewItem:(ConversationViewItem *)conversationItem;
+
 @end
 
 #pragma mark -

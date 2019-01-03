@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, OWSMessageCellType) {
     OWSMessageCellType_GenericAttachment,
     OWSMessageCellType_DownloadingAttachment,
     OWSMessageCellType_ContactShare,
+    MessageCellType_WebPreview,
 };
 
 NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType);
@@ -50,7 +51,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType);
 @property (nonatomic, readonly) BOOL isGroupThread;
 
 @property (nonatomic, readonly) BOOL hasBodyText;
-
+@property (nonatomic, readonly) BOOL hasUrl;
+@property (nonatomic, nullable) NSString *urlString;
 @property (nonatomic, readonly) BOOL isQuotedReply;
 @property (nonatomic, readonly) BOOL hasQuotedAttachment;
 @property (nonatomic, readonly) BOOL hasQuotedText;

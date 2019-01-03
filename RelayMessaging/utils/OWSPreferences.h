@@ -64,6 +64,9 @@ extern NSString *const OWSPreferencesCallLoggingDidChangeNotification;
 -(BOOL)useGravatars;
 -(void)setUseGravatars:(BOOL)value;
 
+-(BOOL)showWebPreviews;
+-(void)setShowWebPreviews:(BOOL)value;
+
 #pragma mark Callkit
 
 - (BOOL)isSystemCallLogEnabled;

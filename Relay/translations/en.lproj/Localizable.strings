@@ -2399,8 +2399,11 @@
 "THREAD_IMAGE_CHANGED_MESSAGE" = "%@ changed the avatar.";
 "REGISTER_CREATION_FAILURE" = "Account creation error";
 
-"APPEARANCE_GRAVATAR_SECTION" = "Avatars";
-"APPEARANCE_USE_GRAVATARS" = "Use Gravatars";
+"INTERFACE_GRAVATAR_SECTION" = "Avatars";
+"INTERFACE_USE_GRAVATARS" = "Use Gravatars";
+
+"INTERFACE_MESSAGES_SECTION" = "Messages";
+"INTERFACE_SHOW_WEB_PREVIEWS" = "Display URL preview";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "Pin";

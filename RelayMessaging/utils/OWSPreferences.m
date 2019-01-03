@@ -28,6 +28,7 @@ NSString *const OWSPreferencesKeyIOSUpgradeNagDate = @"iOSUpgradeNagDate";
 NSString *const OWSPreferencesKey_IsReadyForAppExtensions = @"isReadyForAppExtensions_5";
 NSString *const OWSPreferencesKeySystemCallLogEnabled = @"OWSPreferencesKeySystemCallLogEnabled";
 NSString *const PropertyListPreferencesKeyUseGravatars = @"UseGravatars";
+NSString *const PropertyListPreferencesKeyShowWebPreview = @"ShowWebPreview";
 
 @implementation OWSPreferences
 
@@ -214,6 +215,20 @@ NSString *const PropertyListPreferencesKeyUseGravatars = @"UseGravatars";
     [ThreadManager.sharedManager flushImageCache];
     [self setValueForKey:PropertyListPreferencesKeyUseGravatars toValue:@(value)];
 }
+
+-(BOOL)showWebPreviews
+{
+    NSNumber *preference = [self tryGetValueForKey:PropertyListPreferencesKeyShowWebPreview];
+    // Default to NO.
+    return preference ? [preference boolValue] : NO;
+    
+}
+
+-(void)setShowWebPreviews:(BOOL)value
+{
+    [self setValueForKey:PropertyListPreferencesKeyShowWebPreview toValue:@(value)];
+}
+
 
 
 #pragma mark - Calling
