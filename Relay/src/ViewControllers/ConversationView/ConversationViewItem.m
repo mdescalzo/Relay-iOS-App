@@ -523,7 +523,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         } else {
             OWSFail(@"%@ Unknown attachment type", self.logTag);
         }
-    } else if (self.hasUrl) {
+    } else if (self.hasUrl && Environment.preferences.showWebPreviews) {
         self.messageCellType = MessageCellType_WebPreview;
     }
 
