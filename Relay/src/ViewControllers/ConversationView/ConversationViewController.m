@@ -2245,6 +2245,14 @@ typedef enum : NSUInteger {
     [self.contactShareViewHelper showAddToContactsWithContactShare:contactShare fromViewController:self];
 }
 
+-(void)didTapWebPreviewViewItem:(ConversationViewItem *)conversationItem
+{
+    OWSAssert(conversationItem);
+    OWSAssert(conversationItem.hasUrl)
+    
+    [UIApplication.sharedApplication openURL:[NSURL URLWithString:conversationItem.urlString]];
+}
+
 - (void)didTapFailedIncomingAttachment:(ConversationViewItem *)viewItem
                      attachmentPointer:(TSAttachmentPointer *)attachmentPointer
 {

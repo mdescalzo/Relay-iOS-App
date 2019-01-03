@@ -1623,6 +1623,11 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_ContactShare:
             [self.delegate didTapContactShareViewItem:self.viewItem];
             break;
+        case MessageCellType_WebPreview:
+            OWSAssert(self.viewItem.hasUrl);
+            
+            [self.delegate didTapWebPreviewViewItem:self.viewItem];
+            break;
     }
 }
 
