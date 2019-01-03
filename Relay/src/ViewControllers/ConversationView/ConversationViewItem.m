@@ -40,6 +40,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             return @"OWSMessageCellType_Unknown";
         case OWSMessageCellType_ContactShare:
             return @"OWSMessageCellType_ContactShare";
+        case MessageCellType_WebPreview:
+            return @"MessageCellType_WebPreview";
     }
 }
 
@@ -117,6 +119,31 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
     [self clearCachedLayoutState];
 
     [self ensureViewState:transaction];
+}
+
+-(BOOL)hasUrl
+{
+    return (self.urlString.length > 0);
+}
+
+-(nullable NSString *)urlString
+{
+    if (_urlString == nil) {
+        TSMessage *message = (TSMessage *)self.interaction;
+        NSString *htmlString = [message htmlTextBody];
+        if (htmlString) {
+            // SOURCE: https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\"(ftp:\\/\\/|www\\.|https?:\\/\\/){1}[a-zA-Z0-9u00a1-\\uffff0-]{2,}\\.[a-zA-Z0-9u00a1-\\uffff0-]{2,}(\\S*)\""
+                                                                                   options:(NSRegularExpressionCaseInsensitive | NSRegularExpressionAnchorsMatchLines)
+                                                                                     error:nil];
+            NSArray *matches = [regex matchesInString:htmlString options:0 range:NSMakeRange(0, htmlString.length)];
+            for (NSTextCheckingResult *result in matches) {
+                _urlString = [htmlString substringWithRange:result.range];
+                _urlString = [_urlString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
+            }
+        }
+    }
+    return _urlString;
 }
 
 - (BOOL)hasBodyText
@@ -496,6 +523,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         } else {
             OWSFail(@"%@ Unknown attachment type", self.logTag);
         }
+    } else if (self.hasUrl) {
+        self.messageCellType = MessageCellType_WebPreview;
     }
 
     // Ignore message body for oversize text attachments.

@@ -17,6 +17,8 @@
 #import "Relay-Swift.h"
 #import <RelayMessaging/UIView+OWS.h>
 
+@import WebKit;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OWSMessageBubbleView () <OWSQuotedMessageViewDelegate, OWSContactShareButtonsViewDelegate>
@@ -323,6 +325,9 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_ContactShare:
             bodyMediaView = [self loadViewForContactShare];
             break;
+        case MessageCellType_WebPreview:
+            bodyMediaView = [self loadViewForWebPreview];
+            break;
     }
 
     if (bodyMediaView) {
@@ -601,6 +606,7 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Video:
+        case MessageCellType_WebPreview:
             return YES;
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_GenericAttachment:
@@ -993,6 +999,48 @@ NS_ASSUME_NONNULL_BEGIN
     return stillImageView;
 }
 
+-(UIView *)loadViewForWebPreview
+{
+    OWSAssert(self.viewItem.hasUrl);
+    
+    WKWebViewConfiguration *config = WKWebViewConfiguration.new;
+    config.allowsInlineMediaPlayback = YES;
+    config.requiresUserActionForMediaPlayback = YES;
+    
+    
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
+
+    webView.contentMode = UIViewContentModeScaleAspectFill;
+    
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.viewItem.urlString]];
+//
+//    [webView loadRequest:request];
+
+    __weak OWSMessageBubbleView *weakSelf = self;
+    self.loadCellContentBlock = ^{
+        OWSMessageBubbleView *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        OWSCAssert(strongSelf.bodyMediaView == webView);
+
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strongSelf.viewItem.urlString]];
+
+        [webView loadRequest:request];
+    };
+    
+    self.unloadCellContentBlock = ^{
+        OWSMessageBubbleView *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        OWSCAssert(strongSelf.bodyMediaView == webView);
+        [webView stopLoading];
+    };
+    
+    return webView;
+}
+
 - (UIView *)loadViewForGenericAttachment
 {
     OWSAssert(self.viewItem.attachmentStream);
@@ -1187,6 +1235,9 @@ NS_ASSUME_NONNULL_BEGIN
             OWSAssert(self.viewItem.contactShare);
 
             result = CGSizeMake(maxMessageWidth, [OWSContactShareView bubbleHeight]);
+            break;
+        case MessageCellType_WebPreview:
+            result = CGSizeRound(CGSizeMake(maxMessageWidth, maxMessageWidth*0.75));
             break;
     }
 
