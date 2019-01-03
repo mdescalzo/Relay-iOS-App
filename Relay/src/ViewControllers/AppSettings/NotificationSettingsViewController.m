@@ -78,11 +78,11 @@
     
     // Gravatar section.
 
-    OWSTableSection *gravatarSection = [OWSTableSection new];
+    OWSTableSection *gravatarSection = OWSTableSection.new;
     gravatarSection.headerTitle
-    = NSLocalizedString(@"APPEARANCE_GRAVATAR_SECTION", @"Header Label for the sounds section of settings views.");
+    = NSLocalizedString(@"INTERFACE_GRAVATAR_SECTION", @"Header Label for the avatars section of settings views.");
 
-    NSString *gravatarCellString = NSLocalizedString(@"APPEARANCE_USE_GRAVATARS",
+    NSString *gravatarCellString = NSLocalizedString(@"INTERFACE_USE_GRAVATARS",
                                                        @"Table cell switch label. Toggles gravatar usage.");
     [gravatarSection addItem:[OWSTableItem switchItemWithText:gravatarCellString
                                                        isOn:[prefs useGravatars]
@@ -91,21 +91,37 @@
     [contents addSection:gravatarSection];
 
     
-    ///////
+    // Web preview
+    OWSTableSection *webPreviewSection = OWSTableSection.new;
+    webPreviewSection.headerTitle
+    = NSLocalizedString(@"INTERFACE_MESSAGES_SECTION", @"Header Label for the messages section of settings views.");
+    
+    NSString *webPreviewCellString = NSLocalizedString(@"INTERFACE_SHOW_WEB_PREVIEWS",
+                                                     @"Table cell switch label. Toggles gravatar usage.");
+    [webPreviewSection addItem:[OWSTableItem switchItemWithText:webPreviewCellString
+                                                         isOn:[prefs showWebPreviews]
+                                                       target:weakSelf
+                                                     selector:@selector(didToggleWebPreviewSwitch:)]];
+    [contents addSection:webPreviewSection];
 
     self.contents = contents;
 }
 
 #pragma mark - Events
 
+-(void)didToggleWebPreviewSwitch:(UISwitch *)sender
+{
+    Environment.preferences.showWebPreviews = sender.on;
+}
+
 - (void)didToggleSoundNotificationsSwitch:(UISwitch *)sender
 {
-    [Environment.preferences setSoundInForeground:sender.on];
+    Environment.preferences.soundInForeground = sender.on;
 }
 
 - (void)didToggleUseGravatarSwitch:(UISwitch *)sender
 {
-    [Environment.preferences setUseGravatars:sender.on];
+    Environment.preferences.useGravatars = sender.on;
 }
 
 @end
