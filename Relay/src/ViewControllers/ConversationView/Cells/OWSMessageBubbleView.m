@@ -1006,7 +1006,8 @@ NS_ASSUME_NONNULL_BEGIN
     
     URLEmbeddedView *webView = URLEmbeddedView.new;
     [webView loadWithURLString:self.viewItem.urlString completion:nil];
-
+    webView.backgroundColor = UIColor.lightGrayColor;
+    
 //    WKWebView *webView = [WKWebView new];
 //    webView.contentMode = UIViewContentModeScaleAspectFill;
 //    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.viewItem.urlString]];
