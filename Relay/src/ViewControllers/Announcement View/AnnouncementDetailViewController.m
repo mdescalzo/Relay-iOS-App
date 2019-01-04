@@ -26,7 +26,6 @@
 
 @implementation AnnouncementDetailViewController
 
-0
 - (void)viewDidLoad {
     [super viewDidLoad];
     
