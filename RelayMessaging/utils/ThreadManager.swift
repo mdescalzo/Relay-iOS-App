@@ -17,7 +17,11 @@ import Foundation
 
     fileprivate let imageCache = NSCache<NSString, UIImage>()
     
-    fileprivate let dbReadConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    fileprivate let dbReadConnection  = { () -> YapDatabaseConnection in
+        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+        aConnection.beginLongLivedReadTransaction()
+        return aConnection
+    }()
     fileprivate let dbReadWriteConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     
     @objc public override init() {

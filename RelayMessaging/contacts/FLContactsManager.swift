@@ -117,7 +117,11 @@ import RelayServiceKit
     
     private let serialLookupQueue = DispatchQueue(label: "contactsManagerLookupQueue")
     
-    private let readConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    private let readConnection = { () -> YapDatabaseConnection in 
+        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+        aConnection.beginLongLivedReadTransaction()
+        return aConnection
+    }()
     private let readWriteConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     private var latestRecipientsById: [AnyHashable : Any] = [:]
     private var activeRecipientsBacker: [ RelayRecipient ] = []
@@ -664,15 +668,15 @@ import RelayServiceKit
                                                         self.recipientCache.removeObject(forKey: recipientId as NSString)
                                                         
                                                         // Touch any threads which contain the recipient
-                                                        self.readWriteConnection.asyncReadWrite({ (transaction) in
                                                             for obj in TSThread.allObjectsInCollection() {
                                                                 if let thread = obj as? TSThread {
                                                                     if thread.participantIds.contains(recipientId) {
-                                                                        thread.touch(with: transaction)
+                                                                        self.readWriteConnection.asyncReadWrite({ (transaction) in
+                                                                            thread.touch(with: transaction)
+                                                                        })
                                                                     }
                                                                 }
                                                             }
-                                                        })
                                                         
             }
             

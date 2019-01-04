@@ -26,6 +26,7 @@
 
 @implementation AnnouncementDetailViewController
 
+0
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -37,7 +38,6 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    self.uiConnection = [OWSPrimaryStorage.sharedManager dbReadConnection];
     [self.uiConnection beginLongLivedReadTransaction];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -228,6 +228,14 @@
         _recipients = [NSArray arrayWithArray:holdingTank];
     }
     return _recipients;
+}
+
+-(YapDatabaseConnection *)uiConnection
+{
+    if (_uiConnection == nil) {
+        _uiConnection = OWSPrimaryStorage.sharedManager.newDatabaseConnection;
+    }
+    return _uiConnection;
 }
 
 @end
