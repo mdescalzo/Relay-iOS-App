@@ -27,9 +27,6 @@
 @import RelayMessaging;
 @import AxolotlKit;
 @import PromiseKit;
-@import Fabric;
-@import Crashlytics;
-
 
 NSString *const AppDelegateStoryboardMain = @"Main";
 
@@ -39,7 +36,7 @@ static NSString *const kURLHostVerifyPrefix             = @"verify";
 
 static NSTimeInterval launchStartedAt;
 
-@interface AppDelegate () <CrashlyticsDelegate>
+@interface AppDelegate ()
 
 @property (nonatomic) BOOL hasInitialRootViewController;
 @property (nonatomic) BOOL areVersionMigrationsComplete;
@@ -94,18 +91,6 @@ static NSTimeInterval launchStartedAt;
     if (isLoggingEnabled) {
         [DebugLogger.sharedLogger enableFileLogging];
     }
-    
-    // Initialize crash reporting
-    Crashlytics *crashlytics = [Crashlytics startWithAPIKey:[self fabricAPIKey] delegate:self];
-    Fabric *fabric = [Fabric with:@[ [Crashlytics class] ]];
-    if (crashlytics == nil) {
-        DDLogDebug(@"Unable to start Crashlytics.");
-    }
-    if (fabric == nil) {
-        DDLogDebug(@"Unable to start Fabric.");
-    }
-    
-//    [Crashlytics.sharedInstance crash];
 
     DDLogWarn(@"%@ application: didFinishLaunchingWithOptions.", self.logTag);
 
@@ -1226,28 +1211,5 @@ static NSTimeInterval launchStartedAt;
         [[NSNotificationCenter defaultCenter] postNotificationName:TappedStatusBarNotification object:nil];
     }
 }
-
-#pragma mark - Crashlytics
-- (BOOL)crashlyticsCanUseBackgroundSessions:(Crashlytics *)crashlytics
-{
-    return YES;
-}
-
-
--(NSString *)fabricAPIKey
-{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"Forsta-values" ofType:@"plist"];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    if ([fileManager fileExistsAtPath: path]) {
-        NSDictionary *forstaDict = [[NSDictionary alloc] initWithContentsOfFile:path];
-        NSDictionary *fabricDict = [forstaDict objectForKey:@"Fabric"];
-        return [fabricDict objectForKey:@"APIKey"];
-    } else {
-        DDLogDebug(@"Fabric API key not found!");
-        return @"";
-    }
-}
-
 
 @end
