@@ -129,18 +129,39 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 -(nullable NSString *)urlString
 {
     if (_urlString == nil) {
+        
+        _urlString = @"";
+        
         TSMessage *message = (TSMessage *)self.interaction;
-        NSString *htmlString = [message htmlTextBody];
-        if (htmlString) {
-            // SOURCE: https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\"(ftp:\\/\\/|www\\.|https?:\\/\\/){1}[a-zA-Z0-9u00a1-\\uffff0-]{2,}\\.[a-zA-Z0-9u00a1-\\uffff0-]{2,}(\\S*)\""
-                                                                                   options:(NSRegularExpressionCaseInsensitive | NSRegularExpressionAnchorsMatchLines)
-                                                                                     error:nil];
-            NSArray *matches = [regex matchesInString:htmlString options:0 range:NSMakeRange(0, htmlString.length)];
-            for (NSTextCheckingResult *result in matches) {
-                _urlString = [htmlString substringWithRange:result.range];
-                _urlString = [_urlString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
+        
+        NSString *messageString = [message htmlTextBody];
+        if (messageString.length == 0) {
+            messageString = [message plainTextBody];
+        }
+        
+        if (messageString.length > 0) {
+            
+            NSDataDetector *linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+            NSArray *matches = [linkDetector matchesInString:messageString options:0 range:NSMakeRange(0, messageString.length)];
+            
+            for (NSTextCheckingResult *match in matches) {
+                
+                if ([match resultType] == NSTextCheckingTypeLink) {
+                    NSString *aString = match.URL.absoluteString;
+                    _urlString = [aString stringByReplacingOccurrencesOfString:@"http://" withString:@"https://"];
+                    break;
+                }
             }
+            
+//            // SOURCE: https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
+//            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\"(ftp:\\/\\/|www\\.|https?:\\/\\/){1}[a-zA-Z0-9u00a1-\\uffff0-]{2,}\\.[a-zA-Z0-9u00a1-\\uffff0-]{2,}(\\S*)\""
+//                                                                                   options:(NSRegularExpressionCaseInsensitive | NSRegularExpressionAnchorsMatchLines)
+//                                                                                     error:nil];
+//            NSArray *matches = [regex matchesInString:htmlString options:0 range:NSMakeRange(0, htmlString.length)];
+//            for (NSTextCheckingResult *result in matches) {
+//                _urlString = [htmlString substringWithRange:result.range];
+//                _urlString = [_urlString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
+//            }
         }
     }
     return _urlString;
