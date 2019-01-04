@@ -1053,18 +1053,20 @@ NS_ASSUME_NONNULL_BEGIN
         if (messageRefString.length > 0) {
             TSMessage *parentMessage = [TSMessage fetchObjectWithUniqueID:messageRefString transaction:transaction];
             
-            NSString *authorId = @"Unknown user";
-            if ([parentMessage isKindOfClass:[TSOutgoingMessage class]]) {
-                authorId = [TSAccountManager localUID];
-            } else if ([parentMessage isKindOfClass:[TSIncomingMessage class]]) {
-                authorId = [(TSIncomingMessage *)parentMessage authorId];
+            if (parentMessage != nil) {
+                NSString *authorId = @"Unknown user";
+                if ([parentMessage isKindOfClass:[TSOutgoingMessage class]]) {
+                    authorId = [TSAccountManager localUID];
+                } else if ([parentMessage isKindOfClass:[TSIncomingMessage class]]) {
+                    authorId = [(TSIncomingMessage *)parentMessage authorId];
+                }
+                
+                quotedMessage = [[TSQuotedMessage alloc] initWithTimestamp:parentMessage.timestamp
+                                                                  authorId:authorId
+                                                                 messageId:messageRefString
+                                                                      body:parentMessage.plainTextBody
+                                             receivedQuotedAttachmentInfos:nil];
             }
-            
-            quotedMessage = [[TSQuotedMessage alloc] initWithTimestamp:parentMessage.timestamp
-                                                              authorId:authorId
-                                                             messageId:messageRefString
-                                                                  body:parentMessage.plainTextBody
-                                         receivedQuotedAttachmentInfos:nil];
         }
         
         // Build the message

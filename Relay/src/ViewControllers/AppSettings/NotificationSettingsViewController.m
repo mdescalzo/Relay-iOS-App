@@ -85,7 +85,7 @@
     NSString *gravatarCellString = NSLocalizedString(@"INTERFACE_USE_GRAVATARS",
                                                        @"Table cell switch label. Toggles gravatar usage.");
     [gravatarSection addItem:[OWSTableItem switchItemWithText:gravatarCellString
-                                                       isOn:[prefs useGravatars]
+                                                       isOn:prefs.useGravatars
                                                      target:weakSelf
                                                    selector:@selector(didToggleUseGravatarSwitch:)]];
     [contents addSection:gravatarSection];
@@ -99,7 +99,7 @@
     NSString *webPreviewCellString = NSLocalizedString(@"INTERFACE_SHOW_WEB_PREVIEWS",
                                                      @"Table cell switch label. Toggles gravatar usage.");
     [webPreviewSection addItem:[OWSTableItem switchItemWithText:webPreviewCellString
-                                                         isOn:[prefs showWebPreviews]
+                                                         isOn:prefs.showWebPreviews
                                                        target:weakSelf
                                                      selector:@selector(didToggleWebPreviewSwitch:)]];
     [contents addSection:webPreviewSection];
