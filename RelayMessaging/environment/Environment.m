@@ -116,10 +116,6 @@ static Environment *sharedEnvironment = nil;
     {
         if (!_preferences) {
             _preferences = [OWSPreferences new];
-//            [_preferences addObserver:self.threadManager
-//                           forKeyPath:@"useGravatars"
-//                              options:NSKeyValueObservingOptionNew
-//                              context:NULL];
         }
     }
 

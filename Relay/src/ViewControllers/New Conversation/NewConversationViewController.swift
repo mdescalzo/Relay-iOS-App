@@ -41,7 +41,11 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
         return control
     }()
     
-    private let uiDBConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().dbReadConnection
+    private let uiDBConnection = { () -> YapDatabaseConnection in 
+        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+        aConnection.beginLongLivedReadTransaction()
+        return aConnection
+    }()
     private let searchDBConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     
     private var tagMappings: YapDatabaseViewMappings?
@@ -84,7 +88,6 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
         super.viewDidAppear(animated)
 
         DispatchQueue.main.async {
-            self.uiDBConnection.beginLongLivedReadTransaction()
             self.uiDBConnection.asyncRead({ (transaction) in
                 self.tagMappings?.update(with: transaction)
             }, completionBlock: {
@@ -470,18 +473,29 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
             })
         } else {
             // build thread and go
-            let thread = TSThread.getOrCreateThread(withParticipants: userIds)
-            thread.type = FLThreadTypeConversation
-            thread.prettyExpression = results.object(forKey: "pretty") as? String
-            thread.universalExpression = results.object(forKey: "universal") as? String
-            thread.save()
-
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                            object: self, userInfo: ["userIds" : userIds])
-            DispatchQueue.main.async {
-                self.navigationController?.dismiss(animated: true, completion: {
-                    SignalApp.shared().presentConversation(for: thread, action: .compose)
-                })
+            var thread: TSThread?
+            self.searchDBConnection.asyncReadWrite({ (transaction) in
+                thread = TSThread.getOrCreateThread(withParticipants: userIds, transaction: transaction)
+                
+                guard thread != nil else {
+                    Logger.error("Unable to build thread!")
+                    return;
+                }
+                
+                thread!.type = FLThreadTypeConversation
+                thread!.prettyExpression = results.object(forKey: "pretty") as? String
+                thread!.universalExpression = results.object(forKey: "universal") as? String
+                thread!.save(with: transaction)
+            }) {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                object: self, userInfo: ["userIds" : userIds])
+                DispatchQueue.main.async {
+                    self.navigationController?.dismiss(animated: true, completion: {
+                        if thread != nil {
+                            SignalApp.shared().presentConversation(for: thread!, action: .compose)
+                        }
+                    })
+                }
             }
         }
     }
