@@ -40,8 +40,6 @@ target 'RelayDev' do
     pod 'ReCaptcha', '~> 1.2', :inhibit_warnings => true
     pod 'ATAppUpdater', :inhibit_warnings => true
     pod 'SSZipArchive', :inhibit_warnings => true
-    pod 'Fabric', :inhibit_warnings => true
-    pod 'Crashlytics', :inhibit_warnings => true
 end
 
 
@@ -50,8 +48,6 @@ target 'Relay' do
     pod 'ReCaptcha', '~> 1.2', :inhibit_warnings => true
     pod 'ATAppUpdater', :inhibit_warnings => true
     pod 'SSZipArchive', :inhibit_warnings => true
-    pod 'Fabric', :inhibit_warnings => true
-    pod 'Crashlytics', :inhibit_warnings => true
 
     target 'RelayTests' do
         inherit! :search_paths
