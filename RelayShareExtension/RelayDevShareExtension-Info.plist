@@ -74,6 +74,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>CCSM_Home_URL</key>
-	<string>https://ccsm-dev-api.forsta.io</string>
+	<string>https://atlas-dev.forsta.io</string>
 </dict>
 </plist>
