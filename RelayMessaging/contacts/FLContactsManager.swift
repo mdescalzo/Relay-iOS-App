@@ -668,15 +668,21 @@ import RelayServiceKit
                                                         self.recipientCache.removeObject(forKey: recipientId as NSString)
                                                         
                                                         // Touch any threads which contain the recipient
-                                                            for obj in TSThread.allObjectsInCollection() {
-                                                                if let thread = obj as? TSThread {
-                                                                    if thread.participantIds.contains(recipientId) {
-                                                                        self.readWriteConnection.asyncReadWrite({ (transaction) in
-                                                                            thread.touch(with: transaction)
-                                                                        })
-                                                                    }
+                                                        var threadsToTouch = [TSThread]()
+                                                        for obj in TSThread.allObjectsInCollection() {
+                                                            if let thread = obj as? TSThread {
+                                                                if thread.participantIds.contains(recipientId) {
+                                                                    threadsToTouch.append(thread)
                                                                 }
                                                             }
+                                                        }
+                                                        if threadsToTouch.count > 0 {
+                                                            self.readWriteConnection.asyncReadWrite({ (transaction) in
+                                                                for thread in threadsToTouch {
+                                                                    thread.touch(with: transaction)
+                                                                }
+                                                            })
+                                                        }
                                                         
             }
             
