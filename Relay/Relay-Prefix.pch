@@ -36,7 +36,7 @@
 //#define FLSupermanProdID @"cf40fca2-dfa8-4356-8ae7-45f56f7551ca"
 //
 // Forsta CCSM home URLs
-#define FLForstaDevURL @"https://ccsm-dev-api.forsta.io"
+#define FLForstaDevURL @"https://atlas-dev.forsta.io"
 #define FLForstaStageURL @"https://ccsm-stage-api.forsta.io"
 #define FLForstaProdURL @"https://api.forsta.io"
 //

@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 #define FLSupermanIds @[ FLSupermanDevID, FLSupermanStageID, FLSupermanProdID ]
 
 //// Forsta CCSM home URLs
-//#define FLForstaDevURL @"https://ccsm-dev-api.forsta.io"
+//#define FLForstaDevURL @"https://atlas-dev.forsta.io"
 //#define FLForstaStageURL @"https://ccsm-stage-api.forsta.io"
 //#define FLForstaProdURL @"https://api.forsta.io"
 
