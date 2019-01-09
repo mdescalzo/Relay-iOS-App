@@ -700,7 +700,9 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
                                      DDLogWarn(@"%@ marking unsent message as delivered.", self.logTag);
                                  }
                                  recipientState.state = OWSOutgoingMessageRecipientStateSent;
-                                 recipientState.readTimestamp = @(readTimestamp);
+                                 if (!recipientState.readTimestamp) {
+                                     recipientState.readTimestamp = @(readTimestamp);
+                                 }
                              }];
 }
 

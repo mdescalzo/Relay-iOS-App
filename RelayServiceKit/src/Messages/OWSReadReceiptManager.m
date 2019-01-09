@@ -569,6 +569,47 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
     }
 }
 
+- (void)markAsReadByRecipientId:(NSString *)recipientId
+           beforeTimestamp:(uint64_t)timestamp
+                    thread:(TSThread *)thread
+                  wasLocal:(BOOL)wasLocal
+                      transaction:(YapDatabaseReadWriteTransaction *)transaction
+{
+    OWSAssert(timestamp > 0);
+    OWSAssert(thread);
+    OWSAssert(transaction);
+    OWSAssert(recipientId);
+    
+    NSMutableArray<TSOutgoingMessage *> *newlyReadList = [NSMutableArray new];
+    
+    [[TSDatabaseView threadOutgoingMessageDatabaseView:transaction]
+     enumerateRowsInGroup:thread.uniqueId
+     usingBlock:^(NSString *collection,
+                  NSString *key,
+                  id object,
+                  id metadata,
+                  NSUInteger index,
+                  BOOL *stop) {
+         
+         // This method should only be processing TSOutgoingMessages objects
+         TSOutgoingMessage *possiblyRead = (TSOutgoingMessage *)object;
+         
+         NSString *astring = possiblyRead.plainTextBody;
+         if (possiblyRead.timestamp <= timestamp) {
+             [newlyReadList addObject:possiblyRead];
+         }
+     }];
+    
+    if (newlyReadList.count > 0) {
+        for (TSOutgoingMessage *readMessage in newlyReadList) {
+            [readMessage updateWithReadRecipientId:recipientId
+                                     readTimestamp:timestamp
+                                       transaction:transaction];
+        }
+        
+    }
+}
+
 #pragma mark - Settings
 
 - (void)prepareCachedValues
