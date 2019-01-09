@@ -881,6 +881,7 @@ private class SignalCallData: NSObject {
             
             let allTheData = [ "callId": call.callId ,
                                "peerId": call.peerId,
+                               "originator" : TSAccountManager.localUID()!,
                                "icecandidates" : payloadCandidates
                             ] as NSMutableDictionary
 
@@ -1218,6 +1219,7 @@ private class SignalCallData: NSObject {
         }
 
         let allTheData = [ "callId" : call.callId,
+                           "originator" : TSAccountManager.localUID()!,
                            ] as NSMutableDictionary
         
         let hangupMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
