@@ -23,6 +23,7 @@
 #define FLControlMessageCallAcceptOfferKey @"callAcceptOffer"
 #define FLControlMessageCallICECandidatesKey @"callICECandidates"
 #define FLControlMessageCallLeaveKey @"callLeave"
+#define FLControlMessageMessageReadKey @"readMark"
 
 // Thread keys
 #define FLThreadTitleKey @"threadTitle"

@@ -20,7 +20,9 @@
 #import "TextSecureKitEnv.h"
 #import "Threading.h"
 #import "YapDatabaseConnection+OWS.h"
-#import <YapDatabase/YapDatabase.h>
+#import <RelayServiceKit/RelayServiceKit-Swift.h>
+
+@import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -216,6 +218,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
     {
         DDLogVerbose(@"%@ Processing read receipts.", self.logTag);
 
+        // TODO: Retool linked device receipt send for Forsta environment
         NSArray<OWSLinkedDeviceReadReceipt *> *readReceiptsForLinkedDevices =
             [self.toLinkedDevicesReadReceiptMap allValues];
         [self.toLinkedDevicesReadReceiptMap removeAllObjects];
@@ -311,11 +314,12 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 
             NSString *messageAuthorId = message.messageAuthorId;
             OWSAssert(messageAuthorId.length > 0);
-
+            
+            uint64_t readTimestamp = [NSDate ows_millisecondTimeStamp];
             OWSLinkedDeviceReadReceipt *newReadReceipt =
                 [[OWSLinkedDeviceReadReceipt alloc] initWithSenderId:messageAuthorId
                                                   messageIdTimestamp:message.timestamp
-                                                       readTimestamp:[NSDate ows_millisecondTimeStamp]];
+                                                       readTimestamp:readTimestamp];
 
             OWSLinkedDeviceReadReceipt *_Nullable oldReadReceipt = self.toLinkedDevicesReadReceiptMap[threadUniqueId];
             if (oldReadReceipt && oldReadReceipt.messageIdTimestamp > newReadReceipt.messageIdTimestamp) {
@@ -332,15 +336,28 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                 return;
             }
 
-            if ([self areReadReceiptsEnabled]) {
-                DDLogVerbose(@"%@ Enqueuing read receipt for sender.", self.logTag);
-                NSMutableSet<NSNumber *> *_Nullable timestamps = self.toSenderReadReceiptMap[messageAuthorId];
-                if (!timestamps) {
-                    timestamps = [NSMutableSet new];
-                    self.toSenderReadReceiptMap[messageAuthorId] = timestamps;
-                }
-                [timestamps addObject:@(message.timestamp)];
-            }
+            NSDictionary *allTheData = @{ FLControlMessageMessageReadKey : @(readTimestamp) };
+            OutgoingControlMessage *controlMessage = [[OutgoingControlMessage alloc] initWithThread:message.thread
+                                                                                        controlType:FLControlMessageMessageReadKey
+                                                                                           moreData:[allTheData mutableCopy]];
+            [self.messageSender sendControlMessage:controlMessage
+                                      toRecipients:[NSCountedSet setWithObject:messageAuthorId]
+                                           success:^{
+                                               DDLogInfo(@"%@ Successfully sent read receipt to sender.", self.logTag);
+                                           }
+                                           failure:^(NSError * _Nonnull error) {
+                                               DDLogError(@"%@ Failed to send read receipt to linked devices with error: %@", self.logTag, error);
+                                           }];
+
+//            if ([self areReadReceiptsEnabled]) {
+//                DDLogVerbose(@"%@ Enqueuing read receipt for sender.", self.logTag);
+//                NSMutableSet<NSNumber *> *_Nullable timestamps = self.toSenderReadReceiptMap[messageAuthorId];
+//                if (!timestamps) {
+//                    timestamps = [NSMutableSet new];
+//                    self.toSenderReadReceiptMap[messageAuthorId] = timestamps;
+//                }
+//                [timestamps addObject:@(message.timestamp)];
+//            }
 
             [self scheduleProcessing];
         }
@@ -566,6 +583,46 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
     }
     for (id<OWSReadTracking> readItem in newlyReadList) {
         [readItem markAsReadAtTimestamp:readTimestamp sendReadReceipt:wasLocal transaction:transaction];
+    }
+}
+
+- (void)markAsReadByRecipientId:(NSString *)recipientId
+           beforeTimestamp:(uint64_t)timestamp
+                    thread:(TSThread *)thread
+                  wasLocal:(BOOL)wasLocal
+                      transaction:(YapDatabaseReadWriteTransaction *)transaction
+{
+    OWSAssert(timestamp > 0);
+    OWSAssert(thread);
+    OWSAssert(transaction);
+    OWSAssert(recipientId);
+    
+    NSMutableArray<TSOutgoingMessage *> *newlyReadList = [NSMutableArray new];
+    
+    [[TSDatabaseView threadOutgoingMessageDatabaseView:transaction]
+     enumerateRowsInGroup:thread.uniqueId
+     usingBlock:^(NSString *collection,
+                  NSString *key,
+                  id object,
+                  id metadata,
+                  NSUInteger index,
+                  BOOL *stop) {
+         
+         // This method should only be processing TSOutgoingMessages objects
+         TSOutgoingMessage *possiblyRead = (TSOutgoingMessage *)object;
+         
+         if (possiblyRead.timestamp <= timestamp) {
+             [newlyReadList addObject:possiblyRead];
+         }
+     }];
+    
+    if (newlyReadList.count > 0) {
+        for (TSOutgoingMessage *readMessage in newlyReadList) {
+            [readMessage updateWithReadRecipientId:recipientId
+                                     readTimestamp:timestamp
+                                       transaction:transaction];
+        }
+        
     }
 }
 

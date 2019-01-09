@@ -41,10 +41,46 @@ class ControlMessageManager : NSObject
             self.handleCallLeave(message: message, transaction: transaction)
         case FLControlMessageCallICECandidatesKey:
             self.handleCallICECandidates(message: message, transaction: transaction)
+        case FLControlMessageMessageReadKey:
+            self.handleMessageReadMark(message: message, transaction: transaction)
         default:
             Logger.info("Unhandled control message of type: \(message.controlMessageType)")
         }
     }
+    
+    static private func handleMessageReadMark(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
+    {
+        Logger.info("Received readMark message: \(message.forstaPayload)")
+        
+        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
+            Logger.debug("Received readMark message with no data blob.")
+            return
+        }
+
+        guard let threadId = message.forstaPayload.object(forKey: "threadId") as? String else {
+            Logger.debug("Received readMark message with no threadId.")
+            return
+        }
+        guard let senderId = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as? String else {
+            Logger.debug("Received readMark message with no senderId.")
+            return
+        }
+        var readTimestamp: UInt64 = NSDate.ows_millisecondTimeStamp()
+        if (dataBlob.object(forKey: "readMark") != nil) {
+            readTimestamp = dataBlob.object(forKey: "readMark") as! UInt64
+        } else {
+            Logger.warn("Received readMark control message without a readMark timestamp.")
+        }
+        
+        if let thread = TSThread.fetch(uniqueId: threadId, transaction: transaction) {
+            OWSReadReceiptManager.shared().markAsRead(byRecipientId: senderId,
+                                                      beforeTimestamp: readTimestamp,
+                                                      thread: thread,
+                                                      wasLocal: false,
+                                                      transaction: transaction)
+        }
+    }
+
     
     static private func handleCallICECandidates(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
@@ -56,12 +92,12 @@ class ControlMessageManager : NSObject
                 Logger.debug("Received callICECandidates message with no threadId.")
                 return
             }
-
+            
             guard let _: String = dataBlob.object(forKey: "callId") as? String else {
                 Logger.debug("Received callICECandidates message with no callId.")
                 return
             }
-                        
+            
             if let icecandidates: NSArray = dataBlob.object(forKey: "icecandidates") as? NSArray {
                 for candidate in icecandidates as NSArray {
                     if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
@@ -163,7 +199,6 @@ class ControlMessageManager : NSObject
             return
         }
 
-
         // If the callAccept came from self, another device picked up.  Stop local processing.
         guard message.authorId != TSAccountManager.localUID() else {
             Logger.info("Received call accept offer from another device.  Ignoring")
@@ -258,36 +293,36 @@ class ControlMessageManager : NSObject
                             properties.append(["name" : pointer.fileName ])
                         }
                         
-                            let attachmentsProcessor = OWSAttachmentsProcessor.init(attachmentProtos: message.attachmentPointers!,
-                                                                                    networkManager: TSNetworkManager.shared(),
-                                                                                    transaction: transaction)
-                            
-                            if attachmentsProcessor.hasSupportedAttachments {
-                                attachmentsProcessor.fetchAttachments(for: nil,
-                                                                      transaction: transaction,
-                                                                      success: { (attachmentStream) in
-                                                                        OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
-                                                                            thread.image = attachmentStream.image()
-                                                                            thread.save(with: transaction)
-                                                                            attachmentStream.remove(with: transaction)
-                                                                            let formatString = NSLocalizedString("THREAD_IMAGE_CHANGED_MESSAGE", comment: "")
-                                                                            var messageString: String? = nil
-                                                                            if sender?.uniqueId == TSAccountManager.localUID() {
-                                                                                messageString = String.localizedStringWithFormat(formatString, NSLocalizedString("YOU_STRING", comment: ""))
-                                                                            } else {
-                                                                                let nameString: String = ((sender != nil) ? (sender?.fullName())! as String : NSLocalizedString("UNKNOWN_CONTACT_NAME", comment: ""))
-                                                                                messageString = String.localizedStringWithFormat(formatString, nameString)
-                                                                            }
-                                                                            let infoMessage = TSInfoMessage.init(timestamp: message.timestamp,
-                                                                                                                 in: thread,
-                                                                                                                 infoMessageType: TSInfoMessageType.typeConversationUpdate,
-                                                                                                                 customMessage: messageString!)
-                                                                            infoMessage.save(with: transaction)
-                                                                        })
-                                }) { (error) in
-                                    Logger.error("\(self.tag): Failed to fetch attachments for avatar with error: \(error.localizedDescription)")
-                                }
+                        let attachmentsProcessor = OWSAttachmentsProcessor.init(attachmentProtos: message.attachmentPointers!,
+                                                                                networkManager: TSNetworkManager.shared(),
+                                                                                transaction: transaction)
+                        
+                        if attachmentsProcessor.hasSupportedAttachments {
+                            attachmentsProcessor.fetchAttachments(for: nil,
+                                                                  transaction: transaction,
+                                                                  success: { (attachmentStream) in
+                                                                    OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
+                                                                        thread.image = attachmentStream.image()
+                                                                        thread.save(with: transaction)
+                                                                        attachmentStream.remove(with: transaction)
+                                                                        let formatString = NSLocalizedString("THREAD_IMAGE_CHANGED_MESSAGE", comment: "")
+                                                                        var messageString: String? = nil
+                                                                        if sender?.uniqueId == TSAccountManager.localUID() {
+                                                                            messageString = String.localizedStringWithFormat(formatString, NSLocalizedString("YOU_STRING", comment: ""))
+                                                                        } else {
+                                                                            let nameString: String = ((sender != nil) ? (sender?.fullName())! as String : NSLocalizedString("UNKNOWN_CONTACT_NAME", comment: ""))
+                                                                            messageString = String.localizedStringWithFormat(formatString, nameString)
+                                                                        }
+                                                                        let infoMessage = TSInfoMessage.init(timestamp: message.timestamp,
+                                                                                                             in: thread,
+                                                                                                             infoMessageType: TSInfoMessageType.typeConversationUpdate,
+                                                                                                             customMessage: messageString!)
+                                                                        infoMessage.save(with: transaction)
+                                                                    })
+                            }) { (error) in
+                                Logger.error("\(self.tag): Failed to fetch attachments for avatar with error: \(error.localizedDescription)")
                             }
+                        }
                         
                     }
                 }

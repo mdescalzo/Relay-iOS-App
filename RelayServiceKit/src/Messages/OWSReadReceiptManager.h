@@ -56,6 +56,14 @@ extern NSString *const kIncomingMessageMarkedAsReadNotification;
 - (void)applyEarlyReadReceiptsForIncomingMessage:(TSIncomingMessage *)message
                                      transaction:(YapDatabaseReadWriteTransaction *)transaction;
 
+
+#pragma mark - Control message read mark handler
+- (void)markAsReadByRecipientId:(NSString *)recipientId
+           beforeTimestamp:(uint64_t)timestamp
+                    thread:(TSThread *)thread
+                  wasLocal:(BOOL)wasLocal
+               transaction:(YapDatabaseReadWriteTransaction *)transaction;
+
 #pragma mark - Locally Read
 
 // This method cues this manager:
