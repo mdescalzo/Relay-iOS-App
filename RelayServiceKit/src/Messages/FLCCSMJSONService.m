@@ -274,15 +274,15 @@
 {
     NSString *returnString = nil;
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 10.0) {
+    if (@available(iOS 10.0, *)) {
+        NSISO8601DateFormatter *df = [[NSISO8601DateFormatter alloc] init];
+        df.formatOptions = NSISO8601DateFormatWithInternetDateTime;
+        returnString = [df stringFromDate:date];
+    } else {
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
         [df setLocale:enUSPOSIXLocale];
         [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
-        returnString = [df stringFromDate:date];
-    } else {
-        NSISO8601DateFormatter *df = [[NSISO8601DateFormatter alloc] init];
-        df.formatOptions = NSISO8601DateFormatWithInternetDateTime;
         returnString = [df stringFromDate:date];
     }
     
