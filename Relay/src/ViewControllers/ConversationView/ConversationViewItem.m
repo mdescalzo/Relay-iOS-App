@@ -9,11 +9,11 @@
 #import "OWSMessageHeaderView.h"
 #import "OWSSystemMessageCell.h"
 #import "Relay-Swift.h"
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <RelayMessaging/NSString+OWS.h>
-#import <RelayMessaging/OWSUnreadIndicator.h>
-#import <RelayServiceKit/OWSContact.h>
-#import <RelayServiceKit/TSInteraction.h>
+
+@import AssetsLibrary;
+@import RelayMessaging;
+@import RelayServiceKit;
+@import Photos;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -723,6 +723,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_Video:
         case OWSMessageCellType_GenericAttachment: {
+        case MessageCellType_WebPreview:
             OWSAssert(self.displayableBodyText);
             [AttachmentSharing showShareUIForText:self.displayableBodyText.fullText];
             break;
@@ -745,6 +746,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (void)shareMediaAction
 {
     switch (self.messageCellType) {
+        case MessageCellType_WebPreview:
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
@@ -773,18 +775,22 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_ContactShare:
             return NO;
+            break;
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
             return YES;
+            break;
         case OWSMessageCellType_Audio:
             return NO;
+            break;
         case OWSMessageCellType_Video:
             return UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.attachmentStream.mediaURL.path);
+            break;
         case OWSMessageCellType_GenericAttachment:
+        case OWSMessageCellType_DownloadingAttachment:
+        case MessageCellType_WebPreview:
             return NO;
-        case OWSMessageCellType_DownloadingAttachment: {
-            return NO;
-        }
+            break;
     }
 }
 
@@ -795,34 +801,75 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_ContactShare:
+        case MessageCellType_WebPreview:
             OWSFail(@"%@ Cannot save text data.", self.logTag);
             break;
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage: {
-            NSData *data = [NSData dataWithContentsOfURL:[self.attachmentStream mediaURL]];
-            if (!data) {
-                OWSFail(@"%@ Could not load image data: %@", self.logTag, [self.attachmentStream mediaURL]);
-                return;
-            }
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            [library writeImageDataToSavedPhotosAlbum:data
-                                             metadata:nil
-                                      completionBlock:^(NSURL *assetURL, NSError *error) {
-                                          if (error) {
-                                              DDLogWarn(@"Error Saving image to photo album: %@", error);
-                                          }
-                                      }];
-            break;
+            __block NSURL *mediaUrl = [self.attachmentStream mediaURL];
+            
+            [PHPhotoLibrary.sharedPhotoLibrary performChanges:^{
+                [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:mediaUrl];
+            } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                NSString *message = nil;
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * _Nonnull action) {
+                                                                     // Nothin'
+                                                                 }];
+                if (success) {
+                    message = NSLocalizedString(@"IMAGE_SAVE_SUCCESSFUL", @"Alert message for successfuly saved image attachment.");
+                } else {
+                    NSString *format = NSLocalizedString(@"IMAGE_SAVE_FAILED", @"Alert message for successfuly saved image attachment.");
+                    message = [NSString stringWithFormat:format, error.localizedDescription];
+                    DDLogWarn(@"Error Saving image to photo album: %@", error);
+                }
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:okAction];
+                DispatchMainThreadSafe(^{
+                    [[UIApplication.sharedApplication findFrontmostViewControllerWithIgnoringAlerts:YES] presentViewController:alert animated:YES completion:nil];
+                });
+            }];
         }
+            break;
         case OWSMessageCellType_Audio:
             OWSFail(@"%@ Cannot save media data.", self.logTag);
             break;
-        case OWSMessageCellType_Video:
+        case OWSMessageCellType_Video: {
+            __block NSURL *mediaUrl = self.attachmentStream.mediaURL;
+            [PHPhotoLibrary.sharedPhotoLibrary performChanges:^{
+                [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:mediaUrl];
+            } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                NSString *message = nil;
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * _Nonnull action) {
+                                                                     // Nothin'
+                                                                 }];
+                if (success) {
+                    message = NSLocalizedString(@"IMAGE_SAVE_SUCCESSFUL", @"Alert message for successfuly saved image attachment.");
+                } else {
+                    NSString *format = NSLocalizedString(@"IMAGE_SAVE_FAILED", @"Alert message for successfuly saved image attachment.");
+                    message = [NSString stringWithFormat:format, error.localizedDescription];
+                    DDLogWarn(@"Error Saving image to photo album: %@", error);
+                }
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:okAction];
+                DispatchMainThreadSafe(^{
+                    [[UIApplication.sharedApplication findFrontmostViewControllerWithIgnoringAlerts:YES] presentViewController:alert animated:YES completion:nil];
+                });
+            }];
+            
             if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.attachmentStream.mediaURL.path)) {
                 UISaveVideoAtPathToSavedPhotosAlbum(self.attachmentStream.mediaURL.path, self, nil, nil);
             } else {
                 OWSFail(@"%@ Could not save incompatible video data.", self.logTag);
             }
+        }
             break;
         case OWSMessageCellType_GenericAttachment:
             OWSFail(@"%@ Cannot save media data.", self.logTag);
@@ -849,6 +896,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
     switch (self.messageCellType) {
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
+        case MessageCellType_WebPreview:
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_ContactShare:
             return NO;

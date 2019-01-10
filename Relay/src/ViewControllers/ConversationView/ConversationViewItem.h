@@ -115,6 +115,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType);
 
 @property (nonatomic, readonly) BOOL hasBodyTextActionContent;
 @property (nonatomic, readonly) BOOL hasMediaActionContent;
+@property (nonatomic, readonly) BOOL canSaveMedia;
 
 - (void)copyMediaAction;
 - (void)copyTextAction;
