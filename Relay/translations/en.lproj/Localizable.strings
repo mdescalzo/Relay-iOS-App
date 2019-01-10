@@ -1319,6 +1319,11 @@
 /* Alert title when user has previously denied media library access */
 "MISSING_MEDIA_LIBRARY_PERMISSION_TITLE" = "Forsta Requires Access to your Media Library to do this.";
 
+
+"IMAGE_SAVE_SUCCESSFUL" = "Attachment saved in Photos.";
+
+"IMAGE_SAVE_FAILED" = "Unable to save attachment.\n\nError: %@";
+
 /* notification title. Embeds {{caller's name or phone number}} */
 "MSGVIEW_MISSED_CALL_WITH_NAME" = "Missed call from %@.";
 
