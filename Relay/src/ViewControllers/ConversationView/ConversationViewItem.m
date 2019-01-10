@@ -9,11 +9,11 @@
 #import "OWSMessageHeaderView.h"
 #import "OWSSystemMessageCell.h"
 #import "Relay-Swift.h"
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <RelayMessaging/NSString+OWS.h>
-#import <RelayMessaging/OWSUnreadIndicator.h>
-#import <RelayServiceKit/OWSContact.h>
-#import <RelayServiceKit/TSInteraction.h>
+
+@import AssetsLibrary;
+@import RelayMessaging;
+@import RelayServiceKit;
+@import Photos;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -805,19 +805,18 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             break;
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage: {
-            NSData *data = [NSData dataWithContentsOfURL:[self.attachmentStream mediaURL]];
-            if (!data) {
-                OWSFail(@"%@ Could not load image data: %@", self.logTag, [self.attachmentStream mediaURL]);
-                return;
+            if (self.attachmentStream.isImage) {
+                
+                __block NSURL *mediaUrl = [self.attachmentStream mediaURL];
+                
+                [PHPhotoLibrary.sharedPhotoLibrary performChanges:^{
+                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:mediaUrl];
+                } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                    if (error) {
+                        DDLogWarn(@"Error Saving image to photo album: %@", error);
+                    }
+                }];
             }
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            [library writeImageDataToSavedPhotosAlbum:data
-                                             metadata:nil
-                                      completionBlock:^(NSURL *assetURL, NSError *error) {
-                                          if (error) {
-                                              DDLogWarn(@"Error Saving image to photo album: %@", error);
-                                          }
-                                      }];
             break;
         }
         case OWSMessageCellType_Audio:
