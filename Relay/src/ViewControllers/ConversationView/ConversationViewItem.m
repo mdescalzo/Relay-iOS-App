@@ -745,6 +745,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (void)shareMediaAction
 {
     switch (self.messageCellType) {
+        case MessageCellType_WebPreview:
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
@@ -773,18 +774,22 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_ContactShare:
             return NO;
+            break;
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
             return YES;
+            break;
         case OWSMessageCellType_Audio:
             return NO;
+            break;
         case OWSMessageCellType_Video:
             return UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.attachmentStream.mediaURL.path);
+            break;
         case OWSMessageCellType_GenericAttachment:
+        case OWSMessageCellType_DownloadingAttachment:
+        case MessageCellType_WebPreview:
             return NO;
-        case OWSMessageCellType_DownloadingAttachment: {
-            return NO;
-        }
+            break;
     }
 }
 
@@ -795,6 +800,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_ContactShare:
+        case MessageCellType_WebPreview:
             OWSFail(@"%@ Cannot save text data.", self.logTag);
             break;
         case OWSMessageCellType_StillImage:
@@ -849,6 +855,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
     switch (self.messageCellType) {
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
+        case MessageCellType_WebPreview:
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_ContactShare:
             return NO;
