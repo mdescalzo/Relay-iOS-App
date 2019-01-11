@@ -2006,7 +2006,7 @@
 "SETTINGS_INVITE_TITLE" = "Invite Your Friends";
 
 /* content of tweet when inviting via twitter - please do not translate URL */
-"SETTINGS_INVITE_TWITTER_TEXT" = "You can reach me using @signalapp. Get it now: https://signal.org/download/";
+"SETTINGS_INVITE_TWITTER_TEXT" = "You can reach me using Forsta, @forstainc get it now: https://forsta.io/downloads/";
 
 /* Label for settings view that allows user to change the notification sound. */
 "SETTINGS_ITEM_NOTIFICATION_SOUND" = "Message Sound";

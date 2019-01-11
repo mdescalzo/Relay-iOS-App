@@ -62,17 +62,6 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 //// Forsta SMS invitation URL
 //#define FLSMSInvitationURL @"https://www.forsta.io"
 
-// TODO:  Flesh this for dev environment
-//#if DEVELOPMENT
-//    #define FLHomeURL FLForstaDevURL
-//    #define FLDomainCreateURL FLDomainCreateDevURL
-//    #define FLSupermanID FLSupermanDevID
-//#else
-//    #define FLHomeURL FLForstaProdURL
-//    #define FLDomainCreateURL FLDomainCreateProdURL
-//    #define FLSupermanID FLSupermanProdID
-//#endif
-
 
 //#ifndef DEBUG
 

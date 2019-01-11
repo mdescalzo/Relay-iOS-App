@@ -511,7 +511,7 @@ NSString *const kProfileView_LastPresentedDate = @"kProfileView_LastPresentedDat
 {
     if (sender.state == UIGestureRecognizerStateRecognized) {
         [UIApplication.sharedApplication
-            openURL:[NSURL URLWithString:@"https://support.signal.org/hc/en-us/articles/115001110511"]];
+            openURL:[NSURL URLWithString:@"https://support.forsta.io/"]];
     }
 }
 
