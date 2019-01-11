@@ -873,8 +873,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             break;
         }
     }
-    DDLogDebug(@"XXX Switch End.");
-
 }
 
 - (void)deleteAction
