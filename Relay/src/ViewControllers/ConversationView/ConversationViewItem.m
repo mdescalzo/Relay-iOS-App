@@ -863,12 +863,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
                     [[UIApplication.sharedApplication findFrontmostViewControllerWithIgnoringAlerts:YES] presentViewController:alert animated:YES completion:nil];
                 });
             }];
-            
-            if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.attachmentStream.mediaURL.path)) {
-                UISaveVideoAtPathToSavedPhotosAlbum(self.attachmentStream.mediaURL.path, self, nil, nil);
-            } else {
-                OWSFail(@"%@ Could not save incompatible video data.", self.logTag);
-            }
         }
             break;
         case OWSMessageCellType_GenericAttachment:
@@ -879,6 +873,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             break;
         }
     }
+    DDLogDebug(@"XXX Switch End.");
+
 }
 
 - (void)deleteAction
