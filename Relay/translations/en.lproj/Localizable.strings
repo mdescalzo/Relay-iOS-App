@@ -1320,7 +1320,7 @@
 "MISSING_MEDIA_LIBRARY_PERMISSION_TITLE" = "Forsta Requires Access to your Media Library to do this.";
 
 
-"IMAGE_SAVE_SUCCESSFUL" = "Attachment saved in Photos.";
+"IMAGE_SAVE_SUCCESSFUL" = "Attachment saved to Photos Album.";
 
 "IMAGE_SAVE_FAILED" = "Unable to save attachment.\n\nError: %@";
 
