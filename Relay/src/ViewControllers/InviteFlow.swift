@@ -16,8 +16,8 @@ class InviteFlow: NSObject, MFMessageComposeViewControllerDelegate, MFMailCompos
 
     let TAG = "[ShareActions]"
 
-    let installUrl = "https://signal.org/install/"
-    let homepageUrl = "https://signal.org"
+    let installUrl = "https://forsta.io/downloads/"
+    let homepageUrl = "https://forsta.io"
 
     @objc
     let actionSheetController: UIAlertController
