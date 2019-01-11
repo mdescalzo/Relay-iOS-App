@@ -392,18 +392,21 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
     [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
         for (OWSMessageContentJob *job in jobs) {
 
-            void (^reportFailure)(YapDatabaseReadWriteTransaction *transaction) = ^(
-                YapDatabaseReadWriteTransaction *transaction) {
-                // TODO: Add analytics.
-                TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
-                [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
-                                                                                           transaction:transaction];
-            };
+            // FIXME: Supressing this message for now
+//            void (^reportFailure)(YapDatabaseReadWriteTransaction *transaction) = ^(
+//                YapDatabaseReadWriteTransaction *transaction) {
+//                // TODO: Add analytics.
+//                TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
+//                [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
+//                                                                                           transaction:transaction];
+//            };
 
             @try {
                 SSKEnvelope *_Nullable envelope = job.envelope;
                 if (!envelope) {
-                    reportFailure(transaction);
+                    OWSProdLogAndFail(@"%@ Received an invalid envelope.", self.logTag);
+                    // FIXME: Supressing this message for now
+//                    reportFailure(transaction);
                 } else {
                     [self.messagesManager processEnvelope:envelope
                                             plaintextData:job.plaintextData
@@ -411,7 +414,8 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
                 }
             } @catch (NSException *exception) {
                 OWSProdLogAndFail(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
-                reportFailure(transaction);
+                // FIXME: Supressing this message for now
+//                reportFailure(transaction);
             }
             [processedJobs addObject:job];
 

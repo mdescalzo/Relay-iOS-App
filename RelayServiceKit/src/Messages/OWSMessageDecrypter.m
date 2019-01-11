@@ -178,12 +178,13 @@ NS_ASSUME_NONNULL_BEGIN
     } @catch (NSException *exception) {
         OWSProdLogAndFail(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
 
-        [[OWSPrimaryStorage.sharedManager newDatabaseConnection]
-            readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
-                [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
-                                                                                           transaction:transaction];
-            }];
+//        // FIXME: Supressing this message for now
+//        [[OWSPrimaryStorage.sharedManager newDatabaseConnection]
+//            readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+//                TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
+//                [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
+//                                                                                           transaction:transaction];
+//            }];
     }
 
     failureBlock();
@@ -303,7 +304,8 @@ NS_ASSUME_NONNULL_BEGIN
                 @"%@ Failed to trust identity on incoming message from: %@", self.logTag, envelopeAddress(envelope));
             return;
         } else {
-            errorMessage = [TSErrorMessage corruptedMessageWithEnvelope:envelope withTransaction:transaction];
+            // FIXME: Supressing this message for now
+//            errorMessage = [TSErrorMessage corruptedMessageWithEnvelope:envelope withTransaction:transaction];
         }
 
         OWSAssert(errorMessage);

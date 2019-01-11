@@ -334,12 +334,13 @@ NSString *const OWSMessageDecryptJobFinderExtensionGroup = @"OWSMessageProcessin
         OWSProdLogAndFail(@"%@ Could not parse proto: %@", self.logTag, exception.debugDescription);
         // TODO: Add analytics.
 
-        [[OWSPrimaryStorage.sharedManager newDatabaseConnection]
-            readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
-                [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
-                                                                                           transaction:transaction];
-            }];
+        // FIXME: Supressing this message for now
+//        [[OWSPrimaryStorage.sharedManager newDatabaseConnection]
+//            readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+//                TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
+//                [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
+//                                                                                           transaction:transaction];
+//            }];
 
         dispatch_async(self.serialQueue, ^{
             completion(NO);
