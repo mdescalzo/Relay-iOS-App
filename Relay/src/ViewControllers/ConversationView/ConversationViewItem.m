@@ -148,7 +148,9 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
                 
                 if ([match resultType] == NSTextCheckingTypeLink) {
                     NSString *aString = match.URL.absoluteString;
-                    _urlString = [aString stringByReplacingOccurrencesOfString:@"http://" withString:@"https://"];
+                    if ([aString containsString:@"http://"] || [aString containsString:@"https://"]) {
+                        _urlString = [aString stringByReplacingOccurrencesOfString:@"http://" withString:@"https://"];
+                    }
                     break;
                 }
             }
