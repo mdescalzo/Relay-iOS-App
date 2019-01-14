@@ -325,8 +325,7 @@ extension GiphyError: LocalizedError {
             return
         }
 
-        // This is the Signal iOS API key.
-        let kGiphyApiKey = "ZsUpUm2L6cVbvei347EQNp7HrROjbOdc"
+        let kGiphyApiKey = "a1c3af2e4fc245ca9a6c0055be4963bb"
         let kGiphyPageSize = 100
         let kGiphyPageOffset = 0
         guard let queryEncoded = query.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else {
