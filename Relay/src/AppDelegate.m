@@ -99,15 +99,6 @@ static NSTimeInterval launchStartedAt;
     // XXX - careful when moving this. It must happen before we initialize OWSPrimaryStorage.
     [self verifyDBKeysAvailableBeforeBackgroundLaunch];
 
-#if RELEASE
-    // ensureIsReadyForAppExtensions may have changed the state of the logging
-    // preference (due to [NSUserDefaults migrateToSharedUserDefaults]), so honor
-    // that change if necessary.
-    if (isLoggingEnabled && !OWSPreferences.isLoggingEnabled) {
-        [DebugLogger.sharedLogger disableFileLogging];
-    }
-#endif
-
     // We need to do this _after_ we set up logging, when the keychain is unlocked,
     // but before we access YapDatabase, files on disk, or NSUserDefaults
     if (![self ensureIsReadyForAppExtensions]) {
