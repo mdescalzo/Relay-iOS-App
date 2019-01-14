@@ -404,7 +404,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
             @try {
                 SSKEnvelope *_Nullable envelope = job.envelope;
                 if (!envelope) {
-                    OWSProdLogAndFail(@"%@ Received an invalid envelope.", self.logTag);
+                    DDLogError(@"%@ Received an invalid envelope.", self.logTag);
                     // FIXME: Supressing this message for now
 //                    reportFailure(transaction);
                 } else {
@@ -413,7 +413,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
                                               transaction:transaction];
                 }
             } @catch (NSException *exception) {
-                OWSProdLogAndFail(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
+                DDLogError(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
                 // FIXME: Supressing this message for now
 //                reportFailure(transaction);
             }
