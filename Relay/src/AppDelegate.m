@@ -27,6 +27,8 @@
 @import RelayMessaging;
 @import AxolotlKit;
 @import PromiseKit;
+@import Fabric;
+@import Crashlytics;
 
 NSString *const AppDelegateStoryboardMain = @"Main";
 
@@ -72,7 +74,9 @@ static NSTimeInterval launchStartedAt;
     [DDLog flushLog];
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [Crashlytics startWithAPIKey:[self fabricAPIKey]];
 
     // This should be the first thing we do.
     SetCurrentAppContext([MainAppContext new]);
@@ -1202,5 +1206,22 @@ static NSTimeInterval launchStartedAt;
         [[NSNotificationCenter defaultCenter] postNotificationName:TappedStatusBarNotification object:nil];
     }
 }
+
+#pragma mark - Crashlytics
+-(NSString *)fabricAPIKey
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Forsta-values" ofType:@"plist"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if ([fileManager fileExistsAtPath: path]) {
+        NSDictionary *forstaDict = [[NSDictionary alloc] initWithContentsOfFile:path];
+        NSDictionary *fabricDict = [forstaDict objectForKey:@"Fabric"];
+        return [fabricDict objectForKey:@"APIKey"];
+    } else {
+        DDLogDebug(@"Fabric API key not found!");
+        return @"";
+    }
+}
+
 
 @end
