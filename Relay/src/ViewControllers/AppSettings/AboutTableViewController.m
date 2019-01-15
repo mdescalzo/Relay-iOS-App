@@ -44,10 +44,12 @@
     OWSTableContents *contents = [OWSTableContents new];
 
     OWSTableSection *informationSection = [OWSTableSection new];
+    NSString *versionString = [NSString stringWithFormat:@"%@ (%@)",
+                               [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"],
+                               [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleVersion"]];
     informationSection.headerTitle = NSLocalizedString(@"SETTINGS_INFORMATION_HEADER", @"");
     [informationSection addItem:[OWSTableItem labelItemWithText:NSLocalizedString(@"SETTINGS_VERSION", @"")
-                                                  accessoryText:[[[NSBundle mainBundle] infoDictionary]
-                                                                    objectForKey:@"CFBundleShortVersionString"]]];
+                                                  accessoryText:versionString]];
 
 #ifdef SHOW_LEGAL_TERMS_LINK
     [informationSection addItem:[OWSTableItem disclosureItemWithText:NSLocalizedString(@"SETTINGS_LEGAL_TERMS_CELL",
