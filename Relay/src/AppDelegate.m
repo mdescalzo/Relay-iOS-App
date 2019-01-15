@@ -27,6 +27,8 @@
 @import RelayMessaging;
 @import AxolotlKit;
 @import PromiseKit;
+@import Fabric;
+@import Crashlytics;
 
 NSString *const AppDelegateStoryboardMain = @"Main";
 
@@ -72,7 +74,9 @@ static NSTimeInterval launchStartedAt;
     [DDLog flushLog];
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [Crashlytics startWithAPIKey:[self fabricAPIKey]];
 
     // This should be the first thing we do.
     SetCurrentAppContext([MainAppContext new]);
@@ -98,15 +102,6 @@ static NSTimeInterval launchStartedAt;
 
     // XXX - careful when moving this. It must happen before we initialize OWSPrimaryStorage.
     [self verifyDBKeysAvailableBeforeBackgroundLaunch];
-
-#if RELEASE
-    // ensureIsReadyForAppExtensions may have changed the state of the logging
-    // preference (due to [NSUserDefaults migrateToSharedUserDefaults]), so honor
-    // that change if necessary.
-    if (isLoggingEnabled && !OWSPreferences.isLoggingEnabled) {
-        [DebugLogger.sharedLogger disableFileLogging];
-    }
-#endif
 
     // We need to do this _after_ we set up logging, when the keychain is unlocked,
     // but before we access YapDatabase, files on disk, or NSUserDefaults
@@ -1211,5 +1206,22 @@ static NSTimeInterval launchStartedAt;
         [[NSNotificationCenter defaultCenter] postNotificationName:TappedStatusBarNotification object:nil];
     }
 }
+
+#pragma mark - Crashlytics
+-(NSString *)fabricAPIKey
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Forsta-values" ofType:@"plist"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if ([fileManager fileExistsAtPath: path]) {
+        NSDictionary *forstaDict = [[NSDictionary alloc] initWithContentsOfFile:path];
+        NSDictionary *fabricDict = [forstaDict objectForKey:@"Fabric"];
+        return [fabricDict objectForKey:@"APIKey"];
+    } else {
+        DDLogDebug(@"Fabric API key not found!");
+        return @"";
+    }
+}
+
 
 @end

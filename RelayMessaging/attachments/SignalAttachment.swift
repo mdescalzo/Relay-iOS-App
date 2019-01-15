@@ -322,13 +322,13 @@ public class SignalAttachment: NSObject {
     }
 
     // Use the filename if known. If not, e.g. if the attachment was copy/pasted, we'll generate a filename
-    // like: "signal-2017-04-24-095918.zip"
+    // like: "forsta-2017-04-24-095918.zip"
     @objc
     public var filenameOrDefault: String {
         if let filename = sourceFilename {
             return filename.filterFilename()
         } else {
-            let kDefaultAttachmentName = "signal"
+            let kDefaultAttachmentName = "forsta"
 
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "YYYY-MM-dd-HHmmss"
