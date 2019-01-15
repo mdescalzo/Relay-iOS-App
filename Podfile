@@ -32,7 +32,9 @@ def shared_pods
     pod 'UIImageView+Extension',       '~> 0.2', :inhibit_warnings => true
     pod 'NSAttributedString-DDHTML',   git: 'git@github.com:ForstaLabs/NSAttributedString-DDHTML.git', branch: 'master', :inhibit_warnings => true
     pod 'ZXingObjC', '~> 3.5', :inhibit_warnings => true
-    pod 'URLEmbeddedView'
+    pod 'URLEmbeddedView', :inhibit_warnings => true
+    pod 'Fabric', '~> 1.0', :inhibit_warnings => true
+    pod 'Crashlytics', '~> 3.0', :inhibit_warnings => true
 end
 
 target 'RelayDev' do
