@@ -6,17 +6,17 @@ import Foundation
 
 // Create a searchable index for objects of type T
 public class SearchIndexer<T> {
-
-    private let indexBlock: (T) -> String
-
-    public init(indexBlock: @escaping (T) -> String) {
+    
+    private let indexBlock: (T, YapDatabaseReadTransaction) -> String
+    
+    public init(indexBlock: @escaping (T, YapDatabaseReadTransaction) -> String) {
         self.indexBlock = indexBlock
     }
-
-    public func index(_ item: T) -> String {
-        return normalize(indexingText: indexBlock(item))
+    
+    public func index(_ item: T, transaction: YapDatabaseReadTransaction) -> String {
+        return normalize(indexingText: indexBlock(item, transaction))
     }
-
+    
     private func normalize(indexingText: String) -> String {
         return FullTextSearchFinder.normalize(text: indexingText)
     }
@@ -157,13 +157,11 @@ public class FullTextSearchFinder: NSObject {
         return TextSecureKitEnv.shared().contactsManager
     }
     
-    private static let threadIndexer: SearchIndexer<TSThread> = SearchIndexer { (thread: TSThread) in
-
-//    private static let groupThreadIndexer: SearchIndexer<TSGroupThread> = SearchIndexer { (groupThread: TSGroupThread) in
+    private static let threadIndexer: SearchIndexer<TSThread> = SearchIndexer { (thread: TSThread, transaction: YapDatabaseReadTransaction) in
         let title = thread.title ?? ""
 
         let memberStrings = thread.participantIds.map { recipientId in
-            recipientIndexer.index(recipientId)
+            recipientIndexer.index(recipientId, transaction: transaction)
         }.joined(separator: " ")
 
         return "\(title) \(memberStrings)"
@@ -174,7 +172,7 @@ public class FullTextSearchFinder: NSObject {
 //        return recipientIndexer.index(recipientId)
 //    }
 
-    private static let recipientIndexer: SearchIndexer<String> = SearchIndexer { (recipientId: String) in
+    private static let recipientIndexer: SearchIndexer<String> = SearchIndexer { (recipientId: String, transaction: YapDatabaseReadTransaction) in
         let displayName = contactsManager.cachedDisplayName(forRecipientId: recipientId)
         
         var uuid = UUID.init(uuidString: recipientId)
@@ -187,7 +185,7 @@ public class FullTextSearchFinder: NSObject {
         return "\(recipientId) \(String(describing: displayName))"
     }
 
-    private static let messageIndexer: SearchIndexer<TSMessage> = SearchIndexer { (message: TSMessage) in
+    private static let messageIndexer: SearchIndexer<TSMessage> = SearchIndexer { (message: TSMessage, transaction: YapDatabaseReadTransaction) in
         if let body = message.body, body.count > 0 {
             return body
         }
@@ -224,21 +222,13 @@ public class FullTextSearchFinder: NSObject {
         return oversizeText
     }
 
-    private class func indexContent(object: Any) -> String? {
+    private class func indexContent(object: Any, transaction: YapDatabaseReadTransaction) -> String? {
         if let thread = object as? TSThread {
-            return self.threadIndexer.index(thread)
-//        } else if let contactThread = object as? TSContactThread {
-//            guard contactThread.hasEverHadMessage else {
-//                // If we've never sent/received a message in a TSContactThread,
-//                // then we want it to appear in the "Other Contacts" section rather
-//                // than in the "Conversations" section.
-//                return nil
-//            }
-//            return self.contactThreadIndexer.index(contactThread)
+            return self.threadIndexer.index(thread, transaction: transaction)
         } else if let message = object as? TSMessage {
-            return self.messageIndexer.index(message)
+            return self.messageIndexer.index(message, transaction: transaction)
         } else if let signalAccount = object as? SignalAccount {
-            return self.recipientIndexer.index(signalAccount.recipientId)
+            return self.recipientIndexer.index(signalAccount.recipientId, transaction: transaction)
         } else {
             return nil
         }
@@ -270,13 +260,11 @@ public class FullTextSearchFinder: NSObject {
         SwiftAssertIsOnMainThread(#function)
 
         let contentColumnName = "content"
-
-        let handler = YapDatabaseFullTextSearchHandler.withObjectBlock { (dict: NSMutableDictionary, _: String, _: String, object: Any) in
-            if let content: String = indexContent(object: object) {
+        let handler = YapDatabaseFullTextSearchHandler.withObjectBlock { (transaction: YapDatabaseReadTransaction, dict: NSMutableDictionary, _: String, _: String, object: Any) in
+            if let content: String = indexContent(object: object, transaction: transaction) {
                 dict[contentColumnName] = content
             }
         }
-
         // update search index on contact name changes?
 
         return YapDatabaseFullTextSearch(columnNames: ["content"],

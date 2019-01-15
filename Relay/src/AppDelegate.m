@@ -360,8 +360,10 @@ static NSTimeInterval launchStartedAt;
         return YES;
     };
 
+    YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
     error = [YapDatabaseCryptoUtils convertDatabaseIfNecessary:databaseFilePath
                                               databasePassword:databasePassword
+                                                       options:options
                                                recordSaltBlock:recordSaltBlock];
     if (!error) {
         [OWSStorage removeLegacyPassphrase];
