@@ -8,6 +8,8 @@ import RelayMessaging
 import PureLayout
 import RelayServiceKit
 import PromiseKit
+import Fabric
+import Crashlytics
 
 @objc
 public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailedViewDelegate {
@@ -31,6 +33,8 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     override open func loadView() {
         super.loadView()
 
+        Crashlytics.start(withAPIKey: self.fabricAPIKey()!)
+        
         // This should be the first thing we do.
         let appContext = ShareAppExtensionContext(rootViewController: self)
         SetCurrentAppContext(appContext)
@@ -905,6 +909,22 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
         // If video file already existed on disk as an mp4, then the host app didn't need to
         // apply any conversion, so no need to relocate the app.
         return !itemProvider.registeredTypeIdentifiers.contains(kUTTypeMPEG4 as String)
+    }
+
+    // MARK: Crashlytics
+    func fabricAPIKey() -> String? {
+        if let path = Bundle.main.path(forResource: "Forsta-values", ofType: "plist") {
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: path) {
+                if let forstaDict = NSDictionary(contentsOfFile: path) {
+                    if let fabricDict = forstaDict["Fabric"] as? [AnyHashable : Any] {
+                        return fabricDict["APIKey"] as? String
+                    }
+                }
+            }
+        }
+        Logger.error("Fabric API key not found!")
+        return ""
     }
 }
 
