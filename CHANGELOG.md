@@ -1,18 +1,24 @@
 ## [2.0.4]
 
 ### Additions
-- Support for sending and receiving read receipts
+- Support for sending and receiving read receipts.
 
 ### Updates
-- YapDatabase v3.1.1
+- YapDatabase updated to v3.1.1.
 
 ### Fixes
-- Improper search indexing of messages
-- Announcement message handling
+- Improper search indexing of messages.
+- Announcement message handling.
 
 ## [2.0.2]
 
+### Additions
+- Added lock mechanism to user looksups to prevent redundent calls
+
 ### Fixes
+- Incorrect rating link
+- Several database deadlocks
+- User lookup bug
 
 ## [2.0.1]
 
