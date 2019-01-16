@@ -58,6 +58,11 @@ import Foundation
                 // thread has assigned image
                 self.imageCache.setObject(image, forKey: threadId as NSString)
                 return image
+            } else if thread!.type == FLThreadTypeAnnouncement {
+                if let image = UIImage(named: "Announcement") {
+                    self.imageCache.setObject(image, forKey: threadId as NSString)
+                    return image
+                }
             } else if thread!.isOneOnOne {
                 // one-on-one, use other avatar
                 if let image = TextSecureKitEnv.shared().contactsManager.avatarImageRecipientId(thread!.otherParticipantId!) {
