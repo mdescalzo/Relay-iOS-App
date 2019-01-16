@@ -5,12 +5,11 @@
 #import "RemoteVideoView.h"
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
-#import <MetalKit/MetalKit.h>
-#import <PureLayout/PureLayout.h>
-#import <RelayServiceKit/Threading.h>
-#import <WebRTC/RTCEAGLVideoView.h>
-#import <WebRTC/RTCMTLVideoView.h>
-#import <WebRTC/RTCVideoRenderer.h>
+
+@import MetalKit;
+@import PureLayout;
+@import RelayServiceKit;
+@import WebRTC;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -56,6 +56,19 @@ NS_ASSUME_NONNULL_BEGIN
         });
         return;
     }
+    
+    // Message touch to reindex due to search bugs
+    if ([self isVersion:previousVersion lessThan:@"2.0.4"]) {
+        DDLogInfo(@"Touching messages in database.");
+        [OWSPrimaryStorage.dbReadWriteConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
+            for (TSIncomingMessage *message in [TSIncomingMessage allObjectsInCollection]) {
+                [message touchWithTransaction:transaction];
+            }
+            for (TSOutgoingMessage *message in [TSOutgoingMessage allObjectsInCollection]) {
+                [message touchWithTransaction:transaction];
+            }
+        }];
+    }
 
     if ([self isVersion:previousVersion lessThan:@"2.0.1"]) {
         DDLogInfo(@"Wiping thread images due to assignment bug in 2.0.0");

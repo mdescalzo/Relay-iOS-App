@@ -139,15 +139,14 @@ class ConversationSearchViewController: UITableViewController {
             SignalApp.shared().presentConversation(for: thread.threadRecord, action: .compose)
 
         case .contacts:
-            // TODO: Fix this for our world
-            Logger.debug("Contact search results tapped.  This needs fixing.")
-//            let sectionResults = searchResultSet.contacts
-//            guard let searchResult = sectionResults[safe: indexPath.row] else {
-//                owsFail("\(logTag) unknown row selected.")
-//                return
-//            }
-//
-//            SignalApp.shared().presentConversation(forRecipientId: searchResult.recipientId, action: .compose)
+            let sectionResults = searchResultSet.contacts
+            guard let searchResult = sectionResults[safe: indexPath.row] else {
+                owsFail("\(logTag) unknown row selected.")
+                return
+            }
+            
+            let thread = TSThread.getOrCreateThread(withParticipants: [ TSAccountManager.localUID()!, searchResult.recipientId ])
+            SignalApp.shared().presentConversation(for: thread, action: .compose)
 
         case .messages:
             let sectionResults = searchResultSet.messages
@@ -219,17 +218,17 @@ class ConversationSearchViewController: UITableViewController {
             cell.configure(withThread: searchResult.thread, contactsManager: contactsManager, blockedPhoneNumber: self.blockedPhoneNumberSet)
             return cell
         case .contacts:
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.reuseIdentifier()) as? ContactTableViewCell else {
-//                owsFail("cell was unexpectedly nil")
-//                return UITableViewCell()
-//            }
-//
-//            guard let searchResult = self.searchResultSet.contacts[safe: indexPath.row] else {
-//                owsFail("searchResult was unexpectedly nil")
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.reuseIdentifier()) as? ContactTableViewCell else {
+                owsFail("cell was unexpectedly nil")
                 return UITableViewCell()
-//            }
-//            cell.configure(withRecipientId: searchResult.signalAccount.recipientId, contactsManager: contactsManager)
-//            return cell
+            }
+
+            guard let searchResult = self.searchResultSet.contacts[safe: indexPath.row] else {
+                owsFail("searchResult was unexpectedly nil")
+                return UITableViewCell()
+            }
+            cell.configure(withRecipientId: searchResult.recipientId, contactsManager: contactsManager)
+            return cell
         case .messages:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewCell.cellReuseIdentifier()) as? HomeViewCell else {
                 owsFail("cell was unexpectedly nil")
