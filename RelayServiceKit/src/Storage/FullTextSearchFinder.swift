@@ -160,33 +160,26 @@ public class FullTextSearchFinder: NSObject {
     private static let threadIndexer: SearchIndexer<TSThread> = SearchIndexer { (thread: TSThread, transaction: YapDatabaseReadTransaction) in
         let title = thread.title ?? ""
 
-        let memberStrings = thread.participantIds.map { recipientId in
-            recipientIndexer.index(recipientId, transaction: transaction)
-        }.joined(separator: " ")
+        var participantsStrings: String = ""
+        for recipientId in thread.participantIds {
+            if let recipient = contactsManager.recipient(withId:recipientId, transaction: transaction) {
+                let memberString = recipientIndexer.index(recipient, transaction: transaction)
+                participantsStrings.append(" \(memberString)")
+            }
 
-        return "\(title) \(memberStrings)"
-    }
-
-//    private static let contactThreadIndexer: SearchIndexer<TSContactThread> = SearchIndexer { (contactThread: TSContactThread) in
-//        let recipientId =  contactThread.contactIdentifier()
-//        return recipientIndexer.index(recipientId)
-//    }
-
-    private static let recipientIndexer: SearchIndexer<String> = SearchIndexer { (recipientId: String, transaction: YapDatabaseReadTransaction) in
-        let displayName = contactsManager.cachedDisplayName(forRecipientId: recipientId)
-        
-        var uuid = UUID.init(uuidString: recipientId)
-        
-        guard uuid != nil  else {
-            owsFail("\(logTag) unexpected unparseable recipientId: \(recipientId)")
-            return ""
         }
         
-        return "\(recipientId) \(String(describing: displayName))"
+        return "\(title) \(participantsStrings)"
+    }
+
+    private static let recipientIndexer: SearchIndexer<RelayRecipient> = SearchIndexer { (recipient: RelayRecipient, transaction: YapDatabaseReadTransaction) in
+        let fullName = recipient.fullName()
+        let slug:String  = recipient.flTag?.displaySlug ?? ""
+        return "\(fullName) \(slug)"
     }
 
     private static let messageIndexer: SearchIndexer<TSMessage> = SearchIndexer { (message: TSMessage, transaction: YapDatabaseReadTransaction) in
-        if let body = message.body, body.count > 0 {
+        if let body = message.plainTextBody, body.count > 0 {
             return body
         }
         if let oversizeText = oversizeText(forMessage: message) {
@@ -227,8 +220,8 @@ public class FullTextSearchFinder: NSObject {
             return self.threadIndexer.index(thread, transaction: transaction)
         } else if let message = object as? TSMessage {
             return self.messageIndexer.index(message, transaction: transaction)
-        } else if let signalAccount = object as? SignalAccount {
-            return self.recipientIndexer.index(signalAccount.recipientId, transaction: transaction)
+        } else if let recipient = object as? RelayRecipient {
+            return self.recipientIndexer.index(recipient, transaction: transaction)
         } else {
             return nil
         }
