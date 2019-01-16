@@ -6,6 +6,7 @@ use_frameworks!
 def shared_pods
     # OWS Pods
     # pod 'SQLCipher', path: '../sqlcipher2'
+    pod 'SignalCoreKit', :git => 'git@github.com:signalapp/SignalCoreKit.git'
     pod 'SQLCipher', :git => 'https://github.com/sqlcipher/sqlcipher.git', :commit => 'd5c2bec'
     # pod 'YapDatabase/SQLCipher', path: '../YapDatabase'
     pod 'YapDatabase/SQLCipher', :git => 'https://github.com/signalapp/YapDatabase.git', branch: 'signal-release'

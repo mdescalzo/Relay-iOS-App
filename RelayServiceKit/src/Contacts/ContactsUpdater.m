@@ -3,7 +3,6 @@
 //
 
 #import "ContactsUpdater.h"
-#import "Cryptography.h"
 #import "OWSError.h"
 #import "OWSPrimaryStorage.h"
 #import "OWSRequestFactory.h"
@@ -11,7 +10,10 @@
 #import "TSNetworkManager.h"
 #import "Threading.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
-#import <YapDatabase/YapDatabase.h>
+#import "SSKAsserts.h"
+
+@import YapDatabase;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -19,9 +19,10 @@
 #import "TSErrorMessage.h"
 #import "TSPreKeyManager.h"
 #import "TextSecureKitEnv.h"
-#import <AxolotlKit/AxolotlExceptions.h>
-#import <AxolotlKit/SessionCipher.h>
+#import "SSKAsserts.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
+
+@import AxolotlKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -176,7 +177,7 @@ NS_ASSUME_NONNULL_BEGIN
                 break;
         }
     } @catch (NSException *exception) {
-        OWSProdLogAndFail(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
+        OWSFailDebug(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
 
 //        // FIXME: Supressing this message for now
 //        [[OWSPrimaryStorage.sharedManager newDatabaseConnection]

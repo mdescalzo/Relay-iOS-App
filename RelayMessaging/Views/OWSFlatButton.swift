@@ -24,7 +24,7 @@ public class OWSFlatButton: UIView {
 
     @objc
     public init() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         button = UIButton(type: .custom)
 

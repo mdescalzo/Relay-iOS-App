@@ -8,6 +8,8 @@
 #import "NSString+SSK.h"
 #import "OWSFileSystem.h"
 
+@import SignalCoreKit;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DataSource ()
@@ -81,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Returns the MIME type, if known.
 - (nullable NSString *)mimeType
 {
-    OWS_ABSTRACT_METHOD();
+    OWSAbstractMethod();
 
     return nil;
 }

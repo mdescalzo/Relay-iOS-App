@@ -3,10 +3,11 @@
 //
 
 #import "OWSOutgoingSyncMessage.h"
-#import "Cryptography.h"
 #import "NSDate+OWS.h"
 #import "OWSSignalServiceProtos.pb.h"
 #import "ProtoBuf+OWS.h"
+
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -22,7 +22,7 @@ public class ContactShareViewHelper: NSObject, CNContactViewControllerDelegate {
 
     @objc
     public required init(contactsManager: FLContactsManager) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         self.contactsManager = contactsManager
 

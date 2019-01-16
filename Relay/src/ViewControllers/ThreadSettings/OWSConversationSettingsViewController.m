@@ -15,24 +15,12 @@
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
 #import "UpdateGroupViewController.h"
-#import <Curve25519Kit/Curve25519.h>
-#import <RelayMessaging/Environment.h>
-#import <RelayMessaging/OWSAvatarBuilder.h>
-//#import <RelayMessaging/OWSContactsManager.h>
-#import <RelayMessaging/OWSProfileManager.h>
-#import <RelayMessaging/OWSSounds.h>
-#import <RelayMessaging/OWSUserProfile.h>
-#import <RelayMessaging/UIUtil.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/OWSDisappearingConfigurationUpdateInfoMessage.h>
-#import <RelayServiceKit/OWSDisappearingMessagesConfiguration.h>
-#import <RelayServiceKit/OWSMessageSender.h>
-#import <RelayServiceKit/OWSNotifyRemoteOfUpdatedDisappearingConfigurationJob.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
-#import <RelayServiceKit/TSOutgoingMessage.h>
-#import <RelayServiceKit/TSThread.h>
 
+@import Curve25519Kit;
 @import ContactsUI;
+@import RelayMessaging;
+@import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

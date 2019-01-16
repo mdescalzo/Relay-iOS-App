@@ -119,7 +119,7 @@ private class SignalCallData: NSObject {
 
     weak var localCaptureSession: AVCaptureSession? {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             Logger.info("\(self.logTag) \(#function)")
         }
@@ -127,7 +127,7 @@ private class SignalCallData: NSObject {
 
     weak var remoteVideoTrack: RTCVideoTrack? {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             Logger.info("\(self.logTag) \(#function)")
         }
@@ -135,7 +135,7 @@ private class SignalCallData: NSObject {
 
     var isRemoteVideoEnabled = false {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             Logger.info("\(self.logTag) \(#function): \(isRemoteVideoEnabled)")
         }
@@ -143,7 +143,7 @@ private class SignalCallData: NSObject {
 
     var peerConnectionClient: PeerConnectionClient? {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             Logger.debug("\(self.logTag) .peerConnectionClient setter: \(oldValue != nil) -> \(peerConnectionClient != nil) \(String(describing: peerConnectionClient))")
         }
@@ -183,7 +183,7 @@ private class SignalCallData: NSObject {
     // MARK: -
 
     public func terminate() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) in \(#function)")
 
@@ -235,7 +235,7 @@ private class SignalCallData: NSObject {
 
     fileprivate var callData: SignalCallData? {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             oldValue?.call.removeObserver(self)
             callData?.call.addObserverAndSyncState(observer: self)
@@ -266,14 +266,14 @@ private class SignalCallData: NSObject {
     @objc
     var call: RelayCall? {
         get {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             return callData?.call
         }
     }
     var peerConnectionClient: PeerConnectionClient? {
         get {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             return callData?.peerConnectionClient
         }
@@ -281,7 +281,7 @@ private class SignalCallData: NSObject {
 
     weak var localCaptureSession: AVCaptureSession? {
         get {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             return callData?.localCaptureSession
         }
@@ -289,14 +289,14 @@ private class SignalCallData: NSObject {
 
     var remoteVideoTrack: RTCVideoTrack? {
         get {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             return callData?.remoteVideoTrack
         }
     }
     var isRemoteVideoEnabled: Bool {
         get {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
             // TODO: modify when our video toggle signallying is implemented
             return true
 //            guard let callData = callData else {
@@ -334,12 +334,12 @@ private class SignalCallData: NSObject {
     }
 
     @objc func didEnterBackground() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         self.updateIsVideoEnabled()
     }
 
     @objc func didBecomeActive() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         self.updateIsVideoEnabled()
     }
 
@@ -347,7 +347,7 @@ private class SignalCallData: NSObject {
      * Choose whether to use CallKit or a Notification backed interface for calling.
      */
     @objc public func createCallUIAdapter() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         if self.call != nil {
             Logger.warn("\(self.logTag) ending current call in \(#function). Did user toggle callkit preference while in a call?")
@@ -362,7 +362,7 @@ private class SignalCallData: NSObject {
      * Initiate an outgoing call.
      */
     func handleOutgoingCall(_ call: RelayCall) -> Promise<Void> {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard self.call == nil else {
             let errorDescription = "\(self.logTag) call was unexpectedly already set."
@@ -462,7 +462,7 @@ private class SignalCallData: NSObject {
     }
 
     func readyToSendIceUpdates(call: RelayCall) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let callData = self.callData else {
             self.handleFailedCall(failedCall: call, error: .obsoleteCall(description:"obsolete call in \(#function)"))
@@ -481,7 +481,7 @@ private class SignalCallData: NSObject {
      */
     public func handleReceivedAnswer(thread: TSThread, peerId: String, sessionDescription: String) {
         Logger.info("\(self.logTag) received call answer for call: \(peerId) thread: \(thread.uniqueId)")
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             Logger.warn("\(self.logTag) ignoring obsolete call: \(peerId) in \(#function)")
@@ -516,7 +516,7 @@ private class SignalCallData: NSObject {
      * User didn't answer incoming call
      */
     public func handleMissedCall(_ call: RelayCall) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         // Insert missed call record
         if let callRecord = call.callRecord {
@@ -541,7 +541,7 @@ private class SignalCallData: NSObject {
      */
     private func handleLocalBusyCall(_ call: RelayCall) {
         Logger.info("\(self.logTag) \(#function) for call: \(call.identifiersForLogs) thread: \(call.thread.uniqueId)")
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let busyMessage = OWSCallBusyMessage(peerId: call.peerId)
         let callMessage = OWSOutgoingCallMessage(thread: call.thread, busyMessage: busyMessage)
@@ -556,7 +556,7 @@ private class SignalCallData: NSObject {
      */
     public func handleRemoteBusy(thread: TSThread, peerId: String) {
         Logger.info("\(self.logTag) \(#function) for thread: \(thread.uniqueId)")
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             Logger.warn("\(self.logTag) ignoring obsolete call: \(peerId) in \(#function)")
@@ -583,7 +583,7 @@ private class SignalCallData: NSObject {
      * the user of an incoming call.
      */
     public func handleReceivedOffer(thread: TSThread, callId: String, originatorId: String, peerId: String, sessionDescription callerSessionDescription: String) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let newCall = RelayCall.incomingCall(thread: thread, originatorId: originatorId, callId: callId, peerId: peerId)
 
@@ -658,7 +658,7 @@ private class SignalCallData: NSObject {
         self.callData = callData
 
         var backgroundTask: OWSBackgroundTask? = OWSBackgroundTask(label: "\(#function)", completionBlock: { [weak self] status in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             guard status == .expired else {
                 return
@@ -789,7 +789,7 @@ private class SignalCallData: NSObject {
      * Remote client (could be caller or callee) sent us a connectivity update
      */
     public func handleRemoteAddedIceCandidate(thread: TSThread, peerId: String, sdp: String, lineIndex: Int32, mid: String) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         Logger.verbose("\(logTag) \(#function) callId: \(peerId)")
 
         guard let callData = self.callData else {
@@ -798,7 +798,7 @@ private class SignalCallData: NSObject {
         }
 
         callData.peerConnectionClientPromise.then { () -> Void in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             guard let call = self.call else {
                 Logger.warn("ignoring remote ice update for thread: \(String(describing: thread.uniqueId)) since there is no current call. Call already ended?")
@@ -832,7 +832,7 @@ private class SignalCallData: NSObject {
      * remote client.
      */
     @objc private func handleLocalAddedIceCandidates() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let callData = self.callData else {
             self.handleFailedCurrentCall(error: CallError.assertionError(description: "ignoring local ice candidate, since there is no current call."))
@@ -901,7 +901,7 @@ private class SignalCallData: NSObject {
      * client.
      */
     private func handleIceConnected() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             // This will only be called for the current peerConnectionClient, so
@@ -930,7 +930,7 @@ private class SignalCallData: NSObject {
     }
 
     private func handleIceDisconnected() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             // This will only be called for the current peerConnectionClient, so
@@ -956,7 +956,7 @@ private class SignalCallData: NSObject {
      */
     public func handleRemoteHangup(thread: TSThread, callId: String) {
         Logger.debug("\(self.logTag) in \(#function)")
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         
         guard let call = self.call else {
             // This may happen if we hang up slightly before they hang up.
@@ -995,7 +995,7 @@ private class SignalCallData: NSObject {
     
     public func handleRemoteHangup(thread: TSThread, peerId: String) {
         Logger.debug("\(self.logTag) in \(#function)")
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             // This may happen if we hang up slightly before they hang up.
@@ -1038,7 +1038,7 @@ private class SignalCallData: NSObject {
      * Used by notification actions which can't serialize a call object.
      */
     @objc public func handleAnswerCall(localId: UUID) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             // This should never happen; return to a known good state.
@@ -1061,7 +1061,7 @@ private class SignalCallData: NSObject {
      * User chose to answer call referred to by call `localId`. Used by the Callee only.
      */
     public func handleAnswerCall(_ call: RelayCall) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) in \(#function)")
 
@@ -1100,7 +1100,7 @@ private class SignalCallData: NSObject {
      */
     private func handleConnectedCall(_ callData: SignalCallData) {
         Logger.info("\(self.logTag) in \(#function)")
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let peerConnectionClient = callData.peerConnectionClient else {
             handleFailedCall(failedCall: call, error: CallError.assertionError(description: "\(self.logTag) peerConnectionClient unexpectedly nil in \(#function)"))
@@ -1127,7 +1127,7 @@ private class SignalCallData: NSObject {
      * Incoming call only.
      */
     public func handleDeclineCall(localId: UUID) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             // This should never happen; return to a known good state.
@@ -1152,7 +1152,7 @@ private class SignalCallData: NSObject {
      * Incoming call only.
      */
     public func handleDeclineCall(_ call: RelayCall) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.info("\(self.logTag) in \(#function): \(call.identifiersForLogs).")
 
@@ -1175,7 +1175,7 @@ private class SignalCallData: NSObject {
      * Can be used for Incoming and Outgoing calls.
      */
     func handleLocalHungupCall(_ call: RelayCall) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let currentCall = self.call else {
             Logger.info("\(self.logTag) in \(#function), but no current call. Other party hung up just before us.")
@@ -1240,7 +1240,7 @@ private class SignalCallData: NSObject {
      * Can be used for Incoming and Outgoing calls.
      */
     func setIsMuted(call: RelayCall, isMuted: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard call == self.call else {
             // This can happen after a call has ended. Reproducible on iOS11, when the other party ends the call.
@@ -1263,7 +1263,7 @@ private class SignalCallData: NSObject {
      * e.g. when another Call comes in.
      */
     func setIsOnHold(call: RelayCall, isOnHold: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard call == self.call else {
             Logger.info("\(self.logTag) ignoring held request for obsolete call")
@@ -1303,7 +1303,7 @@ private class SignalCallData: NSObject {
      * Can be used for Incoming and Outgoing calls.
      */
     func setHasLocalVideo(hasLocalVideo: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let frontmostViewController = UIApplication.shared.frontmostViewController else {
             owsFail("\(self.logTag) could not identify frontmostViewController in \(#function)")
@@ -1331,7 +1331,7 @@ private class SignalCallData: NSObject {
     }
 
     private func setHasLocalVideoWithCameraPermissions(hasLocalVideo: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             // This can happen if you toggle local video right after
@@ -1354,13 +1354,13 @@ private class SignalCallData: NSObject {
 
     @objc
     func handleCallKitStartVideo() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         self.setHasLocalVideo(hasLocalVideo: true)
     }
 
     func setCameraSource(call: RelayCall, isUsingFrontCamera: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let peerConnectionClient = self.peerConnectionClient else {
             return
@@ -1380,7 +1380,7 @@ private class SignalCallData: NSObject {
      * Used by both Incoming and Outgoing calls.
      */
     private func handleDataChannelMessage(_ message: OWSWebRTCProtosData) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let callData = self.callData else {
             // This should never happen; return to a known good state.
@@ -1434,7 +1434,7 @@ private class SignalCallData: NSObject {
      * The connection has been established. The clients can now communicate.
      */
     internal func peerConnectionClientIceConnected(_ peerConnectionClient: PeerConnectionClient) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard peerConnectionClient == self.peerConnectionClient else {
             Logger.debug("\(self.logTag) \(#function) Ignoring event from obsolete peerConnectionClient")
@@ -1445,7 +1445,7 @@ private class SignalCallData: NSObject {
     }
 
     func peerConnectionClientIceDisconnected(_ peerconnectionClient: PeerConnectionClient) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard peerConnectionClient == self.peerConnectionClient else {
             Logger.debug("\(self.logTag) \(#function) Ignoring event from obsolete peerConnectionClient")
@@ -1459,7 +1459,7 @@ private class SignalCallData: NSObject {
      * The connection failed to establish. The clients will not be able to communicate.
      */
     internal func peerConnectionClientIceFailed(_ peerConnectionClient: PeerConnectionClient) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard peerConnectionClient == self.peerConnectionClient else {
             Logger.debug("\(self.logTag) \(#function) Ignoring event from obsolete peerConnectionClient")
@@ -1476,7 +1476,7 @@ private class SignalCallData: NSObject {
      * out of band, as part of establishing a connection over WebRTC.
      */
     internal func peerConnectionClient(_ peerConnectionClient: PeerConnectionClient, addedLocalIceCandidate iceCandidate: RTCIceCandidate) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard peerConnectionClient == self.peerConnectionClient else {
             Logger.debug("\(self.logTag) \(#function) Ignoring event from obsolete peerConnectionClient")
@@ -1520,7 +1520,7 @@ private class SignalCallData: NSObject {
      * Once the peerconnection is established, we can receive messages via the data channel, and notify the delegate.
      */
     internal func peerConnectionClient(_ peerConnectionClient: PeerConnectionClient, received dataChannelMessage: OWSWebRTCProtosData) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard peerConnectionClient == self.peerConnectionClient else {
             Logger.debug("\(self.logTag) \(#function) Ignoring event from obsolete peerConnectionClient")
@@ -1531,7 +1531,7 @@ private class SignalCallData: NSObject {
     }
 
     internal func peerConnectionClient(_ peerConnectionClient: PeerConnectionClient, didUpdateLocalVideoCaptureSession captureSession: AVCaptureSession?) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard peerConnectionClient == self.peerConnectionClient else {
             Logger.debug("\(self.logTag) \(#function) Ignoring event from obsolete peerConnectionClient")
@@ -1547,7 +1547,7 @@ private class SignalCallData: NSObject {
     }
 
     internal func peerConnectionClient(_ peerConnectionClient: PeerConnectionClient, didUpdateRemoteVideoTrack videoTrack: RTCVideoTrack?) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard peerConnectionClient == self.peerConnectionClient else {
             Logger.debug("\(self.logTag) \(#function) Ignoring event from obsolete peerConnectionClient")
@@ -1569,7 +1569,7 @@ private class SignalCallData: NSObject {
      * a list of servers, plus we have fallback servers hardcoded in the app.
      */
     private func getIceServers() -> Promise<[RTCIceServer]> {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         return firstly {
             return accountManager.getTurnServerInfo()
@@ -1611,7 +1611,7 @@ private class SignalCallData: NSObject {
     //   to reflect the error.
     // * IFF that call is the current call, we want to terminate it.
     public func handleFailedCall(failedCall: RelayCall?, error: CallError) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         if case CallError.assertionError(description: let description) = error {
             owsFail(description)
@@ -1652,7 +1652,7 @@ private class SignalCallData: NSObject {
      * Clean up any existing call state and get ready to receive a new call.
      */
     private func terminateCall() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) in \(#function)")
 
@@ -1669,36 +1669,36 @@ private class SignalCallData: NSObject {
     // MARK: - CallObserver
 
     internal func stateDidChange(call: RelayCall, state: CallState) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         Logger.info("\(self.logTag) \(#function): \(state)")
         updateIsVideoEnabled()
     }
 
     internal func hasLocalVideoDidChange(call: RelayCall, hasLocalVideo: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         Logger.info("\(self.logTag) \(#function): \(hasLocalVideo)")
         self.updateIsVideoEnabled()
     }
 
     internal func muteDidChange(call: RelayCall, isMuted: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         // Do nothing
     }
 
     internal func holdDidChange(call: RelayCall, isOnHold: Bool) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         // Do nothing
     }
 
     internal func audioSourceDidChange(call: RelayCall, audioSource: AudioSource?) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         // Do nothing
     }
 
     // MARK: - Video
 
     private func shouldHaveLocalVideoTrack() -> Bool {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             return false
@@ -1715,7 +1715,7 @@ private class SignalCallData: NSObject {
 
     //TODO only fire this when it's changed? as of right now it gets called whenever you e.g. lock the phone while it's incoming ringing.
     private func updateIsVideoEnabled() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let call = self.call else {
             return
@@ -1738,7 +1738,7 @@ private class SignalCallData: NSObject {
 
     // The observer-related methods should be invoked on the main thread.
     func addObserverAndSyncState(observer: CallServiceObserver) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         observers.append(Weak(value: observer))
 
@@ -1751,7 +1751,7 @@ private class SignalCallData: NSObject {
 
     // The observer-related methods should be invoked on the main thread.
     func removeObserver(_ observer: CallServiceObserver) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         while let index = observers.index(where: { $0.value === observer }) {
             observers.remove(at: index)
@@ -1760,13 +1760,13 @@ private class SignalCallData: NSObject {
 
     // The observer-related methods should be invoked on the main thread.
     func removeAllObservers() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         observers = []
     }
 
     private func fireDidUpdateVideoTracks() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let remoteVideoTrack = self.isRemoteVideoEnabled ? self.remoteVideoTrack : nil
         for observer in observers {
@@ -1780,7 +1780,7 @@ private class SignalCallData: NSObject {
 
     var activeCallTimer: Timer?
     func startCallTimer() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         stopAnyCallTimer()
         assert(self.activeCallTimer == nil)
@@ -1838,7 +1838,7 @@ private class SignalCallData: NSObject {
     }
 
     func stopAnyCallTimer() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         self.activeCallTimer?.invalidate()
         self.activeCallTimer = nil

@@ -8,19 +8,8 @@
 #import "Relay-Swift.h"
 #import "SignalApp.h"
 #import "ThreadUtil.h"
-//#import <RelayMessaging/OWSContactsManager.h>
-#import <RelayServiceKit/AppReadiness.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/NSString+SSK.h>
-#import <RelayServiceKit/OWSDevice.h>
-#import <RelayServiceKit/OWSMessageReceiver.h>
-#import <RelayServiceKit/OWSMessageSender.h>
-#import <RelayServiceKit/OWSReadReceiptManager.h>
-#import <RelayServiceKit/OWSSignalService.h>
-#import <RelayServiceKit/TSAccountManager.h>
-#import <RelayServiceKit/TSIncomingMessage.h>
-#import <RelayServiceKit/TSOutgoingMessage.h>
-#import <RelayServiceKit/TSSocketManager.h>
+
+@import RelayServiceKit;
 
 NSString *const Signal_Thread_UserInfo_Key = @"Signal_Thread_Id";
 NSString *const Signal_Message_UserInfo_Key = @"Signal_Message_Id";
@@ -134,7 +123,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
     DDLogInfo(@"%@ received content-available push", self.logTag);
 
     // If we want to re-introduce silent pushes we can remove this assert.
-    OWSProdLogAndFail(@"Unexpected content-available push.");
+    OWSFailDebug(@"Unexpected content-available push.");
 
     [AppReadiness runNowOrWhenAppIsReady:^{
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 20 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -146,7 +135,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
 - (void)presentOncePerActivationConversationWithThreadId:(NSString *)threadId
 {
     if (self.hasPresentedConversationSinceLastDeactivation) {
-        OWSProdLogAndFail(@"%@ in %s refusing to present conversation: %@ multiple times.",
+        OWSFailDebug(@"%@ in %s refusing to present conversation: %@ multiple times.",
             self.logTag,
             __PRETTY_FUNCTION__,
             threadId);
@@ -167,7 +156,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
     if (threadId) {
         [self presentOncePerActivationConversationWithThreadId:threadId];
     } else {
-        OWSProdLogAndFail(@"%@ threadId was unexpectedly nil in %s", self.logTag, __PRETTY_FUNCTION__);
+        OWSFailDebug(@"%@ threadId was unexpectedly nil in %s", self.logTag, __PRETTY_FUNCTION__);
     }
 
     // We only want to receive a single local notification per launch.
@@ -275,17 +264,17 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
         if (threadId) {
             [self presentOncePerActivationConversationWithThreadId:threadId];
         } else {
-            OWSProdLogAndFail(
+            OWSFailDebug(
                 @"%@ threadId was unexpectedly nil in action with identifier: %@", self.logTag, identifier);
         }
         completionHandler();
     } else {
-        OWSProdLogAndFail(@"%@ Unhandled action with identifier: %@", self.logTag, identifier);
+        OWSFailDebug(@"%@ Unhandled action with identifier: %@", self.logTag, identifier);
         NSString *threadId = notification.userInfo[Signal_Thread_UserInfo_Key];
         if (threadId) {
             [self presentOncePerActivationConversationWithThreadId:threadId];
         } else {
-            OWSProdLogAndFail(
+            OWSFailDebug(
                 @"%@ threadId was unexpectedly nil in action with identifier: %@", self.logTag, identifier);
         }
         completionHandler();
@@ -296,7 +285,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
 {
     NSString *threadId = userInfo[Signal_Thread_UserInfo_Key];
     if (!threadId) {
-        OWSProdLogAndFail(@"%@ missing thread id for notification.", self.logTag);
+        OWSFailDebug(@"%@ missing thread id for notification.", self.logTag);
         return;
     }
 

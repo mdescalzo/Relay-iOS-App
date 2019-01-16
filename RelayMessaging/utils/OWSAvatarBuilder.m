@@ -90,13 +90,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable UIImage *)buildSavedImage
 {
-    OWS_ABSTRACT_METHOD();
+    OWSAbstractMethod();
     return nil;
 }
 
 - (UIImage *)buildDefaultImage
 {
-    OWS_ABSTRACT_METHOD();
+    OWSAbstractMethod();
     return [UIImage new];
 }
 

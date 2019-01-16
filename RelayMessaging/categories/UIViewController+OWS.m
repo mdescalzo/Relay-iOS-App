@@ -4,8 +4,10 @@
 
 #import "UIView+OWS.h"
 #import "UIViewController+OWS.h"
-#import <RelayServiceKit/AppContext.h>
 #import "Theme.h"
+
+@import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

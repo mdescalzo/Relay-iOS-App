@@ -11,7 +11,6 @@
 #import "OWSDeviceProvisioner.h"
 #import "ECKeyPair+OWSPrivateKey.h"
 #import "NSData+Base64.h"
-#import "Cryptography.h"
 #import "SRWebSocket.h"
 #import "WebSocketResources.pb.h"
 #import "OWSProvisioningCipher.h"
@@ -33,6 +32,7 @@
 @import AxolotlKit;
 @import SocketRocket;
 @import Curve25519Kit;
+@import SignalCoreKit;
 
 @interface FLDeviceRegistrationService() <SRWebSocketDelegate>
 

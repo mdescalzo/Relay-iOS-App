@@ -8,21 +8,11 @@
 #import "DebugUIMessagesAssetLoader.h"
 #import "OWSTableViewController.h"
 #import "Relay-Swift.h"
-#import <Curve25519Kit/Randomness.h>
-#import <RelayMessaging/Environment.h>
-#import <RelayServiceKit/MIMETypeUtil.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/OWSBatchMessageProcessor.h>
-#import <RelayServiceKit/OWSDisappearingConfigurationUpdateInfoMessage.h>
-#import <RelayServiceKit/OWSDisappearingMessagesConfiguration.h>
-#import <RelayServiceKit/OWSMessageUtils.h>
-#import <RelayServiceKit/OWSPrimaryStorage+SessionStore.h>
-//#import <RelayServiceKit/OWSSyncGroupsRequestMessage.h>
-#import <RelayServiceKit/OWSVerificationStateChangeMessage.h>
-#import <RelayServiceKit/TSIncomingMessage.h>
-#import <RelayServiceKit/TSInvalidIdentityKeyReceivingErrorMessage.h>
-#import <RelayServiceKit/TSOutgoingMessage.h>
-#import <RelayServiceKit/TSThread.h>
+
+@import RelayMessaging;
+@import RelayServiceKit;
+@import SignalCoreKit;
+@import Curve25519Kit;
 
 NS_ASSUME_NONNULL_BEGIN
 

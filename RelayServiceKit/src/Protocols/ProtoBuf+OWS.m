@@ -2,11 +2,12 @@
 //  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 
-#import "Cryptography.h"
 #import "ProfileManagerProtocol.h"
 #import "ProtoBuf+OWS.h"
 #import "TSThread.h"
 #import "TextSecureKitEnv.h"
+
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

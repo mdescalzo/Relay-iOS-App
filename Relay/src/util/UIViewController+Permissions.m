@@ -4,10 +4,12 @@
 
 #import "Relay-Swift.h"
 #import "UIViewController+Permissions.h"
-#import <AVFoundation/AVFoundation.h>
-#import <Photos/Photos.h>
-#import <RelayMessaging/UIUtil.h>
-#import <RelayServiceKit/Threading.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
+@import RelayMessaging;
+@import AVFoundation;
+@import Photos;
 
 NS_ASSUME_NONNULL_BEGIN
 

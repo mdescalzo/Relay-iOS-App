@@ -20,10 +20,9 @@
 #import "TextSecureKitEnv.h"
 #import "Threading.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
-#import <YapDatabase/YapDatabaseAutoView.h>
-#import <YapDatabase/YapDatabaseConnection.h>
-#import <YapDatabase/YapDatabaseTransaction.h>
-#import <YapDatabase/YapDatabaseViewTypes.h>
+#import "SSKAsserts.h"
+
+@import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -331,7 +330,7 @@ NSString *const OWSMessageDecryptJobFinderExtensionGroup = @"OWSMessageProcessin
     @try {
         envelope = job.envelopeProto;
     } @catch (NSException *exception) {
-        OWSProdLogAndFail(@"%@ Could not parse proto: %@", self.logTag, exception.debugDescription);
+        OWSFailDebug(@"%@ Could not parse proto: %@", self.logTag, exception.debugDescription);
         // TODO: Add analytics.
 
         // FIXME: Supressing this message for now

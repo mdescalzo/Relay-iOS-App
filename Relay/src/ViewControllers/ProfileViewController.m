@@ -11,12 +11,10 @@
 #import "SignalsNavigationController.h"
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
-#import <RelayMessaging/NSString+OWS.h>
-#import <RelayMessaging/OWSNavigationController.h>
-#import <RelayMessaging/OWSProfileManager.h>
-#import <RelayMessaging/UIViewController+OWS.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
+
+@import RelayMessaging;
+@import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

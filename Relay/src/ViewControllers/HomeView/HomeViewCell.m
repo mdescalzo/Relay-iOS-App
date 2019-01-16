@@ -397,7 +397,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)stringForDate:(nullable NSDate *)date
 {
     if (date == nil) {
-        OWSProdLogAndFail(@"%@ date was unexpectedly nil", self.logTag);
+        OWSFailDebug(@"%@ date was unexpectedly nil", self.logTag);
         return @"";
     }
 

@@ -17,7 +17,9 @@
 #import "TSQuotedMessage.h"
 #import "TSThread.h"
 #import "UIImage+OWS.h"
-#import <YapDatabase/YapDatabase.h>
+#import "SSKAsserts.h"
+
+@import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 

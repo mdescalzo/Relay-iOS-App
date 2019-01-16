@@ -6,6 +6,8 @@
 #import "MIMETypeUtil.h"
 #import "NSString+SSK.h"
 
+@import SignalCoreKit;
+
 NS_ASSUME_NONNULL_BEGIN
 
 NSUInteger const TSAttachmentSchemaVersion = 4;

@@ -4,6 +4,8 @@
 
 #import "NSString+SSK.h"
 
+@import SignalCoreKit;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UnicodeCodeRange : NSObject

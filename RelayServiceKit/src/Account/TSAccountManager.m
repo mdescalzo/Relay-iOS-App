@@ -19,6 +19,7 @@
 #import "YapDatabaseTransaction+OWS.h"
 #import "CCSMStorage.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
+#import "SSKAsserts.h"
 
 @import YapDatabase;
 

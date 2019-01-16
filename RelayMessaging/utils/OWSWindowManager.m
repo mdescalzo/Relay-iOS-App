@@ -7,6 +7,8 @@
 #import "UIView+OWS.h"
 #import <RelayMessaging/RelayMessaging-Swift.h>
 
+@import RelayServiceKit;
+
 NS_ASSUME_NONNULL_BEGIN
 
 NSString *const OWSWindowManagerCallDidChangeNotification = @"OWSWindowManagerCallDidChangeNotification";

@@ -29,6 +29,7 @@
 @import PromiseKit;
 @import Fabric;
 @import Crashlytics;
+@import SignalCoreKit;
 
 NSString *const AppDelegateStoryboardMain = @"Main";
 

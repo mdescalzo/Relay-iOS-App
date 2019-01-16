@@ -4,6 +4,9 @@
 
 #import "AppReadiness.h"
 #import "Threading.h"
+#import "SSKAsserts.h"
+
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

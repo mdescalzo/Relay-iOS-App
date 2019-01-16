@@ -4,7 +4,9 @@
 
 #import "OWSMath.h"
 #import "UIView+OWS.h"
-#import <RelayServiceKit/AppContext.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

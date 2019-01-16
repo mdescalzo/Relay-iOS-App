@@ -4,7 +4,6 @@
 
 #import "OWSAttachmentsProcessor.h"
 #import "AppContext.h"
-#import "Cryptography.h"
 #import "MIMETypeUtil.h"
 #import "NSNotificationCenter+OWS.h"
 #import "OWSBackgroundTask.h"
@@ -19,6 +18,9 @@
 #import "TSNetworkManager.h"
 #import "TSThread.h"
 #import <YapDatabase/YapDatabaseConnection.h>
+
+@import YapDatabase;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

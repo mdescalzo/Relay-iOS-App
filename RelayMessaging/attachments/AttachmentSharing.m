@@ -4,9 +4,9 @@
 
 #import "AttachmentSharing.h"
 #import "UIUtil.h"
-#import <RelayServiceKit/AppContext.h>
-#import <RelayServiceKit/TSAttachmentStream.h>
-#import <RelayServiceKit/Threading.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

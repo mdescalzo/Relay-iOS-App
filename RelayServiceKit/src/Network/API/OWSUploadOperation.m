@@ -3,7 +3,6 @@
 //
 
 #import "OWSUploadOperation.h"
-#import "Cryptography.h"
 #import "MIMETypeUtil.h"
 #import "NSError+MessageSending.h"
 #import "NSNotificationCenter+OWS.h"
@@ -12,7 +11,9 @@
 #import "OWSRequestFactory.h"
 #import "TSAttachmentStream.h"
 #import "TSNetworkManager.h"
-#import <YapDatabase/YapDatabaseConnection.h>
+
+@import SignalCoreKit;
+@import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -122,7 +123,7 @@ static const CGFloat kAttachmentUploadProgressTheta = 0.001f;
     NSData *_Nullable encryptedAttachmentData =
         [Cryptography encryptAttachmentData:attachmentData outKey:&encryptionKey outDigest:&digest];
     if (!encryptedAttachmentData) {
-        OWSProdLogAndFail(@"%@ could not encrypt attachment data.", self.logTag);
+        OWSFailDebug(@"%@ could not encrypt attachment data.", self.logTag);
         error = OWSErrorMakeFailedToSendOutgoingMessageError();
         error.isRetryable = YES;
         [self reportError:error];

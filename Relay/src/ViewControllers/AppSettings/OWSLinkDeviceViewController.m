@@ -3,17 +3,13 @@
 //
 
 #import "OWSLinkDeviceViewController.h"
-#import "Cryptography.h"
 #import "OWSDeviceProvisioningURLParser.h"
 #import "OWSLinkedDevicesTableViewController.h"
 #import "Relay-Swift.h"
-#import <RelayMessaging/OWSProfileManager.h>
-#import <RelayServiceKit/ECKeyPair+OWSPrivateKey.h>
-#import <RelayServiceKit/OWSDevice.h>
-#import <RelayServiceKit/OWSDeviceProvisioner.h>
-#import <RelayServiceKit/OWSIdentityManager.h>
-#import <RelayServiceKit/OWSReadReceiptManager.h>
-#import <RelayServiceKit/TSAccountManager.h>
+
+@import RelayServiceKit;
+@import RelayMessaging;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

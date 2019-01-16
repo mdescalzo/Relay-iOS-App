@@ -5,6 +5,8 @@
 #import "ConversationViewCell.h"
 #import "ConversationViewItem.h"
 
+@import SignalCoreKit;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ConversationViewCell
@@ -21,12 +23,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)loadForDisplayWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWS_ABSTRACT_METHOD();
+    OWSAbstractMethod();
 }
 
 - (CGSize)cellSizeWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWS_ABSTRACT_METHOD();
+    OWSAbstractMethod();
 
     return CGSizeZero;
 }

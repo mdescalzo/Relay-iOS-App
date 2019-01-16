@@ -3,13 +3,13 @@
 //
 
 #import "OWSProvisioningCipher.h"
-#import <RelayServiceKit/Cryptography.h>
-#import <CommonCrypto/CommonCrypto.h>
 #import "OWSProvisioningProtos.pb.h"
 
+@import CommonCrypto;
 @import AxolotlKit;
 @import Curve25519Kit;
 @import HKDFKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -38,7 +38,9 @@
 #import "TSSocketManager.h"
 #import "TSThread.h"
 #import "Threading.h"
+#import "SSKAsserts.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
+
 
 @import PromiseKit;
 @import AxolotlKit;
@@ -171,7 +173,7 @@ void AssertIsOnSendingQueue()
 - (void)didSucceed
 {
     if (self.message.messageState != TSOutgoingMessageStateSent) {
-        OWSProdLogAndFail(@"%@ unexpected message status: %@", self.logTag, self.message.statusDescription);
+        OWSFailDebug(@"%@ unexpected message status: %@", self.logTag, self.message.statusDescription);
     }
     
     self.successHandler();

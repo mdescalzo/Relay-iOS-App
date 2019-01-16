@@ -7,26 +7,9 @@
 #import "NSString+OWS.h"
 #import "OWSUserProfile.h"
 #import <RelayMessaging/RelayMessaging-Swift.h>
-#import <RelayServiceKit/AppContext.h>
-#import <RelayServiceKit/Cryptography.h>
-#import <RelayServiceKit/MIMETypeUtil.h>
-#import <RelayServiceKit/NSData+Image.h>
-#import <RelayServiceKit/NSData+OWS.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/NSNotificationCenter+OWS.h>
-#import <RelayServiceKit/OWSFileSystem.h>
-#import <RelayServiceKit/OWSMessageSender.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
-#import <RelayServiceKit/OWSProfileKeyMessage.h>
-#import <RelayServiceKit/OWSRequestBuilder.h>
-#import <RelayServiceKit/OWSSignalService.h>
-#import <RelayServiceKit/SecurityUtils.h>
-#import <RelayServiceKit/TSAccountManager.h>
-#import <RelayServiceKit/TSNetworkManager.h>
-#import <RelayServiceKit/TSThread.h>
-#import <RelayServiceKit/TSYapDatabaseObject.h>
-#import <RelayServiceKit/TextSecureKitEnv.h>
-#import <RelayServiceKit/UIImage+OWS.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
