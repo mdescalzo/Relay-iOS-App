@@ -139,15 +139,14 @@ class ConversationSearchViewController: UITableViewController {
             SignalApp.shared().presentConversation(for: thread.threadRecord, action: .compose)
 
         case .contacts:
-            // TODO: Fix this for our world
-            Logger.debug("Contact search results tapped.  This needs fixing.")
-//            let sectionResults = searchResultSet.contacts
-//            guard let searchResult = sectionResults[safe: indexPath.row] else {
-//                owsFail("\(logTag) unknown row selected.")
-//                return
-//            }
-//
-//            SignalApp.shared().presentConversation(forRecipientId: searchResult.recipientId, action: .compose)
+            let sectionResults = searchResultSet.contacts
+            guard let searchResult = sectionResults[safe: indexPath.row] else {
+                owsFail("\(logTag) unknown row selected.")
+                return
+            }
+            
+            let thread = TSThread.getOrCreateThread(withParticipants: [ TSAccountManager.localUID()!, searchResult.recipientId ])
+            SignalApp.shared().presentConversation(for: thread, action: .compose)
 
         case .messages:
             let sectionResults = searchResultSet.messages
