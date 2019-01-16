@@ -114,11 +114,6 @@ public class ConversationSearcher: NSObject {
                 let sortKey = NSDate.ows_millisecondsSince1970(for: threadViewModel.lastMessageDate)
                 let searchResult = ConversationSearchResult(thread: threadViewModel, sortKey: sortKey)
 
-//                if let contactThread = thread as? TSThread {
-//                    let recipientId = contactThread.contactIdentifier()
-//                    existingConversationRecipientIds.insert(recipientId)
-//                }
-
                 conversations.append(searchResult)
             } else if let message = match as? TSMessage {
                 let thread = message.thread(with: transaction)

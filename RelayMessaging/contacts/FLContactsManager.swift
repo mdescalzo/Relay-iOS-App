@@ -28,8 +28,8 @@ import RelayServiceKit
         return ""
     }
     
-    public func displayName(forRecipientId recipientId: String) -> String? {
-        if let recipient:RelayRecipient = self.recipient(withId: recipientId) {
+    public func displayName(forRecipientId recipientId: String, transaction: YapDatabaseReadTransaction) -> String? {
+        if let recipient: RelayRecipient = self.recipient(withId: recipientId, transaction: transaction) {
             if recipient.fullName().count > 0 {
                 return recipient.fullName()
             } else if (recipient.flTag?.displaySlug.count)! > 0 {
@@ -40,6 +40,15 @@ import RelayServiceKit
                                                              object: self,
                                                              userInfo: ["userIds" : [ recipientId ]])
         return NSLocalizedString("UNKNOWN_CONTACT_NAME", comment: "Displayed if for some reason we can't determine a contacts ID *or* name");
+
+    }
+    
+    public func displayName(forRecipientId recipientId: String) -> String? {
+        var displayName: String?
+        self.readConnection.read { (transaction) in
+            displayName = self.displayName(forRecipientId: recipientId, transaction: transaction)
+        }
+        return displayName
     }
     
     public func isSystemContact(_ recipientId: String) -> Bool {
