@@ -646,7 +646,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 -(void)setType:(NSString *)value
 {
-    if ([value isEqualToString:_type]) {
+    if (![value isEqualToString:_type]) {
         _type = [value copy];
     }
 }
