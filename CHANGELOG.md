@@ -5,6 +5,7 @@
 
 ### Updates
 - YapDatabase updated to v3.1.1.
+- Signal protocol pods
 
 ### Fixes
 - Improper search indexing of messages.
