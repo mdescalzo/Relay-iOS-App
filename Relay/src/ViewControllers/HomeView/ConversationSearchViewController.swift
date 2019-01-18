@@ -18,7 +18,7 @@ class ConversationSearchViewController: UITableViewController {
     @objc
     public var searchText = "" {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             // Use a slight delay to debounce updates.
             refreshSearchResults()
@@ -94,13 +94,13 @@ class ConversationSearchViewController: UITableViewController {
     }
 
     @objc internal func yapDatabaseModified(notification: NSNotification) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         refreshSearchResults()
     }
 
     @objc internal func themeDidChange(notification: NSNotification) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         applyTheme()
         self.tableView.reloadData()
@@ -109,7 +109,7 @@ class ConversationSearchViewController: UITableViewController {
     }
 
     private func applyTheme() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         self.view.backgroundColor = Theme.backgroundColor
         self.tableView.backgroundColor = Theme.backgroundColor
@@ -309,7 +309,7 @@ class ConversationSearchViewController: UITableViewController {
     var refreshTimer: Timer?
 
     private func refreshSearchResults() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard !searchResultSet.isEmpty else {
             // To avoid incorrectly showing the "no results" state,

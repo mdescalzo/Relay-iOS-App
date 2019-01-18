@@ -175,7 +175,7 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     if (![self ensureJobTempDir]) {
-        OWSProdLogAndFail(@"%@ Could not create jobTempDirPath.", self.logTag);
+        OWSFailDebug(@"%@ Could not create jobTempDirPath.", self.logTag);
         return NO;
     }
 
@@ -310,7 +310,7 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
 
     YapDatabaseConnection *_Nullable dbConnection = self.primaryStorage.newDatabaseConnection;
     if (!dbConnection) {
-        OWSProdLogAndFail(@"%@ Could not create dbConnection.", self.logTag);
+        OWSFailDebug(@"%@ Could not create dbConnection.", self.logTag);
         return completion(NO);
     }
 
@@ -395,7 +395,7 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
                 @try {
                     entities = [OWSSignaliOSProtosBackupSnapshot parseFromData:uncompressedData];
                 } @catch (NSException *exception) {
-                    OWSProdLogAndFail(@"%@ Could not parse proto: %@", self.logTag, exception.debugDescription);
+                    OWSFailDebug(@"%@ Could not parse proto: %@", self.logTag, exception.debugDescription);
                     // TODO: Add analytics.
                 }
                 if (!entities || entities.entity.count < 1) {

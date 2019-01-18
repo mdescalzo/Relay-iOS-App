@@ -54,13 +54,13 @@ public class LRUCache<KeyType: Hashable & Equatable, ValueType> {
     }
 
     @objc func didEnterBackground() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         clear()
     }
 
     @objc func didReceiveMemoryWarning() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         clear()
     }

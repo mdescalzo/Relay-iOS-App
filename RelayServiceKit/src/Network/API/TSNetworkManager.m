@@ -9,9 +9,11 @@
 #import "OWSSignalService.h"
 #import "TSAccountManager.h"
 #import "TSVerifyCodeRequest.h"
-#import <AFNetworking/AFNetworking.h>
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 #import "OWSDevice.h"
+#import "SSKAsserts.h"
+
+@import AFNetworking;
 
 NSString *const TSNetworkManagerDomain = @"io.forsta.relay.networkManager";
 

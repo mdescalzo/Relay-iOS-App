@@ -23,7 +23,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
 
     private var viewMode = ContactViewMode.unknown {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             if oldValue != viewMode && hasLoadedView {
                 updateContent()
@@ -123,7 +123,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
     }
 
     private func updateMode() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard contactShare.e164PhoneNumbers().count > 0 else {
             viewMode = .noPhoneNumber
@@ -142,19 +142,19 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
     }
 
     private func systemContactsWithSignalAccountsForContact() -> [String] {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         return contactShare.systemContactsWithSignalAccountPhoneNumbers(contactsManager)
     }
 
     private func systemContactsForContact() -> [String] {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         return contactShare.systemContactPhoneNumbers(contactsManager)
     }
 
     private func updateContent() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         guard let rootView = self.view else {
             owsFail("\(logTag) missing root view.")
@@ -201,7 +201,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
     }
 
     private func createTopView() -> UIView {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let topView = UIView.container()
         topView.backgroundColor = heroBackgroundColor()
@@ -345,7 +345,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
     }
 
     private func createFieldsView() -> UIView {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         var rows = [UIView]()
 

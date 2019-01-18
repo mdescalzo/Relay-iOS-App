@@ -7,9 +7,10 @@
 #import "NSData+Image.h"
 #import "OWSFileSystem.h"
 #import "TSAttachmentPointer.h"
-#import <AVFoundation/AVFoundation.h>
-#import <ImageIO/ImageIO.h>
-#import <YapDatabase/YapDatabase.h>
+
+@import YapDatabase;
+@import ImageIO;
+@import AVFoundation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -447,7 +448,8 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)self.mediaURL, NULL);
-        OWSAssert(imageSource != NULL) NSDictionary *imageOptions = @{
+        OWSAssert(imageSource != NULL);
+        NSDictionary *imageOptions = @{
             (NSString const *)kCGImageSourceCreateThumbnailFromImageIfAbsent : (NSNumber const *)kCFBooleanTrue,
             (NSString const *)kCGImageSourceThumbnailMaxPixelSize : @(thumbnailSize),
             (NSString const *)kCGImageSourceCreateThumbnailWithTransform : (NSNumber const *)kCFBooleanTrue

@@ -11,7 +11,9 @@
 #import "TSThread.h"
 #import "TSErrorMessage_privateConstructor.h"
 #import "TSOutgoingMessage.h"
-#import <AxolotlKit/NSData+keyVersionByte.h>
+
+@import SignalCoreKit;
+@import AxolotlKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -62,7 +64,14 @@ NSString *TSInvalidRecipientKey = @"TSInvalidRecipientKey";
 
 - (nullable NSData *)newIdentityKey
 {
-    return [self.preKeyBundle.identityKey removeKeyType];
+    NSData *newIdentityKey;
+    @try {
+        newIdentityKey = [self.preKeyBundle.identityKey throws_removeKeyType];
+    } @catch (NSException *exception) {
+        OWSFailDebug(@"exception: %@", exception);
+    }
+
+    return newIdentityKey;
 }
 
 - (NSString *)theirSignalId

@@ -3,12 +3,13 @@
 //
 
 #import "OWSOutgoingNullMessage.h"
-#import "Cryptography.h"
 #import "NSDate+OWS.h"
 #import "OWSSignalServiceProtos.pb.h"
 #import "OWSVerificationStateSyncMessage.h"
 #import "TSThread.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
+
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

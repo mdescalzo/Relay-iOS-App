@@ -20,10 +20,8 @@
 #import "TextSecureKitEnv.h"
 #import "Threading.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
-#import <YapDatabase/YapDatabaseAutoView.h>
-#import <YapDatabase/YapDatabaseConnection.h>
-#import <YapDatabase/YapDatabaseTransaction.h>
-#import <YapDatabase/YapDatabaseViewTypes.h>
+
+@import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -80,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
     SSKEnvelope *_Nullable result = [[SSKEnvelope alloc] initWithSerializedData:self.envelopeData error:&error];
 
     if (error) {
-        OWSProdLogAndFail(@"%@ paring SSKEnvelope failed with error: %@", self.logTag, error);
+        OWSFailDebug(@"%@ paring SSKEnvelope failed with error: %@", self.logTag, error);
         return nil;
     }
     

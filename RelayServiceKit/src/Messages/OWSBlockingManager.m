@@ -11,6 +11,7 @@
 #import "OWSPrimaryStorage.h"
 #import "TextSecureKitEnv.h"
 #import "YapDatabaseConnection+OWS.h"
+#import "SSKAsserts.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

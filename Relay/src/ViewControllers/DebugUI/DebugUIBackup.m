@@ -6,8 +6,8 @@
 #import "OWSBackup.h"
 #import "OWSTableViewController.h"
 #import "Relay-Swift.h"
-#import <Curve25519Kit/Randomness.h>
 
+@import SignalCoreKit;
 @import CloudKit;
 
 NS_ASSUME_NONNULL_BEGIN

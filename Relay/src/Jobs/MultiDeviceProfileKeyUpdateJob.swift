@@ -6,6 +6,7 @@ import Foundation
 import PromiseKit
 import RelayServiceKit
 import RelayMessaging
+import SignalCoreKit
 
 /**
  * Used to distribute our profile key to legacy linked devices, newly linked devices will have our profile key as part of provisioning.

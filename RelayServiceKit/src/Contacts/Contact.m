@@ -3,7 +3,6 @@
 //
 
 #import "Contact.h"
-#import "Cryptography.h"
 #import "NSString+SSK.h"
 #import "OWSPrimaryStorage.h"
 #import "PhoneNumber.h"
@@ -12,6 +11,7 @@
 #import "TextSecureKitEnv.h"
 
 @import Contacts;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (hashData) {
             [hashData getBytes:&hashValue length:sizeof(hashValue)];
         } else {
-            OWSProdLogAndFail(@"%@ could not compute hash for avatar.", self.logTag);
+            OWSFailDebug(@"%@ could not compute hash for avatar.", self.logTag);
         }
         _imageHash = hashValue;
     } else {
@@ -310,15 +310,15 @@ NS_ASSUME_NONNULL_BEGIN
     NSError *error;
     NSArray<CNContact *> *_Nullable contacts = [CNContactVCardSerialization contactsWithData:data error:&error];
     if (!contacts || error) {
-        OWSProdLogAndFail(@"%@ could not parse vcard: %@", self.logTag, error);
+        OWSFailDebug(@"%@ could not parse vcard: %@", self.logTag, error);
         return nil;
     }
     if (contacts.count < 1) {
-        OWSProdLogAndFail(@"%@ empty vcard: %@", self.logTag, error);
+        OWSFailDebug(@"%@ empty vcard: %@", self.logTag, error);
         return nil;
     }
     if (contacts.count > 1) {
-        OWSProdLogAndFail(@"%@ more than one contact in vcard: %@", self.logTag, error);
+        OWSFailDebug(@"%@ more than one contact in vcard: %@", self.logTag, error);
     }
     return contacts.firstObject;
 }

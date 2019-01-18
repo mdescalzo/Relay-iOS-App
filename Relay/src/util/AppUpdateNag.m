@@ -4,9 +4,9 @@
 
 #import "AppUpdateNag.h"
 #import "Relay-Swift.h"
-#import <ATAppUpdater/ATAppUpdater.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
+
+@import ATAppUpdater;
+@import RelayServiceKit;
 
 NSString *const OWSPrimaryStorageAppUpgradeNagCollection = @"TSStorageManagerAppUpgradeNagCollection";
 NSString *const OWSPrimaryStorageAppUpgradeNagDate = @"TSStorageManagerAppUpgradeNagDate";

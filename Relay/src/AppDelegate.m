@@ -29,6 +29,7 @@
 @import PromiseKit;
 @import Fabric;
 @import Crashlytics;
+@import SignalCoreKit;
 
 NSString *const AppDelegateStoryboardMain = @"Main";
 
@@ -1118,7 +1119,7 @@ static NSTimeInterval launchStartedAt;
     [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
 #endif
 
-    [OWSProfileManager.sharedManager fetchLocalUsersProfile];
+//    [OWSProfileManager.sharedManager fetchLocalUsersProfile];
     [[OWSReadReceiptManager sharedManager] prepareCachedValues];
 
     // Disable the SAE until the main app has successfully completed launch process

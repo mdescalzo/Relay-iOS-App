@@ -21,6 +21,7 @@
 #import "Threading.h"
 #import "YapDatabaseConnection+OWS.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
+#import "SSKAsserts.h"
 
 @import YapDatabase;
 
@@ -473,12 +474,12 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
         uint64_t messageIdTimestamp = readReceiptProto.timestamp;
 
         if (senderId.length == 0) {
-            OWSProdLogAndFail(@"%@ in %s senderId was unexpectedly nil", self.logTag, __PRETTY_FUNCTION__);
+            OWSFailDebug(@"%@ in %s senderId was unexpectedly nil", self.logTag, __PRETTY_FUNCTION__);
             continue;
         }
 
         if (messageIdTimestamp == 0) {
-            OWSProdLogAndFail(@"%@ in %s messageIdTimestamp was unexpectedly 0", self.logTag, __PRETTY_FUNCTION__);
+            OWSFailDebug(@"%@ in %s messageIdTimestamp was unexpectedly 0", self.logTag, __PRETTY_FUNCTION__);
             continue;
         }
 

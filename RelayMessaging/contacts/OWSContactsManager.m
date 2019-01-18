@@ -11,14 +11,9 @@
 #import "ViewControllerUtils.h"
 #import <RelayMessaging/RelayMessaging-Swift.h>
 #import <RelayMessaging/UIFont+OWS.h>
-#import <RelayServiceKit/ContactsUpdater.h>
-#import <RelayServiceKit/NSNotificationCenter+OWS.h>
-#import <RelayServiceKit/NSString+SSK.h>
-#import <RelayServiceKit/OWSError.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
-#import <RelayServiceKit/PhoneNumber.h>
-#import <RelayServiceKit/SignalAccount.h>
 
+@import SignalCoreKit;
+@import RelayServiceKit;
 @import Contacts;
 
 NS_ASSUME_NONNULL_BEGIN

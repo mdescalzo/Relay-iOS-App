@@ -38,12 +38,12 @@
 #import "UIFont+OWS.h"
 #import "UIViewController+Permissions.h"
 #import "ViewControllerUtils.h"
-#import <AVFoundation/AVFoundation.h>
-#import <AssetsLibrary/AssetsLibrary.h>
 #import <ContactsUI/CNContactViewController.h>
-#import <MobileCoreServices/UTCoreTypes.h>
-#import <PromiseKit/AnyPromise.h>
 
+@import PromiseKit;
+@import MobileCoreServices;
+@import AssetsLibrary;
+@import AVFoundation;
 @import RelayMessaging;
 @import RelayServiceKit;
 @import YapDatabase;
@@ -1084,7 +1084,6 @@ typedef enum : NSUInteger {
 {
     [super viewDidAppear:animated];
 
-//    [ProfileFetcherJob runWithThread:self.thread networkManager:self.networkManager];
     [self markVisibleMessagesAsRead];
     [self startReadTimer];
     [self updateNavigationBarSubtitleLabel];
@@ -2248,7 +2247,7 @@ typedef enum : NSUInteger {
 -(void)didTapWebPreviewViewItem:(ConversationViewItem *)conversationItem
 {
     OWSAssert(conversationItem);
-    OWSAssert(conversationItem.hasUrl)
+    OWSAssert(conversationItem.hasUrl);
     
     [UIApplication.sharedApplication openURL:[NSURL URLWithString:conversationItem.urlString]];
 }
@@ -3297,7 +3296,7 @@ typedef enum : NSUInteger {
     if (hasMalformedRowChange) {
         // These errors seems to be very rare; they can only be reproduced
         // using the more extreme actions in the debug UI.
-        OWSProdLogAndFail(@"%@ hasMalformedRowChange", self.logTag);
+        OWSFailDebug(@"%@ hasMalformedRowChange", self.logTag);
         [self reloadViewItems];
         [self.collectionView reloadData];
         self.lastReloadDate = [NSDate new];

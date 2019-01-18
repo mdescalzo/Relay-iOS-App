@@ -62,7 +62,7 @@ import RelayServiceKit
     }
 
     internal func updateSubviews() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         self.horizontalBarLayer.frame = self.bounds
         self.progressLayer.frame = self.bounds
@@ -71,7 +71,7 @@ import RelayServiceKit
     }
 
     internal func updateContent() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         // Prevent the shape layer from animating changes.
         CATransaction.begin()

@@ -4,14 +4,10 @@
 
 #import "OWSUserProfile.h"
 #import "NSString+OWS.h"
-#import <RelayServiceKit/AppContext.h>
-#import <RelayServiceKit/Cryptography.h>
-#import <RelayServiceKit/NSData+OWS.h>
-#import <RelayServiceKit/NSNotificationCenter+OWS.h>
-#import <RelayServiceKit/OWSFileSystem.h>
-#import <RelayServiceKit/TSAccountManager.h>
-#import <YapDatabase/YapDatabaseConnection.h>
-#import <YapDatabase/YapDatabaseTransaction.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
+@import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 

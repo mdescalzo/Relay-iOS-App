@@ -160,7 +160,7 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
 {
     uint32_t maxExpirationDuration = [OWSDisappearingMessagesConfiguration maxDurationSeconds];
     if (expiresInSeconds > maxExpirationDuration) {
-        OWSProdLogAndFail(@"%@ in %s using `maxExpirationDuration` instead of: %u",
+        OWSFailDebug(@"%@ in %s using `maxExpirationDuration` instead of: %u",
             self.logTag,
             __PRETTY_FUNCTION__,
             maxExpirationDuration);

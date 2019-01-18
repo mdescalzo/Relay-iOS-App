@@ -6,10 +6,6 @@ import Foundation
 
 public extension String {
 
-    var stripped: String {
-        return self.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
     // Truncates string to be less than or equal to byteCount, while ensuring we never truncate partial characters for multibyte characters.
     func truncated(toByteCount byteCount: UInt) -> String? {
         var lowerBoundCharCount = 0

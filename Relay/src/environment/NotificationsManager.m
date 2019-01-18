@@ -5,20 +5,11 @@
 #import "NotificationsManager.h"
 #import "PushManager.h"
 #import "Relay-Swift.h"
-#import <AudioToolbox/AudioServices.h>
-#import <RelayMessaging/Environment.h>
-#import <RelayMessaging/NSString+OWS.h>
-//#import <RelayMessaging/OWSContactsManager.h>
-#import <RelayMessaging/OWSPreferences.h>
-#import <RelayMessaging/OWSSounds.h>
-#import <RelayServiceKit/NSString+SSK.h>
-#import <RelayServiceKit/TSCall.h>
-#import <RelayServiceKit/TSThread.h>
-#import <RelayServiceKit/TSErrorMessage.h>
-#import <RelayServiceKit/TSIncomingMessage.h>
-#import <RelayServiceKit/TextSecureKitEnv.h>
-#import <RelayServiceKit/Threading.h>
-#import <YapDatabase/YapDatabaseTransaction.h>
+
+@import AudioToolbox;
+@import RelayServiceKit;
+@import YapDatabase;
+@import Pods_RelayMessaging;
 
 @interface NotificationsManager ()
 
@@ -208,7 +199,7 @@
     OWSAssert(message);
 
     if (!thread) {
-        OWSProdLogAndFail(
+        OWSFailDebug(
             @"%@ unexpected notification not associated with a thread: %@.", self.logTag, [message class]);
         [self notifyUserForThreadlessErrorMessage:message transaction:transaction];
         return;

@@ -6,17 +6,11 @@
 #import "Relay-Swift.h"
 #import "ThreadUtil.h"
 #import "zlib.h"
-#import <AFNetworking/AFNetworking.h>
-#import <SSZipArchive/SSZipArchive.h>
-#import <RelayMessaging/AttachmentSharing.h>
-#import <RelayMessaging/DebugLogger.h>
-#import <RelayMessaging/Environment.h>
-#import <RelayServiceKit/AppContext.h>
-#import <RelayServiceKit/MimeTypeUtil.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
-#import <RelayServiceKit/TSAccountManager.h>
-#import <RelayServiceKit/TSThread.h>
-#import <RelayServiceKit/Threading.h>
+
+@import AFNetworking;
+@import SSZipArchive;
+@import RelayMessaging;
+@import RelayServiceKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

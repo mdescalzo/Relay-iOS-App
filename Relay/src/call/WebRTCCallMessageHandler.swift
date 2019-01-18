@@ -33,7 +33,7 @@ public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
 
     // MARK: - Call Handlers
     public func receivedOffer(withThreadId threadId: String, callId: String, originatorId: String, peerId: String, sessionDescription: String) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         
         let thread = TSThread.getOrCreateThread(withId: threadId)
         
@@ -41,14 +41,14 @@ public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
     }
     
     public func receivedAnswer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         
         let thread = TSThread.getOrCreateThread(withId: threadId)
         self.callService.handleReceivedAnswer(thread: thread, peerId: peerId, sessionDescription: sessionDescription)
     }
     
     public func receivedIceUpdate(withThreadId threadId: String, sessionDescription sdp: String, sdpMid: String, sdpMLineIndex: Int32) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let thread = TSThread.getOrCreateThread(withId: threadId)
 
@@ -58,14 +58,14 @@ public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
     }
     
     public func receivedHangup(withThreadId threadId: String, callId: String) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let thread = TSThread.getOrCreateThread(withId: threadId)
         self.callService.handleRemoteHangup(thread: thread, callId: callId)
     }
     
 //    public func receivedHangup(_ hangup: OWSSignalServiceProtosCallMessageHangup, from callerId: String) {
-//        SwiftAssertIsOnMainThread(#function)
+//        AssertIsOnMainThread(file: #function)
 //        guard hangup.hasId() else {
 //            owsFail("no callId in \(#function)")
 //            return
@@ -76,7 +76,7 @@ public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
 //    }
 
     public func receivedBusy(_ busy: OWSSignalServiceProtosCallMessageBusy, from callerId: String) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
         guard busy.hasId() else {
             owsFail("no callId in \(#function)")
             return

@@ -19,18 +19,30 @@ extern int  curve25519_sign(unsigned char* signature_out, /* 64 bytes */
 
 +(ECKeyPair*)generateKeyPairWithPrivateKey:(NSData *)privKey
 {
-    ECKeyPair* keyPair =[[ECKeyPair alloc] init];
+    ECKeyPair* keyPair = [Curve25519 generateKeyPair];
     
-    // Generate key pair as described in https://code.google.com/p/curve25519-donna/
-    memcpy(keyPair->privateKey, privKey.bytes, 32);
-    keyPair->privateKey[0]  &= 248;
-    keyPair->privateKey[31] &= 127;
-    keyPair->privateKey[31] |= 64;
+    // Generate key pair as described in
+    // https://code.google.com/p/curve25519-donna/
+    uint8_t *privateKeyBytes = privKey.bytes;
+    privateKeyBytes[0] &= 248;
+    privateKeyBytes[31] &= 127;
+    privateKeyBytes[31] |= 64;
     
-    static const uint8_t basepoint[ECCKeyLength] = {9};
-    curve25519_donna(keyPair->publicKey, keyPair->privateKey, basepoint);
+    static const uint8_t basepoint[ECCKeyLength] = { 9 };
     
+    curve25519_donna(keyPair.publicKey.bytes, keyPair.privateKey.bytes, basepoint);
+
     return keyPair;
+    
+//    // Generate key pair as described in https://code.google.com/p/curve25519-donna/
+//    memcpy(keyPair->privateKey, privKey.bytes, 32);
+//    keyPair->privateKey[0]  &= 248;
+//    keyPair->privateKey[31] &= 127;
+//    keyPair->privateKey[31] |= 64;
+//
+//    static const uint8_t basepoint[ECCKeyLength] = {9};
+//    curve25519_donna(keyPair.publicKey, keyPair.privateKey, basepoint);
+//    return keyPair;
 }
 
 @end

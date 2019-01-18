@@ -18,18 +18,12 @@
 #import "TSDatabaseView.h"
 #import "TSThread.h"
 #import "ViewControllerUtils.h"
-#import <PromiseKit/AnyPromise.h>
-//#import <RelayMessaging/OWSContactsManager.h>
-#import <RelayMessaging/OWSFormat.h>
-#import <RelayMessaging/UIUtil.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/OWSBlockingManager.h>
-#import <RelayServiceKit/OWSMessageSender.h>
-#import <RelayServiceKit/OWSMessageUtils.h>
-#import <RelayServiceKit/TSAccountManager.h>
-#import <RelayServiceKit/TSOutgoingMessage.h>
-#import <RelayServiceKit/Threading.h>
 #import "FLAnnouncementViewController.h"
+
+@import PromiseKit;
+@import RelayServiceKit;
+@import SignalCoreKit;
+@import RelayMessaging;
 
 @import YapDatabase;
 

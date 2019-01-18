@@ -12,10 +12,8 @@ static const NSUInteger ddLogLevel = DDLogLevelAll;
 static const NSUInteger ddLogLevel = DDLogLevelInfo;
 #endif
 #import "Constraints.h"
-#import "NSObject+OWS.h"
-#import "OWSAsserts.h"
+#import "SSKAsserts.h"
 #import "OWSDispatch.h"
-#import "iOSVersions.h"
 
 #define BLOCK_SAFE_RUN(block, ...)                                                        \
     block ? dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), \

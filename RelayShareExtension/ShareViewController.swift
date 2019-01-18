@@ -79,7 +79,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
         // Don't display load screen immediately, in hopes that we can avoid it altogether.
         after(seconds: 0.5).then { [weak self] () -> Void in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             guard let strongSelf = self else { return }
             guard strongSelf.presentedViewController == nil else {
@@ -99,7 +99,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
             return NoopNotificationsManager()
         },
                                   migrationCompletion: { [weak self] in
-                                    SwiftAssertIsOnMainThread(#function)
+                                    AssertIsOnMainThread(file: #function)
 
                                     guard let strongSelf = self else { return }
 
@@ -145,7 +145,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
     @objc
     public func applicationDidEnterBackground() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.info("\(self.logTag) \(#function)")
 
@@ -154,7 +154,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
             Logger.info("\(self.logTag) \(#function) dismissing.")
 
             self.dismiss(animated: false) { [weak self] in
-                SwiftAssertIsOnMainThread(#function)
+                AssertIsOnMainThread(file: #function)
                 guard let strongSelf = self else { return }
                 strongSelf.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
             }
@@ -162,7 +162,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     }
 
     private func activate() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) \(#function)")
 
@@ -214,7 +214,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
     @objc
     func versionMigrationsDidComplete() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) \(#function)")
 
@@ -225,7 +225,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
     @objc
     func storageIsReady() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) \(#function)")
 
@@ -234,7 +234,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
     @objc
     func checkIsAppReady() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         // App isn't ready until storage is ready AND all version migrations are complete.
         guard areVersionMigrationsComplete else {
@@ -288,7 +288,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
     @objc
     func registrationStateDidChange() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) \(#function)")
 
@@ -304,7 +304,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     }
 
     private func ensureRootViewController() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) \(#function)")
 
@@ -326,7 +326,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     }
 
     private func presentContentView() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) \(#function)")
 
@@ -375,7 +375,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     // MARK: Error Views
 
     private func showNotReadyView() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let failureTitle = NSLocalizedString("SHARE_EXTENSION_NOT_YET_MIGRATED_TITLE",
                                              comment: "Title indicating that the share extension cannot be used until the main app has been launched at least once.")
@@ -385,7 +385,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     }
 
     private func showNotRegisteredView() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let failureTitle = NSLocalizedString("SHARE_EXTENSION_NOT_REGISTERED_TITLE",
                                              comment: "Title indicating that the share extension cannot be used until the user has registered in the main app.")
@@ -395,7 +395,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     }
 
     private func showErrorView(title: String, message: String) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let viewController = SAEFailedViewController(delegate: self, title: title, message: message)
         self.showPrimaryViewController(viewController)
@@ -410,7 +410,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
         if isReadyForAppExtensions {
             AppReadiness.runNowOrWhenAppIsReady { [weak self] in
-                SwiftAssertIsOnMainThread(#function)
+                AssertIsOnMainThread(file: #function)
                 guard let strongSelf = self else { return }
                 strongSelf.activate()
             }
@@ -452,7 +452,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
     @objc
     func owsApplicationWillEnterForeground() throws {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         Logger.debug("\(self.logTag) \(#function)")
 
@@ -485,7 +485,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
         Logger.info("\(self.logTag) \(#function)")
 
         self.dismiss(animated: true) { [weak self] in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
             guard let strongSelf = self else { return }
             strongSelf.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
         }
@@ -495,7 +495,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
         Logger.info("\(self.logTag) \(#function)")
 
         self.dismiss(animated: true) { [weak self] in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
             guard let strongSelf = self else { return }
             strongSelf.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
         }
@@ -505,7 +505,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
         Logger.info("\(self.logTag) \(#function)")
 
         self.dismiss(animated: true) { [weak self] in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
             guard let strongSelf = self else { return }
             strongSelf.extensionContext!.cancelRequest(withError: error)
         }
@@ -521,7 +521,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     // animation. Next, when loading completes, the load view will be switched out for the contact
     // picker view.
     private func showPrimaryViewController(_ viewController: UIViewController) {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         shareViewNavigationController.setViewControllers([viewController], animated: false)
         if self.presentedViewController == nil {
@@ -534,10 +534,10 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     }
 
     private func buildAttachmentAndPresentConversationPicker() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         self.buildAttachment().then { [weak self] attachment -> Void in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
             guard let strongSelf = self else { return }
 
             strongSelf.progressPoller = nil
@@ -549,7 +549,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
             strongSelf.showPrimaryViewController(conversationPicker)
             Logger.info("\(strongSelf.logTag) showing picker with attachment: \(attachment)")
         }.catch {[weak self]  error in
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
             guard let strongSelf = self else { return }
 
             let alertTitle = NSLocalizedString("SHARE_EXTENSION_UNABLE_TO_BUILD_ATTACHMENT_ALERT_TITLE",
@@ -564,7 +564,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
     }
 
     private func presentScreenLock() {
-        SwiftAssertIsOnMainThread(#function)
+        AssertIsOnMainThread(file: #function)
 
         let screenLockUI = SAEScreenLockViewController(shareViewDelegate: self)
         Logger.debug("\(self.logTag) presentScreenLock: \(screenLockUI)")

@@ -7,6 +7,7 @@
 #import <RelayMessaging/RelayMessaging-Swift.h>
 
 @import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -111,7 +112,7 @@ NSString *const ThemeKeyThemeEnabled = @"ThemeKeyThemeEnabled";
     if (hashData) {
         [hashData getBytes:&hash length:hashingLength];
     } else {
-        OWSProdLogAndFail(@"%@ could not compute hash for color seed.", self.logTag);
+        OWSFailDebug(@"%@ could not compute hash for color seed.", self.logTag);
     }
 
     

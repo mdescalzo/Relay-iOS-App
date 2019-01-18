@@ -3,9 +3,9 @@
 //
 
 #import "DateUtil.h"
-#import <RelayMessaging/NSString+OWS.h>
-#import <RelayMessaging/OWSFormat.h>
-#import <RelayServiceKit/NSDate+OWS.h>
+
+@import RelayMessaging;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

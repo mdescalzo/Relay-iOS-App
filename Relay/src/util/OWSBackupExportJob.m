@@ -7,16 +7,9 @@
 #import "OWSDatabaseMigration.h"
 #import "OWSSignalServiceProtos.pb.h"
 #import "Relay-Swift.h"
-#import <RelayServiceKit/NSData+Base64.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/OWSBackgroundTask.h>
-#import <RelayServiceKit/OWSError.h>
-#import <RelayServiceKit/OWSFileSystem.h>
-#import <RelayServiceKit/TSAttachment.h>
-#import <RelayServiceKit/TSAttachmentStream.h>
-#import <RelayServiceKit/TSMessage.h>
-#import <RelayServiceKit/TSThread.h>
-#import <RelayServiceKit/Threading.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -119,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSData *_Nullable data = [NSKeyedArchiver archivedDataWithRootObject:object];
     if (!data) {
-        OWSProdLogAndFail(@"%@ couldn't serialize database object: %@", self.logTag, [object class]);
+        OWSFailDebug(@"%@ couldn't serialize database object: %@", self.logTag, [object class]);
         return NO;
     }
 
@@ -164,7 +157,7 @@ NS_ASSUME_NONNULL_BEGIN
         self.backupSnapshotBuilder = nil;
         self.cachedItemCount = 0;
         if (!uncompressedData) {
-            OWSProdLogAndFail(@"%@ couldn't convert database snapshot to data.", self.logTag);
+            OWSFailDebug(@"%@ couldn't convert database snapshot to data.", self.logTag);
             return NO;
         }
 
@@ -172,7 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
 
         OWSBackupEncryptedItem *_Nullable encryptedItem = [self.backupIO encryptDataAsTempFile:compressedData];
         if (!encryptedItem) {
-            OWSProdLogAndFail(@"%@ couldn't encrypt database snapshot.", self.logTag);
+            OWSFailDebug(@"%@ couldn't encrypt database snapshot.", self.logTag);
             return NO;
         }
 
@@ -392,7 +385,7 @@ NS_ASSUME_NONNULL_BEGIN
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     if (![self ensureJobTempDir]) {
-        OWSProdLogAndFail(@"%@ Could not create jobTempDirPath.", self.logTag);
+        OWSFailDebug(@"%@ Could not create jobTempDirPath.", self.logTag);
         return completion(NO);
     }
 
@@ -464,7 +457,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     YapDatabaseConnection *_Nullable dbConnection = self.primaryStorage.newDatabaseConnection;
     if (!dbConnection) {
-        OWSProdLogAndFail(@"%@ Could not create dbConnection.", self.logTag);
+        OWSFailDebug(@"%@ Could not create dbConnection.", self.logTag);
         return NO;
     }
 
@@ -494,7 +487,7 @@ NS_ASSUME_NONNULL_BEGIN
                                              return;
                                          }
                                          if (![object isKindOfClass:expectedClass]) {
-                                             OWSProdLogAndFail(@"%@ unexpected class: %@", self.logTag, [object class]);
+                                             OWSFailDebug(@"%@ unexpected class: %@", self.logTag, [object class]);
                                              return;
                                          }
                                          TSYapDatabaseObject *entity = object;
@@ -591,7 +584,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     @autoreleasepool {
         if (![exportStream flush]) {
-            OWSProdLogAndFail(@"%@ Could not flush database snapshots.", self.logTag);
+            OWSFailDebug(@"%@ Could not flush database snapshots.", self.logTag);
             return NO;
         }
     }
@@ -905,7 +898,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSData *_Nullable jsonData =
         [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&error];
     if (!jsonData || error) {
-        OWSProdLogAndFail(@"%@ error encoding manifest file: %@", self.logTag, error);
+        OWSFailDebug(@"%@ error encoding manifest file: %@", self.logTag, error);
         return nil;
     }
     return [self.backupIO encryptDataAsTempFile:jsonData encryptionKey:self.delegate.backupEncryptionKey];

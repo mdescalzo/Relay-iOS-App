@@ -3,8 +3,9 @@
 //
 
 #import "OWSPreferences.h"
-
 #import <RelayMessaging/RelayMessaging-Swift.h>
+
+@import RelayServiceKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

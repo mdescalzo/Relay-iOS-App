@@ -5,11 +5,9 @@
 #import "OWSSounds.h"
 #import "OWSAudioPlayer.h"
 #import <RelayMessaging/RelayMessaging-Swift.h>
-#import <RelayServiceKit/OWSFileSystem.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
-#import <RelayServiceKit/TSThread.h>
-#import <RelayServiceKit/YapDatabaseConnection+OWS.h>
-#import <YapDatabase/YapDatabase.h>
+
+@import RelayServiceKit;
+@import YapDatabase;
 
 NSString *const kOWSSoundsStorageNotificationCollection = @"kOWSSoundsStorageNotificationCollection";
 NSString *const kOWSSoundsStorageGlobalNotificationKey = @"kOWSSoundsStorageGlobalNotificationKey";
@@ -350,7 +348,7 @@ NSString *const kOWSSoundsStorageGlobalNotificationKey = @"kOWSSoundsStorageGlob
     [OWSFileSystem protectFileOrFolderAtPath:defaultSoundPath fileProtectionType:NSFileProtectionNone];
 
     if (!success) {
-        OWSProdLogAndFail(
+        OWSFailDebug(
             @"%@ Unable to write new default sound data from: %@ to :%@", self.logTag, soundURL, defaultSoundPath);
         return;
     }

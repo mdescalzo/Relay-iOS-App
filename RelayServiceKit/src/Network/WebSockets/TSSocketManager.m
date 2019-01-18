@@ -5,7 +5,6 @@
 #import "TSSocketManager.h"
 #import "AppContext.h"
 #import "AppReadiness.h"
-#import "Cryptography.h"
 #import "NSNotificationCenter+OWS.h"
 #import "NSTimer+OWS.h"
 #import "NotificationsProtocol.h"
@@ -26,6 +25,9 @@
 #import "WebSocketResources.pb.h"
 #import "OWSDevice.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
+#import "SSKAsserts.h"
+
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -499,7 +501,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
                        options:(NSJSONWritingOptions)0
                          error:&error];
         if (!jsonData || error) {
-            OWSProdLogAndFail(@"%@ could not serialize request JSON: %@", self.logTag, error);
+            OWSFailDebug(@"%@ could not serialize request JSON: %@", self.logTag, error);
             [socketMessage didFailBeforeSending];
             return;
         }
@@ -524,7 +526,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
     NSData *messageData = [messageBuilder build].data;
     if (!messageData) {
-        OWSProdLogAndFail(@"%@ could not serialize message.", self.logTag);
+        OWSFailDebug(@"%@ could not serialize message.", self.logTag);
         [socketMessage didFailBeforeSending];
         return;
     }
@@ -538,7 +540,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
     NSError *error;
     BOOL wasScheduled = [self.websocket sendDataNoCopy:messageData error:&error];
     if (!wasScheduled || error) {
-        OWSProdLogAndFail(@"%@ could not send socket request: %@", self.logTag, error);
+        OWSFailDebug(@"%@ could not send socket request: %@", self.logTag, error);
         [socketMessage didFailBeforeSending];
         return;
     }
@@ -604,7 +606,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
         id _Nullable responseJson =
             [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
         if (!responseJson || error) {
-            OWSProdLogAndFail(@"%@ could not parse WebSocket response JSON: %@.", self.logTag, error);
+            OWSFailDebug(@"%@ could not parse WebSocket response JSON: %@.", self.logTag, error);
             hasValidResponse = NO;
         } else {
             responseObject = responseJson;
@@ -719,7 +721,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
     @try {
         wsMessage = [WebSocketResourcesWebSocketMessage parseFromData:data];
     } @catch (NSException *exception) {
-        OWSProdLogAndFail(@"%@ Received an invalid message: %@", self.logTag, exception.debugDescription);
+        OWSFailDebug(@"%@ Received an invalid message: %@", self.logTag, exception.debugDescription);
         // TODO: Add analytics.
         return;
     }
@@ -762,7 +764,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
                 [self.messageReceiver handleReceivedEnvelopeData:decryptedPayload];
             } @catch (NSException *exception) {
-                OWSProdLogAndFail(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
+                OWSFailDebug(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
                 // TODO: Add analytics.
 
                 [[OWSPrimaryStorage.sharedManager newDatabaseConnection] readWriteWithBlock:^(

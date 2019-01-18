@@ -8,17 +8,10 @@
 #import "Relay-Swift.h"
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
-#import <RelayMessaging/Environment.h>
-//#import <RelayMessaging/OWSContactsManager.h>
-#import <RelayMessaging/UIUtil.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/OWSError.h>
-#import <RelayServiceKit/OWSFingerprint.h>
-#import <RelayServiceKit/OWSFingerprintBuilder.h>
-#import <RelayServiceKit/OWSIdentityManager.h>
-#import <RelayServiceKit/OWSPrimaryStorage+SessionStore.h>
-#import <RelayServiceKit/TSAccountManager.h>
-#import <RelayServiceKit/TSInfoMessage.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
+@import RelayMessaging;
 
 NS_ASSUME_NONNULL_BEGIN
 

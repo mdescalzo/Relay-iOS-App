@@ -39,7 +39,7 @@ public class MediaMessageView: UIView, OWSAudioPlayerDelegate {
     @objc
     public var playbackState = AudioPlaybackState.stopped {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             ensureButtonState()
         }

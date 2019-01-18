@@ -3,9 +3,10 @@
 //
 
 #import "OWSVerificationStateSyncMessage.h"
-#import "Cryptography.h"
 #import "OWSIdentityManager.h"
 #import "OWSSignalServiceProtos.pb.h"
+
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

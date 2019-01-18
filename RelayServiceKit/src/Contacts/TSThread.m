@@ -3,7 +3,6 @@
 //
 
 #import "TSThread.h"
-#import "Cryptography.h"
 #import "NSDate+OWS.h"
 #import "NSString+SSK.h"
 #import "OWSDisappearingMessagesConfiguration.h"
@@ -24,6 +23,7 @@
 #import "ContactsManagerProtocol.h"
 
 @import YapDatabase;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -124,7 +124,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     [interactionsByThread enumerateKeysInGroup:self.uniqueId
                                     usingBlock:^(NSString *collection, NSString *key, NSUInteger index, BOOL *stop) {
                                         if (![key isKindOfClass:[NSString class]] || key.length < 1) {
-                                            OWSProdLogAndFail(@"%@ invalid key in thread interactions: %@, %@.",
+                                            OWSFailDebug(@"%@ invalid key in thread interactions: %@, %@.",
                                                               self.logTag,
                                                               key,
                                                               [key class]);
@@ -144,7 +144,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
         TSInteraction *_Nullable interaction =
         [TSInteraction fetchObjectWithUniqueID:interactionId transaction:transaction];
         if (!interaction) {
-            OWSProdLogAndFail(@"%@ couldn't load thread's interaction for deletion.", self.logTag);
+            OWSFailDebug(@"%@ couldn't load thread's interaction for deletion.", self.logTag);
             continue;
         }
         [interaction removeWithTransaction:transaction];
@@ -152,14 +152,14 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 }
 
 - (NSString *)name {
-    OWS_ABSTRACT_METHOD();
+    OWSAbstractMethod();
     
     return nil;
 }
 
 - (NSArray<NSString *> *)recipientIdentifiers
 {
-    OWS_ABSTRACT_METHOD();
+    OWSAbstractMethod();
     
     return @[];
 }
@@ -471,7 +471,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 //    if (hashData) {
 //        [hashData getBytes:&hash length:hashingLength];
 //    } else {
-//        OWSProdLogAndFail(@"%@ could not compute hash for color seed.", self.logTag);
+//        OWSFailDebug(@"%@ could not compute hash for color seed.", self.logTag);
 //    }
 //
 //    NSUInteger index = (hash % [self.conversationColorNames count]);

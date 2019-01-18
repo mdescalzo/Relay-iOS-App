@@ -16,7 +16,7 @@ public class OutageDetection: NSObject {
     @objc
     public var hasOutage = false {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             if hasOutage != oldValue {
                 Logger.info("\(self.logTag) hasOutage: \(hasOutage).")
@@ -27,7 +27,7 @@ public class OutageDetection: NSObject {
     }
     private var shouldCheckForOutage = false {
         didSet {
-            SwiftAssertIsOnMainThread(#function)
+            AssertIsOnMainThread(file: #function)
 
             ensureCheckTimer()
         }
@@ -60,7 +60,9 @@ public class OutageDetection: NSObject {
                 } else if addressString == kOutageAddress {
                     isOutageDetected = true
                 } else {
-                    owsFail("\(logTag) unexpected address: \(addressString)")
+                    // For now, log an error until our outage strategy is firmed up.
+                    Logger.error("\(logTag) unexpected address: \(addressString)")
+//                    owsFail("\(logTag) unexpected address: \(addressString)")
                 }
             }
         }
@@ -93,7 +95,7 @@ public class OutageDetection: NSObject {
 
             // The TTL of the DNS record is 60 seconds.
             checkTimer = WeakTimer.scheduledTimer(timeInterval: 60, target: self, userInfo: nil, repeats: true) { [weak self] _ in
-                SwiftAssertIsOnMainThread(#function)
+                AssertIsOnMainThread(file: #function)
 
                 guard CurrentAppContext().isMainAppAndActive else {
                     return
