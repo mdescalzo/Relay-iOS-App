@@ -172,7 +172,13 @@
 
 -(void)provisionOtherDeviceWithPublicKey:(NSString *_Nonnull)keyString andUUID:(NSString *_Nonnull)uuidString
 {
-    NSData *theirPublicKey = [[NSData dataFromBase64String:keyString] removeKeyType];
+    NSData *theirPublicKey;
+    @try {
+        theirPublicKey = [[NSData dataFromBase64String:keyString] throws_removeKeyType];
+    } @catch (NSException *exception) {
+        OWSFailDebug(@"exception: %@", exception);
+    }
+
     NSString *accountIdentifier = [TSAccountManager localUID];
     ECKeyPair *myKeyPair =[OWSIdentityManager.sharedManager identityKeyPair];
     NSData *profileKey = TextSecureKitEnv.sharedEnv.profileManager.localProfileKey.keyData;;

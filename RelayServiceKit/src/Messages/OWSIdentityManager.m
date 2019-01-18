@@ -712,8 +712,13 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
             rawIdentityKey);
         return;
     }
-    NSData *identityKey = [rawIdentityKey removeKeyType];
-
+    NSData *identityKey;// = [rawIdentityKey removeKeyType];
+    @try {
+        identityKey = [rawIdentityKey throws_removeKeyType];
+    } @catch (NSException *exception) {
+        OWSFailDebug(@"exception: %@", exception);
+    }
+    
     switch (verified.state) {
         case OWSSignalServiceProtosVerifiedStateDefault:
             [self tryToApplyVerificationStateFromSyncMessage:OWSVerificationStateDefault

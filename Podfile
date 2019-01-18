@@ -5,29 +5,23 @@ use_frameworks!
 
 def shared_pods
     # OWS Pods
-    # pod 'SQLCipher', path: '../sqlcipher2'
-    pod 'SignalCoreKit', :git => 'git@github.com:ForstaLabs/SignalCoreKit.git'
-    pod 'SQLCipher', :git => 'https://github.com/sqlcipher/sqlcipher.git', :commit => 'd5c2bec'
-    # pod 'YapDatabase/SQLCipher', path: '../YapDatabase'
-    pod 'YapDatabase/SQLCipher', :git => 'https://github.com/signalapp/YapDatabase.git', branch: 'signal-release'
-    # pod 'AxolotlKit',   path: '../SignalProtocolKit'
+    pod 'SQLCipher', :git => 'https://github.com/sqlcipher/sqlcipher.git', :commit => 'd5c2bec', inhibit_warnings: true
+    pod 'YapDatabase/SQLCipher', :git => 'https://github.com/signalapp/YapDatabase.git', branch: 'signal-release', inhibit_warnings: true
+    pod 'AxolotlKit', git: 'https://github.com/signalapp/SignalProtocolKit.git', branch: 'master', inhibit_warnings: true
+    pod 'HKDFKit', git: 'https://github.com/signalapp/HKDFKit.git', inhibit_warnings: true
+    pod 'Curve25519Kit', git: 'git@github.com:signalapp/Curve25519Kit.git'
+    pod 'GRKOpenSSLFramework', git: 'https://github.com/signalapp/GRKOpenSSLFramework', inhibit_warnings: true
+    pod 'SocketRocket', :git => 'https://github.com/signalapp/SocketRocket.git', branch: 'mkirk/handle-sec-err', inhibit_warnings: true
+
+    # Forsta pods
     pod 'RelayServiceKit', path: '.'
-    pod 'AxolotlKit', git: 'https://github.com/signalapp/SignalProtocolKit.git', :commit => 'b523c0b82e76295726ded8afec2715328d63213c'
-    #pod 'AxolotlKit', path: '../SignalProtocolKit'
-    pod 'HKDFKit', git: 'https://github.com/signalapp/HKDFKit.git', branch: 'mkirk/framework-friendly'
-    #pod 'HKDFKit', path: '../HKDFKit'
-    pod 'Curve25519Kit', git: 'https://github.com/signalapp/Curve25519Kit', branch: 'mkirk/framework-friendly'
-    #pod 'Curve25519Kit', path: '../Curve25519Kit'
-    pod 'GRKOpenSSLFramework', git: 'https://github.com/signalapp/GRKOpenSSLFramework'
-    #pod 'GRKOpenSSLFramework', path: '../GRKOpenSSLFramework'
+    pod 'SignalCoreKit', :git => 'git@github.com:ForstaLabs/SignalCoreKit.git', inhibit_warnings: true
     
     # third party pods
     pod 'AFNetworking', inhibit_warnings: true
     pod 'Mantle', :inhibit_warnings => true
-    # pod 'YapDatabase/SQLCipher', :inhibit_warnings => true
     pod 'PureLayout', :inhibit_warnings => true
     pod 'Reachability', :inhibit_warnings => true
-    pod 'SocketRocket', :git => 'https://github.com/signalapp/SocketRocket.git', branch: 'mkirk/handle-sec-err', inhibit_warnings: true
     pod 'YYImage', :inhibit_warnings => true
     pod 'GoogleWebRTC', '= 1.1.24907', :inhibit_warnings => true
     pod 'UIImageView+Extension',       '~> 0.2', :inhibit_warnings => true

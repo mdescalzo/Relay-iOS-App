@@ -7,27 +7,11 @@
 #import "OWSTableViewController.h"
 #import "Relay-Swift.h"
 #import "ThreadUtil.h"
-#import <AxolotlKit/PreKeyBundle.h>
-#import <Curve25519Kit/Randomness.h>
 #import <RelayMessaging/Environment.h>
-#import <RelayServiceKit/OWSBatchMessageProcessor.h>
-#import <RelayServiceKit/OWSBlockingManager.h>
-#import <RelayServiceKit/OWSDisappearingConfigurationUpdateInfoMessage.h>
-#import <RelayServiceKit/OWSDisappearingMessagesConfiguration.h>
-#import <RelayServiceKit/OWSPrimaryStorage+SessionStore.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
-#import <RelayServiceKit/OWSReadReceiptManager.h>
-//#import <RelayServiceKit/OWSSyncConfigurationMessage.h>
-//#import <RelayServiceKit/OWSSyncContactsMessage.h>
-//#import <RelayServiceKit/OWSSyncGroupsMessage.h>
-//#import <RelayServiceKit/OWSSyncGroupsRequestMessage.h>
-#import <RelayServiceKit/OWSVerificationStateChangeMessage.h>
-#import <RelayServiceKit/SecurityUtils.h>
-#import <RelayServiceKit/TSCall.h>
-#import <RelayServiceKit/TSDatabaseView.h>
-#import <RelayServiceKit/TSIncomingMessage.h>
-#import <RelayServiceKit/TSInvalidIdentityKeyReceivingErrorMessage.h>
-#import <RelayServiceKit/TSThread.h>
+
+@import RelayServiceKit;
+@import SignalCoreKit;
+@import AxolotlKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

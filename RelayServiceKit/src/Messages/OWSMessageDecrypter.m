@@ -198,14 +198,14 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(envelope);
     OWSAssert(successBlock);
     OWSAssert(failureBlock);
-
+    
     [self decryptEnvelope:envelope
-            cipherTypeName:@"Secure Message"
-        cipherMessageBlock:^(NSData *encryptedData) {
-            return [[WhisperMessage alloc] initWithData:encryptedData];
-        }
-              successBlock:successBlock
-              failureBlock:failureBlock];
+           cipherTypeName:@"Secure Message"
+       cipherMessageBlock:^id<CipherMessage> _Nonnull(NSData * _Nonnull encryptedData) {
+           return [[WhisperMessage alloc] init_throws_withData:encryptedData];
+       }
+             successBlock:successBlock
+             failureBlock:failureBlock];
 }
 
 - (void)decryptPreKeyBundle:(SSKEnvelope *)envelope
@@ -221,8 +221,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self decryptEnvelope:envelope
             cipherTypeName:@"PreKey Bundle"
-        cipherMessageBlock:^(NSData *encryptedData) {
-            return [[PreKeyWhisperMessage alloc] initWithData:encryptedData];
+        cipherMessageBlock:^id<CipherMessage> _Nonnull(NSData * _Nonnull encryptedData) {
+            return [[PreKeyWhisperMessage alloc] init_throws_withData:encryptedData];
         }
               successBlock:successBlock
               failureBlock:failureBlock];
@@ -262,7 +262,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                         recipientId:recipientId
                                                                            deviceId:deviceId];
 
-                NSData *plaintextData = [[cipher decrypt:cipherMessage protocolContext:transaction] removePadding];
+                NSData *plaintextData = [[cipher throws_decrypt:cipherMessage protocolContext:transaction] removePadding];
                 successBlock(plaintextData, transaction);
             } @catch (NSException *exception) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

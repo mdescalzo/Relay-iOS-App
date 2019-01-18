@@ -103,7 +103,6 @@
 		346129AD1FD1F34E00532771 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346129AC1FD1F34E00532771 /* ImageCache.swift */; };
 		346129B41FD1F7E800532771 /* OWSProfileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129B11FD1F7E800532771 /* OWSProfileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		346129B51FD1F7E800532771 /* OWSProfileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129B21FD1F7E800532771 /* OWSProfileManager.m */; };
-		346129B61FD1F7E800532771 /* ProfileFetcherJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346129B31FD1F7E800532771 /* ProfileFetcherJob.swift */; };
 		346129C71FD2072E00532771 /* NSString+OWS.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129C01FD2072C00532771 /* NSString+OWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		346129C81FD2072E00532771 /* NSAttributedString+OWS.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129C11FD2072D00532771 /* NSAttributedString+OWS.m */; };
 		346129C91FD2072E00532771 /* NSString+OWS.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129C21FD2072D00532771 /* NSString+OWS.m */; };
@@ -127,7 +126,6 @@
 		346129FB1FD5F31400532771 /* OWS101ExistingUsersBlockOnIdentityChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129EE1FD5F31300532771 /* OWS101ExistingUsersBlockOnIdentityChange.m */; };
 		346129FC1FD5F31400532771 /* OWS101ExistingUsersBlockOnIdentityChange.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129EF1FD5F31400532771 /* OWS101ExistingUsersBlockOnIdentityChange.h */; };
 		346129FD1FD5F31400532771 /* OWS102MoveLoggingPreferenceToUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129F01FD5F31400532771 /* OWS102MoveLoggingPreferenceToUserDefaults.h */; };
-		346129FE1FD5F31400532771 /* OWS106EnsureProfileComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346129F11FD5F31400532771 /* OWS106EnsureProfileComplete.swift */; };
 		346129FF1FD5F31400532771 /* OWS103EnableVideoCalling.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129F21FD5F31400532771 /* OWS103EnableVideoCalling.m */; };
 		34612A001FD5F31400532771 /* OWS105AttachmentFilePaths.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129F31FD5F31400532771 /* OWS105AttachmentFilePaths.h */; };
 		34612A011FD5F31400532771 /* OWS104CreateRecipientIdentities.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129F41FD5F31400532771 /* OWS104CreateRecipientIdentities.h */; };
@@ -1120,7 +1118,6 @@
 		346129AC1FD1F34E00532771 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		346129B11FD1F7E800532771 /* OWSProfileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSProfileManager.h; sourceTree = "<group>"; };
 		346129B21FD1F7E800532771 /* OWSProfileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSProfileManager.m; sourceTree = "<group>"; };
-		346129B31FD1F7E800532771 /* ProfileFetcherJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileFetcherJob.swift; sourceTree = "<group>"; };
 		346129BD1FD2068600532771 /* ThreadUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadUtil.h; sourceTree = "<group>"; };
 		346129BE1FD2068600532771 /* ThreadUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadUtil.m; sourceTree = "<group>"; };
 		346129C01FD2072C00532771 /* NSString+OWS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+OWS.h"; sourceTree = "<group>"; };
@@ -1146,7 +1143,6 @@
 		346129EE1FD5F31300532771 /* OWS101ExistingUsersBlockOnIdentityChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWS101ExistingUsersBlockOnIdentityChange.m; sourceTree = "<group>"; };
 		346129EF1FD5F31400532771 /* OWS101ExistingUsersBlockOnIdentityChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWS101ExistingUsersBlockOnIdentityChange.h; sourceTree = "<group>"; };
 		346129F01FD5F31400532771 /* OWS102MoveLoggingPreferenceToUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWS102MoveLoggingPreferenceToUserDefaults.h; sourceTree = "<group>"; };
-		346129F11FD5F31400532771 /* OWS106EnsureProfileComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OWS106EnsureProfileComplete.swift; sourceTree = "<group>"; };
 		346129F21FD5F31400532771 /* OWS103EnableVideoCalling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWS103EnableVideoCalling.m; sourceTree = "<group>"; };
 		346129F31FD5F31400532771 /* OWS105AttachmentFilePaths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWS105AttachmentFilePaths.h; sourceTree = "<group>"; };
 		346129F41FD5F31400532771 /* OWS104CreateRecipientIdentities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWS104CreateRecipientIdentities.h; sourceTree = "<group>"; };
@@ -2099,7 +2095,6 @@
 				346129EC1FD5F31300532771 /* OWS104CreateRecipientIdentities.m */,
 				346129F31FD5F31400532771 /* OWS105AttachmentFilePaths.h */,
 				346129EA1FD5F31300532771 /* OWS105AttachmentFilePaths.m */,
-				346129F11FD5F31400532771 /* OWS106EnsureProfileComplete.swift */,
 				4503F1C2204711D200CEE724 /* OWS107LegacySounds.h */,
 				4503F1C1204711D200CEE724 /* OWS107LegacySounds.m */,
 				4598198C204E2F28009414F2 /* OWS108CallLoggingPreference.h */,
@@ -2145,7 +2140,6 @@
 				346129B21FD1F7E800532771 /* OWSProfileManager.m */,
 				347850701FDAEB16007B8332 /* OWSUserProfile.h */,
 				3478506F1FDAEB16007B8332 /* OWSUserProfile.m */,
-				346129B31FD1F7E800532771 /* ProfileFetcherJob.swift */,
 			);
 			path = profiles;
 			sourceTree = "<group>";
@@ -4126,11 +4120,9 @@
 				7D6565192113CB3E00365A19 /* OWSContactsManager.m in Sources */,
 				7DCA3B3E21BB00F700733FF2 /* ThreadManager.swift in Sources */,
 				451F8A341FD710C3005CB9DA /* ConversationSearcher.swift in Sources */,
-				346129FE1FD5F31400532771 /* OWS106EnsureProfileComplete.swift in Sources */,
 				346129F91FD5F31400532771 /* OWS104CreateRecipientIdentities.m in Sources */,
 				346129D01FD207F300532771 /* OWSAlerts.swift in Sources */,
 				454A965F1FD60EA3008D2A0E /* OWSFlatButton.swift in Sources */,
-				346129B61FD1F7E800532771 /* ProfileFetcherJob.swift in Sources */,
 				451573962061B49500803601 /* GradientView.swift in Sources */,
 				346129F51FD5F31400532771 /* OWS102MoveLoggingPreferenceToUserDefaults.m in Sources */,
 				45194F8F1FD71FF500333B2C /* ThreadUtil.m in Sources */,

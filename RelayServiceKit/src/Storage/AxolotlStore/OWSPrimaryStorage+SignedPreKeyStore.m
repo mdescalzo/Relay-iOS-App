@@ -32,11 +32,11 @@ NSString *const OWSPrimaryStorageKeyPrekeyCurrentSignedPrekeyId = @"currentSigne
     return [[SignedPreKeyRecord alloc]
          initWithId:preKeyId
             keyPair:keyPair
-          signature:[Ed25519 sign:keyPair.publicKey.prependKeyType withKeyPair:identityKeyPair]
+          signature:[Ed25519 throws_sign:keyPair.publicKey.prependKeyType withKeyPair:identityKeyPair]
         generatedAt:[NSDate date]];
 }
 
-- (SignedPreKeyRecord *)loadSignedPrekey:(int)signedPreKeyId
+- (SignedPreKeyRecord *)throws_loadSignedPrekey:(int)signedPreKeyId
 {
     SignedPreKeyRecord *preKeyRecord =
         [self.dbReadConnection signedPreKeyRecordForKey:[self keyFromInt:signedPreKeyId]

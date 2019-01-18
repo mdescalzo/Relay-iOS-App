@@ -65,24 +65,21 @@ NS_ASSUME_NONNULL_BEGIN
 // Returns YES on success.
 - (BOOL)deriveKeys
 {
-    NSData *ephemeralToEphemeral =
-        [Curve25519 generateSharedSecretFromPublicKey:self.serverEphemeralPublic andKeyPair:self.keyPair];
-    NSData *ephemeralToStatic =
-        [Curve25519 generateSharedSecretFromPublicKey:self.serverStaticPublic andKeyPair:self.keyPair];
-
-    NSData *masterSecret = [ephemeralToEphemeral dataByAppendingData:ephemeralToStatic];
-    NSData *publicKeys = [[self.keyPair.publicKey dataByAppendingData:self.serverEphemeralPublic]
-        dataByAppendingData:self.serverStaticPublic];
-
     NSData *_Nullable derivedMaterial;
     @try {
-        derivedMaterial =
-            [HKDFKit deriveKey:masterSecret info:nil salt:publicKeys outputSize:(int)kAES256_KeyByteLength * 2];
+        NSData *ephemeralToEphemeral = [Curve25519 throws_generateSharedSecretFromPublicKey:self.serverEphemeralPublic andKeyPair:self.keyPair];
+        NSData *ephemeralToStatic = [Curve25519 throws_generateSharedSecretFromPublicKey:self.serverStaticPublic andKeyPair:self.keyPair];
+        
+        NSData *masterSecret = [ephemeralToEphemeral dataByAppendingData:ephemeralToStatic];
+        NSData *publicKeys = [[self.keyPair.publicKey dataByAppendingData:self.serverEphemeralPublic]
+                              dataByAppendingData:self.serverStaticPublic];
+        
+        derivedMaterial = [HKDFKit throws_deriveKey:masterSecret info:nil salt:publicKeys outputSize:(int)kAES256_KeyByteLength * 2];
     } @catch (NSException *exception) {
         DDLogError(@"%@ could not derive service key: %@", self.logTag, exception);
         return NO;
     }
-
+    
     if (!derivedMaterial) {
         OWSFailDebug(@"%@ missing derived service key.", self.logTag);
         return NO;

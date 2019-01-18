@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSData *)ows_privateKey
 {
-    return [NSData dataWithBytes:self->privateKey length:32];
+    return [NSData dataWithBytes:self.privateKey.bytes length:32];
 }
 
 @end

@@ -486,12 +486,12 @@ const NSUInteger kOWSProfileManager_MaxAvatarDiameter = 640;
 
 - (void)fetchLocalUsersProfile
 {
-    OWSAssertIsOnMainThread();
-
-    NSString *_Nullable localUID = [TSAccountManager sharedInstance].localUID;
-    if (!localUID) {
+//    OWSAssertIsOnMainThread();
+//
+//    NSString *_Nullable localUID = [TSAccountManager sharedInstance].localUID;
+//    if (!localUID) {
         return;
-    }
+//    }
     // TODO: Bend to the Forsta world
 //    [ProfileFetcherJob runWithRecipientId:localUID networkManager:self.networkManager ignoreThrottling:YES];
 }

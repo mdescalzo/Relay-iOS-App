@@ -3,7 +3,8 @@
 //
 
 #import "SecurityUtils.h"
-#import <Curve25519Kit/Randomness.h>
+
+@import SignalCoreKit;
 
 @implementation SecurityUtils
 

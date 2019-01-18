@@ -129,8 +129,16 @@ NS_ASSUME_NONNULL_BEGIN
         return nil;
     }
 
-    PreKeyWhisperMessage *message = [[PreKeyWhisperMessage alloc] initWithData:pkwmData];
-    return [message.identityKey removeKeyType];
+    NSData *newIdentityKey;
+    @try {
+        PreKeyWhisperMessage *message = [[PreKeyWhisperMessage alloc] init_throws_withData:pkwmData];
+        newIdentityKey = [message.identityKey throws_removeKeyType];
+    } @catch (NSException *exception) {
+        OWSFailDebug(@"exception: %@", exception);
+    }
+    
+    return newIdentityKey;
+    
 }
 
 - (NSString *)theirSignalId

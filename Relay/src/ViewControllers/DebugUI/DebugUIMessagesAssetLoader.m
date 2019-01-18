@@ -3,12 +3,10 @@
 //
 
 #import "DebugUIMessagesAssetLoader.h"
-#import <AFNetworking/AFHTTPSessionManager.h>
-#import <AFNetworking/AFNetworking.h>
-#import <Curve25519Kit/Randomness.h>
-#import <RelayServiceKit/MIMETypeUtil.h>
-#import <RelayServiceKit/OWSFileSystem.h>
-#import <RelayServiceKit/TSAttachment.h>
+
+@import SignalCoreKit;
+@import RelayServiceKit;
+@import AFNetworking;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -866,7 +866,13 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
                 return;
             }
             
-            NSData *newIdentityKey = [newIdentityKeyWithVersion removeKeyType];
+            NSData *newIdentityKey;// = [newIdentityKeyWithVersion removeKeyType];
+            @try {
+                newIdentityKey = [newIdentityKeyWithVersion throws_removeKeyType];
+            } @catch (NSException *exception) {
+                OWSFailDebug(@"exception: %@", exception);
+            }
+
             [[OWSIdentityManager sharedManager] saveRemoteIdentity:newIdentityKey recipientId:recipient.uniqueId];
             
             failureHandler(error);
@@ -1405,7 +1411,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
                                                                        recipientId:identifier
                                                                           deviceId:[deviceNumber intValue]];
             @try {
-                [builder processPrekeyBundle:bundle protocolContext:transaction];
+                [builder throws_processPrekeyBundle:bundle protocolContext:transaction];
             } @catch (NSException *exception) {
                 if ([exception.name isEqualToString:UntrustedIdentityKeyException]) {
                     OWSRaiseExceptionWithUserInfo(UntrustedIdentityKeyException,
@@ -1424,21 +1430,24 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
                                                             recipientId:identifier
                                                                deviceId:[deviceNumber intValue]];
     
-    id<CipherMessage> encryptedMessage =
-    [cipher encryptMessage:[plainText paddedMessageBody] protocolContext:transaction];
-    
-    
-    NSData *serializedMessage = encryptedMessage.serialized;
-    TSWhisperMessageType messageType = [self messageTypeForCipherMessage:encryptedMessage];
-    
-    OWSMessageServiceParams *messageParams =
-    [[OWSMessageServiceParams alloc] initWithType:messageType
-                                      recipientId:identifier
-                                           device:[deviceNumber intValue]
-                                          content:serializedMessage
-                                         isSilent:isSilent
-                                   registrationId:[cipher remoteRegistrationId:transaction]];
-    
+    id<CipherMessage> encryptedMessage;
+    OWSMessageServiceParams *messageParams;
+    @try {
+        encryptedMessage = [cipher throws_encryptMessage:[plainText paddedMessageBody] protocolContext:transaction];
+        
+        NSData *serializedMessage = encryptedMessage.serialized;
+        TSWhisperMessageType messageType = [self messageTypeForCipherMessage:encryptedMessage];
+        
+        messageParams = [[OWSMessageServiceParams alloc] initWithType:messageType
+                                                          recipientId:identifier
+                                                               device:[deviceNumber intValue]
+                                                              content:serializedMessage
+                                                             isSilent:isSilent
+                                                       registrationId:[cipher throws_remoteRegistrationId:transaction]];
+    } @catch (NSException *exception) {
+        OWSFailDebug(@"exception: %@", exception);
+    }
+
     NSError *error;
     NSDictionary *jsonDict = [MTLJSONAdapter JSONDictionaryFromModel:messageParams error:&error];
     

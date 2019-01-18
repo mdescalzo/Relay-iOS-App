@@ -1084,7 +1084,6 @@ typedef enum : NSUInteger {
 {
     [super viewDidAppear:animated];
 
-//    [ProfileFetcherJob runWithThread:self.thread networkManager:self.networkManager];
     [self markVisibleMessagesAsRead];
     [self startReadTimer];
     [self updateNavigationBarSubtitleLabel];

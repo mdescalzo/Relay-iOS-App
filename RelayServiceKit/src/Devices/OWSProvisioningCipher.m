@@ -62,17 +62,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSData *)encrypt:(NSData *)dataToEncrypt
 {
-    NSData *sharedSecret =
-        [Curve25519 generateSharedSecretFromPublicKey:self.theirPublicKey andKeyPair:self.ourKeyPair];
-
-    NSData *infoData = [@"TextSecure Provisioning Message" dataUsingEncoding:NSASCIIStringEncoding];
-    NSData *nullSalt = [[NSMutableData dataWithLength:32] copy];
-    NSData *derivedSecret = [HKDFKit deriveKey:sharedSecret info:infoData salt:nullSalt outputSize:64];
+    NSData *sharedSecret;
+    NSData *derivedSecret;
+    
+    @try {
+        sharedSecret = [Curve25519 throws_generateSharedSecretFromPublicKey:self.theirPublicKey andKeyPair:self.ourKeyPair];
+        NSData *infoData = [@"TextSecure Provisioning Message" dataUsingEncoding:NSASCIIStringEncoding];
+        NSData *nullSalt = [[NSMutableData dataWithLength:32] copy];
+        derivedSecret = [HKDFKit throws_deriveKey:sharedSecret info:infoData salt:nullSalt outputSize:64];
+    } @catch (NSException *exception){
+        OWSFailDebug(@"exception: %@", exception);
+    }
+    
     NSData *cipherKey = [derivedSecret subdataWithRange:NSMakeRange(0, 32)];
     NSData *macKey = [derivedSecret subdataWithRange:NSMakeRange(32, 32)];
     NSAssert(cipherKey.length == 32, @"Cipher Key must be 32 bytes");
     NSAssert(macKey.length == 32, @"Mac Key must be 32 bytes");
-
+    
     u_int8_t versionByte[] = { 0x01 };
     NSMutableData *message = [NSMutableData dataWithBytes:&versionByte length:1];
 
@@ -137,7 +143,12 @@ NS_ASSUME_NONNULL_BEGIN
     NSData *publicKeyData = envelopeProto.publicKey;
     NSData *message = envelopeProto.body;
     
-    NSData *keyData = [publicKeyData removeKeyType];
+    NSData *keyData;
+    @try {
+        keyData = [publicKeyData throws_removeKeyType];
+    } @catch (NSException *exception) {
+        OWSFailDebug(@"exception: %@", exception);
+    }
     
     NSData *versionData = [message subdataWithRange:NSMakeRange(0, 1)];
     int version = *(int *)(versionData.bytes);
@@ -153,22 +164,24 @@ NS_ASSUME_NONNULL_BEGIN
     NSData *ivAndCiphertext = [message subdataWithRange:NSMakeRange(0, message.length - mac.length)];
     NSData *ciphertext = [message subdataWithRange:NSMakeRange(kCCBlockSizeAES128 + 1, message.length - (kCCBlockSizeAES128 + mac.length + 1))];
     
-    NSData *sharedSecret = [Curve25519 generateSharedSecretFromPublicKey:keyData
-                                                              andKeyPair:self.ourKeyPair];
-    
-    NSData *infoData = [@"TextSecure Provisioning Message" dataUsingEncoding:NSASCIIStringEncoding];
-    NSData *nullSalt = [[NSMutableData dataWithLength:32] copy];
-    
-    NSData *derivedSecret = [HKDFKit deriveKey:sharedSecret info:infoData salt:nullSalt outputSize:64];
-    
-    NSData *cipherKey = [derivedSecret subdataWithRange:NSMakeRange(0, 32)];
-    NSData *macKey = [derivedSecret subdataWithRange:NSMakeRange(32, 32)];
-    NSAssert(cipherKey.length == 32, @"Cipher Key must be 32 bytes");
-    NSAssert(macKey.length == 32, @"Mac Key must be 32 bytes");
-    
-    [self verifyMac:mac fromMessage:ivAndCiphertext withMCCKey:macKey];
-    
-    NSData *returnData = [AES_CBC decryptCBCMode:ciphertext withKey:cipherKey withIV:iv];
+    NSData *returnData;
+    @try {
+        NSData *sharedSecret = [Curve25519 throws_generateSharedSecretFromPublicKey:keyData
+                                                                         andKeyPair:self.ourKeyPair];
+        NSData *infoData = [@"TextSecure Provisioning Message" dataUsingEncoding:NSASCIIStringEncoding];
+        NSData *nullSalt = [[NSMutableData dataWithLength:32] copy];
+        NSData *derivedSecret = [HKDFKit throws_deriveKey:sharedSecret info:infoData salt:nullSalt outputSize:64];
+        NSData *cipherKey = [derivedSecret subdataWithRange:NSMakeRange(0, 32)];
+        NSData *macKey = [derivedSecret subdataWithRange:NSMakeRange(32, 32)];
+        NSAssert(cipherKey.length == 32, @"Cipher Key must be 32 bytes");
+        NSAssert(macKey.length == 32, @"Mac Key must be 32 bytes");
+        
+        [self verifyMac:mac fromMessage:ivAndCiphertext withMCCKey:macKey];
+        
+        returnData = [AES_CBC throws_decryptCBCMode:ciphertext withKey:cipherKey withIV:iv];
+    } @catch (NSException *exception) {
+        OWSFailDebug(@"exception: %@", exception);
+    }
     return returnData;
     
 }

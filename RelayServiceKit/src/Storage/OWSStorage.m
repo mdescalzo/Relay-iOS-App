@@ -12,8 +12,6 @@
 #import "OWSPrimaryStorage.h"
 #import "OWSStorage+Subclass.h"
 #import "TSAttachmentStream.h"
-#import <Curve25519Kit/Randomness.h>
-#import <SAMKeychain/SAMKeychain.h>
 #import <YapDatabase/YapDatabase.h>
 #import <YapDatabase/YapDatabaseAutoView.h>
 #import <YapDatabase/YapDatabaseCrossProcessNotification.h>
@@ -23,6 +21,9 @@
 #import <YapDatabase/YapDatabaseSecondaryIndex.h>
 #import <YapDatabase/YapDatabaseSecondaryIndexPrivate.h>
 #import <YapDatabase/YapDatabaseFilteredView.h>
+
+@import SAMKeychain;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
