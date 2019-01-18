@@ -15,7 +15,7 @@ NSString *const OWSWindowManagerCallDidChangeNotification = @"OWSWindowManagerCa
 
 const CGFloat OWSWindowManagerCallBannerHeight(void)
 {
-    if ([UIDevice currentDevice].isIPhoneX) {
+    if ([UIDevice currentDevice].hasIPhoneXNotch) {
         // On an iPhoneX, the system return-to-call banner has been replaced by a much subtler green
         // circle behind the system clock. Instead, we mimic the old system call banner as on older devices,
         // but it has to be taller to fit beneath the notch.
