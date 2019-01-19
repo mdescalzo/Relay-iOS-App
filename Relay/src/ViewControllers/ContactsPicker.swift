@@ -233,7 +233,7 @@ public class ContactsPicker: OWSViewController, UITableViewDelegate, UITableView
 
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: contactCellReuseIdentifier, for: indexPath) as? ContactCell else {
-            owsFail("\(logTag) in \(#function) cell had unexpected type")
+            owsFailDebug("\(logTag) in \(#function) cell had unexpected type")
             return UITableViewCell()
         }
 

@@ -178,7 +178,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
     private func updateContent() {
         guard let contentView = contentView else {
-            owsFail("\(logTag) Missing contentView")
+            owsFailDebug("\(logTag) Missing contentView")
             return
         }
 
@@ -229,7 +229,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
                 for recipientId in messageRecipientIds {
                     guard let recipientState = outgoingMessage.recipientState(forRecipientId: recipientId) else {
-                        owsFail("\(self.logTag) no message status for recipient: \(recipientId).")
+                        owsFailDebug("\(self.logTag) no message status for recipient: \(recipientId).")
                         continue
                     }
 
@@ -362,7 +362,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
         if rows.isEmpty {
             // Neither attachment nor body.
-            owsFail("\(self.logTag) Message has neither attachment nor body.")
+            owsFailDebug("\(self.logTag) Message has neither attachment nor body.")
             rows.append(valueRow(name: NSLocalizedString("MESSAGE_METADATA_VIEW_NO_ATTACHMENT_OR_BODY",
                                                          comment: "Label for messages without a body or attachment in the 'message metadata' view."),
                                  value: ""))
@@ -618,7 +618,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
     func didTapContactShare(_ viewItem: ConversationViewItem) {
         guard let contactShare = viewItem.contactShare else {
-            owsFail("\(logTag) missing contact.")
+            owsFailDebug("\(logTag) missing contact.")
             return
         }
         let contactViewController = ContactViewController(contactShare: contactShare)
@@ -643,12 +643,12 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
         AssertIsOnMainThread(file: #function)
 
         guard let mediaURL = attachmentStream.mediaURL() else {
-            owsFail("\(logTag) in \(#function) mediaURL was unexpectedly nil for attachment: \(attachmentStream)")
+            owsFailDebug("\(logTag) in \(#function) mediaURL was unexpectedly nil for attachment: \(attachmentStream)")
             return
         }
 
         guard FileManager.default.fileExists(atPath: mediaURL.path) else {
-            owsFail("\(logTag) in \(#function) audio file missing at path: \(mediaURL)")
+            owsFailDebug("\(logTag) in \(#function) audio file missing at path: \(mediaURL)")
             return
         }
 
@@ -673,7 +673,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
     func didTapTruncatedTextMessage(_ conversationItem: ConversationViewItem) {
         guard let navigationController = self.navigationController else {
-            owsFail("\(logTag) in \(#function) navigationController was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) navigationController was unexpectedly nil")
             return
         }
 
@@ -704,7 +704,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
         guard (items.map({ $0.message }) == [self.message]) else {
             // Should only be one message we can delete when viewing message details
-            owsFail("\(logTag) in \(#function) Unexpectedly informed of irrelevant message deletion")
+            owsFailDebug("\(logTag) in \(#function) Unexpectedly informed of irrelevant message deletion")
             return
         }
 

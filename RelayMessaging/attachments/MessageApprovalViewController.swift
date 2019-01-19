@@ -157,7 +157,7 @@ public class MessageApprovalViewController: OWSViewController, UITextViewDelegat
         return recipientRow
         //        }
         //        guard let contactThread = self.thread as? TSThread else {
-        //            owsFail("Unexpected thread type")
+        //            owsFailDebug("Unexpected thread type")
         //            return recipientRow
         //        }
         //

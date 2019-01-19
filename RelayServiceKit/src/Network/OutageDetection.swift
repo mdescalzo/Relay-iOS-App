@@ -62,7 +62,7 @@ public class OutageDetection: NSObject {
                 } else {
                     // For now, log an error until our outage strategy is firmed up.
                     Logger.error("\(logTag) unexpected address: \(addressString)")
-//                    owsFail("\(logTag) unexpected address: \(addressString)")
+//                    owsFailDebug("\(logTag) unexpected address: \(addressString)")
                 }
             }
         }

@@ -160,7 +160,7 @@ import CloudKit
                                       failure: failure)
                 }
             case .unknownItem:
-                owsFail("\(self.logTag) unexpected CloudKit response.")
+                owsFailDebug("\(self.logTag) unexpected CloudKit response.")
                 failure(invalidServiceResponseError())
             }
         }
@@ -282,7 +282,7 @@ import CloudKit
                                         failure: failure)
                 }
             case .unknownItem:
-                owsFail("\(self.logTag) unexpected CloudKit response.")
+                owsFailDebug("\(self.logTag) unexpected CloudKit response.")
                 failure(invalidServiceResponseError())
             }
         }
@@ -308,7 +308,7 @@ import CloudKit
             switch outcome {
             case .success:
                 guard let record = record else {
-                    owsFail("\(self.logTag) missing fetching record.")
+                    owsFailDebug("\(self.logTag) missing fetching record.")
                     failure(invalidServiceResponseError())
                     return
                 }
@@ -424,7 +424,7 @@ import CloudKit
                                             failure: failure)
                 }
             case .unknownItem:
-                owsFail("\(self.logTag) unexpected CloudKit response.")
+                owsFailDebug("\(self.logTag) unexpected CloudKit response.")
                 failure(invalidServiceResponseError())
             }
         }

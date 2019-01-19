@@ -80,7 +80,7 @@ public class PlayerProgressBar: UIView {
     public var player: AVPlayer? {
         didSet {
             guard let item = player?.currentItem else {
-                owsFail("No player item")
+                owsFailDebug("No player item")
                 return
             }
 
@@ -160,7 +160,7 @@ public class PlayerProgressBar: UIView {
     @objc
     private func handleSliderTouchDown(_ slider: UISlider) {
         guard let player = self.player else {
-            owsFail("player was nil")
+            owsFailDebug("player was nil")
             return
         }
 
@@ -185,12 +185,12 @@ public class PlayerProgressBar: UIView {
 
     private func updateState() {
         guard let player = player else {
-            owsFail("\(TAG) player isn't set.")
+            owsFailDebug("\(TAG) player isn't set.")
             return
         }
 
         guard let item = player.currentItem else {
-            owsFail("\(TAG) player has no item.")
+            owsFailDebug("\(TAG) player has no item.")
             return
         }
 
@@ -203,7 +203,7 @@ public class PlayerProgressBar: UIView {
         let remainingSeconds = CMTimeGetSeconds(remainingTime)
 
         guard let remainingString = formatter.string(from: remainingSeconds) else {
-            owsFail("unable to format time remaining")
+            owsFailDebug("unable to format time remaining")
             remainingLabel.text = "0:00"
             return
         }

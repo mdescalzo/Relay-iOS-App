@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 // This should all migrations which do NOT qualify as safeBlockingMigrations:
 - (NSArray<OWSDatabaseMigration *> *)allMigrations
 {
-    OWSPrimaryStorage *primaryStorage = OWSPrimaryStorage.sharedManager;
+//    OWSPrimaryStorage *primaryStorage = OWSPrimaryStorage.sharedManager;
     return @[
              
              // Legacy Signal Migrations

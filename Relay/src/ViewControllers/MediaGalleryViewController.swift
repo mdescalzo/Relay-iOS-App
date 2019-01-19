@@ -35,7 +35,7 @@ public struct MediaGalleryItem: Equatable, Hashable {
 
     var thumbnailImage: UIImage {
         guard let image = attachmentStream.thumbnailImage() else {
-            owsFail("\(logTag) in \(#function) unexpectedly unable to build attachment thumbnail")
+            owsFailDebug("\(logTag) in \(#function) unexpectedly unable to build attachment thumbnail")
             return UIImage()
         }
 
@@ -44,7 +44,7 @@ public struct MediaGalleryItem: Equatable, Hashable {
 
     var fullSizedImage: UIImage {
         guard let image = attachmentStream.image() else {
-            owsFail("\(logTag) in \(#function) unexpectedly unable to build attachment image")
+            owsFailDebug("\(logTag) in \(#function) unexpectedly unable to build attachment image")
             return UIImage()
         }
 
@@ -283,7 +283,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
         }
 
         guard let initialDetailItem = galleryItem else {
-            owsFail("\(logTag) in \(#function) unexpectedly failed to build initialDetailItem.")
+            owsFailDebug("\(logTag) in \(#function) unexpectedly failed to build initialDetailItem.")
             return
         }
 
@@ -330,7 +330,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
         self.view.alpha = 0.0
 
         guard let detailView = pageViewController.view else {
-            owsFail("\(logTag) in \(#function) detailView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) detailView was unexpectedly nil")
             return
         }
 
@@ -455,7 +455,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
             //
 
             guard let pageViewController = self.pageViewController else {
-                owsFail("\(logTag) in \(#function) pageViewController was unexpectedly nil")
+                owsFailDebug("\(logTag) in \(#function) pageViewController was unexpectedly nil")
                 self.dismiss(animated: true)
 
                 return
@@ -474,7 +474,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
         UIApplication.shared.isStatusBarHidden = false
 
         guard let detailView = mediaPageViewController.view else {
-            owsFail("\(logTag) in \(#function) detailView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) detailView was unexpectedly nil")
             self.presentingViewController?.dismiss(animated: false, completion: completion)
             return
         }
@@ -521,7 +521,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
                            options: .curveEaseInOut,
                            animations: {
                             guard let replacingView = self.replacingView else {
-                                owsFail("\(self.logTag) in \(#function) replacingView was unexpectedly nil")
+                                owsFailDebug("\(self.logTag) in \(#function) replacingView was unexpectedly nil")
                                 self.presentingViewController?.dismiss(animated: false, completion: completion)
                                 return
                             }
@@ -534,7 +534,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
             })
         } else {
             guard let replacingView = self.replacingView else {
-                owsFail("\(self.logTag) in \(#function) replacingView was unexpectedly nil")
+                owsFailDebug("\(self.logTag) in \(#function) replacingView was unexpectedly nil")
                 self.presentingViewController?.dismiss(animated: false, completion: completion)
                 return
             }
@@ -550,12 +550,12 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
         }
 
         guard let originRect = self.originRect else {
-            owsFail("\(logTag) in \(#function) originRect was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) originRect was unexpectedly nil")
             return
         }
 
         guard let presentationSuperview = self.presentationView.superview else {
-            owsFail("\(logTag) in \(#function) presentationView.superview was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) presentationView.superview was unexpectedly nil")
             return
         }
 
@@ -697,7 +697,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
                     }
 
                     guard let item: MediaGalleryItem = self.buildGalleryItem(message: message, transaction: transaction) else {
-                        owsFail("\(self.logTag) in \(#function) unexpectedly failed to buildGalleryItem")
+                        owsFailDebug("\(self.logTag) in \(#function) unexpectedly failed to buildGalleryItem")
                         return
                     }
 
@@ -796,40 +796,40 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
 
         for item in items {
             guard let itemIndex = galleryItems.index(of: item) else {
-                owsFail("\(logTag) in \(#function) removing unknown item.")
+                owsFailDebug("\(logTag) in \(#function) removing unknown item.")
                 return
             }
 
             self.galleryItems.remove(at: itemIndex)
 
             guard let sectionIndex = sectionDates.index(where: { $0 == item.galleryDate }) else {
-                owsFail("\(logTag) in \(#function) item with unknown date.")
+                owsFailDebug("\(logTag) in \(#function) item with unknown date.")
                 return
             }
 
             guard var sectionItems = self.sections[item.galleryDate] else {
-                owsFail("\(logTag) in \(#function) item with unknown section")
+                owsFailDebug("\(logTag) in \(#function) item with unknown section")
                 return
             }
 
             guard let sectionRowIndex = sectionItems.index(of: item) else {
-                owsFail("\(logTag) in \(#function) item with unknown sectionRowIndex")
+                owsFailDebug("\(logTag) in \(#function) item with unknown sectionRowIndex")
                 return
             }
 
             // We need to calculate the index of the deleted item with respect to it's original position.
             guard let originalSectionIndex = originalSectionDates.index(where: { $0 == item.galleryDate }) else {
-                owsFail("\(logTag) in \(#function) item with unknown date.")
+                owsFailDebug("\(logTag) in \(#function) item with unknown date.")
                 return
             }
 
             guard let originalSectionItems = originalSections[item.galleryDate] else {
-                owsFail("\(logTag) in \(#function) item with unknown section")
+                owsFailDebug("\(logTag) in \(#function) item with unknown section")
                 return
             }
 
             guard let originalSectionRowIndex = originalSectionItems.index(of: item) else {
-                owsFail("\(logTag) in \(#function) item with unknown sectionRowIndex")
+                owsFailDebug("\(logTag) in \(#function) item with unknown sectionRowIndex")
                 return
             }
 
@@ -859,7 +859,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
         self.ensureGalleryItemsLoaded(.after, item: currentItem, amount: kGallerySwipeLoadBatchSize)
 
         guard let currentIndex = galleryItems.index(of: currentItem) else {
-            owsFail("currentIndex was unexpectedly nil in \(#function)")
+            owsFailDebug("currentIndex was unexpectedly nil in \(#function)")
             return nil
         }
 
@@ -883,7 +883,7 @@ class MediaGalleryViewController: OWSNavigationController, MediaGalleryDataSourc
         self.ensureGalleryItemsLoaded(.before, item: currentItem, amount: kGallerySwipeLoadBatchSize)
 
         guard let currentIndex = galleryItems.index(of: currentItem) else {
-            owsFail("currentIndex was unexpectedly nil in \(#function)")
+            owsFailDebug("currentIndex was unexpectedly nil in \(#function)")
             return nil
         }
 

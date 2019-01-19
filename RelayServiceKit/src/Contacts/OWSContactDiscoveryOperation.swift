@@ -44,7 +44,7 @@ class LegacyContactDiscoveryBatchOperation: OWSOperation {
 
         for recipientId in recipientIdsToLookup {
             guard let hash = Cryptography.truncatedSHA1Base64EncodedWithoutPadding(recipientId) else {
-                owsFail("\(logTag) could not hash recipient id: \(recipientId)")
+                owsFailDebug("\(logTag) could not hash recipient id: \(recipientId)")
                 continue
             }
             assert(phoneNumbersByHashes[hash] == nil)
@@ -115,17 +115,17 @@ class LegacyContactDiscoveryBatchOperation: OWSOperation {
 
         for contactDict in contactDicts {
             guard let hash = contactDict["token"] as? String, hash.count > 0 else {
-                owsFail("\(self.logTag) in \(#function) hash was unexpectedly nil")
+                owsFailDebug("\(self.logTag) in \(#function) hash was unexpectedly nil")
                 continue
             }
 
             guard let recipientId = phoneNumbersByHashes[hash], recipientId.count > 0 else {
-                owsFail("\(self.logTag) in \(#function) recipientId was unexpectedly nil")
+                owsFailDebug("\(self.logTag) in \(#function) recipientId was unexpectedly nil")
                 continue
             }
 
             guard recipientIdsToLookup.contains(recipientId) else {
-                owsFail("\(self.logTag) in \(#function) unexpected recipientId")
+                owsFailDebug("\(self.logTag) in \(#function) unexpected recipientId")
                 continue
             }
 
@@ -183,7 +183,7 @@ class CDSOperation: OWSOperation {
 
         for dependency in self.dependencies {
             guard let batchOperation = dependency as? CDSBatchOperation else {
-                owsFail("\(self.logTag) in \(#function) unexpected dependency: \(dependency)")
+                owsFailDebug("\(self.logTag) in \(#function) unexpected dependency: \(dependency)")
                 continue
             }
 

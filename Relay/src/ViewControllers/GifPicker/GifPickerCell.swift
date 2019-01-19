@@ -142,7 +142,7 @@ class GifPickerCell: UICollectionViewCell {
                                                                                 success: { [weak self] assetRequest, asset in
                                                                                     guard let strongSelf = self else { return }
                                                                                     if assetRequest != nil && assetRequest != strongSelf.stillAssetRequest {
-                                                                                        owsFail("Obsolete request callback.")
+                                                                                        owsFailDebug("Obsolete request callback.")
                                                                                         return
                                                                                     }
                                                                                     strongSelf.clearStillAssetRequest()
@@ -152,7 +152,7 @@ class GifPickerCell: UICollectionViewCell {
                                                                                 failure: { [weak self] assetRequest in
                                                                                     guard let strongSelf = self else { return }
                                                                                     if assetRequest != strongSelf.stillAssetRequest {
-                                                                                        owsFail("Obsolete request callback.")
+                                                                                        owsFailDebug("Obsolete request callback.")
                                                                                         return
                                                                                     }
                                                                                     strongSelf.clearStillAssetRequest()
@@ -168,7 +168,7 @@ class GifPickerCell: UICollectionViewCell {
                                                                                success: { [weak self] assetRequest, asset in
                                                                                 guard let strongSelf = self else { return }
                                                                                 if assetRequest != nil && assetRequest != strongSelf.animatedAssetRequest {
-                                                                                    owsFail("Obsolete request callback.")
+                                                                                    owsFailDebug("Obsolete request callback.")
                                                                                     return
                                                                                 }
                                                                                 // If we have the animated asset, we don't need the still asset.
@@ -179,7 +179,7 @@ class GifPickerCell: UICollectionViewCell {
                                                                                failure: { [weak self] assetRequest in
                                                                                 guard let strongSelf = self else { return }
                                                                                 if assetRequest != strongSelf.animatedAssetRequest {
-                                                                                    owsFail("Obsolete request callback.")
+                                                                                    owsFailDebug("Obsolete request callback.")
                                                                                     return
                                                                                 }
                                                                                 strongSelf.clearAnimatedAssetRequest()
@@ -198,7 +198,7 @@ class GifPickerCell: UICollectionViewCell {
             return
         }
         guard let image = YYImage(contentsOfFile: asset.filePath) else {
-            owsFail("\(TAG) could not load asset.")
+            owsFailDebug("\(TAG) could not load asset.")
             clearViewState()
             return
         }
@@ -209,7 +209,7 @@ class GifPickerCell: UICollectionViewCell {
             imageView.ows_autoPinToSuperviewEdges()
         }
         guard let imageView = imageView else {
-            owsFail("\(TAG) missing imageview.")
+            owsFailDebug("\(TAG) missing imageview.")
             clearViewState()
             return
         }
@@ -241,7 +241,7 @@ class GifPickerCell: UICollectionViewCell {
 
     public func requestRenditionForSending() -> Promise<GiphyAsset> {
         guard let renditionForSending = self.renditionForSending else {
-            owsFail("\(TAG) renditionForSending was unexpectedly nil")
+            owsFailDebug("\(TAG) renditionForSending was unexpectedly nil")
             return Promise(error: GiphyError.assertionError(description: "renditionForSending was unexpectedly nil"))
         }
 

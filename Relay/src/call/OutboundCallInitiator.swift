@@ -52,7 +52,7 @@ import RelayMessaging
         // because it can change after app launch due to user settings
         let callUIAdapter = SignalApp.shared().callUIAdapter
         guard let frontmostViewController = UIApplication.shared.frontmostViewController else {
-            owsFail("\(TAG) could not identify frontmostViewController in \(#function)")
+            owsFailDebug("\(TAG) could not identify frontmostViewController in \(#function)")
             return false
         }
 

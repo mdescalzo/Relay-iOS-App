@@ -14,14 +14,14 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
 
     private var galleryItems: [GalleryDate: [MediaGalleryItem]] {
         guard let mediaGalleryDataSource = self.mediaGalleryDataSource else {
-            owsFail("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
             return [:]
         }
         return mediaGalleryDataSource.sections
     }
     private var galleryDates: [GalleryDate] {
         guard let mediaGalleryDataSource = self.mediaGalleryDataSource else {
-            owsFail("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
             return []
         }
         return mediaGalleryDataSource.sectionDates
@@ -76,7 +76,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         self.title = MediaStrings.allMedia
 
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpectedly nil")
             return
         }
 
@@ -132,7 +132,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         }
 
         guard let indexPath = self.indexPath(galleryItem: focusedItem) else {
-            owsFail("\(logTag) unexpectedly unable to find indexPath for focusedItem: \(focusedItem)")
+            owsFailDebug("\(logTag) unexpectedly unable to find indexPath for focusedItem: \(focusedItem)")
             return
         }
 
@@ -208,12 +208,12 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         Logger.debug("\(self.logTag) in \(#function)")
 
         guard let galleryCell = self.collectionView(collectionView, cellForItemAt: indexPath) as? MediaGalleryCell else {
-            owsFail("\(logTag) in \(#function) galleryCell was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) galleryCell was unexpectedly nil")
             return
         }
 
         guard let galleryItem = galleryCell.item else {
-            owsFail("\(logTag) in \(#function) galleryItem was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) galleryItem was unexpectedly nil")
             return
         }
 
@@ -269,12 +269,12 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         }
 
         guard let sectionDate = self.galleryDates[safe: sectionIdx - 1] else {
-            owsFail("\(logTag) in \(#function) unknown section: \(sectionIdx)")
+            owsFailDebug("\(logTag) in \(#function) unknown section: \(sectionIdx)")
             return 0
         }
 
         guard let section = self.galleryItems[sectionDate] else {
-            owsFail("\(logTag) in \(#function) no section for date: \(sectionDate)")
+            owsFailDebug("\(logTag) in \(#function) no section for date: \(sectionDate)")
             return 0
         }
 
@@ -288,7 +288,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         guard galleryDates.count > 0 else {
             guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MediaGalleryStaticHeader.reuseIdentifier, for: indexPath) as? MediaGalleryStaticHeader else {
 
-                owsFail("\(logTag) in \(#function) unable to build section header for kLoadOlderSectionIdx")
+                owsFailDebug("\(logTag) in \(#function) unable to build section header for kLoadOlderSectionIdx")
                 return defaultView
             }
             let title = NSLocalizedString("GALLERY_TILES_EMPTY_GALLERY", comment: "Label indicating media gallery is empty")
@@ -301,7 +301,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
             case kLoadOlderSectionIdx:
                 guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MediaGalleryStaticHeader.reuseIdentifier, for: indexPath) as? MediaGalleryStaticHeader else {
 
-                    owsFail("\(logTag) in \(#function) unable to build section header for kLoadOlderSectionIdx")
+                    owsFailDebug("\(logTag) in \(#function) unable to build section header for kLoadOlderSectionIdx")
                     return defaultView
                 }
                 let title = NSLocalizedString("GALLERY_TILES_LOADING_OLDER_LABEL", comment: "Label indicating loading is in progress")
@@ -310,7 +310,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
             case loadNewerSectionIdx:
                 guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MediaGalleryStaticHeader.reuseIdentifier, for: indexPath) as? MediaGalleryStaticHeader else {
 
-                    owsFail("\(logTag) in \(#function) unable to build section header for kLoadOlderSectionIdx")
+                    owsFailDebug("\(logTag) in \(#function) unable to build section header for kLoadOlderSectionIdx")
                     return defaultView
                 }
                 let title = NSLocalizedString("GALLERY_TILES_LOADING_MORE_RECENT_LABEL", comment: "Label indicating loading is in progress")
@@ -318,11 +318,11 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
                 return sectionHeader
             default:
                 guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MediaGallerySectionHeader.reuseIdentifier, for: indexPath) as? MediaGallerySectionHeader else {
-                    owsFail("\(logTag) in \(#function) unable to build section header for indexPath: \(indexPath)")
+                    owsFailDebug("\(logTag) in \(#function) unable to build section header for indexPath: \(indexPath)")
                     return defaultView
                 }
                 guard let date = self.galleryDates[safe: indexPath.section - 1] else {
-                    owsFail("\(logTag) in \(#function) unknown section for indexPath: \(indexPath)")
+                    owsFailDebug("\(logTag) in \(#function) unknown section for indexPath: \(indexPath)")
                     return defaultView
                 }
 
@@ -340,25 +340,25 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         let defaultCell = UICollectionViewCell()
 
         guard galleryDates.count > 0 else {
-            owsFail("\(logTag) in \(#function) unexpected cell for loadNewerSectionIdx")
+            owsFailDebug("\(logTag) in \(#function) unexpected cell for loadNewerSectionIdx")
             return defaultCell
         }
 
         switch indexPath.section {
         case kLoadOlderSectionIdx:
-            owsFail("\(logTag) in \(#function) unexpected cell for kLoadOlderSectionIdx")
+            owsFailDebug("\(logTag) in \(#function) unexpected cell for kLoadOlderSectionIdx")
             return defaultCell
         case loadNewerSectionIdx:
-            owsFail("\(logTag) in \(#function) unexpected cell for loadNewerSectionIdx")
+            owsFailDebug("\(logTag) in \(#function) unexpected cell for loadNewerSectionIdx")
             return defaultCell
         default:
             guard let galleryItem = galleryItem(at: indexPath) else {
-                owsFail("\(logTag) in \(#function) no message for path: \(indexPath)")
+                owsFailDebug("\(logTag) in \(#function) no message for path: \(indexPath)")
                 return defaultCell
             }
 
             guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: MediaGalleryCell.reuseIdentifier, for: indexPath) as? MediaGalleryCell else {
-                owsFail("\(logTag) in \(#function) unexpected cell for indexPath: \(indexPath)")
+                owsFailDebug("\(logTag) in \(#function) unexpected cell for indexPath: \(indexPath)")
                 return defaultCell
             }
 
@@ -370,17 +370,17 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
 
     func galleryItem(at indexPath: IndexPath) -> MediaGalleryItem? {
         guard let sectionDate = self.galleryDates[safe: indexPath.section - 1] else {
-            owsFail("\(logTag) in \(#function) unknown section: \(indexPath.section)")
+            owsFailDebug("\(logTag) in \(#function) unknown section: \(indexPath.section)")
             return nil
         }
 
         guard let sectionItems = self.galleryItems[sectionDate] else {
-            owsFail("\(logTag) in \(#function) no section for date: \(sectionDate)")
+            owsFailDebug("\(logTag) in \(#function) no section for date: \(sectionDate)")
             return nil
         }
 
         guard let galleryItem = sectionItems[safe: indexPath.row] else {
-            owsFail("\(logTag) in \(#function) no message for row: \(indexPath.row)")
+            owsFailDebug("\(logTag) in \(#function) no message for row: \(indexPath.row)")
             return nil
         }
 
@@ -401,7 +401,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         }
 
         guard let mediaGalleryDataSource = self.mediaGalleryDataSource else {
-            owsFail("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
             return CGSize.zero
         }
 
@@ -429,7 +429,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
 
     func updateDeleteButton() {
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpectedly nil")
             return
         }
 
@@ -456,7 +456,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         isInBatchSelectMode = true
 
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpectedly nil")
             return
         }
 
@@ -488,7 +488,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         isInBatchSelectMode = false
 
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpectedly nil")
             return
         }
 
@@ -513,19 +513,19 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         Logger.debug("\(self.logTag) in \(#function)")
 
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpectedly nil")
             return
         }
 
         guard let indexPaths = collectionView.indexPathsForSelectedItems else {
-            owsFail("\(logTag) in \(#function) indexPaths was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) indexPaths was unexpectedly nil")
             return
         }
 
         let items: [MediaGalleryItem] = indexPaths.compactMap { return self.galleryItem(at: $0) }
 
         guard let mediaGalleryDataSource = self.mediaGalleryDataSource else {
-            owsFail("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
             return
         }
 
@@ -561,7 +561,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         Logger.debug("\(self.logTag) in \(#function)")
 
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpectedly nil")
             return
         }
 
@@ -574,7 +574,7 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         Logger.debug("\(self.logTag) in \(#function) with deletedSections: \(deletedSections) deletedItems: \(deletedItems)")
 
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpetedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpetedly nil")
             return
         }
 
@@ -626,12 +626,12 @@ public class MediaTileViewController: UICollectionViewController, MediaGalleryDa
         }
 
         guard let collectionView = self.collectionView else {
-            owsFail("\(logTag) in \(#function) collectionView was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) collectionView was unexpectedly nil")
             return
         }
 
         guard let mediaGalleryDataSource = self.mediaGalleryDataSource else {
-            owsFail("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) mediaGalleryDataSource was unexpectedly nil")
             return
         }
 

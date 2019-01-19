@@ -97,13 +97,13 @@ class MenuActionsViewController: UIViewController, MenuActionSheetDelegate {
 
     private func addSnapshotFocusedView() -> UIView? {
         guard let snapshotView = self.focusedView.snapshotView(afterScreenUpdates: false) else {
-            owsFail("\(self.logTag) in \(#function) snapshotView was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) snapshotView was unexpectedly nil")
             return nil
         }
         view.addSubview(snapshotView)
 
         guard let focusedViewSuperview = focusedView.superview else {
-            owsFail("\(self.logTag) in \(#function) focusedViewSuperview was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) focusedViewSuperview was unexpectedly nil")
             return nil
         }
 
@@ -115,18 +115,18 @@ class MenuActionsViewController: UIViewController, MenuActionSheetDelegate {
 
     private func animatePresentation() {
         guard let actionSheetViewVerticalConstraint = self.actionSheetViewVerticalConstraint else {
-            owsFail("\(self.logTag) in \(#function) actionSheetViewVerticalConstraint was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) actionSheetViewVerticalConstraint was unexpectedly nil")
             return
         }
 
         guard let focusedViewSuperview = focusedView.superview else {
-            owsFail("\(self.logTag) in \(#function) focusedViewSuperview was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) focusedViewSuperview was unexpectedly nil")
             return
         }
 
         // darken background
         guard let snapshotView = addSnapshotFocusedView() else {
-            owsFail("\(self.logTag) in \(#function) snapshotView was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) snapshotView was unexpectedly nil")
             return
         }
 
@@ -168,19 +168,19 @@ class MenuActionsViewController: UIViewController, MenuActionSheetDelegate {
 
     private func animateDismiss(action: MenuAction?) {
         guard let actionSheetViewVerticalConstraint = self.actionSheetViewVerticalConstraint else {
-            owsFail("\(self.logTag) in \(#function) actionSheetVerticalConstraint was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) actionSheetVerticalConstraint was unexpectedly nil")
             self.delegate?.menuActionsDidHide(self)
             return
         }
 
         guard let snapshotView = self.snapshotView else {
-            owsFail("\(self.logTag) in \(#function) snapshotView was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) snapshotView was unexpectedly nil")
             self.delegate?.menuActionsDidHide(self)
             return
         }
 
         guard let presentationFocusOffset = self.presentationFocusOffset else {
-            owsFail("\(self.logTag) in \(#function) presentationFocusOffset was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) presentationFocusOffset was unexpectedly nil")
             self.delegate?.menuActionsDidHide(self)
             return
         }
@@ -230,7 +230,7 @@ class MenuActionsViewController: UIViewController, MenuActionSheetDelegate {
         didInformDelegateOfDismissalAnimation = true
 
         guard let presentationFocusOffset = self.presentationFocusOffset else {
-            owsFail("\(self.logTag) in \(#function) presentationFocusOffset was unexpectedly nil")
+            owsFailDebug("\(self.logTag) in \(#function) presentationFocusOffset was unexpectedly nil")
             self.delegate?.menuActionsDidHide(self)
             return
         }

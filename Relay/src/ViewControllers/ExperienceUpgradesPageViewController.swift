@@ -45,7 +45,7 @@ private class IntroducingCustomNotificationAudioExperienceUpgradeViewController:
             // dismiss the modally presented view controller, then proceed.
             self.experienceUpgradesPageViewController.dismiss(animated: true) {
                 guard let fromViewController = UIApplication.shared.frontmostViewController else {
-                    owsFail("frontmostViewController was unexectedly nil")
+                    owsFailDebug("frontmostViewController was unexectedly nil")
                     return
                 }
 
@@ -107,7 +107,7 @@ private class IntroducingCustomNotificationAudioExperienceUpgradeViewController:
         Logger.debug("\(TAG) in \(#function)")
 
         guard let buttonAction = self.buttonAction else {
-            owsFail("\(TAG) button action was nil")
+            owsFailDebug("\(TAG) button action was nil")
             return
         }
 
@@ -155,7 +155,7 @@ private class IntroductingReadReceiptsExperienceUpgradeViewController: Experienc
             // dismiss the modally presented view controller, then proceed.
             self.experienceUpgradesPageViewController.dismiss(animated: true) {
                 guard let fromViewController = UIApplication.shared.frontmostViewController as? HomeViewController else {
-                    owsFail("unexpected frontmostViewController: \(String(describing: UIApplication.shared.frontmostViewController))")
+                    owsFailDebug("unexpected frontmostViewController: \(String(describing: UIApplication.shared.frontmostViewController))")
                     return
                 }
 
@@ -217,7 +217,7 @@ private class IntroductingReadReceiptsExperienceUpgradeViewController: Experienc
         Logger.debug("\(TAG) in \(#function)")
 
         guard let buttonAction = self.buttonAction else {
-            owsFail("\(TAG) button action was nil")
+            owsFailDebug("\(TAG) button action was nil")
             return
         }
 
@@ -349,7 +349,7 @@ private class IntroductingProfilesExperienceUpgradeViewController: ExperienceUpg
         // dismiss the modally presented view controller, then proceed.
         experienceUpgradesPageViewController.dismiss(animated: true) {
             guard let fromViewController = UIApplication.shared.frontmostViewController as? HomeViewController else {
-                owsFail("unexpected frontmostViewController: \(String(describing: UIApplication.shared.frontmostViewController))")
+                owsFailDebug("unexpected frontmostViewController: \(String(describing: UIApplication.shared.frontmostViewController))")
                 return
             }
             ProfileViewController.presentForUpgradeOrNag(from: fromViewController)
@@ -518,7 +518,7 @@ public class ExperienceUpgradesPageViewController: OWSViewController, UIPageView
 
     @objc public override func viewDidLoad() {
         guard let firstViewController = allViewControllers.first else {
-            owsFail("\(TAG) no pages to show.")
+            owsFailDebug("\(TAG) no pages to show.")
             dismiss(animated: true)
             return
         }
@@ -604,7 +604,7 @@ public class ExperienceUpgradesPageViewController: OWSViewController, UIPageView
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         Logger.debug("\(TAG) in \(#function)")
         guard let currentIndex = self.viewControllerIndexes[viewController] else {
-            owsFail("\(TAG) unknown view controller: \(viewController)")
+            owsFailDebug("\(TAG) unknown view controller: \(viewController)")
             return nil
         }
 
@@ -619,7 +619,7 @@ public class ExperienceUpgradesPageViewController: OWSViewController, UIPageView
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         Logger.debug("\(TAG) in \(#function)")
         guard let currentIndex = self.viewControllerIndexes[viewController] else {
-            owsFail("\(TAG) unknown view controller: \(viewController)")
+            owsFailDebug("\(TAG) unknown view controller: \(viewController)")
             return nil
         }
 
@@ -653,7 +653,7 @@ public class ExperienceUpgradesPageViewController: OWSViewController, UIPageView
     public func addViewController(experienceUpgrade: ExperienceUpgrade) {
         let uniqueId = experienceUpgrade.uniqueId
         guard let identifier = ExperienceUpgradeId(rawValue: uniqueId) else {
-            owsFail("\(TAG) unknown experience upgrade. skipping")
+            owsFailDebug("\(TAG) unknown experience upgrade. skipping")
             return
         }
 

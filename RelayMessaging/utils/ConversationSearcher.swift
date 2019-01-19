@@ -131,7 +131,7 @@ public class ConversationSearcher: NSObject {
                 let searchResult = ContactSearchResult(relayRecipient: relayRecipient, contactsManager: contactsManager)
                 contacts.append(searchResult)
             } else {
-                owsFail("\(self.logTag) in \(#function) unhandled item: \(match)")
+                owsFailDebug("\(self.logTag) in \(#function) unhandled item: \(match)")
             }
         }
 

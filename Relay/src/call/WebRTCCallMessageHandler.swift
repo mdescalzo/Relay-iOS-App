@@ -67,7 +67,7 @@ public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
 //    public func receivedHangup(_ hangup: OWSSignalServiceProtosCallMessageHangup, from callerId: String) {
 //        AssertIsOnMainThread(file: #function)
 //        guard hangup.hasId() else {
-//            owsFail("no callId in \(#function)")
+//            owsFailDebug("no callId in \(#function)")
 //            return
 //        }
 //
@@ -78,7 +78,7 @@ public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
     public func receivedBusy(_ busy: OWSSignalServiceProtosCallMessageBusy, from callerId: String) {
         AssertIsOnMainThread(file: #function)
         guard busy.hasId() else {
-            owsFail("no callId in \(#function)")
+            owsFailDebug("no callId in \(#function)")
             return
         }
 

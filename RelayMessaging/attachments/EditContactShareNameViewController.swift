@@ -92,7 +92,7 @@ class ContactNameFieldView: UIView {
         hasUnsavedChanges = true
 
         guard let delegate = self.delegate else {
-            owsFail("\(logTag) missing delegate.")
+            owsFailDebug("\(logTag) missing delegate.")
             return
         }
 
@@ -244,7 +244,7 @@ public class EditContactShareNameViewController: OWSViewController, ContactNameF
         AssertIsOnMainThread(file: #function)
 
         guard let rootView = self.view else {
-            owsFail("\(logTag) missing root view.")
+            owsFailDebug("\(logTag) missing root view.")
             return
         }
 
@@ -289,7 +289,7 @@ public class EditContactShareNameViewController: OWSViewController, ContactNameF
         Logger.info("\(logTag) \(#function)")
 
         guard let newName = OWSContactName() else {
-            owsFail("\(logTag) could not create a new name.")
+            owsFailDebug("\(logTag) could not create a new name.")
             return
         }
         newName.namePrefix = namePrefixView.value().ows_stripped()
@@ -302,14 +302,14 @@ public class EditContactShareNameViewController: OWSViewController, ContactNameF
         let modifiedContactShare = contactShare.copy(withName: newName)
 
         guard let delegate = self.delegate else {
-            owsFail("\(logTag) missing delegate.")
+            owsFailDebug("\(logTag) missing delegate.")
             return
         }
 
         delegate.editContactShareNameView(self, didEditContactShare: modifiedContactShare)
 
         guard let navigationController = self.navigationController else {
-            owsFail("\(logTag) Missing navigationController.")
+            owsFailDebug("\(logTag) Missing navigationController.")
             return
         }
         navigationController.popViewController(animated: true)
@@ -319,7 +319,7 @@ public class EditContactShareNameViewController: OWSViewController, ContactNameF
         Logger.info("\(logTag) \(#function)")
 
         guard let navigationController = self.navigationController else {
-            owsFail("\(logTag) Missing navigationController.")
+            owsFailDebug("\(logTag) Missing navigationController.")
             return
         }
         navigationController.popViewController(animated: true)
