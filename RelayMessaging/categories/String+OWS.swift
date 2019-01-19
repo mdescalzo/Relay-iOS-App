@@ -13,7 +13,7 @@ public extension String {
 
         while (lowerBoundCharCount < upperBoundCharCount) {
             guard let upperBoundData = self.prefix(upperBoundCharCount).data(using: .utf8) else {
-                owsFail("in \(#function) upperBoundData was unexpectedly nil")
+                owsFailDebug("in \(#function) upperBoundData was unexpectedly nil")
                 return nil
             }
 
@@ -31,7 +31,7 @@ public extension String {
             let midpointString = self.prefix(midpointCharCount)
 
             guard let midpointData = midpointString.data(using: .utf8) else {
-                owsFail("in \(#function) midpointData was unexpectedly nil")
+                owsFailDebug("in \(#function) midpointData was unexpectedly nil")
                 return nil
             }
             let midpointByteCount = midpointData.count

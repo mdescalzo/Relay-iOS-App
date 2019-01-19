@@ -70,12 +70,12 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         guard let call = self.callService.call else {
-            owsFail("\(self.TAG) in \(#function) No current call.")
+            owsFailDebug("\(self.TAG) in \(#function) No current call.")
             return
         }
 
         guard call.localId == localId else {
-            owsFail("\(self.TAG) in \(#function) localId does not match current call")
+            owsFailDebug("\(self.TAG) in \(#function) localId does not match current call")
             return
         }
 
@@ -86,7 +86,7 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         guard call.localId == self.callService.call?.localId else {
-            owsFail("\(self.TAG) in \(#function) localId does not match current call")
+            owsFailDebug("\(self.TAG) in \(#function) localId does not match current call")
             return
         }
 
@@ -98,12 +98,12 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         guard let call = self.callService.call else {
-            owsFail("\(self.TAG) in \(#function) No current call.")
+            owsFailDebug("\(self.TAG) in \(#function) No current call.")
             return
         }
 
         guard call.localId == localId else {
-            owsFail("\(self.TAG) in \(#function) localId does not match current call")
+            owsFailDebug("\(self.TAG) in \(#function) localId does not match current call")
             return
         }
 
@@ -114,7 +114,7 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         guard call.localId == self.callService.call?.localId else {
-            owsFail("\(self.TAG) in \(#function) localId does not match current call")
+            owsFailDebug("\(self.TAG) in \(#function) localId does not match current call")
             return
         }
 
@@ -133,7 +133,7 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         // If both parties hang up at the same moment,
         // call might already be nil.
         guard self.callService.call == nil || call.localId == self.callService.call?.localId else {
-            owsFail("\(self.TAG) in \(#function) localId does not match current call")
+            owsFailDebug("\(self.TAG) in \(#function) localId does not match current call")
             return
         }
 
@@ -162,7 +162,7 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         guard call.localId == self.callService.call?.localId else {
-            owsFail("\(self.TAG) in \(#function) localId does not match current call")
+            owsFailDebug("\(self.TAG) in \(#function) localId does not match current call")
             return
         }
 
@@ -173,7 +173,7 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         guard call.localId == self.callService.call?.localId else {
-            owsFail("\(self.TAG) in \(#function) localId does not match current call")
+            owsFailDebug("\(self.TAG) in \(#function) localId does not match current call")
             return
         }
 

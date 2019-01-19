@@ -60,11 +60,11 @@ class AttachmentPointerView: UIStackView {
         let attachmentId = attachmentPointer.uniqueId
         
         guard let progress = (notification as NSNotification).userInfo?[kAttachmentDownloadProgressKey] as? NSNumber else {
-            owsFail("Attachment download notification missing progress.")
+            owsFailDebug("Attachment download notification missing progress.")
             return
         }
         guard let notificationAttachmentId = (notification as NSNotification).userInfo?[kAttachmentDownloadAttachmentIDKey] as? String else {
-            owsFail("Attachment download notification missing attachment id.")
+            owsFailDebug("Attachment download notification missing attachment id.")
             return
         }
         guard notificationAttachmentId == attachmentId else {

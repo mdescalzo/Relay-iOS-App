@@ -22,7 +22,7 @@ class DebugUICalling: DebugUIPage {
 
     override func section(thread aThread: TSThread?) -> OWSTableSection? {
         guard aThread?.participantIds.count == 2 else {
-            owsFail("Calling is only valid for contact thread, got thread: \(String(describing: aThread))")
+            owsFailDebug("Calling is only valid for contact thread, got thread: \(String(describing: aThread))")
             return nil
         }
         

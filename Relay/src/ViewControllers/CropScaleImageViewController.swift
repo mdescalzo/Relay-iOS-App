@@ -501,7 +501,7 @@ import RelayMessaging
 
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         if scaledImage == nil {
-            owsFail("\(TAG) could not generate dst image.")
+            owsFailDebug("\(TAG) could not generate dst image.")
         }
         UIGraphicsEndImageContext()
         return scaledImage

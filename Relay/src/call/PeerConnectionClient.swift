@@ -311,7 +311,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
                                                            configuration: configuration) else {
 
                                                             // TODO fail outgoing call?
-                                                            owsFail("dataChannel was unexpectedly nil")
+                                                            owsFailDebug("dataChannel was unexpectedly nil")
                                                             return
         }
         dataChannel.delegate = proxy
@@ -362,7 +362,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
             guard let strongSelf = proxyCopy.get() else { return }
 
             guard let captureController = strongSelf.videoCaptureController else {
-                owsFail("\(self.logTag) in \(#function) captureController was unexpectedly nil")
+                owsFailDebug("\(self.logTag) in \(#function) captureController was unexpectedly nil")
                 return
             }
 
@@ -383,7 +383,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
                 }
 
                 guard let captureController = strongSelf.videoCaptureController else {
-                    owsFail("\(self.logTag) in \(#function) videoCaptureController was unexpectedly nil")
+                    owsFailDebug("\(self.logTag) in \(#function) videoCaptureController was unexpectedly nil")
                     return nil
                 }
 
@@ -892,12 +892,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
                 return
             }
             guard peerConnection == peerConnectionParam else {
-                owsFail("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
+                owsFailDebug("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
                 return
             }
             guard stream.videoTracks.count > 0 else {
-                Logger.debug("No video track to update.")
-//                owsFail("\(strongSelf.logTag) in \(#function) didAdd stream missing stream.")
+                owsFailDebug("\(strongSelf.logTag) in \(#function) didAdd stream missing stream.")
                 return
             }
             let remoteVideoTrack = stream.videoTracks[0]
@@ -950,7 +949,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
                 return
             }
             guard peerConnection == peerConnectionParam else {
-                owsFail("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
+                owsFailDebug("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
                 return
             }
 
@@ -992,7 +991,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
                 return
             }
             guard peerConnection == peerConnectionParam else {
-                owsFail("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
+                owsFailDebug("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
                 return
             }
             Logger.info("\(strongSelf.logTag) adding local ICE candidate:\(candidate.sdp)")
@@ -1025,7 +1024,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
                 return
             }
             guard peerConnection == peerConnectionParam else {
-                owsFail("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
+                owsFailDebug("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
                 return
             }
             Logger.info("\(strongSelf.logTag) didOpen dataChannel:\(dataChannel)")
@@ -1178,12 +1177,12 @@ class VideoCaptureController {
 
         let position: AVCaptureDevice.Position = isUsingFrontCamera ? .front : .back
         guard let device: AVCaptureDevice = self.device(position: position) else {
-            owsFail("unable to find captureDevice")
+            owsFailDebug("unable to find captureDevice")
             return
         }
 
         guard let format: AVCaptureDevice.Format = self.format(device: device) else {
-            owsFail("unable to find captureDevice")
+            owsFailDebug("unable to find captureDevice")
             return
         }
 

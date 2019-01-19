@@ -143,7 +143,7 @@ class InviteFlow: NSObject, MFMessageComposeViewControllerDelegate, MFMailCompos
     }
 
     func contactsPicker(_: ContactsPicker, didSelectContact contact: Contact) {
-        owsFail("\(logTag) in \(#function) InviteFlow only supports multi-select")
+        owsFailDebug("\(logTag) in \(#function) InviteFlow only supports multi-select")
         self.presentingViewController.dismiss(animated: true)
     }
 

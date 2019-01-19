@@ -264,7 +264,7 @@ public class ContactShareApprovalViewController: OWSViewController, EditContactS
                                                       delegate: self)
                 fieldViews.append(fieldView)
             } else {
-                owsFail("\(logTag) could not load avatar image.")
+                owsFailDebug("\(logTag) could not load avatar image.")
             }
         }
 
@@ -354,7 +354,7 @@ public class ContactShareApprovalViewController: OWSViewController, EditContactS
         AssertIsOnMainThread(file: #function)
 
         guard let rootView = self.view else {
-            owsFail("\(logTag) missing root view.")
+            owsFailDebug("\(logTag) missing root view.")
             return
         }
 
@@ -464,7 +464,7 @@ public class ContactShareApprovalViewController: OWSViewController, EditContactS
         Logger.info("\(logTag) \(#function)")
 
         guard let delegate = self.delegate else {
-            owsFail("\(logTag) missing delegate.")
+            owsFailDebug("\(logTag) missing delegate.")
             return
         }
 
@@ -479,7 +479,7 @@ public class ContactShareApprovalViewController: OWSViewController, EditContactS
         Logger.info("\(logTag) \(#function)")
 
         guard let delegate = self.delegate else {
-            owsFail("\(logTag) missing delegate.")
+            owsFailDebug("\(logTag) missing delegate.")
             return
         }
 

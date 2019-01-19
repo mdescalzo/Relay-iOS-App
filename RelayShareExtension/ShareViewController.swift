@@ -356,19 +356,19 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
             localeIdentifier.count > 0 {
             Logger.info("\(self.logTag) Locale Identifier: \(localeIdentifier)")
         } else {
-            owsFail("Locale Identifier: Unknown")
+            owsFailDebug("Locale Identifier: Unknown")
         }
         if let countryCode = locale.object(forKey: NSLocale.Key.countryCode) as? String,
             countryCode.count > 0 {
             Logger.info("\(self.logTag) Country Code: \(countryCode)")
         } else {
-            owsFail("Country Code: Unknown")
+            owsFailDebug("Country Code: Unknown")
         }
         if let languageCode = locale.object(forKey: NSLocale.Key.languageCode) as? String,
             languageCode.count > 0 {
             Logger.info("\(self.logTag) Language Code: \(languageCode)")
         } else {
-            owsFail("Language Code: Unknown")
+            owsFailDebug("Language Code: Unknown")
         }
     }
 
@@ -559,7 +559,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
                                 buttonTitle: CommonStrings.cancelButton) { _ in
                                     strongSelf.shareViewWasCancelled()
             }
-            owsFail("\(strongSelf.logTag) building attachment failed with error: \(error)")
+            owsFailDebug("\(strongSelf.logTag) building attachment failed with error: \(error)")
         }.retainUntilComplete()
     }
 
@@ -845,7 +845,7 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
                     progressPoller.startPolling()
 
                     guard let loadViewController = strongSelf.loadViewController else {
-                        owsFail("load view controller was unexpectedly nil")
+                        owsFailDebug("load view controller was unexpectedly nil")
                         return promise
                     }
 
@@ -953,7 +953,7 @@ private class ProgressPoller {
 
     func startPolling() {
         guard self.timer == nil else {
-            owsFail("already started timer")
+            owsFailDebug("already started timer")
             return
         }
 

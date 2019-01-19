@@ -97,13 +97,13 @@ public class ConversationAvatarImageView: AvatarImageView {
         Logger.debug("\(self.logTag) in \(#function)")
 
         guard let changedRecipientId = notification.userInfo?[kNSNotificationKey_ProfileRecipientId] as? String else {
-            owsFail("\(logTag) in \(#function) recipientId was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) recipientId was unexpectedly nil")
             return
         }
 
 //        guard let recipientId = self.recipientId else {
 //            // shouldn't call this for group threads
-//            owsFail("\(logTag) in \(#function) contactId was unexpectedly nil")
+//            owsFailDebug("\(logTag) in \(#function) contactId was unexpectedly nil")
 //            return
 //        }
 
@@ -119,13 +119,13 @@ public class ConversationAvatarImageView: AvatarImageView {
         Logger.debug("\(self.logTag) in \(#function)")
 
         guard let changedGroupThreadId = notification.userInfo?[TSThread_NotificationKey_UniqueId] as? String else {
-            owsFail("\(logTag) in \(#function) groupThreadId was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) groupThreadId was unexpectedly nil")
             return
         }
 
         guard let groupThreadId = self.groupThreadId else {
             // shouldn't call this for contact threads
-            owsFail("\(logTag) in \(#function) groupThreadId was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) groupThreadId was unexpectedly nil")
             return
         }
 

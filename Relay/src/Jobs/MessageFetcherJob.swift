@@ -45,7 +45,7 @@ public class MessageFetcherJob: NSObject {
                     let envelopeData = try envelope.serializedData()
                     self.messageReceiver.handleReceivedEnvelopeData(envelopeData)
                 } catch {
-                    owsFail("\(self.logTag) in \(#function) failed to serialize envelope")
+                    owsFailDebug("\(self.logTag) in \(#function) failed to serialize envelope")
                 }
                 self.acknowledgeDelivery(envelope: envelope)
             }
@@ -136,7 +136,7 @@ public class MessageFetcherJob: NSObject {
 
             return SSKEnvelope(timestamp: UInt64(timestamp), source: source, sourceDevice: sourceDevice, type: type, content: content, legacyMessage: legacyMessage)
         } catch {
-            owsFail("\(self.logTag) in \(#function) error building envelope: \(error)")
+            owsFailDebug("\(self.logTag) in \(#function) error building envelope: \(error)")
             return nil
         }
     }

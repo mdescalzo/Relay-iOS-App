@@ -40,7 +40,7 @@ import SignalCoreKit
     func run(retryDelay: TimeInterval = 1) {
         Logger.debug("MultiDeviceProfileKeyUpdateJob called.  This shouldn't be required in Forsta environment.")
 //        guard let localUID = TSAccountManager.localUID() else {
-//            owsFail("\(self.TAG) localUID was unexpectedly nil")
+//            owsFailDebug("\(self.TAG) localUID was unexpectedly nil")
 //            return
 //        }
 //
@@ -56,7 +56,7 @@ import SignalCoreKit
 //        }
 //
 //        guard let attachmentDataSource = dataSource else {
-//            owsFail("\(self.logTag) in \(#function) dataSource was unexpectedly nil")
+//            owsFailDebug("\(self.logTag) in \(#function) dataSource was unexpectedly nil")
 //            return
 //        }
 //

@@ -44,7 +44,7 @@ extension CallUIAdaptee {
             OWSWindowManager.shared().startCall(callViewController)
         } else {
             guard let presentingViewController = UIApplication.shared.frontmostViewControllerIgnoringAlerts else {
-                owsFail("in \(#function) view controller unexpectedly nil")
+                owsFailDebug("in \(#function) view controller unexpectedly nil")
                 return
             }
 
@@ -68,7 +68,7 @@ extension CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         guard self.callService.call == nil else {
-            owsFail("unexpectedly found an existing call when trying to start outgoing call: \(recipientId)")
+            owsFailDebug("unexpectedly found an existing call when trying to start outgoing call: \(recipientId)")
             return
         }
 

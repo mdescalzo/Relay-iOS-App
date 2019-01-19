@@ -31,7 +31,7 @@ class DebugUINotifications: DebugUIPage {
 
     override func section(thread aThread: TSThread?) -> OWSTableSection? {
         guard let thread = aThread else {
-            owsFail("\(logTag) Notifications must specify thread.")
+            owsFailDebug("\(logTag) Notifications must specify thread.")
             return nil
         }
 
@@ -46,12 +46,12 @@ class DebugUINotifications: DebugUIPage {
                     Logger.info("\(strongSelf.logTag) dispatching")
                     OWSPrimaryStorage.shared().newDatabaseConnection().read { (transaction) in
                         guard let viewTransaction = transaction.ext(TSMessageDatabaseViewExtensionName) as? YapDatabaseViewTransaction  else {
-                            owsFail("unable to build view transaction")
+                            owsFailDebug("unable to build view transaction")
                             return
                         }
 
                         guard let incomingMessage = viewTransaction.lastObject(inGroup: (aThread?.uniqueId)!  ) as? TSIncomingMessage else {
-                            owsFail("last message was not an incoming message.")
+                            owsFailDebug("last message was not an incoming message.")
                             return
                         }
                         Logger.info("\(strongSelf.logTag) notifying user of incoming message")

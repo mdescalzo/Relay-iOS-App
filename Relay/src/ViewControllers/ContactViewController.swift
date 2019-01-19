@@ -79,7 +79,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
         super.viewWillAppear(animated)
 
         guard let navigationController = self.navigationController else {
-            owsFail("\(logTag) in \(#function) navigationController was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) navigationController was unexpectedly nil")
             return
         }
 
@@ -103,7 +103,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
             // animation glitch where the navigation bar for this view controller starts to appear while
             // the whole nav stack is about to be obscured by the modal we are presenting.
             guard let postDismissNavigationController = self.postDismissNavigationController else {
-                owsFail("\(logTag) in \(#function) postDismissNavigationController was unexpectedly nil")
+                owsFailDebug("\(logTag) in \(#function) postDismissNavigationController was unexpectedly nil")
                 return
             }
 
@@ -157,7 +157,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
         AssertIsOnMainThread(file: #function)
 
         guard let rootView = self.view else {
-            owsFail("\(logTag) missing root view.")
+            owsFailDebug("\(logTag) missing root view.")
             return
         }
 
@@ -221,7 +221,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
 
         let backIconName = (CurrentAppContext().isRTL ? "system_disclosure_indicator" : "system_disclosure_indicator_rtl")
         guard let backIconImage = UIImage(named: backIconName) else {
-            owsFail("\(logTag) missing icon.")
+            owsFailDebug("\(logTag) missing icon.")
             return topView
         }
         let backIconView = UIImageView(image: backIconImage.withRenderingMode(.alwaysTemplate))
@@ -436,7 +436,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
         circleView.autoHCenterInSuperview()
 
         guard let image = UIImage(named: imageName) else {
-            owsFail("\(logTag) missing image.")
+            owsFailDebug("\(logTag) missing image.")
             return button
         }
         let imageView = UIImageView(image: image)
@@ -524,7 +524,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
         Logger.info("\(self.logTag) \(#function)")
 
         guard let navigationController = self.navigationController else {
-            owsFail("\(logTag) in \(#function) navigationController was unexpectedly nil")
+            owsFailDebug("\(logTag) in \(#function) navigationController was unexpectedly nil")
             return
         }
 
@@ -571,7 +571,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
         Logger.info("\(self.logTag) \(#function)")
 
         guard let url = NSURL(string: "tel:\(phoneNumber.phoneNumber)") else {
-            owsFail("\(ContactViewController.logTag) could not open phone number.")
+            owsFailDebug("\(ContactViewController.logTag) could not open phone number.")
             return
         }
         UIApplication.shared.openURL(url as URL)
@@ -599,7 +599,7 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
         Logger.info("\(self.logTag) \(#function)")
 
         guard let url = NSURL(string: "mailto:\(email.email)") else {
-            owsFail("\(ContactViewController.logTag) could not open email.")
+            owsFailDebug("\(ContactViewController.logTag) could not open email.")
             return
         }
         UIApplication.shared.openURL(url as URL)
@@ -630,13 +630,13 @@ class ContactViewController: OWSViewController, ContactShareViewHelperDelegate {
 
         let mapAddress = formatAddressForQuery(address: address)
         guard let escapedMapAddress = mapAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            owsFail("\(ContactViewController.logTag) could not open address.")
+            owsFailDebug("\(ContactViewController.logTag) could not open address.")
             return
         }
         // Note that we use "q" (i.e. query) rather than "address" since we can't assume
         // this is a well-formed address.
         guard let url = URL(string: "http://maps.apple.com/?q=\(escapedMapAddress)") else {
-            owsFail("\(ContactViewController.logTag) could not open address.")
+            owsFailDebug("\(ContactViewController.logTag) could not open address.")
             return
         }
 

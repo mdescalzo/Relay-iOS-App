@@ -18,7 +18,7 @@
 - (PreKeyRecord *)getOrGenerateLastResortKey
 {
     if ([self containsPreKey:kPreKeyOfLastResortId]) {
-        return [self loadPreKey:kPreKeyOfLastResortId];
+        return [self throws_loadPreKey:kPreKeyOfLastResortId];
     } else {
         PreKeyRecord *lastResort =
             [[PreKeyRecord alloc] initWithId:kPreKeyOfLastResortId keyPair:[Curve25519 generateKeyPair]];
@@ -60,7 +60,7 @@
     }
 }
 
-- (PreKeyRecord *)loadPreKey:(int)preKeyId
+- (PreKeyRecord *)throws_loadPreKey:(int)preKeyId
 {
     PreKeyRecord *preKeyRecord = [self.dbReadConnection preKeyRecordForKey:[self keyFromInt:preKeyId]
                                                               inCollection:OWSPrimaryStoragePreKeyStoreCollection];

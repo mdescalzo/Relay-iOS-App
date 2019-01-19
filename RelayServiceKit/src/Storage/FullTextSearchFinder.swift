@@ -81,7 +81,7 @@ public class FullTextSearchFinder: NSObject {
 
     public func enumerateObjects(searchText: String, transaction: YapDatabaseReadTransaction, block: @escaping (Any, String) -> Void) {
         guard let ext: YapDatabaseFullTextSearchTransaction = ext(transaction: transaction) else {
-            owsFail("\(logTag) ext was unexpectedly nil")
+            owsFailDebug("\(logTag) ext was unexpectedly nil")
             return
         }
 
@@ -207,7 +207,7 @@ public class FullTextSearchFinder: NSObject {
                 return
             }
             guard let text = attachmentStream.readOversizeText() else {
-                owsFail("Could not load oversize text attachment")
+                owsFailDebug("Could not load oversize text attachment")
                 return
             }
             oversizeText = text
