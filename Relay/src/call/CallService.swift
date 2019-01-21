@@ -99,7 +99,7 @@ protocol CallServiceObserver: class {
 }
 
 // Gather all per-call state in one place.
-private class SignalCallData: NSObject {
+private class RelayCallData: NSObject {
     public let call: RelayCall
 
     // Used to coordinate promises across delegate methods
@@ -140,6 +140,8 @@ private class SignalCallData: NSObject {
             Logger.info("\(self.logTag) \(#function): \(isRemoteVideoEnabled)")
         }
     }
+    
+    var peerConnectionClients = [ PeerConnectionClient ]()
 
     var peerConnectionClient: PeerConnectionClient? {
         didSet {
@@ -233,7 +235,7 @@ private class SignalCallData: NSObject {
 
     // MARK: Ivars
 
-    fileprivate var callData: SignalCallData? {
+    fileprivate var callData: RelayCallData? {
         didSet {
             AssertIsOnMainThread(file: #function)
 
@@ -371,7 +373,7 @@ private class SignalCallData: NSObject {
             return Promise(error: CallError.assertionError(description: errorDescription))
         }
 
-        let callData = SignalCallData(call: call)
+        let callData = RelayCallData(call: call)
         self.callData = callData
 
         let callRecord = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: call.callId, callType: RPRecentCallTypeOutgoingIncomplete, in: call.thread)
@@ -654,7 +656,7 @@ private class SignalCallData: NSObject {
 
         Logger.info("\(self.logTag) starting new call: \(newCall.identifiersForLogs)")
 
-        let callData = SignalCallData(call: newCall)
+        let callData = RelayCallData(call: newCall)
         self.callData = callData
 
         var backgroundTask: OWSBackgroundTask? = OWSBackgroundTask(label: "\(#function)", completionBlock: { [weak self] status in
@@ -1098,7 +1100,7 @@ private class SignalCallData: NSObject {
      * For outgoing call, when the callee has chosen to accept the call.
      * For incoming call, when the local user has chosen to accept the call.
      */
-    private func handleConnectedCall(_ callData: SignalCallData) {
+    private func handleConnectedCall(_ callData: RelayCallData) {
         Logger.info("\(self.logTag) in \(#function)")
         AssertIsOnMainThread(file: #function)
 
