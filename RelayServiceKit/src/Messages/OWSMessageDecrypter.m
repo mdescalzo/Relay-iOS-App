@@ -307,6 +307,7 @@ NS_ASSUME_NONNULL_BEGIN
         } else {
             // FIXME: Supressing this message for now
 //            errorMessage = [TSErrorMessage corruptedMessageWithEnvelope:envelope withTransaction:transaction];
+            return;
         }
 
         OWSAssert(errorMessage);
