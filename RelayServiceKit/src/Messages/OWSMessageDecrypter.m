@@ -13,16 +13,19 @@
 #import "OWSPrimaryStorage+SignedPreKeyStore.h"
 #import "OWSPrimaryStorage.h"
 #import "OWSSignalServiceProtos.pb.h"
-#import "SignalRecipient.h"
 #import "TSAccountManager.h"
 #import "TSThread.h"
 #import "TSErrorMessage.h"
 #import "TSPreKeyManager.h"
 #import "TextSecureKitEnv.h"
 #import "SSKAsserts.h"
+#import "OWSEndSessionMessage.h"
+#import "OWSMessageSender.h"
+#import "TSInfoMessage.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 
 @import AxolotlKit;
+@import SignalCoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -111,10 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     DecryptSuccessBlock successBlock
         = ^(NSData *_Nullable plaintextData, YapDatabaseReadWriteTransaction *transaction) {
-              [SignalRecipient markRecipientAsRegistered:envelope.source
-                                                deviceId:envelope.sourceDevice
-                                             transaction:transaction];
-
+            [RelayRecipient markAsRegistered:envelope.source deviceId:envelope.sourceDevice transaction:transaction];
               successBlockParameter(plaintextData, transaction);
           };
 
@@ -279,21 +279,21 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)processException:(NSException *)exception envelope:(SSKEnvelope *)envelope
 {
     DDLogError(@"%@ Got exception: %@ of type: %@ with reason: %@",
-        self.logTag,
-        exception.description,
-        exception.name,
-        exception.reason);
-
-
+               self.logTag,
+               exception.description,
+               exception.name,
+               exception.reason);
+    
+    
     [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
         TSErrorMessage *errorMessage;
-
+        
         if ([exception.name isEqualToString:NoSessionException]) {
-            errorMessage = [TSErrorMessage missingSessionWithEnvelope:envelope withTransaction:transaction];
+            //            errorMessage = [TSErrorMessage missingSessionWithEnvelope:envelope withTransaction:transaction];
         } else if ([exception.name isEqualToString:InvalidKeyException]) {
-            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
+            //            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
         } else if ([exception.name isEqualToString:InvalidKeyIdException]) {
-            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
+            //            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
         } else if ([exception.name isEqualToString:DuplicateMessageException]) {
             // Duplicate messages are dismissed
             return;
@@ -301,19 +301,41 @@ NS_ASSUME_NONNULL_BEGIN
             errorMessage = [TSErrorMessage invalidVersionWithEnvelope:envelope withTransaction:transaction];
         } else if ([exception.name isEqualToString:UntrustedIdentityKeyException]) {
             // Should no longer get here, since we now record the new identity for incoming messages.
-            OWSFail(
-                @"%@ Failed to trust identity on incoming message from: %@", self.logTag, envelopeAddress(envelope));
+            OWSFailDebug(@"%@ Failed to trust identity on incoming message from: %@", self.logTag, envelopeAddress(envelope));
             return;
         } else {
             // FIXME: Supressing this message for now
-//            errorMessage = [TSErrorMessage corruptedMessageWithEnvelope:envelope withTransaction:transaction];
-            return;
+            //            errorMessage = [TSErrorMessage corruptedMessageWithEnvelope:envelope withTransaction:transaction];
+            //            return;
         }
-
-        OWSAssert(errorMessage);
+        
+        //        OWSAssert(errorMessage);
+        // If we have something to say...
         if (errorMessage != nil) {
             [errorMessage saveWithTransaction:transaction];
             [self notifyUserForErrorMessage:errorMessage envelope:envelope transaction:transaction];
+        } else {
+            // Otherwise, Reset session
+            DDLogInfo(@"%@: Resetting session due to message corruption.", self.logTag);
+            
+            DDLogInfo(@"%@: deleting sessions for recipient: %@", self.logTag, envelope.source);
+            [self.primaryStorage deleteAllSessionsForContact:envelope.source protocolContext:transaction];
+            
+            TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID] transaction:transaction];
+            OWSEndSessionMessage *endSessionMessage = [[OWSEndSessionMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp] inThread:thread];
+            [TextSecureKitEnv.sharedEnv.messageSender enqueueMessage:endSessionMessage success:^{
+                DDLogInfo(@"%@: successfully sent EndSessionMessage.", self.logTag);
+                [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
+                
+                TSInfoMessage *infoMessage = [[TSInfoMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                             inThread:thread
+                                                                      infoMessageType:TSInfoMessageTypeSessionDidEnd];
+                [infoMessage saveWithTransaction:transaction];
+                
+            } failure:^(NSError * _Nonnull error) {
+                DDLogInfo(@"%@: failed to send EndSessionMessage with error: %@", self.logTag, error.localizedDescription);
+                [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
+            }];
         }
     }];
 }
