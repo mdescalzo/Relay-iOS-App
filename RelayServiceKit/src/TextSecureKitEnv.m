@@ -13,7 +13,7 @@ static TextSecureKitEnv *sharedTextSecureKitEnv;
 
 @property (nonatomic) id<OWSCallMessageHandler> callMessageHandler;
 @property (nonatomic) id<ContactsManagerProtocol> contactsManager;
-@property (nonatomic) OWSMessageSender *messageSender;
+@property (nonatomic) MessageSender *messageSender;
 @property (nonatomic) id<NotificationsProtocol> notificationsManager;
 @property (nonatomic) id<ProfileManagerProtocol> profileManager;
 
@@ -25,7 +25,7 @@ static TextSecureKitEnv *sharedTextSecureKitEnv;
 
 - (instancetype)initWithCallMessageHandler:(id<OWSCallMessageHandler>)callMessageHandler
                            contactsManager:(id<ContactsManagerProtocol>)contactsManager
-                             messageSender:(OWSMessageSender *)messageSender
+                             messageSender:(MessageSender *)messageSender
                       notificationsManager:(id<NotificationsProtocol>)notificationsManager
                             profileManager:(id<ProfileManagerProtocol>)profileManager
 {

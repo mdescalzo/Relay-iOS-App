@@ -12,7 +12,7 @@ extern const NSUInteger kOWSProfileManager_NameDataLength;
 extern const NSUInteger kOWSProfileManager_MaxAvatarDiameter;
 
 @class OWSAES256Key;
-@class OWSMessageSender;
+@class MessageSender;
 @class TSThread;
 
 // This class can be safely accessed and used from any thread.

@@ -12,6 +12,7 @@ extern NSString *const RegistrationStateDidChangeNotification;
 extern NSString *const DeregistrationStateDidChangeNotification;
 extern NSString *const kNSNotificationName_LocalUIDDidChange;
 
+@class AnyPromise;
 @class OWSPrimaryStorage;
 @class TSNetworkManager;
 @class YapDatabaseReadWriteTransaction;
@@ -155,6 +156,11 @@ extern NSString *const kNSNotificationName_LocalUIDDidChange;
 - (BOOL)resetForReregistration;
 - (NSString *)reregisterationPhoneNumber;
 - (BOOL)isReregistering;
+
+#pragma mark - Manual Message Fetch
+
+- (BOOL)isManualMessageFetchEnabled;
+- (AnyPromise *)setIsManualMessageFetchEnabled:(BOOL)value __attribute__((warn_unused_result));
 
 @end
 

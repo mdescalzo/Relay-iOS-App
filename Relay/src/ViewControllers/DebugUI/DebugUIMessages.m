@@ -299,7 +299,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSString *randomText = [self randomText];
     NSString *text = [[[@(counter) description] stringByAppendingString:@" "] stringByAppendingString:randomText];
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     TSOutgoingMessage *message =
         [ThreadUtil sendMessageWithText:text inThread:thread quotedReplyModel:nil messageSender:messageSender];
     DDLogError(@"%@ sendTextMessageInThread timestamp: %llu.", self.logTag, message.timestamp);
@@ -337,7 +337,7 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(filePath);
     OWSAssert(thread);
 
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     NSString *filename = [filePath lastPathComponent];
     NSString *utiType = [MIMETypeUtil utiTypeForFileExtension:filename.pathExtension];
     DataSource *_Nullable dataSource = [DataSourcePath dataSourceWithFilePath:filePath shouldDeleteOnDeallocation:NO];
@@ -1716,7 +1716,7 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(thread);
 
     SignalAttachment *attachment = [self signalAttachmentForFilePath:filePath];
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     [ThreadUtil sendMessageWithAttachment:attachment
                                  inThread:thread
                          quotedReplyModel:nil
@@ -3119,7 +3119,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
             ActionFailureBlock failure) {
             OWSContact *contact = contactBlock(transaction);
             DDLogVerbose(@"%@ sending contact: %@", self.logTag, contact.debugDescription);
-            OWSMessageSender *messageSender = [Environment current].messageSender;
+            MessageSender *messageSender = [Environment current].messageSender;
             [ThreadUtil sendMessageWithContactShare:contact inThread:thread messageSender:messageSender completion:nil];
 
             success();
@@ -3311,7 +3311,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
 
 + (void)sendOversizeTextMessage:(TSThread *)thread
 {
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     NSString *message = [self randomOversizeText];
     DataSource *_Nullable dataSource = [DataSourceValue dataSourceWithOversizeText:message];
     SignalAttachment *attachment =
@@ -3342,7 +3342,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
 
 + (void)sendRandomAttachment:(TSThread *)thread uti:(NSString *)uti length:(NSUInteger)length
 {
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     DataSource *_Nullable dataSource =
         [DataSourceValue dataSourceWithData:[self createRandomNSDataOfSize:length] utiType:uti];
     SignalAttachment *attachment =
@@ -3794,7 +3794,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
         [TSOutgoingMessage outgoingMessageInThread:thread groupMetaMessage:TSGroupMessageNew expiresInSeconds:0];
     [message updateWithCustomMessage:NSLocalizedString(@"GROUP_CREATED", nil)];
 
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     void (^completion)(void) = ^{
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)1.f * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [ThreadUtil sendMessageWithText:[@(counter) description]
@@ -4325,7 +4325,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
         }
         NSString *filename = filenames.lastObject;
         [filenames removeLastObject];
-        OWSMessageSender *messageSender = [Environment current].messageSender;
+        MessageSender *messageSender = [Environment current].messageSender;
         NSString *utiType = (NSString *)kUTTypeData;
         const NSUInteger kDataLength = 32;
         DataSource *_Nullable dataSource =

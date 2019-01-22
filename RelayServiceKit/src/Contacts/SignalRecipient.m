@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
     } else {
         // Default to sending to just primary device.
         //
-        // OWSMessageSender will correct this if it is wrong the next time
+        // MessageSender will correct this if it is wrong the next time
         // we send a message to this recipient.
         _devices = [NSOrderedSet orderedSetWithObject:@(1)];
     }

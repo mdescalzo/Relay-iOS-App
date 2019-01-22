@@ -93,7 +93,7 @@
 #import <RelayServiceKit/OWSMediaGalleryFinder.h>
 #import <RelayServiceKit/OWSMessageManager.h>
 #import <RelayServiceKit/OWSMessageReceiver.h>
-#import <RelayServiceKit/OWSMessageSender.h>
+#import <RelayServiceKit/MessageSender.h>
 #import <RelayServiceKit/OWSOutgoingCallMessage.h>
 #import <RelayServiceKit/OWSPrimaryStorage+Calling.h>
 #import <RelayServiceKit/OWSPrimaryStorage+SessionStore.h>

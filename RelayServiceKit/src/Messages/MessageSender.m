@@ -2,7 +2,7 @@
 //  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "AppContext.h"
 #import "NSData+keyVersionByte.h"
 #import "NSData+messagePadding.h"
@@ -64,14 +64,14 @@ void AssertIsOnSendingQueue()
  * OWSSendMessageOperation encapsulates all the work associated with sending a message, e.g. uploading attachments,
  * getting proper keys, and retrying upon failure.
  *
- * Used by `OWSMessageSender` to serialize message sending, ensuring that messages are emitted in the order they
+ * Used by `MessageSender` to serialize message sending, ensuring that messages are emitted in the order they
  * were sent.
  */
 @interface OWSSendMessageOperation : OWSOperation
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithMessage:(TSOutgoingMessage *)message
-                  messageSender:(OWSMessageSender *)messageSender
+                  messageSender:(MessageSender *)messageSender
                    dbConnection:(YapDatabaseConnection *)dbConnection
                         success:(void (^)(void))aSuccessHandler
                         failure:(void (^)(NSError * error))aFailureHandler NS_DESIGNATED_INITIALIZER;
@@ -80,7 +80,7 @@ void AssertIsOnSendingQueue()
 
 #pragma mark -
 
-@interface OWSMessageSender (OWSSendMessageOperation)
+@interface MessageSender (OWSSendMessageOperation)
 
 - (void)sendMessageToService:(TSOutgoingMessage *)message
                      success:(void (^)(void))successHandler
@@ -93,7 +93,7 @@ void AssertIsOnSendingQueue()
 @interface OWSSendMessageOperation ()
 
 @property (nonatomic, readonly) TSOutgoingMessage *message;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
 @property (nonatomic, readonly) void (^successHandler)(void);
 @property (nonatomic, readonly) void (^failureHandler)(NSError * error);
@@ -105,7 +105,7 @@ void AssertIsOnSendingQueue()
 @implementation OWSSendMessageOperation
 
 - (instancetype)initWithMessage:(TSOutgoingMessage *)message
-                  messageSender:(OWSMessageSender *)messageSender
+                  messageSender:(MessageSender *)messageSender
                    dbConnection:(YapDatabaseConnection *)dbConnection
                         success:(void (^)(void))successHandler
                         failure:(void (^)(NSError * error))failureHandler
@@ -189,11 +189,11 @@ void AssertIsOnSendingQueue()
 
 @end
 
-int const OWSMessageSenderRetryAttempts = 3;
-NSString *const OWSMessageSenderInvalidDeviceException = @"InvalidDeviceException";
-NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
+int const MessageSenderRetryAttempts = 3;
+NSString *const MessageSenderInvalidDeviceException = @"InvalidDeviceException";
+NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
 
-@interface OWSMessageSender ()
+@interface MessageSender ()
 
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
@@ -204,7 +204,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
 
 @end
 
-@implementation OWSMessageSender
+@implementation MessageSender
 
 - (instancetype)initWithNetworkManager:(TSNetworkManager *)networkManager
                         primaryStorage:(OWSPrimaryStorage *)primaryStorage
@@ -519,7 +519,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
             [self sendMessageToService:message
                              recipient:recipient
                                 thread:thread
-                              attempts:OWSMessageSenderRetryAttempts
+                              attempts:MessageSenderRetryAttempts
                useWebsocketIfAvailable:YES
                                success:successHandler
                                failure:failureHandler];
@@ -620,7 +620,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
             [self sendMessageToService:message
                              recipient:recipient
                                 thread:thread
-                              attempts:OWSMessageSenderRetryAttempts
+                              attempts:MessageSenderRetryAttempts
                useWebsocketIfAvailable:YES
                                success:^{
                                    // The value doesn't matter, we just need any non-NSError value.
@@ -656,7 +656,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
         for (NSError *error in sendErrorsCopy) {
             // Some errors should be ignored when sending messages
             // to groups.  See discussion on
-            // NSError (OWSMessageSender) category.
+            // NSError (MessageSender) category.
             if ([error shouldBeIgnoredForGroups]) {
                 continue;
             }
@@ -879,7 +879,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
             return;
         }
         
-        if ([exception.name isEqualToString:OWSMessageSenderRateLimitedException]) {
+        if ([exception.name isEqualToString:MessageSenderRateLimitedException]) {
             NSError *error = OWSErrorWithCodeDescription(OWSErrorCodeSignalServiceRateLimited,
                                                          NSLocalizedString(@"FAILED_SENDING_BECAUSE_RATE_LIMIT",
                                                                            @"action sheet header when re-sending message which failed because of too many attempts"));
@@ -1275,7 +1275,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
     [self sendMessageToService:sentMessageTranscript
                      recipient:TSAccountManager.selfRecipient
                         thread:message.thread
-                      attempts:OWSMessageSenderRetryAttempts
+                      attempts:MessageSenderRetryAttempts
        useWebsocketIfAvailable:YES
                        success:^{
                            DDLogInfo(@"Successfully sent sync transcript.");
@@ -1284,7 +1284,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
                            // FIXME: We don't yet honor the isRetryable flag here, since sendSyncTranscriptForMessage
                            // isn't yet wrapped in our retryable SendMessageOperation. Addressing this would require
                            // a refactor to the MessageSender. Note that we *do* however continue to respect the
-                           // OWSMessageSenderRetryAttempts, which is an "inner" retry loop, encompassing only the
+                           // MessageSenderRetryAttempts, which is an "inner" retry loop, encompassing only the
                            // messaging API.
                            DDLogInfo(@"Failed to send sync transcript: %@ (isRetryable: %d)", error, [error isRetryable]);
                        }];
@@ -1332,7 +1332,7 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
                 OWSRaiseException(InvalidMessageException, @"Failed to encrypt message");
             }
         } @catch (NSException *exception) {
-            if ([exception.name isEqualToString:OWSMessageSenderInvalidDeviceException]) {
+            if ([exception.name isEqualToString:MessageSenderInvalidDeviceException]) {
                 [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
                     [recipient removeDevicesFromRecipient:[NSOrderedSet orderedSetWithObject:deviceNumber] transaction:transaction];
                 }];
@@ -1382,12 +1382,12 @@ NSString *const OWSMessageSenderRateLimitedException = @"RateLimitedException";
                                      NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
                                      if (response.statusCode == 404) {
                                          // Can't throw exception from within callback as it's probabably a different thread.
-                                         exception = [NSException exceptionWithName:OWSMessageSenderInvalidDeviceException
+                                         exception = [NSException exceptionWithName:MessageSenderInvalidDeviceException
                                                                              reason:@"Device not registered"
                                                                            userInfo:nil];
                                      } else if (response.statusCode == 413) {
                                          // Can't throw exception from within callback as it's probabably a different thread.
-                                         exception = [NSException exceptionWithName:OWSMessageSenderRateLimitedException
+                                         exception = [NSException exceptionWithName:MessageSenderRateLimitedException
                                                                              reason:@"Too many prekey requests"
                                                                            userInfo:nil];
                                      }
