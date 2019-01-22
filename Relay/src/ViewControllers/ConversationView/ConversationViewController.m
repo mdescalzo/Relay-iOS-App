@@ -1811,11 +1811,6 @@ typedef enum : NSUInteger {
         actionWithTitle:NSLocalizedString(@"FINGERPRINT_SHRED_KEYMATERIAL_BUTTON", @"")
                   style:UIAlertActionStyleDefault
                 handler:^(UIAlertAction *action) {
-                    if (![self.thread isKindOfClass:[TSThread class]]) {
-                        // Corrupt Message errors only appear in contact threads.
-                        DDLogError(@"%@ Unexpected request to reset session in group thread. Refusing", self.logTag);
-                        return;
-                    }
                     [OWSSessionResetJob runWithThread:self.thread
                                         messageSender:self.messageSender
                                        primaryStorage:self.primaryStorage];

@@ -11,6 +11,7 @@
 #import "TextSecureKitEnv.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 #import <YapDatabase/YapDatabaseConnection.h>
+#import "TSAccountManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -88,10 +89,10 @@ NSUInteger TSErrorMessageSchemaVersion = 1;
                  withTransaction:(YapDatabaseReadWriteTransaction *)transaction
                failedMessageType:(TSErrorMessageType)errorMessageType
 {
-    TSThread *contactThread =
-        [TSThread getOrCreateThreadWithId:envelope.source transaction:transaction];
+    TSThread *thread =
+    [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID] transaction:transaction];
 
-    return [self initWithTimestamp:envelope.timestamp inThread:contactThread failedMessageType:errorMessageType];
+    return [self initWithTimestamp:envelope.timestamp inThread:thread failedMessageType:errorMessageType];
 }
 
 - (instancetype)initWithFailedMessageType:(TSErrorMessageType)errorMessageType

@@ -14,6 +14,7 @@
 #import "TSErrorMessage_privateConstructor.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 #import <YapDatabase/YapDatabaseTransaction.h>
+#import "TSAccountManager.h"
 
 @import AxolotlKit;
 
@@ -36,11 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable instancetype)untrustedKeyWithEnvelope:(SSKEnvelope *)envelope
                          withTransaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    TSThread *contactThread =
-    [TSThread getOrCreateThreadWithId:envelope.source transaction:transaction];
+    TSThread *thread =
+    [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID] transaction:transaction];
     TSInvalidIdentityKeyReceivingErrorMessage *errorMessage =
     [[self alloc] initForUnknownIdentityKeyWithTimestamp:envelope.timestamp
-                                                inThread:contactThread
+                                                inThread:thread
                                         incomingEnvelope:envelope];
     return errorMessage;
 }
