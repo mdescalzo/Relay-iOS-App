@@ -1001,7 +1001,7 @@ NS_ASSUME_NONNULL_BEGIN
     //            envelopeAddress(envelope),
     //            (unsigned long)timestamp);
     //        TSThread *thread =
-    //            [TSThread getOrCreateThreadWithId:envelope.source transaction:transaction];
+    //            [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID] transaction:transaction];
     //
     //        TSQuotedMessage *_Nullable quotedMessage = [TSQuotedMessage quotedMessageForDataMessage:dataMessage
     //                                                                                         thread:thread
