@@ -7,7 +7,7 @@
 #import "AppReadiness.h"
 #import "NSNotificationCenter+OWS.h"
 #import "OWSBlockedPhoneNumbersMessage.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "OWSPrimaryStorage.h"
 #import "TextSecureKitEnv.h"
 #import "YapDatabaseConnection+OWS.h"
@@ -26,7 +26,7 @@ NSString *const kOWSBlockingManager_SyncedBlockedPhoneNumbersKey = @"kOWSBlockin
 @interface OWSBlockingManager ()
 
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 
 // We don't store the phone numbers as instances of PhoneNumber to avoid
 // consistency issues between clients, but these should all be valid e164
@@ -52,13 +52,13 @@ NSString *const kOWSBlockingManager_SyncedBlockedPhoneNumbersKey = @"kOWSBlockin
 - (instancetype)initDefault
 {
     OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
-    OWSMessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
+    MessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
 
     return [self initWithPrimaryStorage:primaryStorage messageSender:messageSender];
 }
 
 - (instancetype)initWithPrimaryStorage:(OWSPrimaryStorage *)primaryStorage
-                         messageSender:(OWSMessageSender *)messageSender
+                         messageSender:(MessageSender *)messageSender
 {
     self = [super init];
 

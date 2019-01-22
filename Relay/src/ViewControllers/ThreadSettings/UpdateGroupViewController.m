@@ -23,7 +23,7 @@ OWSTableViewControllerDelegate,
 UINavigationControllerDelegate,
 OWSNavigationView>
 
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) ContactsViewHelper *contactsViewHelper;
 @property (nonatomic, readonly) AvatarViewHelper *avatarViewHelper;
 

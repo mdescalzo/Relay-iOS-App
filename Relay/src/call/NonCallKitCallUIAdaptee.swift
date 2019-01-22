@@ -36,11 +36,7 @@ class NonCallKitCallUIAdaptee: NSObject, CallUIAdaptee {
         // make sure we don't terminate audio session during call
         OWSAudioSession.shared.startAudioActivity(call.audioActivity)
 
-        self.callService.handleOutgoingCall(call).then {
-            Logger.debug("\(self.TAG) handleOutgoingCall succeeded")
-        }.catch { error in
-            Logger.error("\(self.TAG) handleOutgoingCall failed with error: \(error)")
-        }.retainUntilComplete()
+        self.callService.handleOutgoingCall(call).retainUntilComplete()
 
         return call
     }

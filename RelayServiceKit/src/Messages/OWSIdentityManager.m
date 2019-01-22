@@ -10,7 +10,7 @@
 #import "NotificationsProtocol.h"
 #import "OWSError.h"
 #import "OWSFileSystem.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "OWSOutgoingNullMessage.h"
 #import "OWSPrimaryStorage+sessionStore.h"
 #import "OWSPrimaryStorage.h"
@@ -60,7 +60,7 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
 
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 
 @end
 
@@ -81,13 +81,13 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
 - (instancetype)initDefault
 {
     OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
-    OWSMessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
+    MessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
 
     return [self initWithPrimaryStorage:primaryStorage messageSender:messageSender];
 }
 
 - (instancetype)initWithPrimaryStorage:(OWSPrimaryStorage *)primaryStorage
-                         messageSender:(OWSMessageSender *)messageSender
+                         messageSender:(MessageSender *)messageSender
 {
     self = [super init];
 

@@ -84,7 +84,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 @property (nonatomic, readonly) AccountManager *accountManager;
 @property (nonatomic, readonly) FLContactsManager *contactsManager;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 
 // Views
@@ -942,7 +942,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 {
     OWSAssertIsOnMainThread();
     DDLogInfo(@"%@ beggining refreshing.", self.logTag);
-    [SignalApp.sharedApp.messageFetcherJob run].always(^{
+    [SignalApp.sharedApp.messageFetcherJob run].ensure(^{
         DDLogInfo(@"%@ ending refreshing.", self.logTag);
         [refreshControl endRefreshing];
     });

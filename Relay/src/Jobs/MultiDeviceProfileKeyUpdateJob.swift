@@ -38,7 +38,7 @@ import SignalCoreKit
     }
 
     func run(retryDelay: TimeInterval = 1) {
-        Logger.debug("MultiDeviceProfileKeyUpdateJob called.  This shouldn't be required in Forsta environment.")
+        Logger.debug("MultiDeviceProfileKeyUpdateJob called.  This isn't be used in Forsta environment.")
 //        guard let localUID = TSAccountManager.localUID() else {
 //            owsFailDebug("\(self.TAG) localUID was unexpectedly nil")
 //            return
@@ -68,7 +68,7 @@ import SignalCoreKit
 //            },
 //            failure: { error in
 //                Logger.error("\(self.TAG) in \(#function) failed with error: \(error) retrying in \(retryDelay)s.")
-//                after(interval: retryDelay).then {
+//                after(seconds: retryDelay).done {
 //                    self.run(retryDelay: retryDelay * 2)
 //                }.retainUntilComplete()
 //            })

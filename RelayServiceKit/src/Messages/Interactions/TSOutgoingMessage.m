@@ -6,7 +6,7 @@
 #import "NSDate+OWS.h"
 #import "NSString+SSK.h"
 #import "OWSContact.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "OWSOutgoingSyncMessage.h"
 #import "OWSPrimaryStorage.h"
 #import "OWSSignalServiceProtos.pb.h"

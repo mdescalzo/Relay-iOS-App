@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RemoteVideoView () <RTCEAGLVideoViewDelegate>
+@interface RemoteVideoView () <RTCVideoViewDelegate>
 
 @property (nonatomic, readonly) __kindof UIView<RTCVideoRenderer> *videoRenderer;
 

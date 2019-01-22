@@ -21,7 +21,7 @@
 #import "OWSIdentityManager.h"
 #import "OWSIncomingMessageFinder.h"
 #import "OWSIncomingSentMessageTranscript.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "OWSMessageUtils.h"
 #import "OWSPrimaryStorage+SessionStore.h"
 #import "OWSPrimaryStorage.h"
@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) id<OWSCallMessageHandler> callMessageHandler;
 @property (nonatomic, readonly) id<ContactsManagerProtocol> contactsManager;
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) OWSIncomingMessageFinder *incomingMessageFinder;
 @property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 @property (nonatomic, readonly) OWSIdentityManager *identityManager;
@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
     id<ContactsManagerProtocol> contactsManager = [TextSecureKitEnv sharedEnv].contactsManager;
     id<OWSCallMessageHandler> callMessageHandler = [TextSecureKitEnv sharedEnv].callMessageHandler;
     OWSIdentityManager *identityManager = [OWSIdentityManager sharedManager];
-    OWSMessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
+    MessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
     
     
     return [self initWithNetworkManager:networkManager
@@ -100,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
                     callMessageHandler:(id<OWSCallMessageHandler>)callMessageHandler
                        contactsManager:(id<ContactsManagerProtocol>)contactsManager
                        identityManager:(OWSIdentityManager *)identityManager
-                         messageSender:(OWSMessageSender *)messageSender
+                         messageSender:(MessageSender *)messageSender
 {
     self = [super init];
     

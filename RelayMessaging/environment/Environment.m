@@ -19,7 +19,7 @@ static Environment *sharedEnvironment = nil;
 @property (nonatomic) FLContactsManager *contactsManager;
 @property (nonatomic) ContactsUpdater *contactsUpdater;
 @property (nonatomic) TSNetworkManager *networkManager;
-@property (nonatomic) OWSMessageSender *messageSender;
+@property (nonatomic) MessageSender *messageSender;
 @property (nonatomic) OWSPreferences *preferences;
 @property (nonatomic) ThreadManager *threadManager;
 
@@ -56,7 +56,7 @@ static Environment *sharedEnvironment = nil;
 - (instancetype)initWithContactsManager:(FLContactsManager *)contactsManager
                         contactsUpdater:(ContactsUpdater *)contactsUpdater
                          networkManager:(TSNetworkManager *)networkManager
-                          messageSender:(OWSMessageSender *)messageSender
+                          messageSender:(MessageSender *)messageSender
 {
     self = [super init];
     if (!self) {
@@ -95,7 +95,7 @@ static Environment *sharedEnvironment = nil;
     return _networkManager;
 }
 
-- (OWSMessageSender *)messageSender
+- (MessageSender *)messageSender
 {
     OWSAssert(_messageSender);
 

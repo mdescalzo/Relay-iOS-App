@@ -38,7 +38,7 @@ public class AccountManager: NSObject {
 
     @objc func register(verificationCode: String,
                         pin: String?) -> AnyPromise {
-        return AnyPromise(register(verificationCode: verificationCode, pin: pin))
+        return AnyPromise(register(verificationCode: verificationCode, pin: pin) as Promise<Void>)
     }
 
     func register(verificationCode: String,
@@ -62,11 +62,11 @@ public class AccountManager: NSObject {
                 // - simulators, none of which support receiving push notifications
                 // - on iOS11 devices which have disabled "Allow Notifications" and disabled "Enable Background Refresh" in the system settings.
                 Logger.info("\(self.TAG) Recovered push registration error. Registering for manual message fetcher because push not supported: \(description)")
-                return self.registerForManualMessageFetching()
+                return self.enableManualMessageFetching()
             default:
                 throw error
             }
-        }.then {
+        }.done {
             self.completeRegistration()
         }
 
@@ -77,11 +77,15 @@ public class AccountManager: NSObject {
 
     private func registerForTextSecure(verificationCode: String,
                                        pin: String?) -> Promise<Void> {
-        return Promise { fulfill, reject in
+        return Promise { resolver in
             self.textSecureAccountManager.verifyAccount(withCode: verificationCode,
                                                         pin: pin,
-                                                        success: fulfill,
-                                                        failure: reject)
+                                                        success: {
+                                                            resolver.fulfill()
+            },
+                                                        failure: { (error) in
+                                                            resolver.reject(error)
+            })
         }
     }
 
@@ -100,41 +104,40 @@ public class AccountManager: NSObject {
     // MARK: Message Delivery
 
     func updatePushTokens(pushToken: String, voipToken: String) -> Promise<Void> {
-        return Promise { fulfill, reject in
+        return Promise { resolver in
             self.textSecureAccountManager.registerForPushNotifications(pushToken: pushToken,
                                                                        voipToken: voipToken,
-                                                                       success: fulfill,
-                                                                       failure: reject)
+                                                                       success: { resolver.fulfill() },
+                                                                       failure: { (error) in resolver.reject(error) })
         }
     }
 
-    func registerForManualMessageFetching() -> Promise<Void> {
-        return Promise { fulfill, reject in
-            self.textSecureAccountManager.registerForManualMessageFetching(success: fulfill, failure: reject)
-        }
+    func enableManualMessageFetching() -> Promise<Void> {
+        let anyPromise = textSecureAccountManager.setIsManualMessageFetchEnabled(true)
+        return Promise(anyPromise).asVoid()
     }
 
     // MARK: Turn Server
 
     func getTurnServerInfo() -> Promise<TurnServerInfo> {
-        return Promise { fulfill, reject in
+        return Promise { resolver in
             let request = OWSRequestFactory.turnServerInfoRequest()
-            self.networkManager.makeRequest(OWSRequestFactory.turnServerInfoRequest(),
+            self.networkManager.makeRequest(request,
                                             success: { (_: URLSessionDataTask, responseObject: Any?) in
                                                 guard responseObject != nil else {
-                                                    return reject(OWSErrorMakeUnableToProcessServerResponseError())
+                                                    return resolver.reject(OWSErrorMakeUnableToProcessServerResponseError())
                                                 }
-
+                                                
                                                 if let responseDictionary = responseObject as? [String: AnyObject] {
                                                     if let turnServerInfo = TurnServerInfo(attributes: responseDictionary) {
-                                                        return fulfill(turnServerInfo)
+                                                        return resolver.fulfill(turnServerInfo)
                                                     }
                                                     Logger.error("\(self.TAG) unexpected server response:\(responseDictionary)")
                                                 }
-                                                return reject(OWSErrorMakeUnableToProcessServerResponseError())
+                                                return resolver.reject(OWSErrorMakeUnableToProcessServerResponseError())
             },
                                             failure: { (_: URLSessionDataTask, error: Error) in
-                                                    return reject(error)
+                                                return resolver.reject(error)
             })
         }
     }

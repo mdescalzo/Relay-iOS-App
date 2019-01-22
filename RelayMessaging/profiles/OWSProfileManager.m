@@ -25,7 +25,7 @@ const NSUInteger kOWSProfileManager_MaxAvatarDiameter = 640;
 
 @interface OWSProfileManager ()
 
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
 @property (nonatomic, readonly) OWSIdentityManager *identityManager;
@@ -62,14 +62,14 @@ const NSUInteger kOWSProfileManager_MaxAvatarDiameter = 640;
 - (instancetype)initDefault
 {
     OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     TSNetworkManager *networkManager = [Environment current].networkManager;
 
     return [self initWithPrimaryStorage:primaryStorage messageSender:messageSender networkManager:networkManager];
 }
 
 - (instancetype)initWithPrimaryStorage:(OWSPrimaryStorage *)primaryStorage
-                         messageSender:(OWSMessageSender *)messageSender
+                         messageSender:(MessageSender *)messageSender
                         networkManager:(TSNetworkManager *)networkManager
 {
     self = [super init];
@@ -486,14 +486,8 @@ const NSUInteger kOWSProfileManager_MaxAvatarDiameter = 640;
 
 - (void)fetchLocalUsersProfile
 {
-//    OWSAssertIsOnMainThread();
-//
-//    NSString *_Nullable localUID = [TSAccountManager sharedInstance].localUID;
-//    if (!localUID) {
-        return;
-//    }
-    // TODO: Bend to the Forsta world
-//    [ProfileFetcherJob runWithRecipientId:localUID networkManager:self.networkManager ignoreThrottling:YES];
+// We don't use profiles in Forsta world
+    return;
 }
 
 #pragma mark - Profile Whitelist

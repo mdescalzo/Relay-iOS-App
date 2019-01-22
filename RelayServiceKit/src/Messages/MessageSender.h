@@ -35,7 +35,7 @@ typedef void (^RetryableFailureHandler)(NSError *_Nonnull error);
 #pragma mark -
 
 NS_SWIFT_NAME(MessageSender)
-@interface OWSMessageSender : NSObject {
+@interface MessageSender : NSObject {
 
 @protected
 

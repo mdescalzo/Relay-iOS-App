@@ -99,23 +99,20 @@ protocol CallServiceObserver: class {
 }
 
 // Gather all per-call state in one place.
-private class SignalCallData: NSObject {
+private class RelayCallData: NSObject {
     public let call: RelayCall
 
     // Used to coordinate promises across delegate methods
-    let fulfillCallConnectedPromise: (() -> Void)
-    let rejectCallConnectedPromise: ((Error) -> Void)
     let callConnectedPromise: Promise<Void>
+    let peerConnectionClientResolver: Resolver<Void>
 
     // Used to ensure any received ICE messages wait until the peer connection client is set up.
-    let fulfillPeerConnectionClientPromise: (() -> Void)
-    let rejectPeerConnectionClientPromise: ((Error) -> Void)
     let peerConnectionClientPromise: Promise<Void>
+    let readyToSendIceUpdatesResolver: Resolver<Void>
 
     // Used to ensure CallOffer was sent before sending any ICE updates.
-    let fulfillReadyToSendIceUpdatesPromise: (() -> Void)
-    let rejectReadyToSendIceUpdatesPromise: ((Error) -> Void)
-    let readyToSendIceUpdatesPromise: Promise<Void>
+     let readyToSendIceUpdatesPromise: Promise<Void>
+     let callConnectedResolver: Resolver<Void>
 
     weak var localCaptureSession: AVCaptureSession? {
         didSet {
@@ -140,6 +137,8 @@ private class SignalCallData: NSObject {
             Logger.info("\(self.logTag) \(#function): \(isRemoteVideoEnabled)")
         }
     }
+    
+    var peerConnectionClients = [ PeerConnectionClient ]()
 
     var peerConnectionClient: PeerConnectionClient? {
         didSet {
@@ -152,26 +151,17 @@ private class SignalCallData: NSObject {
     required init(call: RelayCall) {
         self.call = call
 
-        let (callConnectedPromise, fulfillCallConnectedPromise, rejectCallConnectedPromise) = Promise<Void>.pending()
+        let (callConnectedPromise, callConnectedResolver) = Promise<Void>.pending()
         self.callConnectedPromise = callConnectedPromise
-        self.fulfillCallConnectedPromise = {
-            fulfillCallConnectedPromise(())
-        }
-        self.rejectCallConnectedPromise = rejectCallConnectedPromise
+        self.callConnectedResolver = callConnectedResolver
 
-        let (peerConnectionClientPromise, fulfillPeerConnectionClientPromise, rejectPeerConnectionClientPromise) = Promise<Void>.pending()
+        let (peerConnectionClientPromise, peerConnectionClientResolver) = Promise<Void>.pending()
         self.peerConnectionClientPromise = peerConnectionClientPromise
-        self.fulfillPeerConnectionClientPromise = {
-            fulfillPeerConnectionClientPromise(())
-        }
-        self.rejectPeerConnectionClientPromise = rejectPeerConnectionClientPromise
+        self.peerConnectionClientResolver = peerConnectionClientResolver
 
-        let (readyToSendIceUpdatesPromise, fulfillReadyToSendIceUpdatesPromise, rejectReadyToSendIceUpdatesPromise) = Promise<Void>.pending()
+        let (readyToSendIceUpdatesPromise, readyToSendIceUpdatesResolver) = Promise<Void>.pending()
         self.readyToSendIceUpdatesPromise = readyToSendIceUpdatesPromise
-        self.fulfillReadyToSendIceUpdatesPromise = {
-            fulfillReadyToSendIceUpdatesPromise(())
-        }
-        self.rejectReadyToSendIceUpdatesPromise = rejectReadyToSendIceUpdatesPromise
+        self.readyToSendIceUpdatesResolver = readyToSendIceUpdatesResolver
 
         super.init()
     }
@@ -191,15 +181,15 @@ private class SignalCallData: NSObject {
 
         // In case we're still waiting on this promise somewhere, we need to reject it to avoid a memory leak.
         // There is no harm in rejecting a previously fulfilled promise.
-        rejectCallConnectedPromise(CallError.obsoleteCall(description: "Terminating call"))
+        self.callConnectedResolver.reject(CallError.obsoleteCall(description: "Terminating call"))
 
         // In case we're still waiting on the peer connection setup somewhere, we need to reject it to avoid a memory leak.
         // There is no harm in rejecting a previously fulfilled promise.
-        rejectPeerConnectionClientPromise(CallError.obsoleteCall(description: "Terminating call"))
+        self.peerConnectionClientResolver.reject(CallError.obsoleteCall(description: "Terminating call"))
 
         // In case we're still waiting on this promise somewhere, we need to reject it to avoid a memory leak.
         // There is no harm in rejecting a previously fulfilled promise.
-        rejectReadyToSendIceUpdatesPromise(CallError.obsoleteCall(description: "Terminating call"))
+        self.readyToSendIceUpdatesResolver.reject(CallError.obsoleteCall(description: "Terminating call"))
 
         peerConnectionClient?.terminate()
         Logger.debug("\(self.logTag) setting peerConnectionClient in \(#function)")
@@ -233,7 +223,7 @@ private class SignalCallData: NSObject {
 
     // MARK: Ivars
 
-    fileprivate var callData: SignalCallData? {
+    fileprivate var callData: RelayCallData? {
         didSet {
             AssertIsOnMainThread(file: #function)
 
@@ -371,7 +361,7 @@ private class SignalCallData: NSObject {
             return Promise(error: CallError.assertionError(description: errorDescription))
         }
 
-        let callData = SignalCallData(call: call)
+        let callData = RelayCallData(call: call)
         self.callData = callData
 
         let callRecord = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: call.callId, callType: RPRecentCallTypeOutgoingIncomplete, in: call.thread)
@@ -396,7 +386,7 @@ private class SignalCallData: NSObject {
             let peerConnectionClient = PeerConnectionClient(iceServers: iceServers, delegate: self, callDirection: .outgoing, useTurnOnly: useTurnOnly)
             Logger.debug("\(self.logTag) setting peerConnectionClient in \(#function) for call: \(call.identifiersForLogs)")
             callData.peerConnectionClient = peerConnectionClient
-            callData.fulfillPeerConnectionClientPromise()
+            callData.peerConnectionClientResolver.fulfill(())
 
             return peerConnectionClient.createOffer()
         }.then { (sessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
@@ -408,7 +398,9 @@ private class SignalCallData: NSObject {
                 throw CallError.obsoleteCall(description: "Missing peerConnectionClient in \(#function)")
             }
 
-            return peerConnectionClient.setLocalSessionDescription(sessionDescription).then {
+          return firstly {
+               peerConnectionClient.setLocalSessionDescription(sessionDescription)
+               }.then { _ -> Promise<Void> in
                 
                 // Build data object
                 let allTheData = [ "callId" : call.callId,
@@ -423,7 +415,7 @@ private class SignalCallData: NSObject {
 
                 return self.messageSender.sendPromise(message: answerControlMessage)
             }
-        }.then {
+        }.then { () -> Promise<Void> in
             guard self.call == call else {
                 throw CallError.obsoleteCall(description: "obsolete call in \(#function)")
             }
@@ -433,7 +425,7 @@ private class SignalCallData: NSObject {
             self.readyToSendIceUpdates(call: call)
 
             // Don't let the outgoing call ring forever. We don't support inbound ringing forever anyway.
-            let timeout: Promise<Void> = after(interval: connectingTimeoutSeconds).then { () -> Void in
+            let timeout: Promise<Void> = after(seconds: connectingTimeoutSeconds).done {
                 // This code will always be called, whether or not the call has timed out.
                 // However, if the call has already connected, the `race` promise will have already been
                 // fulfilled. Rejecting an already fulfilled promise is a no-op.
@@ -441,13 +433,15 @@ private class SignalCallData: NSObject {
             }
 
             return race(timeout, callData.callConnectedPromise)
-        }.then {
+        }.done {
             Logger.info(self.call == call
                 ? "\(self.logTag) outgoing call connected: \(call.identifiersForLogs)."
                 : "\(self.logTag) obsolete outgoing call connected: \(call.identifiersForLogs).")
-        }.then {
-            self.setHasLocalVideo(hasLocalVideo: true)
-        }.catch { error in
+//        }.then {
+//            self.setHasLocalVideo(hasLocalVideo: true)
+     }
+     
+     promise.catch { error in
             Logger.error("\(self.logTag) placing call \(call.identifiersForLogs) failed with error: \(error)")
 
             if let callError = error as? CallError {
@@ -456,8 +450,7 @@ private class SignalCallData: NSObject {
                 let externalError = CallError.externalError(underlyingError: error)
                 self.handleFailedCall(failedCall: call, error: externalError)
             }
-        }
-        promise.retainUntilComplete()
+        }.retainUntilComplete()
         return promise
     }
 
@@ -473,44 +466,46 @@ private class SignalCallData: NSObject {
             return
         }
 
-        callData.fulfillReadyToSendIceUpdatesPromise()
+        callData.readyToSendIceUpdatesResolver.fulfill(())
     }
 
-    /**
-     * Called by the call initiator after receiving a CallAnswer from the callee.
-     */
-    public func handleReceivedAnswer(thread: TSThread, peerId: String, sessionDescription: String) {
-        Logger.info("\(self.logTag) received call answer for call: \(peerId) thread: \(thread.uniqueId)")
-        AssertIsOnMainThread(file: #function)
-
-        guard let call = self.call else {
-            Logger.warn("\(self.logTag) ignoring obsolete call: \(peerId) in \(#function)")
-            return
-        }
-
-        guard call.peerId == peerId else {
-            Logger.warn("\(self.logTag) ignoring mismatched call: \(peerId) currentCall: \(call.peerId) in \(#function)")
-            return
-        }
-
-        guard let peerConnectionClient = self.peerConnectionClient else {
-            handleFailedCall(failedCall: call, error: CallError.assertionError(description: "peerConnectionClient was unexpectedly nil in \(#function)"))
-            return
-        }
-
-        let sessionDescription = RTCSessionDescription(type: .answer, sdp: sessionDescription)
-        let setDescriptionPromise = peerConnectionClient.setRemoteSessionDescription(sessionDescription).then {
-            Logger.debug("\(self.logTag) successfully set remote description")
-        }.catch { error in
-            if let callError = error as? CallError {
-                self.handleFailedCall(failedCall: call, error: callError)
-            } else {
-                let externalError = CallError.externalError(underlyingError: error)
-                self.handleFailedCall(failedCall: call, error: externalError)
-            }
-        }
-        setDescriptionPromise.retainUntilComplete()
-    }
+     /**
+      * Called by the call initiator after receiving a CallAnswer from the callee.
+      */
+     public func handleReceivedAnswer(thread: TSThread, peerId: String, sessionDescription: String) {
+          Logger.info("\(self.logTag) received call answer for call: \(peerId) thread: \(thread.uniqueId)")
+          AssertIsOnMainThread(file: #function)
+          
+          guard let call = self.call else {
+               Logger.warn("\(self.logTag) ignoring obsolete call: \(peerId) in \(#function)")
+               return
+          }
+          
+          guard call.peerId == peerId else {
+               Logger.warn("\(self.logTag) ignoring mismatched call: \(peerId) currentCall: \(call.peerId) in \(#function)")
+               return
+          }
+          
+          guard let peerConnectionClient = self.peerConnectionClient else {
+               handleFailedCall(failedCall: call, error: CallError.assertionError(description: "peerConnectionClient was unexpectedly nil in \(#function)"))
+               return
+          }
+          
+          let sessionDescription = RTCSessionDescription(type: .answer, sdp: sessionDescription)
+          call
+          firstly {
+               peerConnectionClient.setRemoteSessionDescription(sessionDescription)
+               }.done {
+                    Logger.debug("\(self.logTag) successfully set remote description")
+               }.catch { error in
+                    if let callError = error as? CallError {
+                         self.handleFailedCall(failedCall: call, error: callError)
+                    } else {
+                         let externalError = CallError.externalError(underlyingError: error)
+                         self.handleFailedCall(failedCall: call, error: externalError)
+                    }
+               }.retainUntilComplete()
+     }
 
     /**
      * User didn't answer incoming call
@@ -654,7 +649,7 @@ private class SignalCallData: NSObject {
 
         Logger.info("\(self.logTag) starting new call: \(newCall.identifiersForLogs)")
 
-        let callData = SignalCallData(call: newCall)
+        let callData = RelayCallData(call: newCall)
         self.callData = callData
 
         var backgroundTask: OWSBackgroundTask? = OWSBackgroundTask(label: "\(#function)", completionBlock: { [weak self] status in
@@ -676,8 +671,8 @@ private class SignalCallData: NSObject {
             strongSelf.handleFailedCall(failedCall: newCall, error: timeout)
         })
 
-        let incomingCallPromise = firstly {
-            return getIceServers()
+     firstly {
+          getIceServers()
         }.then { (iceServers: [RTCIceServer]) -> Promise<HardenedRTCSessionDescription> in
             // FIXME for first time call recipients I think we'll see mic/camera permission requests here,
             // even though, from the users perspective, no incoming call is yet visible.
@@ -695,14 +690,14 @@ private class SignalCallData: NSObject {
             Logger.debug("\(self.logTag) setting peerConnectionClient in \(#function) for: \(newCall.identifiersForLogs)")
             let peerConnectionClient = PeerConnectionClient(iceServers: iceServers, delegate: self, callDirection: .incoming, useTurnOnly: useTurnOnly)
             callData.peerConnectionClient = peerConnectionClient
-            callData.fulfillPeerConnectionClientPromise()
+            callData.peerConnectionClientResolver.fulfill(())
 
             let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: callerSessionDescription)
             let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
 
             // Find a sessionDescription compatible with my constraints and the remote sessionDescription
             return peerConnectionClient.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
-        }.then { (negotiatedSessionDescription: HardenedRTCSessionDescription) in
+        }.then { (negotiatedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
             Logger.debug("\(self.logTag) set the remote description for: \(newCall.identifiersForLogs)")
 
             guard self.call == newCall else {
@@ -742,7 +737,7 @@ private class SignalCallData: NSObject {
             let answerControlMessage = OutgoingControlMessage(thread: thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
             return self.messageSender.sendPromise(message: answerControlMessage)
 
-            }.then {
+            }.then { () -> Promise<Void> in
             guard self.call == newCall else {
                 throw CallError.obsoleteCall(description: "sendPromise(message: ) response for obsolete call")
             }
@@ -752,20 +747,20 @@ private class SignalCallData: NSObject {
             // a more intuitive ordering.
             self.readyToSendIceUpdates(call: newCall)
 
-            let timeout: Promise<Void> = after(interval: connectingTimeoutSeconds).then { () -> Void in
+            let timeout: Promise<Void> = after(seconds: connectingTimeoutSeconds).done {
                 // rejecting a promise by throwing is safely a no-op if the promise has already been fulfilled
                 throw CallError.timeout(description: "timed out waiting for call to connect")
             }
 
             // This will be fulfilled (potentially) by the RTCDataChannel delegate method
             return race(callData.callConnectedPromise, timeout)
-        }.then {
+        }.done {
             Logger.info(self.call == newCall
                 ? "\(self.logTag) incoming call connected: \(newCall.identifiersForLogs)."
                 : "\(self.logTag) obsolete incoming call connected: \(newCall.identifiersForLogs).")
-        }.then {
-            self.setHasLocalVideo(hasLocalVideo: true)
-        }.catch { error in
+//        }.then {
+//            self.setHasLocalVideo(hasLocalVideo: true)
+        }.recover { error in
             guard self.call == newCall else {
                 Logger.debug("\(self.logTag) ignoring error: \(error)  for obsolete call: \(newCall.identifiersForLogs).")
                 return
@@ -776,13 +771,12 @@ private class SignalCallData: NSObject {
                 let externalError = CallError.externalError(underlyingError: error)
                 self.handleFailedCall(failedCall: newCall, error: externalError)
             }
-        }.always {
+        }.ensure {
             Logger.debug("\(self.logTag) ending background task awaiting inbound call connection")
 
             assert(backgroundTask != nil)
             backgroundTask = nil
-        }
-        incomingCallPromise.retainUntilComplete()
+        }.retainUntilComplete()
     }
 
     /**
@@ -797,7 +791,7 @@ private class SignalCallData: NSObject {
             return
         }
 
-        callData.peerConnectionClientPromise.then { () -> Void in
+     callData.peerConnectionClientPromise.done {
             AssertIsOnMainThread(file: #function)
 
             guard let call = self.call else {
@@ -845,7 +839,7 @@ private class SignalCallData: NSObject {
 
         // Wait until we've sent the CallOffer before sending any ice updates for the call to ensure
         // intuitive message ordering for other clients.
-        callData.readyToSendIceUpdatesPromise.then { () -> Void in
+     callData.readyToSendIceUpdatesPromise.done {
             guard call == self.call else {
                 self.handleFailedCurrentCall(error: .obsoleteCall(description: "current call changed since we became ready to send ice updates"))
                 return
@@ -1098,7 +1092,7 @@ private class SignalCallData: NSObject {
      * For outgoing call, when the callee has chosen to accept the call.
      * For incoming call, when the local user has chosen to accept the call.
      */
-    private func handleConnectedCall(_ callData: SignalCallData) {
+    private func handleConnectedCall(_ callData: RelayCallData) {
         Logger.info("\(self.logTag) in \(#function)")
         AssertIsOnMainThread(file: #function)
 
@@ -1110,7 +1104,7 @@ private class SignalCallData: NSObject {
         Logger.info("\(self.logTag) handleConnectedCall: \(callData.call.identifiersForLogs).")
 
         // cancel connection timeout
-        callData.fulfillCallConnectedPromise()
+        callData.callConnectedResolver.fulfill(())
 
         callData.call.state = .connected
 
@@ -1216,23 +1210,24 @@ private class SignalCallData: NSObject {
 //            peerConnectionClient.sendDataChannelMessage(data: message.asData(), description: "hangup", isCritical: true)
         } else {
             Logger.info("\(self.logTag) ending call before peer connection created. Device offline or quick hangup.")
-        }
-
-        let allTheData = [ "callId" : call.callId,
-                           "originator" : TSAccountManager.localUID()!,
-                           ] as NSMutableDictionary
-        
-        let hangupMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
-
-        let sendPromise = self.messageSender.sendPromise(message: hangupMessage).then {_ in
-            Logger.debug("\(self.logTag) successfully sent hangup call message to \(call.thread.uniqueId)")
-        }.catch { error in
-            Logger.error("\(self.logTag) failed to send hangup call message to \(call.thread.uniqueId) with error: \(error)")
-        }
-        sendPromise.retainUntilComplete()
-
-        terminateCall()
-    }
+     }
+     
+     let allTheData = [ "callId" : call.callId,
+                        "originator" : TSAccountManager.localUID()!,
+                        ] as NSMutableDictionary
+     
+     let hangupMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
+     
+     firstly {
+          self.messageSender.sendPromise(message: hangupMessage)
+          }.done {
+               Logger.debug("\(self.logTag) successfully sent hangup call message to \(call.thread.uniqueId)")
+          }.catch { error in
+               Logger.error("\(self.logTag) failed to send hangup call message to \(call.thread.uniqueId) with error: \(error)")
+          }.retainUntilComplete()
+     
+     terminateCall()
+     }
 
     /**
      * Local user toggled to mute audio.
@@ -1572,8 +1567,8 @@ private class SignalCallData: NSObject {
         AssertIsOnMainThread(file: #function)
 
         return firstly {
-            return accountManager.getTurnServerInfo()
-        }.then { turnServerInfo -> [RTCIceServer] in
+          accountManager.getTurnServerInfo()
+          }.map { turnServerInfo -> [RTCIceServer] in
             Logger.debug("\(self.logTag) got turn server urls: \(turnServerInfo.urls)")
 
             return turnServerInfo.urls.map { url in
@@ -1586,11 +1581,11 @@ private class SignalCallData: NSObject {
                     return RTCIceServer(urlStrings: [url])
                 }
             } + [CallService.fallbackIceServer]
-        }.recover { error -> [RTCIceServer] in
+          }.recover { (error: Error) -> Guarantee<[RTCIceServer]> in
             Logger.error("\(self.logTag) fetching ICE servers failed with error: \(error)")
             Logger.warn("\(self.logTag) using fallback ICE Servers")
 
-            return [CallService.fallbackIceServer]
+            return Guarantee.value([CallService.fallbackIceServer])
         }
     }
 

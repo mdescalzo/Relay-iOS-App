@@ -7,7 +7,7 @@
 #import "NSDate+OWS.h"
 #import "NSNotificationCenter+OWS.h"
 #import "OWSLinkedDeviceReadReceipt.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "OWSPrimaryStorage.h"
 #import "OWSReadReceiptsForLinkedDevicesMessage.h"
 #import "OWSReadReceiptsForSenderMessage.h"
@@ -119,7 +119,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 
 @interface OWSReadReceiptManager ()
 
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
 
@@ -158,13 +158,13 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 
 - (instancetype)initDefault
 {
-    OWSMessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
+    MessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
     OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
 
     return [self initWithMessageSender:messageSender primaryStorage:primaryStorage];
 }
 
-- (instancetype)initWithMessageSender:(OWSMessageSender *)messageSender
+- (instancetype)initWithMessageSender:(MessageSender *)messageSender
                        primaryStorage:(OWSPrimaryStorage *)primaryStorage
 {
     self = [super init];

@@ -5,7 +5,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ContactsManagerProtocol;
-@class OWSMessageSender;
+@class MessageSender;
 @protocol NotificationsProtocol;
 @protocol OWSCallMessageHandler;
 @protocol ProfileManagerProtocol;
@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithCallMessageHandler:(id<OWSCallMessageHandler>)callMessageHandler
                            contactsManager:(id<ContactsManagerProtocol>)contactsManager
-                             messageSender:(OWSMessageSender *)messageSender
+                             messageSender:(MessageSender *)messageSender
                       notificationsManager:(id<NotificationsProtocol>)notificationsManager
                             profileManager:(id<ProfileManagerProtocol>)profileManager NS_DESIGNATED_INITIALIZER;
 
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) id<OWSCallMessageHandler> callMessageHandler;
 @property (nonatomic, readonly) id<ContactsManagerProtocol> contactsManager;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) id<NotificationsProtocol> notificationsManager;
 @property (nonatomic, readonly) id<ProfileManagerProtocol> profileManager;
 

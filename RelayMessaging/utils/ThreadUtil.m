@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (TSOutgoingMessage *)sendMessageWithText:(NSString *)text
                                   inThread:(TSThread *)thread
                           quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                             messageSender:(OWSMessageSender *)messageSender
+                             messageSender:(MessageSender *)messageSender
 {
     return [self sendMessageWithText:text
         inThread:thread
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (TSOutgoingMessage *)sendMessageWithText:(NSString *)text
                                   inThread:(TSThread *)thread
                           quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                             messageSender:(OWSMessageSender *)messageSender
+                             messageSender:(MessageSender *)messageSender
                                    success:(void (^)(void))successHandler
                                    failure:(void (^)(NSError *error))failureHandler
 {
@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (TSOutgoingMessage *)sendMessageWithAttachment:(SignalAttachment *)attachment
                                         inThread:(TSThread *)thread
                                 quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                                   messageSender:(OWSMessageSender *)messageSender
+                                   messageSender:(MessageSender *)messageSender
                                       completion:(void (^_Nullable)(NSError *_Nullable error))completion
 {
     return [self sendMessageWithAttachment:attachment
@@ -102,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (TSOutgoingMessage *)sendMessageWithAttachment:(SignalAttachment *)attachment
                                         inThread:(TSThread *)thread
                                 quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                                   messageSender:(OWSMessageSender *)messageSender
+                                   messageSender:(MessageSender *)messageSender
                                     ignoreErrors:(BOOL)ignoreErrors
                                       completion:(void (^_Nullable)(NSError *_Nullable error))completion
 {
@@ -157,7 +157,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (TSOutgoingMessage *)sendMessageWithContactShare:(OWSContact *)contactShare
                                           inThread:(TSThread *)thread
-                                     messageSender:(OWSMessageSender *)messageSender
+                                     messageSender:(MessageSender *)messageSender
                                         completion:(void (^_Nullable)(NSError *_Nullable error))completion
 {
     OWSAssertIsOnMainThread();

@@ -4,7 +4,6 @@
 
 #import "AppDelegate.h"
 #import "AppStoreRating.h"
-#import "AppUpdateNag.h"
 #import "DebugLogger.h"
 #import "HomeViewController.h"
 #import "MainAppContext.h"
@@ -116,7 +115,7 @@ static NSTimeInterval launchStartedAt;
         return YES;
     }
 
-    [AppVersion instance];
+    [AppVersion sharedInstance];
 
     [self startupLogging];
 
@@ -294,7 +293,7 @@ static NSTimeInterval launchStartedAt;
     self.didAppLaunchFail = YES;
 
     // We perform a subset of the [application:didFinishLaunchingWithOptions:].
-    [AppVersion instance];
+    [AppVersion sharedInstance];
     [self startupLogging];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -1087,7 +1086,7 @@ static NSTimeInterval launchStartedAt;
 
     [DeviceSleepManager.sharedInstance removeBlockWithBlockObject:self];
 
-    [AppVersion.instance mainAppLaunchDidComplete];
+    [AppVersion.sharedInstance mainAppLaunchDidComplete];
 
 //    [Environment.current.contactsManager loadSignalAccountsFromCache];
 //    [Environment.current.contactsManager startObserving];
