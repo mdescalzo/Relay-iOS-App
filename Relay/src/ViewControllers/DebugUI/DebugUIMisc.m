@@ -223,7 +223,7 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
 
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     NSString *utiType = [MIMETypeUtil utiTypeForFileExtension:fileName.pathExtension];
     DataSource *_Nullable dataSource = [DataSourcePath dataSourceWithFilePath:filePath shouldDeleteOnDeallocation:YES];
     [dataSource setSourceFilename:fileName];
@@ -252,7 +252,7 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
 
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     NSString *utiType = [MIMETypeUtil utiTypeForFileExtension:fileName.pathExtension];
     DataSource *_Nullable dataSource = [DataSourcePath dataSourceWithFilePath:filePath shouldDeleteOnDeallocation:YES];
     [dataSource setSourceFilename:fileName];

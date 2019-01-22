@@ -4,14 +4,14 @@
 
 #import "OWSNotifyRemoteOfUpdatedDisappearingConfigurationJob.h"
 #import "OWSDisappearingMessagesConfigurationMessage.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OWSNotifyRemoteOfUpdatedDisappearingConfigurationJob ()
 
 @property (nonatomic, readonly) OWSDisappearingMessagesConfiguration *configuration;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) TSThread *thread;
 
 @end
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithConfiguration:(OWSDisappearingMessagesConfiguration *)configuration
                                thread:(TSThread *)thread
-                        messageSender:(OWSMessageSender *)messageSender
+                        messageSender:(MessageSender *)messageSender
 {
     self = [super init];
     if (!self) {
@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)runWithConfiguration:(OWSDisappearingMessagesConfiguration *)configuration
                       thread:(TSThread *)thread
-               messageSender:(OWSMessageSender *)messageSender
+               messageSender:(MessageSender *)messageSender
 {
     OWSNotifyRemoteOfUpdatedDisappearingConfigurationJob *job =
         [[self alloc] initWithConfiguration:configuration thread:thread messageSender:messageSender];

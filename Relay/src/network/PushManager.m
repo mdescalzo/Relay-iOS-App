@@ -25,7 +25,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
 
 @property (nonatomic) NSMutableArray *currentNotifications;
 @property (nonatomic) UIBackgroundTaskIdentifier callBackgroundTask;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) OWSMessageFetcherJob *messageFetcherJob;
 @property (nonatomic, readonly) NotificationsManager *notificationsManager;
 
@@ -52,7 +52,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
 
 - (instancetype)initWithMessageFetcherJob:(OWSMessageFetcherJob *)messageFetcherJob
                            primaryStorage:(OWSPrimaryStorage *)primaryStorage
-                            messageSender:(OWSMessageSender *)messageSender
+                            messageSender:(MessageSender *)messageSender
                      notificationsManager:(NotificationsManager *)notificationsManager
 {
     self = [super init];

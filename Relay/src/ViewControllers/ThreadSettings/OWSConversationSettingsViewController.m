@@ -39,7 +39,7 @@ const CGFloat kIconViewLength = 24;
 @property (nullable, nonatomic) MediaGalleryViewController *mediaGalleryViewController;
 @property (nonatomic, readonly) TSAccountManager *accountManager;
 @property (nonatomic, readonly) FLContactsManager *contactsManager;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 @property (nonatomic, readonly) ContactsViewHelper *contactsViewHelper;
 @property (nonatomic, readonly) UIImageView *avatarView;

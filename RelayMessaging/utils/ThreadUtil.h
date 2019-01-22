@@ -6,7 +6,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OWSBlockingManager;
 @class FLContactsManager;
-@class OWSMessageSender;
+@class MessageSender;
 @class OWSUnreadIndicator;
 @class SignalAttachment;
 @class TSInteraction;
@@ -42,32 +42,32 @@ NS_ASSUME_NONNULL_BEGIN
 + (TSOutgoingMessage *)sendMessageWithText:(NSString *)text
                                   inThread:(TSThread *)thread
                           quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                             messageSender:(OWSMessageSender *)messageSender
+                             messageSender:(MessageSender *)messageSender
                                    success:(void (^)(void))successHandler
                                    failure:(void (^)(NSError *error))failureHandler;
 
 + (TSOutgoingMessage *)sendMessageWithText:(NSString *)text
                                   inThread:(TSThread *)thread
                           quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                             messageSender:(OWSMessageSender *)messageSender;
+                             messageSender:(MessageSender *)messageSender;
 
 + (TSOutgoingMessage *)sendMessageWithAttachment:(SignalAttachment *)attachment
                                         inThread:(TSThread *)thread
                                 quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                                   messageSender:(OWSMessageSender *)messageSender
+                                   messageSender:(MessageSender *)messageSender
                                       completion:(void (^_Nullable)(NSError *_Nullable error))completion;
 
 // We only should set ignoreErrors in debug or test code.
 + (TSOutgoingMessage *)sendMessageWithAttachment:(SignalAttachment *)attachment
                                         inThread:(TSThread *)thread
                                 quotedReplyModel:(nullable OWSQuotedReplyModel *)quotedReplyModel
-                                   messageSender:(OWSMessageSender *)messageSender
+                                   messageSender:(MessageSender *)messageSender
                                     ignoreErrors:(BOOL)ignoreErrors
                                       completion:(void (^_Nullable)(NSError *_Nullable error))completion;
 
 + (TSOutgoingMessage *)sendMessageWithContactShare:(OWSContact *)contactShare
                                           inThread:(TSThread *)thread
-                                     messageSender:(OWSMessageSender *)messageSender
+                                     messageSender:(MessageSender *)messageSender
                                         completion:(void (^_Nullable)(NSError *_Nullable error))completion;
 
 // This method will create and/or remove any offers and indicators

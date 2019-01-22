@@ -3,7 +3,7 @@
 //
 
 #import "DebugUIStress.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "OWSTableViewController.h"
 #import "SignalApp.h"
 #import "ThreadUtil.h"
@@ -431,7 +431,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     OWSAssert(message);
 
-    OWSMessageSender *messageSender = [Environment current].messageSender;
+    MessageSender *messageSender = [Environment current].messageSender;
     [messageSender enqueueMessage:message
         success:^{
             DDLogInfo(@"%@ Successfully sent message.", self.logTag);

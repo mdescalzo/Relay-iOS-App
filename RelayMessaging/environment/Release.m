@@ -22,7 +22,7 @@
         TSNetworkManager *networkManager = [TSNetworkManager sharedManager];
         FLContactsManager *contactsManager = [FLContactsManager shared];
         ContactsUpdater *contactsUpdater = [ContactsUpdater sharedUpdater];
-        OWSMessageSender *messageSender = [[OWSMessageSender alloc] initWithNetworkManager:networkManager
+        MessageSender *messageSender = [[MessageSender alloc] initWithNetworkManager:networkManager
                                                                             primaryStorage:primaryStorage
                                                                            contactsManager:contactsManager];
 

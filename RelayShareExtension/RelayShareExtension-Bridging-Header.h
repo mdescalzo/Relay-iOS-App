@@ -20,5 +20,5 @@
 #import <RelayServiceKit/AppReadiness.h>
 #import <RelayServiceKit/AppVersion.h>
 #import <RelayServiceKit/SSKAsserts.h>
-#import <RelayServiceKit/OWSMessageSender.h>
+#import <RelayServiceKit/MessageSender.h>
 #import <RelayServiceKit/TSAccountManager.h>

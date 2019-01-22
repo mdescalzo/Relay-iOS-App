@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [OWSTableSection sectionWithTitle:self.name items:items];
 }
 
-+ (OWSMessageSender *)messageSender
++ (MessageSender *)messageSender
 {
     return [Environment current].messageSender;
 }

@@ -21,6 +21,8 @@
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 #import "SSKAsserts.h"
 
+@import PromiseKit;
+@import SignalCoreKit;
 @import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -38,6 +40,7 @@ NSString *const TSAccountManager_LocalRegistrationIdKey = @"TSStorageLocalRegist
 
 NSString *const TSAccountManager_UserAccountCollection = @"TSStorageUserAccountCollection";
 NSString *const TSAccountManager_ServerAuthToken = @"TSStorageServerAuthToken";
+NSString *const TSAccountManager_ManualMessageFetchKey = @"TSAccountManager_ManualMessageFetchKey";
 NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignalingKey";
 
 // CCSM Additions
@@ -696,6 +699,23 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
     return nil !=
         [self.dbConnection stringForKey:TSAccountManager_ReregisteringPhoneNumberKey
                            inCollection:TSAccountManager_UserAccountCollection];
+}
+
+- (BOOL)isManualMessageFetchEnabled
+{
+    return [self.dbConnection boolForKey:TSAccountManager_ManualMessageFetchKey
+                            inCollection:TSAccountManager_UserAccountCollection
+                            defaultValue:NO];
+}
+
+- (void)setIsManualMessageFetchEnabled:(BOOL)value {
+    [self.dbConnection setBool:value
+                        forKey:TSAccountManager_ManualMessageFetchKey
+                  inCollection:TSAccountManager_UserAccountCollection];
+    
+    // TODO: Is this necessary in Forsta world?
+    // Try to update the account attributes to reflect this change.
+//    return [self updateAccountAttributes];
 }
 
 @end

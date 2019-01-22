@@ -6,6 +6,7 @@ import Foundation
 import RelayServiceKit
 import Reachability
 import RelayMessaging
+import PromiseKit
 
 @objc
 protocol GifPickerViewControllerDelegate: class {
@@ -363,43 +364,44 @@ class GifPickerViewController: OWSViewController, UISearchBarDelegate, UICollect
 
     public func getFileForCell(_ cell: GifPickerCell) {
         GiphyDownloader.sharedInstance.cancelAllRequests()
-        cell.requestRenditionForSending().then { [weak self] (asset: GiphyAsset) -> Void in
-            guard let strongSelf = self else {
-                Logger.info("\(GifPickerViewController.TAG) ignoring send, since VC was dismissed before fetching finished.")
-                return
-            }
-
-            let filePath = asset.filePath
-            guard let dataSource = DataSourcePath.dataSource(withFilePath: filePath,
-                shouldDeleteOnDeallocation: false) else {
-                owsFailDebug("\(strongSelf.TAG) couldn't load asset.")
-                return
-            }
-            let attachment = SignalAttachment.attachment(dataSource: dataSource, dataUTI: asset.rendition.utiType, imageQuality: .original)
-
-            strongSelf.dismiss(animated: true) {
-                // Delegate presents view controllers, so it's important that *this* controller be dismissed before that occurs.
-                strongSelf.delegate?.gifPickerDidSelect(attachment: attachment)
-            }
-        }.catch { [weak self] error in
-            guard let strongSelf = self else {
-                Logger.info("\(GifPickerViewController.TAG) ignoring failure, since VC was dismissed before fetching finished.")
-                return
-            }
-
-            let alert = UIAlertController(title: NSLocalizedString("GIF_PICKER_FAILURE_ALERT_TITLE", comment: "Shown when selected GIF couldn't be fetched"),
-                                          message: error.localizedDescription,
-                                          preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: CommonStrings.retryButton, style: .default) { _ in
+        firstly {
+            cell.requestRenditionForSending()
+            }.done { [weak self] (asset: GiphyAsset) in
+                guard let strongSelf = self else {
+                    Logger.info("\(GifPickerViewController.TAG) ignoring send, since VC was dismissed before fetching finished.")
+                    return
+                }
+                
+                let filePath = asset.filePath
+                guard let dataSource = DataSourcePath.dataSource(withFilePath: filePath,
+                                                                 shouldDeleteOnDeallocation: false) else {
+                                                                    owsFailDebug("\(strongSelf.TAG) couldn't load asset.")
+                                                                    return
+                }
+                let attachment = SignalAttachment.attachment(dataSource: dataSource, dataUTI: asset.rendition.utiType, imageQuality: .original)
+                
+                strongSelf.dismiss(animated: true) {
+                    // Delegate presents view controllers, so it's important that *this* controller be dismissed before that occurs.
+                    strongSelf.delegate?.gifPickerDidSelect(attachment: attachment)
+                }
+            }.catch { [weak self] error in
+                guard let strongSelf = self else {
+                    Logger.info("\(GifPickerViewController.TAG) ignoring failure, since VC was dismissed before fetching finished.")
+                    return
+                }
+                
+                let alert = UIAlertController(title: NSLocalizedString("GIF_PICKER_FAILURE_ALERT_TITLE", comment: "Shown when selected GIF couldn't be fetched"),
+                                              message: error.localizedDescription,
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: CommonStrings.retryButton, style: .default) { _ in
                     strongSelf.getFileForCell(cell)
-            })
-            alert.addAction(UIAlertAction(title: CommonStrings.dismissButton, style: .cancel) { _ in
-                strongSelf.dismiss(animated: true, completion: nil)
-            })
-
-            strongSelf.present(alert, animated: true, completion: nil)
-        }.retainUntilComplete()
-
+                })
+                alert.addAction(UIAlertAction(title: CommonStrings.dismissButton, style: .cancel) { _ in
+                    strongSelf.dismiss(animated: true, completion: nil)
+                })
+                
+                strongSelf.present(alert, animated: true, completion: nil)
+            }.retainUntilComplete()
     }
 
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

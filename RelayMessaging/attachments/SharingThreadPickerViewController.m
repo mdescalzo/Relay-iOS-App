@@ -12,7 +12,7 @@
 #import <RelayMessaging/RelayMessaging-Swift.h>
 #import <RelayServiceKit/OWSDispatch.h>
 #import <RelayServiceKit/OWSError.h>
-#import <RelayServiceKit/OWSMessageSender.h>
+#import <RelayServiceKit/MessageSender.h>
 #import <RelayServiceKit/TSThread.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -26,7 +26,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
     ContactShareApprovalViewControllerDelegate>
 
 @property (nonatomic, readonly) FLContactsManager *contactsManager;
-@property (nonatomic, readonly) OWSMessageSender *messageSender;
+@property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic) TSThread *thread;
 @property (nonatomic, readonly, weak) id<ShareViewDelegate> shareViewDelegate;
 @property (nonatomic, readonly) UIProgressView *progressView;
