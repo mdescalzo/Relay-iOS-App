@@ -20,7 +20,7 @@
 #import "TextSecureKitEnv.h"
 #import "SSKAsserts.h"
 #import "OWSEndSessionMessage.h"
-#import "OWSMessageSender.h"
+#import "MessageSender.h"
 #import "TSInfoMessage.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 
