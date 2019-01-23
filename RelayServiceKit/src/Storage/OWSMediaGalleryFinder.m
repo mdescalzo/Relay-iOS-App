@@ -148,7 +148,7 @@ static NSString *const OWSMediaGalleryFinderExtensionName = @"OWSMediaGalleryFin
         }
         TSMessage *message = (TSMessage *)object;
         
-        OWSAssert(message.attachmentIds.count <= 1);
+        OWSFailDebug(message.attachmentIds.count <= 1);
         NSString *attachmentId = message.attachmentIds.firstObject;
         if (attachmentId.length == 0) {
             return nil;
