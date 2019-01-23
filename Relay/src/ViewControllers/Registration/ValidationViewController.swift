@@ -130,11 +130,11 @@ class ValidationViewController: UITableViewController {
     // MARK: - Navigation
     private func proceedToMain() {
         DispatchQueue.global(qos: .background).async {
-            let _: Promise = SyncPushTokensJob.run(accountManager: SignalApp.shared().accountManager, preferences: Environment.preferences())
             TSSocketManager.requestSocketOpen()
             CCSMCommManager.refreshCCSMData()
         }
         DispatchMainThreadSafe({
+            let _: Promise = SyncPushTokensJob.run(accountManager: SignalApp.shared().accountManager, preferences: Environment.preferences())
             self.performSegue(withIdentifier: "mainSegue", sender: self)
         })
     }
