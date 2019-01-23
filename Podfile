@@ -9,7 +9,7 @@ def shared_pods
     pod 'YapDatabase/SQLCipher', :git => 'https://github.com/signalapp/YapDatabase.git', branch: 'signal-release', inhibit_warnings: true
     pod 'AxolotlKit', git: 'https://github.com/signalapp/SignalProtocolKit.git', branch: 'master', inhibit_warnings: true
     pod 'HKDFKit', git: 'https://github.com/signalapp/HKDFKit.git', inhibit_warnings: true
-    pod 'Curve25519Kit', git: 'git@github.com:signalapp/Curve25519Kit.git'
+    pod 'Curve25519Kit', git: 'https://github.com/ForstaLabs/Curve25519Kit.git', branch: 'autoProvision', inhibit_warnings: true
     pod 'GRKOpenSSLFramework', git: 'https://github.com/signalapp/GRKOpenSSLFramework', inhibit_warnings: true
     pod 'SocketRocket', :git => 'https://github.com/signalapp/SocketRocket.git', branch: 'mkirk/handle-sec-err', inhibit_warnings: true
 
