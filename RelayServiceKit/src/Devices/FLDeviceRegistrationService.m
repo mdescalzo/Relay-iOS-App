@@ -16,7 +16,6 @@
 #import "OWSProvisioningCipher.h"
 #import "OWSProvisioningProtos.pb.h"
 #import "NSData+keyVersionByte.h"
-#import "Curve25519+keyPairFromPrivateKey.h"
 #import "SignalKeyingStorage.h"
 #import "SecurityUtils.h"
 #import "TSPreKeyManager.h"
