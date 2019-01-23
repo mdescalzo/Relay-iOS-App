@@ -321,21 +321,25 @@ NS_ASSUME_NONNULL_BEGIN
             DDLogInfo(@"%@: deleting sessions for recipient: %@", self.logTag, envelope.source);
             [self.primaryStorage deleteAllSessionsForContact:envelope.source protocolContext:transaction];
             
-            TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID] transaction:transaction];
-            OWSEndSessionMessage *endSessionMessage = [[OWSEndSessionMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp] inThread:thread];
-            [TextSecureKitEnv.sharedEnv.messageSender enqueueMessage:endSessionMessage success:^{
-                DDLogInfo(@"%@: successfully sent EndSessionMessage.", self.logTag);
-                [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
-                
-                TSInfoMessage *infoMessage = [[TSInfoMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp]
-                                                                             inThread:thread
-                                                                      infoMessageType:TSInfoMessageTypeSessionDidEnd];
-                [infoMessage saveWithTransaction:transaction];
-                
-            } failure:^(NSError * _Nonnull error) {
-                DDLogInfo(@"%@: failed to send EndSessionMessage with error: %@", self.logTag, error.localizedDescription);
-                [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
-            }];
+            __block TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID] transaction:transaction];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                OWSEndSessionMessage *endSessionMessage = [[OWSEndSessionMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp] inThread:thread];
+                [TextSecureKitEnv.sharedEnv.messageSender enqueueMessage:endSessionMessage success:^{
+                    DDLogInfo(@"%@: successfully sent EndSessionMessage.", self.logTag);
+                    [self.dbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
+                        [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
+                        
+                        TSInfoMessage *infoMessage = [[TSInfoMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                                     inThread:thread
+                                                                              infoMessageType:TSInfoMessageTypeSessionDidEnd];
+                        [infoMessage saveWithTransaction:transaction];
+                    }];
+                } failure:^(NSError * _Nonnull error) {
+                    DDLogInfo(@"%@: failed to send EndSessionMessage with error: %@", self.logTag, error.localizedDescription);
+                    [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
+                }];
+            });
         }
     }];
 }

@@ -1231,6 +1231,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
     __block TSThread *thread = [self threadForIndexPath:indexPath];
 
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
     [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
         switch (self.homeViewMode) {
             case HomeViewMode_Inbox:
@@ -1255,7 +1256,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
             [self.messageSender sendControlMessage:controlMessage
                                       toRecipients:[NSCountedSet setWithObject:[TSAccountManager localUID]]
                                            success:^{
-                                               DDLogDebug(@"Achive toggle control message successfully sent.");
+                                               DDLogDebug(@"Archive toggle control message successfully sent.");
                                            }
                                            failure:^(NSError * _Nonnull error) {
                                                DDLogDebug(@"Achive toggle control message send failed with error: %@", error.localizedDescription);
@@ -1263,6 +1264,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         }
         [self checkIfEmptyView];
     }];
+        });
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
