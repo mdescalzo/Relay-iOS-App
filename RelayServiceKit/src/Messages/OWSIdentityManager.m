@@ -23,7 +23,6 @@
 #import "TextSecureKitEnv.h"
 #import "YapDatabaseConnection+OWS.h"
 #import "YapDatabaseTransaction+OWS.h"
-#import "Curve25519+keyPairFromPrivateKey.h"
 #import "SSKAsserts.h"
 
 @import SignalCoreKit;
