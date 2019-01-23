@@ -289,11 +289,11 @@ NS_ASSUME_NONNULL_BEGIN
         TSErrorMessage *errorMessage;
         
         if ([exception.name isEqualToString:NoSessionException]) {
-            //            errorMessage = [TSErrorMessage missingSessionWithEnvelope:envelope withTransaction:transaction];
+            errorMessage = [TSErrorMessage missingSessionWithEnvelope:envelope withTransaction:transaction];
         } else if ([exception.name isEqualToString:InvalidKeyException]) {
-            //            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
+            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
         } else if ([exception.name isEqualToString:InvalidKeyIdException]) {
-            //            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
+            errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
         } else if ([exception.name isEqualToString:DuplicateMessageException]) {
             // Duplicate messages are dismissed
             return;
@@ -304,42 +304,13 @@ NS_ASSUME_NONNULL_BEGIN
             OWSFailDebug(@"%@ Failed to trust identity on incoming message from: %@", self.logTag, envelopeAddress(envelope));
             return;
         } else {
-            // FIXME: Supressing this message for now
-            //            errorMessage = [TSErrorMessage corruptedMessageWithEnvelope:envelope withTransaction:transaction];
-            //            return;
+            errorMessage = [TSErrorMessage corruptedMessageWithEnvelope:envelope withTransaction:transaction];
         }
         
-        //        OWSAssert(errorMessage);
-        // If we have something to say...
+        OWSAssert(errorMessage);
         if (errorMessage != nil) {
             [errorMessage saveWithTransaction:transaction];
             [self notifyUserForErrorMessage:errorMessage envelope:envelope transaction:transaction];
-        } else {
-            // Otherwise, Reset session
-            DDLogInfo(@"%@: Resetting session due to message corruption.", self.logTag);
-            
-            DDLogInfo(@"%@: deleting sessions for recipient: %@", self.logTag, envelope.source);
-            [self.primaryStorage deleteAllSessionsForContact:envelope.source protocolContext:transaction];
-            
-            __block TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[envelope.source, TSAccountManager.localUID] transaction:transaction];
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                OWSEndSessionMessage *endSessionMessage = [[OWSEndSessionMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp] inThread:thread];
-                [TextSecureKitEnv.sharedEnv.messageSender enqueueMessage:endSessionMessage success:^{
-                    DDLogInfo(@"%@: successfully sent EndSessionMessage.", self.logTag);
-                    [self.dbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
-                        [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
-                        
-                        TSInfoMessage *infoMessage = [[TSInfoMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp]
-                                                                                     inThread:thread
-                                                                              infoMessageType:TSInfoMessageTypeSessionDidEnd];
-                        [infoMessage saveWithTransaction:transaction];
-                    }];
-                } failure:^(NSError * _Nonnull error) {
-                    DDLogInfo(@"%@: failed to send EndSessionMessage with error: %@", self.logTag, error.localizedDescription);
-                    [self.primaryStorage archiveAllSessionsForContact:envelope.source protocolContext:transaction];
-                }];
-            });
         }
     }];
 }
