@@ -480,46 +480,6 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
 {
     if (![_htmlTextBody isEqualToString:value]) {
         _htmlTextBody = value;
-        
-        // Add the new value to the forstaPayload
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            if (self->_htmlTextBody.length > 0) {
-                NSMutableDictionary *dataDict = [[self.forstaPayload objectForKey:@"data"] mutableCopy];
-                if (!dataDict) {
-                    dataDict = [NSMutableDictionary new];
-                }
-                NSMutableArray *body = [[dataDict objectForKey:@"body"] mutableCopy];
-                if (!body) {
-                    body = [NSMutableArray new];
-                }
-                
-                NSDictionary *oldDict = nil;
-                if (body.count > 0) {
-                    for (NSDictionary *dict in body) {
-                        if ([(NSString *)[dict objectForKey:@"type"] isEqualToString:@"text/html"]) {
-                            oldDict = dict;
-                        }
-                    }
-                }
-                NSDictionary *newDict = @{ @"type" : @"text/html",
-                                           @"value" : value };
-                [body addObject:newDict];
-                
-                if (oldDict) {
-                    [body removeObject:oldDict];
-                }
-                
-                [dataDict setObject:body forKey:@"body"];
-                [self.forstaPayload setObject:dataDict forKey:@"data"];
-            } else {
-                // Empty value passed, remove the object from the payload
-                NSMutableDictionary *dataDict = [[self.forstaPayload objectForKey:@"data"] mutableCopy];
-                if (dataDict) {
-                    [dataDict removeObjectForKey:@"body"];
-                    [self.forstaPayload setObject:dataDict forKey:@"data"];
-                }
-            }
-        });
     }
 }
 
