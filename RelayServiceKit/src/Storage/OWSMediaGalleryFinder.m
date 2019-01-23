@@ -148,17 +148,25 @@ static NSString *const OWSMediaGalleryFinderExtensionName = @"OWSMediaGalleryFin
         }
         TSMessage *message = (TSMessage *)object;
         
-        OWSFailDebug(message.attachmentIds.count <= 1);
-        NSString *attachmentId = message.attachmentIds.firstObject;
-        if (attachmentId.length == 0) {
+        if (message.attachmentIds.count > 1) {
+            DDLogInfo(@"Message found with more than one attachment");
+        }
+        
+        BOOL shouldAppear = NO;
+        for (NSString *attachmentId in message.attachmentIds) {
+            if (attachmentId.length > 0) {
+                if ([self attachmentIdShouldAppearInMediaGallery:attachmentId transaction:transaction]) {
+                    shouldAppear = YES;
+                    break;
+                }
+            }
+        }
+        
+        if (shouldAppear) {
+            return [self mediaGroupWithThreadId:message.uniqueThreadId];
+        } else {
             return nil;
         }
-        
-        if ([self attachmentIdShouldAppearInMediaGallery:attachmentId transaction:transaction]) {
-            return [self mediaGroupWithThreadId:message.uniqueThreadId];
-        }
-        
-        return nil;
     }];
     
     YapDatabaseViewOptions *options = [YapDatabaseViewOptions new];
