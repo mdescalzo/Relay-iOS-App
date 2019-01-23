@@ -203,7 +203,11 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
 
 - (BOOL)hasAttachments
 {
-    return self.attachmentIds ? (self.attachmentIds.count > 0) : NO;
+    if (self.attachmentIds.count > 0) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (nullable TSAttachment *)attachmentWithTransaction:(YapDatabaseReadTransaction *)transaction
@@ -212,7 +216,6 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
         return nil;
     }
 
-    OWSAssert(self.attachmentIds.count == 1);
     return [TSAttachment fetchObjectWithUniqueID:self.attachmentIds.firstObject transaction:transaction];
 }
 

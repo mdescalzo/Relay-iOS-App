@@ -3210,7 +3210,8 @@ typedef enum : NSUInteger {
         if (updatedThread) {
             self.thread = updatedThread;
         } else {
-            OWSFail(@"%@ Could not reload thread.", self.logTag);
+            OWSFailDebug(@"%@ Could not reload thread.", self.logTag);
+            return;
         }
     }];
     [self updateNavigationTitle];
