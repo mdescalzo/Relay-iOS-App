@@ -296,6 +296,10 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                 NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
                 message.body = messageBlob;
             }
+            
+            if (message.body.length == 0) {
+                OWSFailDebug(@"Unexpected empty body on outbound message of class: %@", [message class]);
+            }
 
             if (message.quotedMessage) {
                 quotedThumbnailAttachments =
@@ -719,6 +723,11 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                 NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
                 message.body = messageBlob;
             }
+
+            if (message.body.length == 0) {
+                OWSFailDebug(@"Unexpected empty body on outbound control message of class: %@", [message class]);
+            }
+
             
             for (NSString *recipientId in recipientIds) {
                 if ([recipientId isEqualToString:[TSAccountManager localUID]]) {
