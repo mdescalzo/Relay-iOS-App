@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     _readReceipts = [readReceipts copy];
+    self.messageType = @"receipt";
 
     return self;
 }

@@ -16,6 +16,7 @@
 #import "TSAttachmentPointer.h"
 #import "TSAttachmentStream.h"
 #import "OWSReadReceiptsForSenderMessage.h"
+#import "OWSLinkedDeviceReadReceipt.h"
 #import "TSAccountManager.h"
 #import "TSQuotedMessage.h"
 
@@ -37,15 +38,18 @@
 +(NSString *_Nullable)blobFromMessage:(TSOutgoingMessage *_Nonnull)message
 {
     NSArray *holdingArray = nil;
+    // TODO: add addition messageType handlers
     if ([message.messageType isEqualToString:@"control"]) {
         holdingArray = [self arrayForTypeControlFromMessage:message];
     } else if ([message.messageType isEqualToString:@"content"]) {
         holdingArray = [self arrayForTypeContentFromMessage:message];
-    } else {
-        // TODO: add addition messageType handlers
-        if ([message isKindOfClass:[OWSReadReceiptsForSenderMessage class]]) {
+    } else if ([message.messageType isEqualToString:@"receipt"] ||
+               [message isKindOfClass:[OWSReadReceiptsForSenderMessage class]] ||
+               [message isKindOfClass:[OWSLinkedDeviceReadReceipt class]]){
             message.messageType = @"receipt";
-        }
+        holdingArray = [self arrayForTypeContentFromMessage:message];
+    } else {
+        OWSFailDebug(@"Sending message with unknown message of class: %@", [message class]);
         holdingArray = [self arrayForTypeContentFromMessage:message];
     }
     
