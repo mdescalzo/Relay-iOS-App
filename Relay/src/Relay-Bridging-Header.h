@@ -82,7 +82,7 @@
 #import <RelayServiceKit/OWSCallBusyMessage.h>
 #import <RelayServiceKit/OWSCallHangupMessage.h>
 #import <RelayServiceKit/OWSCallIceUpdateMessage.h>
-#import <RelayServiceKit/OWSCallMessageHandler.h>
+#import <RelayServiceKit/FLCallMessageHandler.h>
 #import <RelayServiceKit/OWSCallOfferMessage.h>
 #import <RelayServiceKit/OWSContactsOutputStream.h>
 #import <RelayServiceKit/OWSDispatch.h>

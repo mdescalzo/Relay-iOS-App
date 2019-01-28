@@ -289,7 +289,6 @@
 		452314A01F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4523149F1F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift */; };
 		4523D016206EDC2B00A2AB51 /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4523D015206EDC2B00A2AB51 /* LRUCache.swift */; };
 		452B999020A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B998F20A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift */; };
-		452C468F1E427E200087B011 /* OutboundCallInitiator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452C468E1E427E200087B011 /* OutboundCallInitiator.swift */; };
 		452C7CA72037628B003D51A5 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F170D51E315310003FC1F2 /* Weak.swift */; };
 		452D1AF12081059C00A67F7F /* StringAdditionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452D1AF02081059C00A67F7F /* StringAdditionsTest.swift */; };
 		452D1AF320810B6F00A67F7F /* String+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452D1AF220810B6F00A67F7F /* String+OWS.swift */; };
@@ -323,7 +322,6 @@
 		45666F581D9B2880008FE134 /* OWSScrubbingLogFormatterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 45666F571D9B2880008FE134 /* OWSScrubbingLogFormatterTest.m */; };
 		456C38961DC7B882007536A7 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451DE9F11DC1585F00810E42 /* PromiseKit.framework */; };
 		456F6E2F1E261D1000FD2210 /* PeerConnectionClientTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F6E2E1E261D1000FD2210 /* PeerConnectionClientTest.swift */; };
-		4574A5D61DD6704700C6B692 /* CallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4574A5D51DD6704700C6B692 /* CallService.swift */; };
 		4579431E1E7C8CE9008ED0C0 /* Pastelog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4579431D1E7C8CE9008ED0C0 /* Pastelog.m */; };
 		45794E861E00620000066731 /* CallUIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45794E851E00620000066731 /* CallUIAdapter.swift */; };
 		457C87B82032645C008D52D6 /* DebugUINotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457C87B72032645C008D52D6 /* DebugUINotifications.swift */; };
@@ -331,7 +329,6 @@
 		45847E871E4283C30080EAB3 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45847E861E4283C30080EAB3 /* Intents.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4585C4681ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4585C4671ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift */; };
 		458967111DC117CC00E9DD21 /* AccountManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458967101DC117CC00E9DD21 /* AccountManagerTest.swift */; };
-		458DE9D61DEE3FD00071BB03 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458DE9D51DEE3FD00071BB03 /* PeerConnectionClient.swift */; };
 		458DE9D91DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 458DE9D81DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m */; };
 		458E38371D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 458E38361D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m */; };
 		458E383A1D6699FA0094BD24 /* OWSDeviceProvisioningURLParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 458E38391D6699FA0094BD24 /* OWSDeviceProvisioningURLParserTest.m */; };
@@ -385,7 +382,6 @@
 		45DF5DF21DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DF5DF11DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift */; };
 		45E5A6991F61E6DE001E4A8A /* MarqueeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E5A6981F61E6DD001E4A8A /* MarqueeLabel.swift */; };
 		45E7A6A81E71CA7E00D44FB5 /* DisplayableTextFilterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E7A6A61E71CA7E00D44FB5 /* DisplayableTextFilterTest.swift */; };
-		45F170BB1E2FC5D3003FC1F2 /* CallAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F170BA1E2FC5D3003FC1F2 /* CallAudioService.swift */; };
 		45F32C222057297A00A300D5 /* MediaDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B9EE9B200E91FB005D2F2D /* MediaDetailViewController.m */; };
 		45F32C232057297A00A300D5 /* MediaPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F32C1D205718B000A300D5 /* MediaPageViewController.swift */; };
 		45F32C242057297A00A300D5 /* MessageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */; };
@@ -394,7 +390,6 @@
 		45F659731E1BD99C00444429 /* CallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */; };
 		45F659821E1BE77000444429 /* NonCallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659811E1BE77000444429 /* NonCallKitCallUIAdaptee.swift */; };
 		45FBC5C81DF8575700E9B410 /* CallKitCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */; };
-		45FBC5D11DF8592E00E9B410 /* RelayCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC5D01DF8592E00E9B410 /* RelayCall.swift */; };
 		4C090A1B210FD9C7001FD7F9 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */; };
 		4C11AA5020FD59C700351FBD /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11AA4F20FD59C700351FBD /* MessageStatusView.swift */; };
 		4C13C9F620E57BA30089A98B /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13C9F520E57BA30089A98B /* ColorPickerViewController.swift */; };
@@ -550,14 +545,11 @@
 		7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
 		7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */; };
 		7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539B5851F79348F007141FF /* PushRegistrationManager.swift */; };
-		7D2CD5C6214C3C9C004E957A /* RelayCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC5D01DF8592E00E9B410 /* RelayCall.swift */; };
 		7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */; };
 		7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8BF204DB7D2007AEB0F /* OWSBackupExportJob.m */; };
 		7D2CD5C9214C3C9C004E957A /* MediaPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F32C1D205718B000A300D5 /* MediaPageViewController.swift */; };
 		7D2CD5CA214C3C9C004E957A /* OWSLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3466087320E5649700AFFE73 /* OWSLayerView.swift */; };
-		7D2CD5CB214C3C9C004E957A /* OutboundCallInitiator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452C468E1E427E200087B011 /* OutboundCallInitiator.swift */; };
 		7D2CD5CC214C3C9C004E957A /* OWSScreenLockUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCD92062E7D000CB1A14 /* OWSScreenLockUI.m */; };
-		7D2CD5CD214C3C9C004E957A /* CallAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F170BA1E2FC5D3003FC1F2 /* CallAudioService.swift */; };
 		7D2CD5CE214C3C9C004E957A /* OWS2FASettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BC30B2047030600257B7C /* OWS2FASettingsViewController.m */; };
 		7D2CD5CF214C3C9C004E957A /* OWSBackupImportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8C820517B84007AEB0F /* OWSBackupImportJob.m */; };
 		7D2CD5D0214C3C9C004E957A /* OWSConversationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */; };
@@ -565,7 +557,6 @@
 		7D2CD5D2214C3C9C004E957A /* MessageRecipientStatusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0BF1F8EC1760066283D /* MessageRecipientStatusUtils.swift */; };
 		7D2CD5D3214C3C9C004E957A /* CallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */; };
 		7D2CD5D4214C3C9C004E957A /* OWSQuotedMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34277A5C20751BDC006049F2 /* OWSQuotedMessageView.m */; };
-		7D2CD5D5214C3C9C004E957A /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458DE9D51DEE3FD00071BB03 /* PeerConnectionClient.swift */; };
 		7D2CD5D6214C3C9C004E957A /* ConversationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDA6232090CEB500DE97F8 /* ConversationHeaderView.swift */; };
 		7D2CD5D7214C3C9C004E957A /* MessageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */; };
 		7D2CD5D8214C3C9C004E957A /* ConversationInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F06A1F8678AA0066283D /* ConversationInputToolbar.m */; };
@@ -579,7 +570,6 @@
 		7D2CD5E0214C3C9C004E957A /* AboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC893204DAC8C007AEB0F /* AboutTableViewController.m */; };
 		7D2CD5E1214C3C9C004E957A /* DebugUIStress.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2A1F74C12700D7438D /* DebugUIStress.m */; };
 		7D2CD5E2214C3C9C004E957A /* UpdateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89C204DAC8D007AEB0F /* UpdateGroupViewController.m */; };
-		7D2CD5E3214C3C9C004E957A /* CallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4574A5D51DD6704700C6B692 /* CallService.swift */; };
 		7D2CD5E4214C3C9C004E957A /* NotificationsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3461299B1FD1EA9E00532771 /* NotificationsManager.m */; };
 		7D2CD5E5214C3C9C004E957A /* TextFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4521C3BF1F59F3BA00B4C582 /* TextFieldHelper.swift */; };
 		7D2CD5E6214C3C9C004E957A /* DebugUIMessagesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCDB206939B100CB1A14 /* DebugUIMessagesAction.m */; };
@@ -834,6 +824,12 @@
 		D24B5BD5169F568C00681372 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D24B5BD4169F568C00681372 /* AudioToolbox.framework */; };
 		D2AEACDC16C426DA00C364C0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AEACDB16C426DA00C364C0 /* CFNetwork.framework */; };
 		DBD6CEE82146CD790088B4A4 /* Forsta-values.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */; };
+		DBEB8B9221FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
+		DBEB8B9321FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
+		DBEB8B9521FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */; };
+		DBEB8B9621FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */; };
+		DBEB8B9821FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */; };
+		DBEB8B9921FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */; };
 		E1368CBE18A1C36B00109378 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EB5ABC1884C002007CBB57 /* MessageUI.framework */; };
 		E6431F0E7EAC0CB73D75A38B /* Pods_Relay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE34D2C7844709C73962401 /* Pods_Relay.framework */; };
 		EF764C351DB67CC5000D9A87 /* UIViewController+Permissions.m in Sources */ = {isa = PBXBuildFile; fileRef = EF764C341DB67CC5000D9A87 /* UIViewController+Permissions.m */; };
@@ -1631,6 +1627,9 @@
 		D562B853DF3F1C3D5A1CB00B /* Pods-RelayTests.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayTests.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests.app store release.xcconfig"; sourceTree = "<group>"; };
 		D7BCBE6C7CD3E58FF656F0AC /* Pods-RelayDevShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDevShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDevShareExtension/Pods-RelayDevShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
 		DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Forsta-values.plist"; sourceTree = "<group>"; };
+		DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallService.swift; sourceTree = "<group>"; };
+		DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCall.swift; sourceTree = "<group>"; };
+		DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerConnectionClient.swift; sourceTree = "<group>"; };
 		DD2F0E9696373921805C505E /* Pods-RelayShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayShareExtension/Pods-RelayShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		E1A0AD8B16E13FDD0071E604 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		EDECD29AA2892699CD63E5D8 /* Pods_Common_RelayMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_RelayMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2573,6 +2572,7 @@
 		76EB03C118170B33006006FC /* src */ = {
 			isa = PBXGroup;
 			children = (
+				DBEB8B9021FF7B86005D4FE2 /* ConferenceCall */,
 				76EB03C218170B33006006FC /* AppDelegate.h */,
 				76EB03C318170B33006006FC /* AppDelegate.m */,
 				76EB03FE18170B33006006FC /* call */,
@@ -3008,6 +3008,16 @@
 				D221A09B169C9E5E00537ABF /* Relay-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DBEB8B9021FF7B86005D4FE2 /* ConferenceCall */ = {
+			isa = PBXGroup;
+			children = (
+				DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */,
+				DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */,
+				DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */,
+			);
+			path = ConferenceCall;
 			sourceTree = "<group>";
 		};
 		FCFA64B11A24F29E0007FB87 /* UI Categories */ = {
@@ -4191,6 +4201,7 @@
 				7D2CD546214C3C9C004E957A /* HttpRequest.m in Sources */,
 				7D2CD548214C3C9C004E957A /* AddToGroupViewController.m in Sources */,
 				7D2CD549214C3C9C004E957A /* DebugUIMisc.m in Sources */,
+				DBEB8B9321FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */,
 				7D2CD54A214C3C9C004E957A /* OWSLinkDeviceViewController.m in Sources */,
 				7D2CD54B214C3C9C004E957A /* DebugUIDiskUsage.m in Sources */,
 				7D2CD54C214C3C9C004E957A /* MediaTileViewController.swift in Sources */,
@@ -4254,6 +4265,7 @@
 				7D2CD584214C3C9C004E957A /* MultiDeviceProfileKeyUpdateJob.swift in Sources */,
 				7D2CD585214C3C9C004E957A /* SessionResetJob.swift in Sources */,
 				7D2CD586214C3C9C004E957A /* NotificationSettingsOptionsViewController.m in Sources */,
+				DBEB8B9621FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */,
 				7D2CD587214C3C9C004E957A /* DebugUISessionState.m in Sources */,
 				7D2CD588214C3C9C004E957A /* main.m in Sources */,
 				7D2CD589214C3C9C004E957A /* HttpResponse.m in Sources */,
@@ -4315,14 +4327,11 @@
 				7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */,
 				7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */,
 				7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */,
-				7D2CD5C6214C3C9C004E957A /* RelayCall.swift in Sources */,
 				7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */,
 				7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */,
 				7D2CD5C9214C3C9C004E957A /* MediaPageViewController.swift in Sources */,
 				7D2CD5CA214C3C9C004E957A /* OWSLayerView.swift in Sources */,
-				7D2CD5CB214C3C9C004E957A /* OutboundCallInitiator.swift in Sources */,
 				7D2CD5CC214C3C9C004E957A /* OWSScreenLockUI.m in Sources */,
-				7D2CD5CD214C3C9C004E957A /* CallAudioService.swift in Sources */,
 				7D2CD5CE214C3C9C004E957A /* OWS2FASettingsViewController.m in Sources */,
 				7D2CD5CF214C3C9C004E957A /* OWSBackupImportJob.m in Sources */,
 				7D2CD5D0214C3C9C004E957A /* OWSConversationSettingsViewController.m in Sources */,
@@ -4330,7 +4339,6 @@
 				7D2CD5D2214C3C9C004E957A /* MessageRecipientStatusUtils.swift in Sources */,
 				7D2CD5D3214C3C9C004E957A /* CallKitCallUIAdaptee.swift in Sources */,
 				7D2CD5D4214C3C9C004E957A /* OWSQuotedMessageView.m in Sources */,
-				7D2CD5D5214C3C9C004E957A /* PeerConnectionClient.swift in Sources */,
 				7D2CD5D6214C3C9C004E957A /* ConversationHeaderView.swift in Sources */,
 				7D2CD5D7214C3C9C004E957A /* MessageDetailViewController.swift in Sources */,
 				7D2CD5D8214C3C9C004E957A /* ConversationInputToolbar.m in Sources */,
@@ -4344,7 +4352,6 @@
 				7D2CD5E0214C3C9C004E957A /* AboutTableViewController.m in Sources */,
 				7D2CD5E1214C3C9C004E957A /* DebugUIStress.m in Sources */,
 				7D2CD5E2214C3C9C004E957A /* UpdateGroupViewController.m in Sources */,
-				7D2CD5E3214C3C9C004E957A /* CallService.swift in Sources */,
 				7D2CD5E4214C3C9C004E957A /* NotificationsManager.m in Sources */,
 				7D2CD5E5214C3C9C004E957A /* TextFieldHelper.swift in Sources */,
 				7D2CD5E6214C3C9C004E957A /* DebugUIMessagesAction.m in Sources */,
@@ -4364,6 +4371,7 @@
 				7D2CD5F4214C3C9C004E957A /* ConversationViewController.m in Sources */,
 				7D2CD5F5214C3C9C004E957A /* OWSMessageTimerView.m in Sources */,
 				7D2CD5F6214C3C9C004E957A /* DateUtil.m in Sources */,
+				DBEB8B9921FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */,
 				7D2CD5F7214C3C9C004E957A /* ShowGroupMembersViewController.m in Sources */,
 				7D2CD5F8214C3C9C004E957A /* OWSDeviceTableViewCell.m in Sources */,
 				7D2CD5F9214C3C9C004E957A /* CryptoTools.m in Sources */,
@@ -4401,6 +4409,7 @@
 				7DD5A72D211B7B1100965478 /* HttpRequest.m in Sources */,
 				340FC8B8204DAC8D007AEB0F /* AddToGroupViewController.m in Sources */,
 				341F2C0F1F2B8AE700D07D6B /* DebugUIMisc.m in Sources */,
+				DBEB8B9221FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */,
 				340FC8AF204DAC8D007AEB0F /* OWSLinkDeviceViewController.m in Sources */,
 				34E3EF0D1EFC235B007F6822 /* DebugUIDiskUsage.m in Sources */,
 				454A84042059C787008B8C75 /* MediaTileViewController.swift in Sources */,
@@ -4464,6 +4473,7 @@
 				451686AB1F520CDA00AC3D4B /* MultiDeviceProfileKeyUpdateJob.swift in Sources */,
 				45D231771DC7E8F10034FA89 /* SessionResetJob.swift in Sources */,
 				340FC8A9204DAC8D007AEB0F /* NotificationSettingsOptionsViewController.m in Sources */,
+				DBEB8B9521FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */,
 				452037D11EE84975004E4CDF /* DebugUISessionState.m in Sources */,
 				D221A09A169C9E5E00537ABF /* main.m in Sources */,
 				7DD5A733211B7CA500965478 /* HttpResponse.m in Sources */,
@@ -4525,14 +4535,11 @@
 				45C0DC1B1E68FE9000E04C47 /* UIApplication+OWS.swift in Sources */,
 				45FBC5C81DF8575700E9B410 /* CallKitCallManager.swift in Sources */,
 				4539B5861F79348F007141FF /* PushRegistrationManager.swift in Sources */,
-				45FBC5D11DF8592E00E9B410 /* RelayCall.swift in Sources */,
 				340FC8BB204DAC8D007AEB0F /* OWSAddToContactViewController.m in Sources */,
 				340FC8C0204DB7D2007AEB0F /* OWSBackupExportJob.m in Sources */,
 				45F32C232057297A00A300D5 /* MediaPageViewController.swift in Sources */,
 				3466087420E5649700AFFE73 /* OWSLayerView.swift in Sources */,
-				452C468F1E427E200087B011 /* OutboundCallInitiator.swift in Sources */,
 				34D2CCDA2062E7D000CB1A14 /* OWSScreenLockUI.m in Sources */,
-				45F170BB1E2FC5D3003FC1F2 /* CallAudioService.swift in Sources */,
 				345BC30C2047030700257B7C /* OWS2FASettingsViewController.m in Sources */,
 				340FC8CA20517B84007AEB0F /* OWSBackupImportJob.m in Sources */,
 				340FC8B7204DAC8D007AEB0F /* OWSConversationSettingsViewController.m in Sources */,
@@ -4540,7 +4547,6 @@
 				34D1F0C01F8EC1760066283D /* MessageRecipientStatusUtils.swift in Sources */,
 				45F659731E1BD99C00444429 /* CallKitCallUIAdaptee.swift in Sources */,
 				34277A5E20751BDC006049F2 /* OWSQuotedMessageView.m in Sources */,
-				458DE9D61DEE3FD00071BB03 /* PeerConnectionClient.swift in Sources */,
 				45DDA6242090CEB500DE97F8 /* ConversationHeaderView.swift in Sources */,
 				45F32C242057297A00A300D5 /* MessageDetailViewController.swift in Sources */,
 				34D1F0841F8678AA0066283D /* ConversationInputToolbar.m in Sources */,
@@ -4554,7 +4560,6 @@
 				340FC8B5204DAC8D007AEB0F /* AboutTableViewController.m in Sources */,
 				34BECE2B1F74C12700D7438D /* DebugUIStress.m in Sources */,
 				340FC8B9204DAC8D007AEB0F /* UpdateGroupViewController.m in Sources */,
-				4574A5D61DD6704700C6B692 /* CallService.swift in Sources */,
 				3461299C1FD1EA9E00532771 /* NotificationsManager.m in Sources */,
 				4521C3C01F59F3BA00B4C582 /* TextFieldHelper.swift in Sources */,
 				34D2CCDF206939B400CB1A14 /* DebugUIMessagesAction.m in Sources */,
@@ -4574,6 +4579,7 @@
 				34D1F0861F8678AA0066283D /* ConversationViewController.m in Sources */,
 				3427C64320F500E000EEC730 /* OWSMessageTimerView.m in Sources */,
 				B90418E6183E9DD40038554A /* DateUtil.m in Sources */,
+				DBEB8B9821FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */,
 				340FC8BD204DAC8D007AEB0F /* ShowGroupMembersViewController.m in Sources */,
 				459311FC1D75C948008DD4F0 /* OWSDeviceTableViewCell.m in Sources */,
 				7D8517CF211CAC0E00F9EF53 /* CryptoTools.m in Sources */,

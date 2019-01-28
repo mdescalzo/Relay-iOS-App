@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
         [Environment setCurrent:[Release releaseEnvironment]];
 
-        id<OWSCallMessageHandler> callMessageHandler = callMessageHandlerBlock();
+        id<FLCallMessageHandler> callMessageHandler = callMessageHandlerBlock();
         id<NotificationsProtocol> notificationsManager = notificationsManagerBlock();
 
         TextSecureKitEnv *sharedEnv =

@@ -7,7 +7,7 @@ import RelayServiceKit
 import RelayMessaging
 
 @objc(OWSWebRTCCallMessageHandler)
-public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
+public class WebRTCCallMessageHandler: NSObject, FLCallMessageHandler {
 
     // MARK - Properties
 
@@ -32,15 +32,15 @@ public class WebRTCCallMessageHandler: NSObject, OWSCallMessageHandler {
     }
 
     // MARK: - Call Handlers
-    public func receivedOffer(withThreadId threadId: String, callId: String, originatorId: String, peerId: String, sessionDescription: String) {
+    public func receivedOffer(withThreadId threadId: String, callId: String, peerId: String, originatorId: String, sessionDescription: String) {
         AssertIsOnMainThread(file: #function)
         
         let thread = TSThread.getOrCreateThread(withId: threadId)
         
-        self.callService.handleReceivedOffer(thread: thread, callId: callId, originatorId: originatorId, peerId: peerId, sessionDescription: sessionDescription)
+        self.callService.handleReceivedOffer(thread: thread, callId: callId, peerId: String, originatorId: originatorId, sessionDescription: sessionDescription)
     }
     
-    public func receivedAnswer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
+    public func receivedAcceptOffer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
         AssertIsOnMainThread(file: #function)
         
         let thread = TSThread.getOrCreateThread(withId: threadId)

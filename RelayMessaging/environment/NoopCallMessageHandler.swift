@@ -5,7 +5,7 @@
 import RelayServiceKit
 
 @objc
-public class NoopCallMessageHandler: NSObject, OWSCallMessageHandler {
+public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
     public func receivedAnswer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }

@@ -93,27 +93,27 @@ class ControlMessageManager : NSObject
                 return
             }
             
-            guard let _: String = dataBlob.object(forKey: "callId") as? String else {
+            guard let callId: String = dataBlob.object(forKey: "callId") as? String else {
                 Logger.debug("Received callICECandidates message with no callId.")
                 return
             }
             
-            if let icecandidates: NSArray = dataBlob.object(forKey: "icecandidates") as? NSArray {
-                for candidate in icecandidates as NSArray {
-                    if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
-                        if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
-                            let sdpMid: String = candidateDictiontary["sdpMid"] as? String,
-                            let sdp: String = candidateDictiontary["candidate"] as? String {
-                            
-                            DispatchQueue.main.async {
-                                TextSecureKitEnv.shared().callMessageHandler.receivedIceUpdate(withThreadId: threadId,
-                                                                                               sessionDescription: sdp,
-                                                                                               sdpMid: sdpMid,
-                                                                                               sdpMLineIndex: sdpMLineIndex)
-                            }
-                        }
-                    }
-                }
+            guard let peerId: String = dataBlob.object(forKey: "peerIdallId") as? String else {
+                Logger.debug("Received callICECandidates message with no peerId.")
+                return
+            }
+
+            guard let iceCandidates: [NSDictionary] = dataBlob.object(forKey: "icecandidates") as? [NSDictionary] else {
+                Logger.debug("Received callICECandidates message with no peerId.")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(withThreadId: threadId,
+                                                                                   callId: callId,
+                                                                                   peerId: peerId,
+                                                                                   iceCandidates: iceCandidates);
+            
             }
         }
     }
@@ -159,8 +159,8 @@ class ControlMessageManager : NSObject
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedOffer(withThreadId: threadId!,
                                                                        callId: callId!,
-                                                                       originatorId: message.authorId,
                                                                        peerId: peerId!,
+                                                                       originatorId: originator!,
                                                                        sessionDescription: sdpString!)
         }
     }
@@ -206,7 +206,7 @@ class ControlMessageManager : NSObject
         }
         
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedAnswer(withThreadId: threadId, callId: callId, peerId: peerId, sessionDescription: sdp)
+            TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(withThreadId: threadId, callId: callId, peerId: peerId, sessionDescription: sdp)
         }
     }
     
@@ -230,8 +230,13 @@ class ControlMessageManager : NSObject
             return
         }
         
+        guard let peerId = dataBlob.object(forKey: "peerId") as? String else {
+            Logger.info("Received callLeave message without peerId.")
+            return
+        }
+        
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedHangup(withThreadId: threadId, callId: callId)
+            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(withThreadId: threadId, callId: callId, peerId: peerId)
         }
     }
     

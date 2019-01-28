@@ -12,7 +12,7 @@
 #import "NotificationsProtocol.h"
 #import "OWSAttachmentsProcessor.h"
 #import "OWSBlockingManager.h"
-#import "OWSCallMessageHandler.h"
+#import "FLCallMessageHandler.h"
 #import "OWSContact.h"
 #import "OWSDevice.h"
 #import "OWSDisappearingConfigurationUpdateInfoMessage.h"
@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OWSMessageManager ()
 
-@property (nonatomic, readonly) id<OWSCallMessageHandler> callMessageHandler;
+@property (nonatomic, readonly) id<FLCallMessageHandler> callMessageHandler;
 @property (nonatomic, readonly) id<ContactsManagerProtocol> contactsManager;
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
 @property (nonatomic, readonly) MessageSender *messageSender;
@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
     TSNetworkManager *networkManager = [TSNetworkManager sharedManager];
     OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
     id<ContactsManagerProtocol> contactsManager = [TextSecureKitEnv sharedEnv].contactsManager;
-    id<OWSCallMessageHandler> callMessageHandler = [TextSecureKitEnv sharedEnv].callMessageHandler;
+    id<FLCallMessageHandler> callMessageHandler = [TextSecureKitEnv sharedEnv].callMessageHandler;
     OWSIdentityManager *identityManager = [OWSIdentityManager sharedManager];
     MessageSender *messageSender = [TextSecureKitEnv sharedEnv].messageSender;
     
@@ -97,7 +97,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithNetworkManager:(TSNetworkManager *)networkManager
                         primaryStorage:(OWSPrimaryStorage *)primaryStorage
-                    callMessageHandler:(id<OWSCallMessageHandler>)callMessageHandler
+                    callMessageHandler:(id<FLCallMessageHandler>)callMessageHandler
                        contactsManager:(id<ContactsManagerProtocol>)contactsManager
                        identityManager:(OWSIdentityManager *)identityManager
                          messageSender:(MessageSender *)messageSender

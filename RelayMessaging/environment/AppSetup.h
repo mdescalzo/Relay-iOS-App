@@ -4,10 +4,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol OWSCallMessageHandler;
+@protocol FLCallMessageHandler;
 @protocol NotificationsProtocol;
 
-typedef id<OWSCallMessageHandler> _Nonnull (^CallMessageHandlerBlock)(void);
+typedef id<FLCallMessageHandler> _Nonnull (^CallMessageHandlerBlock)(void);
 typedef id<NotificationsProtocol> _Nonnull (^NotificationsManagerBlock)(void);
 
 // This is _NOT_ a singleton and will be instantiated each time that the SAE is used.
