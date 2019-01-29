@@ -3,13 +3,13 @@
 //  Relay
 //
 //  Created by Greg Perkins on 1/28/19.
-//  Copyright © 2019 Open Whisper Systems. All rights reserved.
+//  Copyright © 2019 Forsta, Inc. All rights reserved.
 //
 
 import Foundation
 import RelayServiceKit
 
-class ConferenceCallService: FLCallMessageHandler {
+class ConferenceCallService: NSObject, FLCallMessageHandler {
     static let shared = ConferenceCallService();
     
     var conferenceCall: ConferenceCall?  // this can be a collection in the future

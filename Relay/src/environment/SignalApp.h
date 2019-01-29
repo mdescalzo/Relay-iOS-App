@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class NotificationsManager;
 @class OWSMessageFetcherJob;
 @class OWSNavigationController;
-@class OWSWebRTCCallMessageHandler;
 @class OutboundCallInitiator;
 @class TSThread;
 
@@ -23,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable, weak) OWSNavigationController *signUpFlowNavigationController;
 
 // TODO: Convert to singletons?
-@property (nonatomic, readonly) OWSWebRTCCallMessageHandler *callMessageHandler;
 @property (nonatomic, readonly) CallService *callService;
 @property (nonatomic, readonly) CallUIAdapter *callUIAdapter;
 @property (nonatomic, readonly) OutboundCallInitiator *outboundCallInitiator;

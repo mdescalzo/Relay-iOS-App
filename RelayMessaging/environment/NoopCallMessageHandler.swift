@@ -6,6 +6,18 @@ import RelayServiceKit
 
 @objc
 public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
+    public func receivedAcceptOffer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
+        owsFailDebug("\(self.logTag) in \(#function).")
+    }
+    
+    public func receivedIceCandidates(withThreadId threadId: String, callId: String, peerId: String, iceCandidates: [Any]) {
+        owsFailDebug("\(self.logTag) in \(#function).")
+    }
+    
+    public func receivedLeave(withThreadId threadId: String, callId: String, peerId: String) {
+        owsFailDebug("\(self.logTag) in \(#function).")
+    }
+    
     public func receivedAnswer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
@@ -18,7 +30,7 @@ public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedOffer(withThreadId threadId: String, callId: String, originatorId: String, peerId: String, sessionDescription: String) {
+    public func receivedOffer(withThreadId threadId: String, callId: String, peerId originatorId: String, originatorId peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     

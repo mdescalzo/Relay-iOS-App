@@ -372,7 +372,6 @@
 		45BE4EA22012AD2000935E59 /* DisappearingTimerConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE4EA12012AD2000935E59 /* DisappearingTimerConfigurationView.swift */; };
 		45C0DC1B1E68FE9000E04C47 /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
 		45C0DC1E1E69011F00E04C47 /* UIStoryboard+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1D1E69011F00E04C47 /* UIStoryboard+OWS.swift */; };
-		45C9DEB81DF4E35A0065CA84 /* WebRTCCallMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DEB71DF4E35A0065CA84 /* WebRTCCallMessageHandler.swift */; };
 		45CB2FA81CB7146C00E1B343 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45CB2FA71CB7146C00E1B343 /* Launch Screen.storyboard */; };
 		45CD81EF1DC030E7004C9430 /* SyncPushTokensJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CD81EE1DC030E7004C9430 /* SyncPushTokensJob.swift */; };
 		45D231771DC7E8F10034FA89 /* SessionResetJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D231761DC7E8F10034FA89 /* SessionResetJob.swift */; };
@@ -421,7 +420,6 @@
 		7D2CD541214C3C9C004E957A /* OWSBubbleShapeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBF006206C3CB200025978 /* OWSBubbleShapeView.m */; };
 		7D2CD542214C3C9C004E957A /* OWSAudioMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0B91F8800D90066283D /* OWSAudioMessageView.m */; };
 		7D2CD543214C3C9C004E957A /* DebugUIContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D8C02A1ED3685800188D7C /* DebugUIContacts.m */; };
-		7D2CD544214C3C9C004E957A /* WebRTCCallMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DEB71DF4E35A0065CA84 /* WebRTCCallMessageHandler.swift */; };
 		7D2CD545214C3C9C004E957A /* GifPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F04F1F7D45A60066283D /* GifPickerCell.swift */; };
 		7D2CD546214C3C9C004E957A /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72C211B7B1000965478 /* HttpRequest.m */; };
 		7D2CD548214C3C9C004E957A /* AddToGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89B204DAC8D007AEB0F /* AddToGroupViewController.m */; };
@@ -823,13 +821,13 @@
 		D221A0E8169DFFC500537ABF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D221A0E7169DFFC500537ABF /* AVFoundation.framework */; };
 		D24B5BD5169F568C00681372 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D24B5BD4169F568C00681372 /* AudioToolbox.framework */; };
 		D2AEACDC16C426DA00C364C0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AEACDB16C426DA00C364C0 /* CFNetwork.framework */; };
+		DB2326B02200DF440063CB09 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */; };
+		DB2326B12200DF440063CB09 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */; };
 		DBD6CEE82146CD790088B4A4 /* Forsta-values.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */; };
 		DBEB8B9221FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
 		DBEB8B9321FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
 		DBEB8B9521FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */; };
 		DBEB8B9621FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */; };
-		DBEB8B9821FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */; };
-		DBEB8B9921FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */; };
 		E1368CBE18A1C36B00109378 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EB5ABC1884C002007CBB57 /* MessageUI.framework */; };
 		E6431F0E7EAC0CB73D75A38B /* Pods_Relay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE34D2C7844709C73962401 /* Pods_Relay.framework */; };
 		EF764C351DB67CC5000D9A87 /* UIViewController+Permissions.m in Sources */ = {isa = PBXBuildFile; fileRef = EF764C341DB67CC5000D9A87 /* UIViewController+Permissions.m */; };
@@ -1370,7 +1368,6 @@
 		4585C4671ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafetyNumberConfirmationAlert.swift; sourceTree = "<group>"; };
 		4589670F1DC117CC00E9DD21 /* SignalTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SignalTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		458967101DC117CC00E9DD21 /* AccountManagerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManagerTest.swift; path = Models/AccountManagerTest.swift; sourceTree = "<group>"; };
-		458DE9D51DEE3FD00071BB03 /* PeerConnectionClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConnectionClient.swift; sourceTree = "<group>"; };
 		458DE9D71DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSWebRTCDataProtos.pb.h; sourceTree = "<group>"; };
 		458DE9D81DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSWebRTCDataProtos.pb.m; sourceTree = "<group>"; };
 		458E38351D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSDeviceProvisioningURLParser.h; sourceTree = "<group>"; };
@@ -1422,7 +1419,6 @@
 		45BE4EA12012AD2000935E59 /* DisappearingTimerConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisappearingTimerConfigurationView.swift; sourceTree = "<group>"; };
 		45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+OWS.swift"; sourceTree = "<group>"; };
 		45C0DC1D1E69011F00E04C47 /* UIStoryboard+OWS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+OWS.swift"; sourceTree = "<group>"; };
-		45C9DEB71DF4E35A0065CA84 /* WebRTCCallMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebRTCCallMessageHandler.swift; sourceTree = "<group>"; };
 		45CB2FA71CB7146C00E1B343 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Relay/src/util/Launch Screen.storyboard"; sourceTree = SOURCE_ROOT; };
 		45CD81EE1DC030E7004C9430 /* SyncPushTokensJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPushTokensJob.swift; sourceTree = "<group>"; };
 		45D231761DC7E8F10034FA89 /* SessionResetJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionResetJob.swift; sourceTree = "<group>"; };
@@ -1626,10 +1622,10 @@
 		D3982FE81613EA6D4D796702 /* Pods_RelayTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelayTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D562B853DF3F1C3D5A1CB00B /* Pods-RelayTests.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayTests.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests.app store release.xcconfig"; sourceTree = "<group>"; };
 		D7BCBE6C7CD3E58FF656F0AC /* Pods-RelayDevShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDevShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDevShareExtension/Pods-RelayDevShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
+		DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConnectionClient.swift; sourceTree = "<group>"; };
 		DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Forsta-values.plist"; sourceTree = "<group>"; };
 		DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallService.swift; sourceTree = "<group>"; };
 		DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCall.swift; sourceTree = "<group>"; };
-		DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerConnectionClient.swift; sourceTree = "<group>"; };
 		DD2F0E9696373921805C505E /* Pods-RelayShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayShareExtension/Pods-RelayShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		E1A0AD8B16E13FDD0071E604 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		EDECD29AA2892699CD63E5D8 /* Pods_Common_RelayMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_RelayMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2468,7 +2464,6 @@
 		45464DB81DFA03D8001D3FD6 /* Signaling */ = {
 			isa = PBXGroup;
 			children = (
-				45C9DEB71DF4E35A0065CA84 /* WebRTCCallMessageHandler.swift */,
 				45AE48501E0732D6004D96C2 /* TurnServerInfo.swift */,
 				458DE9D71DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.h */,
 				458DE9D81DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m */,
@@ -2594,7 +2589,6 @@
 				45794E841E0061CF00066731 /* UserInterface */,
 				45464DB81DFA03D8001D3FD6 /* Signaling */,
 				45FBC5D01DF8592E00E9B410 /* RelayCall.swift */,
-				458DE9D51DEE3FD00071BB03 /* PeerConnectionClient.swift */,
 				4574A5D51DD6704700C6B692 /* CallService.swift */,
 				45F170BA1E2FC5D3003FC1F2 /* CallAudioService.swift */,
 				452C468E1E427E200087B011 /* OutboundCallInitiator.swift */,
@@ -3015,7 +3009,7 @@
 			children = (
 				DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */,
 				DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */,
-				DBEB8B9721FF7D6C005D4FE2 /* PeerConnectionClient.swift */,
+				DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */,
 			);
 			path = ConferenceCall;
 			sourceTree = "<group>";
@@ -4196,7 +4190,6 @@
 				7D2CD541214C3C9C004E957A /* OWSBubbleShapeView.m in Sources */,
 				7D2CD542214C3C9C004E957A /* OWSAudioMessageView.m in Sources */,
 				7D2CD543214C3C9C004E957A /* DebugUIContacts.m in Sources */,
-				7D2CD544214C3C9C004E957A /* WebRTCCallMessageHandler.swift in Sources */,
 				7D2CD545214C3C9C004E957A /* GifPickerCell.swift in Sources */,
 				7D2CD546214C3C9C004E957A /* HttpRequest.m in Sources */,
 				7D2CD548214C3C9C004E957A /* AddToGroupViewController.m in Sources */,
@@ -4286,6 +4279,7 @@
 				7D2CD597214C3C9C004E957A /* GifPickerLayout.swift in Sources */,
 				7D2CD598214C3C9C004E957A /* DebugUISyncMessages.m in Sources */,
 				7D2CD599214C3C9C004E957A /* UIStoryboard+OWS.swift in Sources */,
+				DB2326B12200DF440063CB09 /* PeerConnectionClient.swift in Sources */,
 				7D2CD59A214C3C9C004E957A /* MessageFetcherJob.swift in Sources */,
 				7D2CD59B214C3C9C004E957A /* DebugUIProfile.swift in Sources */,
 				7D2CD59C214C3C9C004E957A /* ReminderView.swift in Sources */,
@@ -4371,7 +4365,6 @@
 				7D2CD5F4214C3C9C004E957A /* ConversationViewController.m in Sources */,
 				7D2CD5F5214C3C9C004E957A /* OWSMessageTimerView.m in Sources */,
 				7D2CD5F6214C3C9C004E957A /* DateUtil.m in Sources */,
-				DBEB8B9921FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */,
 				7D2CD5F7214C3C9C004E957A /* ShowGroupMembersViewController.m in Sources */,
 				7D2CD5F8214C3C9C004E957A /* OWSDeviceTableViewCell.m in Sources */,
 				7D2CD5F9214C3C9C004E957A /* CryptoTools.m in Sources */,
@@ -4404,7 +4397,6 @@
 				34DBF007206C3CB200025978 /* OWSBubbleShapeView.m in Sources */,
 				34D1F0BA1F8800D90066283D /* OWSAudioMessageView.m in Sources */,
 				34D8C02B1ED3685800188D7C /* DebugUIContacts.m in Sources */,
-				45C9DEB81DF4E35A0065CA84 /* WebRTCCallMessageHandler.swift in Sources */,
 				34D1F0501F7D45A60066283D /* GifPickerCell.swift in Sources */,
 				7DD5A72D211B7B1100965478 /* HttpRequest.m in Sources */,
 				340FC8B8204DAC8D007AEB0F /* AddToGroupViewController.m in Sources */,
@@ -4494,6 +4486,7 @@
 				34BECE301F7ABCF800D7438D /* GifPickerLayout.swift in Sources */,
 				343A65951FC47D5E000477A1 /* DebugUISyncMessages.m in Sources */,
 				45C0DC1E1E69011F00E04C47 /* UIStoryboard+OWS.swift in Sources */,
+				DB2326B02200DF440063CB09 /* PeerConnectionClient.swift in Sources */,
 				452ECA4D1E087E7200E2F016 /* MessageFetcherJob.swift in Sources */,
 				4556FA681F54AA9500AF40DD /* DebugUIProfile.swift in Sources */,
 				45A6DAD61EBBF85500893231 /* ReminderView.swift in Sources */,
@@ -4579,7 +4572,6 @@
 				34D1F0861F8678AA0066283D /* ConversationViewController.m in Sources */,
 				3427C64320F500E000EEC730 /* OWSMessageTimerView.m in Sources */,
 				B90418E6183E9DD40038554A /* DateUtil.m in Sources */,
-				DBEB8B9821FF7D6C005D4FE2 /* PeerConnectionClient.swift in Sources */,
 				340FC8BD204DAC8D007AEB0F /* ShowGroupMembersViewController.m in Sources */,
 				459311FC1D75C948008DD4F0 /* OWSDeviceTableViewCell.m in Sources */,
 				7D8517CF211CAC0E00F9EF53 /* CryptoTools.m in Sources */,

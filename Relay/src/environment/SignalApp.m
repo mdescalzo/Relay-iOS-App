@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SignalApp ()
 
-@property (nonatomic) OWSWebRTCCallMessageHandler *callMessageHandler;
 @property (nonatomic) CallService *callService;
 @property (nonatomic) OutboundCallInitiator *outboundCallInitiator;
 @property (nonatomic) OWSMessageFetcherJob *messageFetcherJob;
@@ -61,21 +60,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 #pragma mark - Singletons
-
-- (OWSWebRTCCallMessageHandler *)callMessageHandler
-{
-    @synchronized(self)
-    {
-        if (!_callMessageHandler) {
-            _callMessageHandler =
-                [[OWSWebRTCCallMessageHandler alloc] initWithAccountManager:self.accountManager
-                                                                callService:self.callService
-                                                              messageSender:Environment.current.messageSender];
-        }
-    }
-
-    return _callMessageHandler;
-}
 
 - (CallService *)callService
 {

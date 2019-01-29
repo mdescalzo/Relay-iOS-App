@@ -5,24 +5,6 @@
 import Foundation
 import RelayServiceKit
 
-public enum CallState: String {
-    case idle
-    case dialing
-    case answering
-    case remoteRinging
-    case localRinging
-    case connected
-    case reconnecting
-    case localFailure // terminal
-    case localHangup // terminal
-    case remoteHangup // terminal
-    case remoteBusy // terminal
-}
-
-enum CallDirection {
-    case outgoing, incoming
-}
-
 // All Observer methods will be invoked from the main thread.
 protocol CallObserver: class {
     func stateDidChange(call: RelayCall, state: CallState)
