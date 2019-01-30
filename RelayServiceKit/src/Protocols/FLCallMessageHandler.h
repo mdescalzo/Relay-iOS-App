@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)receivedOfferWithThreadId:(NSString *)threadId
                           callId:(NSString *)callId
+                        senderId:(NSString *)senderId
                           peerId:(NSString *)peerId
                     originatorId:(NSString *)originatorId
               sessionDescription:(NSString *)sessionDescription;

@@ -219,8 +219,6 @@ private class RelayCallData: NSObject {
 
     // MARK: Class
 
-    static let fallbackIceServer = RTCIceServer(urlStrings: ["stun:stun1.l.google.com:19302"])
-
     // MARK: Ivars
 
     fileprivate var callData: RelayCallData? {
@@ -1558,36 +1556,6 @@ private class RelayCallData: NSObject {
     }
 
     // MARK: -
-
-    /**
-     * RTCIceServers are used when attempting to establish an optimal connection to the other party. SignalService supplies
-     * a list of servers, plus we have fallback servers hardcoded in the app.
-     */
-    private func getIceServers() -> Promise<[RTCIceServer]> {
-        AssertIsOnMainThread(file: #function)
-
-        return firstly {
-          accountManager.getTurnServerInfo()
-          }.map { turnServerInfo -> [RTCIceServer] in
-            Logger.debug("\(self.logTag) got turn server urls: \(turnServerInfo.urls)")
-
-            return turnServerInfo.urls.map { url in
-                if url.hasPrefix("turn") {
-                    // Only "turn:" servers require authentication. Don't include the credentials to other ICE servers
-                    // as 1.) they aren't used, and 2.) the non-turn servers might not be under our control.
-                    // e.g. we use a public fallback STUN server.
-                    return RTCIceServer(urlStrings: [url], username: turnServerInfo.username, credential: turnServerInfo.password)
-                } else {
-                    return RTCIceServer(urlStrings: [url])
-                }
-            } + [CallService.fallbackIceServer]
-          }.recover { (error: Error) -> Guarantee<[RTCIceServer]> in
-            Logger.error("\(self.logTag) fetching ICE servers failed with error: \(error)")
-            Logger.warn("\(self.logTag) using fallback ICE Servers")
-
-            return Guarantee.value([CallService.fallbackIceServer])
-        }
-    }
 
     // This method should be called when either: a) we know or assume that
     // the error is related to the current call. b) the error is so serious

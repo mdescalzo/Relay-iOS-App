@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 enum ConferenceCallDirection {
     case outgoing, incoming
@@ -27,6 +28,14 @@ protocol ConferenceCallObserver: class {
 class ConferenceCall: PeerConnectionClientDelegate {
     let TAG = "[ConferenceCall]"
     var connectedDate: NSDate?
+    
+    let direction: ConferenceCallDirection
+    let thread: TSThread;
+    let callId: String;
+    let originatorId: String;
+    
+    var observers = [Weak<ConferenceCallObserver>]()
+    var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
     
     var callRecord: TSCall? {
         didSet {
@@ -58,18 +67,33 @@ class ConferenceCall: PeerConnectionClientDelegate {
         }
     }
     
-    var direction: ConferenceCallDirection
-    
-    let thread: TSThread;
-    let callId: String;
-    var observers = [Weak<ConferenceCallObserver>]()
-    
-    var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
-    
-    
-    required init(thread: TSThread, callId: String) {
+
+    private init(direction: ConferenceCallDirection, thread: TSThread, callId: String, originatorId: String) {
+        self.direction = direction
         self.thread = thread
         self.callId = callId
+        self.originatorId = originatorId
+    }
+    
+    class public func buildIncoming(thread: TSThread, callId: String, offererId: String, originatorId: String, peerId: String, sessionDescription: String) -> ConferenceCall {
+        let cc = ConferenceCall(direction: .incoming, thread: thread, callId: callId, originatorId: originatorId)
+        
+        // kick off the incoming-peerconnection dance, if this is incoming
+        _ = firstly {
+            return ConferenceCallService.shared.iceServers
+        }.then { iceServers -> Promise<HardenedRTCSessionDescription> in
+            let pcc = PeerConnectionClient(delegate: cc, userId: offererId, iceServers: iceServers)
+            pcc.peerId = peerId
+            cc.peerConnectionClients[peerId] = pcc
+            
+            let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
+            let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            
+            return pcc.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
+        }.then { hardenedSessionDesc in
+            
+        }
+        return cc
     }
     
     // MARK: - Class Helpers
