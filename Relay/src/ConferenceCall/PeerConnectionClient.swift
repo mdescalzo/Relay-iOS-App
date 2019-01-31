@@ -228,8 +228,8 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
     // Connection
 
     private var peerConnection: RTCPeerConnection?
-    private let connectionConstraints: RTCMediaConstraints
-    private let configuration: RTCConfiguration
+    private let connectionConstraints: RTCMediaConstraints?
+    private let configuration: RTCConfiguration?
 
     // DataChannel
 
@@ -259,33 +259,77 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
     // is tiny (a single property), so it's better to leak and be safe.
     private static var expiredProxies = [PeerConnectionProxy]()
 
-    init(delegate: PeerConnectionClientDelegate, userId: String, iceServers: [RTCIceServer]) {
+    init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String) {
         AssertIsOnMainThread(file: #function)
 
-        self.delegate = delegate
-        self.userId = userId
-
+        delegate = delegate
+        userId = userId
+        peerId = peerId
+    }
+    
+    public func acceptOffer(sessionDescription: String) {
         configuration = RTCConfiguration()
         configuration.iceServers = iceServers
         configuration.bundlePolicy = .maxBundle
         configuration.rtcpMuxPolicy = .require
-
+        
         let connectionConstraintsDict = ["DtlsSrtpKeyAgreement": "true"]
         connectionConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: connectionConstraintsDict)
-
+        
         audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
         cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-
+        
         super.init()
-
+        
         proxy.set(value: self)
-
+        
         peerConnection = PeerConnectionClient.peerConnectionFactory.peerConnection(with: configuration,
                                                                                    constraints: connectionConstraints,
                                                                                    delegate: proxy)
         createAudioSender()
         createVideoSender()
-    }
+        
+    /*
+     firstly {
+     ConferenceCallService.shared.iceServers
+     }.then { iceServers -> Promise<HardenedRTCSessionDescription> in
+     let pcc = PeerConnectionClient(delegate: self, userId: senderId, iceServers: iceServers)
+     pcc.peerId = peerId
+     self.peerConnectionClients[peerId] = pcc
+     
+     let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
+     let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+     
+     return pcc.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
+     }.then { hardenedSessionDesc in
+     return self.sendCallAcceptOffer(peerId: peerId, negotiatedSessionDescription: hardenedSessionDesc)
+     }.then {
+     // more
+     }
+     */
+}
+
+
+private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: HardenedRTCSessionDescription) {
+    let callId = self.callId
+    let members = thread.participantIds
+    let originator = self.originatorId
+    let answer = [ "type" : "answer",
+                   "sdp" : negotiatedSessionDescription.sdp ]
+    
+    let allTheData = [ "answer" : answer,
+                       "callId" : callId,
+                       "members" : members,
+                       "originator" : originator,
+                       "peerId" : peerId,
+                       ] as NSMutableDictionary
+    
+    let message = OutgoingControlMessage(thread: thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
+    return self.messageSender.sendPromise(message: message)
+    
+    
+}
+    
 
     deinit {
         // TODO: We can demote this log level to debug once we're confident that

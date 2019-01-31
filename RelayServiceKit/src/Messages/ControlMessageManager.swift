@@ -88,11 +88,6 @@ class ControlMessageManager : NSObject
         
         if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
             
-            guard let threadId = message.forstaPayload.object(forKey: "threadId") as? String else {
-                Logger.debug("Received callICECandidates message with no threadId.")
-                return
-            }
-            
             guard let callId: String = dataBlob.object(forKey: "callId") as? String else {
                 Logger.debug("Received callICECandidates message with no callId.")
                 return
@@ -109,7 +104,7 @@ class ControlMessageManager : NSObject
             }
             
             DispatchQueue.main.async {
-                TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(withThreadId: threadId,
+                TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: message.thread,
                                                                                    callId: callId,
                                                                                    peerId: peerId,
                                                                                    iceCandidates: iceCandidates);
@@ -125,8 +120,10 @@ class ControlMessageManager : NSObject
             return
         }
         
-        let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary
-        let threadId = message.forstaPayload.object(forKey: "threadId") as? String
+        let forstaPayload = message.forstaPayload as NSDictionary
+        
+        let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary
+        let threadId = forstaPayload.object(forKey: "threadId") as? String
         
         guard dataBlob != nil else {
             Logger.info("Received callOffer message with no data object.")
@@ -156,9 +153,15 @@ class ControlMessageManager : NSObject
             return
         }
         
+        let thread = message.thread
+        thread.update(withPayload: forstaPayload as! [AnyHashable : Any])
+        thread.participantIds = members! as! [String]
+        thread.save()
+        
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedOffer(withThreadId: threadId!,
+            TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: thread,
                                                                        callId: callId!,
+                                                                       senderId: message.authorId,
                                                                        peerId: peerId!,
                                                                        originatorId: originator!,
                                                                        sessionDescription: sdpString!)
@@ -194,11 +197,6 @@ class ControlMessageManager : NSObject
             return
         }
         
-        guard let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as? String else {
-            Logger.info("Received callAcceptOffer message with no threadId.")
-            return
-        }
-
         // If the callAccept came from self, another device picked up.  Stop local processing.
         guard message.authorId != TSAccountManager.localUID() else {
             Logger.info("Received call accept offer from another device.  Ignoring")
@@ -206,7 +204,7 @@ class ControlMessageManager : NSObject
         }
         
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(withThreadId: threadId, callId: callId, peerId: peerId, sessionDescription: sdp)
+            TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(with: message.thread, callId: callId, peerId: peerId, sessionDescription: sdp)
         }
     }
     

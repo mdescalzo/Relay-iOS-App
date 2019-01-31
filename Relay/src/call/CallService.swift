@@ -735,6 +735,7 @@ private class RelayCallData: NSObject {
             let answerControlMessage = OutgoingControlMessage(thread: thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
             return self.messageSender.sendPromise(message: answerControlMessage)
 
+          // GEP JUST FINISHED THIS
             }.then { () -> Promise<Void> in
             guard self.call == newCall else {
                 throw CallError.obsoleteCall(description: "sendPromise(message: ) response for obsolete call")

@@ -11,24 +11,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol FLCallMessageHandler <NSObject>
 
--(void)receivedOfferWithThreadId:(NSString *)threadId
+-(void)receivedOfferWithThread:(TSThread *)thread
                           callId:(NSString *)callId
                         senderId:(NSString *)senderId
                           peerId:(NSString *)peerId
                     originatorId:(NSString *)originatorId
               sessionDescription:(NSString *)sessionDescription;
 
--(void)receivedAcceptOfferWithThreadId:(NSString *)threadId
+-(void)receivedAcceptOfferWithThread:(TSThread *)thread
                                 callId:(NSString *)callId
                                 peerId:(NSString *)peerId
                     sessionDescription:(NSString *)sessionDescription;
 
--(void)receivedIceCandidatesWithThreadId:(NSString *)threadId
+-(void)receivedIceCandidatesWithThread:(TSThread *)thread
                                   callId:(NSString *)callId
                                   peerId:(NSString *)peerId
                            iceCandidates:(NSArray *)iceCandidates;
 
--(void)receivedLeaveWithThreadId:(NSString *)threadId
+-(void)receivedLeaveWithThread:(TSThread *)thread
                           callId:(NSString *)callId
                           peerId:(NSString *)peerId;
 

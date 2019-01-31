@@ -8,6 +8,9 @@
 
 import Foundation
 import PromiseKit
+import RelayServiceKit
+import RelayMessaging
+import UIKit
 
 enum ConferenceCallDirection {
     case outgoing, incoming
@@ -20,15 +23,16 @@ enum ConferenceCallState {
     case failed             // after ringing or joined
 }
 
-protocol ConferenceCallObserver: class {
+protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
     func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String)
 }
 
-class ConferenceCall: PeerConnectionClientDelegate {
+class ConferenceCall: PeerConnectionClientObserver {
     let TAG = "[ConferenceCall]"
-    var connectedDate: NSDate?
     
+    var joinedDate: NSDate?
+
     let direction: ConferenceCallDirection
     let thread: TSThread;
     let callId: String;
@@ -36,7 +40,7 @@ class ConferenceCall: PeerConnectionClientDelegate {
     
     var observers = [Weak<ConferenceCallObserver>]()
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
-    
+
     var callRecord: TSCall? {
         didSet {
             AssertIsOnMainThread(file: #function)
@@ -51,11 +55,11 @@ class ConferenceCall: PeerConnectionClientDelegate {
             AssertIsOnMainThread(file: #function)
             Logger.debug("\(TAG) state changed: \(oldValue) -> \(self.state) for call: \(self.callId)")
             
-            // Update connectedDate
+            // Update joinedDate
             if case .joined = self.state {
                 // if it's the first time we've connected (not a reconnect)
-                if connectedDate == nil {
-                    connectedDate = NSDate()
+                if joinedDate == nil {
+                    joinedDate = NSDate()
                 }
             }
             
@@ -67,35 +71,48 @@ class ConferenceCall: PeerConnectionClientDelegate {
         }
     }
     
-
-    private init(direction: ConferenceCallDirection, thread: TSThread, callId: String, originatorId: String) {
+    
+    public required init(direction: ConferenceCallDirection, thread: TSThread, callId: String, originatorId: String) {
         self.direction = direction
         self.thread = thread
         self.callId = callId
         self.originatorId = originatorId
+        if (direction == .outgoing) { self.state = .joined }
     }
     
-    class public func buildIncoming(thread: TSThread, callId: String, offererId: String, originatorId: String, peerId: String, sessionDescription: String) -> ConferenceCall {
-        let cc = ConferenceCall(direction: .incoming, thread: thread, callId: callId, originatorId: originatorId)
-        
-        // kick off the incoming-peerconnection dance, if this is incoming
-        _ = firstly {
-            return ConferenceCallService.shared.iceServers
-        }.then { iceServers -> Promise<HardenedRTCSessionDescription> in
-            let pcc = PeerConnectionClient(delegate: cc, userId: offererId, iceServers: iceServers)
-            pcc.peerId = peerId
-            cc.peerConnectionClients[peerId] = pcc
-            
-            let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
-            let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-            
-            return pcc.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
-        }.then { hardenedSessionDesc in
-            
+    public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
+        // skip it if we've already received this one
+        if let pcc = self.peerConnectionClients[peerId] {
+            Logger.debug("\(TAG) received ANOTHER offer for an existing peerId!: \(peerId)")
+            return
         }
-        return cc
+        
+        // throw away any existing connections from this user
+        for pId in self.peerConnectionClients.filter(where: { $0.userId == senderId }).keys() {
+            let pcc = self.peerConnectionClients[pId]
+            self.peerConnectionClients.removeValue(forKey: pId)
+            pcc.uninit()
+        }
+
+        // now get this new peer connection underway
+        let pcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId)
+        self.peerConnectionClients[peerId] = pcc
+        pcc.acceptOffer(sessionDescription)
+        
+        // and also kick off peer connections other parties in the thread (if not already underway)
+        for userId in self.thread.participantIds {
+            if (userId == senderId || userId == TSAccountManager.localUID()!
+                || self.peerConnectionClients.contains { $0.userId == userId }) {
+                continue;
+            }
+            let newPeerId = NSUUID().uuidString.lowercased()
+            let pcc = PeerConnectionClient(delegate: self, userId: userId, peerId: newPeerId)
+            self.peerConnectionClients[newPeerId] = pcc
+            pcc.sendOffer()
+        }
     }
-    
+        
+
     // MARK: - Class Helpers
     private func updateCallRecordType() {
         AssertIsOnMainThread(file: #function)
@@ -112,18 +129,18 @@ class ConferenceCall: PeerConnectionClientDelegate {
         }
     }
     
-    func addObserver(observer: ConferenceCallObserver) {
+    func addDelegate(observer: ConferenceCallDelegate) {
         AssertIsOnMainThread(file: #function)
         observers.append(Weak(value: observer))
     }
     
-    func removeObserver(_ observer: ConferenceCallObserver) {
+    func removeDelegate(_ observer: ConferenceCallDelegate) {
         AssertIsOnMainThread(file: #function)
         while let index = observers.index(where: { $0.value === observer }) {
             observers.remove(at: index)
         }
     }
-
+    
     // MARK: - PeerConnectionClientDelegate Implementation
     func peerConnectionClientIceConnected(_ peerconnectionClient: PeerConnectionClient) {
         <#code#>
