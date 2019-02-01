@@ -34,51 +34,12 @@ let kMediaConstraintsMinHeight = kRTCMediaConstraintsMinHeight
 let kMediaConstraintsMaxHeight = kRTCMediaConstraintsMaxHeight
 
 /**
- * The PeerConnectionClient notifies it's delegate (the CallService) of key events in the call signaling life cycle
+ * The PeerConnectionClient notifies it's delegate (the ConferenceCallService) of key events
  *
  * The delegate's methods will always be called on the main thread.
  */
 protocol PeerConnectionClientDelegate: class {
-
-    /**
-     * The connection has been established. The clients can now communicate.
-     * This can be called multiple times throughout the call in the event of temporary network disconnects.
-     */
-    func peerConnectionClientIceConnected(_ peerconnectionClient: PeerConnectionClient)
-
-    /**
-     * The connection failed to establish. The clients will not be able to communicate.
-     */
-    func peerConnectionClientIceFailed(_ peerconnectionClient: PeerConnectionClient)
-
-    /**
-     * After initially connecting, the connection disconnected.
-     * It maybe be temporary, in which case `peerConnectionClientIceConnected` will be called again once we're reconnected.
-     * Otherwise, `peerConnectionClientIceFailed` will eventually called.
-     */
-    func peerConnectionClientIceDisconnected(_ peerconnectionClient: PeerConnectionClient)
-
-    /**
-     * During the Signaling process each client generates IceCandidates locally, which contain information about how to 
-     * reach the local client via the internet. The delegate must shuttle these IceCandates to the other (remote) client 
-     * out of band, as part of establishing a connection over WebRTC.
-     */
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, addedLocalIceCandidate iceCandidate: RTCIceCandidate)
-
-    /**
-     * Once the peerconnection is established, we can receive messages via the data channel, and notify the delegate.
-     */
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, received dataChannelMessage: OWSWebRTCProtosData)
-
-    /**
-     * Fired whenever the local video track become active or inactive.
-     */
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, didUpdateLocalVideoCaptureSession captureSession: AVCaptureSession?)
-
-    /**
-     * Fired whenever the remote video track become active or inactive.
-     */
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, didUpdateRemoteVideoTrack videoTrack: RTCVideoTrack?)
+    func peerConnectionFailed(pcc: PeerConnectionClient)
 }
 
 // In Swift (at least in Swift v3.3), weak variables aren't thread safe. It
@@ -208,10 +169,12 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDe
  * including audio, video, and some post-connected signaling (hangup, add video)
  */
 class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelDelegate, VideoCaptureSettingsDelegate {
-    private static let PeerConnectionClient.peerConnectionFactory = RTCPeerConnectionFactory()
+    private static let factory = RTCPeerConnectionFactory()
+    private var pendingIceCandidates = Set<RTCIceCandidate>()
+    private var iceCandidatesDebounceTimer: Timer?
     
     let userId: String
-    var peerId: String?
+    var peerId: String
 
     enum Identifiers: String {
         case mediaStream = "ARDAMS",
@@ -258,6 +221,13 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
     // collection to avoid EXC_BAD_ACCESS.  Calls are rare and the proxy
     // is tiny (a single property), so it's better to leak and be safe.
     private static var expiredProxies = [PeerConnectionProxy]()
+    
+    // promises and their resolvers for controlling ordering of async actions
+    let readyToSendIceCandidatesResolver: Resolver<Void>
+    let readyToSendIceCandidatesPromise: Promise<Void>
+    let peerConnectedPromise: Promise<Void>
+    let peerConnectedResolver: Promise<Void>
+
 
     init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String) {
         AssertIsOnMainThread(file: #function)
@@ -265,70 +235,92 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
         delegate = delegate
         userId = userId
         peerId = peerId
-    }
-    
-    public func acceptOffer(sessionDescription: String) {
-        configuration = RTCConfiguration()
-        configuration.iceServers = iceServers
-        configuration.bundlePolicy = .maxBundle
-        configuration.rtcpMuxPolicy = .require
-        
-        let connectionConstraintsDict = ["DtlsSrtpKeyAgreement": "true"]
-        connectionConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: connectionConstraintsDict)
-        
-        audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-        cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
         
         super.init()
         
+        (self.readyToSendIceCandidatesPromise, self.readyToSendIceCandidatesResolver) = Promise<Void>.pending()
         proxy.set(value: self)
+    }
+    
+    public func acceptOffer(sessionDescription: String) {
+        firstly {
+            ConferenceCallService.shared.iceServers
+        }.then { (iceServers: [RTCIceServer]) -> Promise<HardenedRTCSessionDescription> in
+            configuration = RTCConfiguration()
+            configuration.iceServers = iceServers
+            configuration.bundlePolicy = .maxBundle
+            configuration.rtcpMuxPolicy = .require
+            
+            let connectionConstraintsDict = ["DtlsSrtpKeyAgreement": "true"]
+            connectionConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: connectionConstraintsDict)
+            
+            audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            
+            peerConnection = PeerConnectionClient.factory.peerConnection(with: configuration,
+                                                                         constraints: connectionConstraints,
+                                                                         delegate: proxy)
+            createAudioSender()
+            createVideoSender()
+            
+            let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
+            let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            
+            return pcc.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
+        }.then { hardenedSessionDesc in
+            return self.sendCallAcceptOffer(peerId: peerId, negotiatedSessionDescription: hardenedSessionDesc)
+        }.then { () -> Promise<Void> in
+            guard self.call == newCall else {
+                throw CallError.obsoleteCall(description: "sendPromise(message: ) response for obsolete call")
+            }
+            Logger.debug("\(self.logTag) successfully sent callAnswerMessage for: \(newCall.identifiersForLogs)")
+            
+            // There's nothing technically forbidding receiving ICE updates before receiving the CallAnswer, but this
+            // a more intuitive ordering.
+            self.readyToSendIceUpdatesResolver.fulfill(())
+            
+            let timeout: Promise<Void> = after(seconds: connectingTimeoutSeconds).done {
+                // rejecting a promise by throwing is safely a no-op if the promise has already been fulfilled
+                throw CallError.timeout(description: "timed out waiting for peer connect")
+            }
+            
+            // This will be fulfilled (potentially) by the RTCDataChannel delegate method
+            return race(self.peerConnectedPromise, timeout)
+        }.done {
+            Logger.debug("peer \(peerId) connected")
+        }.recover { error in
+            if let callError = error as? CallError {
+                self.handleFailedCall(failedCall: newCall, error: callError)
+            } else {
+                let externalError = CallError.externalError(underlyingError: error)
+                self.handleFailedCall(failedCall: newCall, error: externalError)
+            }
+        }.ensure {
+            Logger.debug("\(self.logTag) ending background task awaiting inbound call connection")
         
-        peerConnection = PeerConnectionClient.peerConnectionFactory.peerConnection(with: configuration,
-                                                                                   constraints: connectionConstraints,
-                                                                                   delegate: proxy)
-        createAudioSender()
-        createVideoSender()
-        
-    /*
-     firstly {
-     ConferenceCallService.shared.iceServers
-     }.then { iceServers -> Promise<HardenedRTCSessionDescription> in
-     let pcc = PeerConnectionClient(delegate: self, userId: senderId, iceServers: iceServers)
-     pcc.peerId = peerId
-     self.peerConnectionClients[peerId] = pcc
-     
-     let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
-     let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-     
-     return pcc.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
-     }.then { hardenedSessionDesc in
-     return self.sendCallAcceptOffer(peerId: peerId, negotiatedSessionDescription: hardenedSessionDesc)
-     }.then {
-     // more
-     }
-     */
-}
+            assert(backgroundTask != nil)
+            backgroundTask = nil
+        }.retainUntilComplete()
+    }
 
 
-private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: HardenedRTCSessionDescription) {
-    let callId = self.callId
-    let members = thread.participantIds
-    let originator = self.originatorId
-    let answer = [ "type" : "answer",
-                   "sdp" : negotiatedSessionDescription.sdp ]
-    
-    let allTheData = [ "answer" : answer,
-                       "callId" : callId,
-                       "members" : members,
-                       "originator" : originator,
-                       "peerId" : peerId,
-                       ] as NSMutableDictionary
-    
-    let message = OutgoingControlMessage(thread: thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
-    return self.messageSender.sendPromise(message: message)
-    
-    
-}
+    private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: HardenedRTCSessionDescription) {
+        let callId = self.callId
+        let members = thread.participantIds
+        let originator = self.originatorId
+        let answer = [ "type" : "answer",
+                       "sdp" : negotiatedSessionDescription.sdp ]
+        
+        let allTheData = [ "answer" : answer,
+                           "callId" : callId,
+                           "members" : members,
+                           "originator" : originator,
+                           "peerId" : peerId,
+                           ] as NSMutableDictionary
+        
+        let message = OutgoingControlMessage(thread: thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
+        return self.messageSender.sendPromise(message: message)
+    }
     
 
     deinit {
@@ -353,9 +345,9 @@ private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: H
             return
         }
 
-        let videoSource = PeerConnectionClient.peerConnectionFactory.videoSource()
+        let videoSource = PeerConnectionClient.factory.videoSource()
 
-        let localVideoTrack = PeerConnectionClient.peerConnectionFactory.videoTrack(with: videoSource, trackId: Identifiers.videoTrack.rawValue)
+        let localVideoTrack = PeerConnectionClient.factory.videoTrack(with: videoSource, trackId: Identifiers.videoTrack.rawValue)
         self.localVideoTrack = localVideoTrack
         // Disable by default until call is connected.
         // FIXME - do we require mic permissions at this point?
@@ -462,9 +454,9 @@ private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: H
             return
         }
 
-        let audioSource = PeerConnectionClient.peerConnectionFactory.audioSource(with: self.audioConstraints)
+        let audioSource = PeerConnectionClient.factory.audioSource(with: self.audioConstraints)
 
-        let audioTrack = PeerConnectionClient.peerConnectionFactory.audioTrack(with: audioSource, trackId: Identifiers.audioTrack.rawValue)
+        let audioTrack = PeerConnectionClient.factory.audioTrack(with: audioSource, trackId: Identifiers.audioTrack.rawValue)
         self.audioTrack = audioTrack
 
         // Disable by default until call is connected.
@@ -995,10 +987,30 @@ private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: H
     internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
         let proxyCopy = self.proxy
         let completion: (RTCIceCandidate) -> Void = { (candidate) in
-            AssertIsOnMainThread(file: #function)
-            guard let strongSelf = proxyCopy.get() else { return }
-            guard let strongDelegate = strongSelf.delegate else { return }
-            strongDelegate.peerConnectionClient(strongSelf, addedLocalIceCandidate: candidate)
+            self.pendingIceCandidates.add(iceCandidate)
+            
+            if self.pendingIceCandidates.count > 24 {
+                if self.iceCandidatesDebounceTimer != nil {
+                    self.iceCandidatesDebounceTimer?.invalidate()
+                    self.iceCandidatesDebounceTimer = nil
+                }
+                self.sendLocalIceCandidates()()
+            } else if self.pendingIceCandidates.count > 0 {
+                if self.iceCandidatesDebounceTimer !=  nil {
+                    self.iceCandidatesDebounceTimer?.invalidate()
+                    self.iceCandidatesDebounceTimer = nil
+                }
+                self.iceCandidatesDebounceTimer = Timer.scheduledTimer(timeInterval: 0.1,
+                                                                       target: self,
+                                                                       selector: #selector(self.sendLocalIceCandidates),
+                                                                       userInfo: nil,
+                                                                       repeats: false)
+            } else {
+                if self.iceCandidatesDebounceTimer !=  nil {
+                    self.iceCandidatesDebounceTimer?.invalidate()
+                }
+                self.iceCandidatesDebounceTimer = nil
+            }
         }
 
         ConferenceCallService.shared.rtcQueue.async {
@@ -1099,6 +1111,71 @@ private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: H
             // Noop.
         }
     }
+    
+
+    @objc private func sendLocalIceCandidates() {
+        AssertIsOnMainThread(file: #function)
+        
+        guard let callData = self.callData else {
+            self.handleFailedCurrentCall(error: CallError.assertionError(description: "ignoring local ice candidate, since there is no current call."))
+            return
+        }
+        let call = callData.call
+        
+        let iceToSendSet = self.pendingIceCandidates.copy()
+        self.pendingIceCandidates.removeAllObjects()
+        
+        // Wait until we've sent the CallOffer before sending any ice updates for the call to ensure
+        // intuitive message ordering for other clients.
+        self.readyToSendIceUpdatesPromise.done {
+            guard call == self.call else {
+                self.handleFailedCurrentCall(error: .obsoleteCall(description: "current call changed since we became ready to send ice updates"))
+                return
+            }
+            
+            guard call.state != .idle else {
+                // This will only be called for the current peerConnectionClient, so
+                // fail the current call.
+                self.handleFailedCurrentCall(error: CallError.assertionError(description: "ignoring local ice candidate, since call is now idle."))
+                return
+            }
+            
+            var payloadCandidates = [NSDictionary]()
+            for candidate in iceToSendSet as! Set<RTCIceCandidate> {
+                
+                let sdp = candidate.sdp
+                let sdpMLineIndex = candidate.sdpMLineIndex
+                let sdpMid = candidate.sdpMid
+                
+                
+                let iceCandidate = [ "candidate" : sdp,
+                                     "sdpMLineIndex" : sdpMLineIndex,
+                                     "sdpMid" : sdpMid!,
+                                     ] as NSDictionary
+                
+                payloadCandidates.append(iceCandidate)
+            }
+            
+            guard payloadCandidates.count > 0 else {
+                Logger.debug("Attempt to build ice candidate message with no ice candidates.")
+                return
+            }
+            
+            let allTheData = [ "callId": call.callId ,
+                               "peerId": call.peerId,
+                               "originator" : TSAccountManager.localUID()!,
+                               "icecandidates" : payloadCandidates
+                ] as NSMutableDictionary
+            
+            let iceControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallICECandidatesKey, moreData: allTheData)
+            Logger.info("\(self.logTag) in \(#function) sending ICE Candidate \(call.identifiersForLogs).")
+            let sendPromise = self.messageSender.sendPromise(message: iceControlMessage)
+            sendPromise.retainUntilComplete()
+            }.catch { error in
+                Logger.error("\(self.logTag) in \(#function) waitUntilReadyToSendIceUpdates failed with error: \(error)")
+            }.retainUntilComplete()
+    }
+
 }
 
 /**

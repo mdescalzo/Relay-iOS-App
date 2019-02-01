@@ -28,7 +28,7 @@ protocol ConferenceCallDelegate: class {
     func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String)
 }
 
-class ConferenceCall: PeerConnectionClientObserver {
+class ConferenceCall: PeerConnectionClientDelegate {
     let TAG = "[ConferenceCall]"
     
     var joinedDate: NSDate?
@@ -38,7 +38,7 @@ class ConferenceCall: PeerConnectionClientObserver {
     let callId: String;
     let originatorId: String;
     
-    var observers = [Weak<ConferenceCallObserver>]()
+    var observers = [Weak<ConferenceCallDelegate>]()
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
 
     var callRecord: TSCall? {
@@ -99,10 +99,13 @@ class ConferenceCall: PeerConnectionClientObserver {
         self.peerConnectionClients[peerId] = pcc
         pcc.acceptOffer(sessionDescription)
         
-        // and also kick off peer connections other parties in the thread (if not already underway)
+        // and also kick off peer connections to other parties in the thread (if not already underway)
+        self.inviteMissingParticipants()
+    }
+    
+    func inviteMissingParticipants() {
         for userId in self.thread.participantIds {
-            if (userId == senderId || userId == TSAccountManager.localUID()!
-                || self.peerConnectionClients.contains { $0.userId == userId }) {
+            if (userId == TSAccountManager.localUID()! || self.peerConnectionClients.contains { $0.userId == userId }) {
                 continue;
             }
             let newPeerId = NSUUID().uuidString.lowercased()
@@ -111,7 +114,6 @@ class ConferenceCall: PeerConnectionClientObserver {
             pcc.sendOffer()
         }
     }
-        
 
     // MARK: - Class Helpers
     private func updateCallRecordType() {
@@ -142,32 +144,13 @@ class ConferenceCall: PeerConnectionClientObserver {
     }
     
     // MARK: - PeerConnectionClientDelegate Implementation
-    func peerConnectionClientIceConnected(_ peerconnectionClient: PeerConnectionClient) {
-        <#code#>
+    func peerConnectionFailed(pcc: PeerConnectionClient) {
+        self.peerConnectionClients.removeValue(forKey: pcc.peerId)
+        pcc.uninit()
+
+        // depending on policy maybe give up on the entire call, or try connecting again to all the missing participants like this:
+        self.inviteMissingParticipants();
+        
+        // tell ui delegate that stuff happened
     }
-    
-    func peerConnectionClientIceFailed(_ peerconnectionClient: PeerConnectionClient) {
-        <#code#>
-    }
-    
-    func peerConnectionClientIceDisconnected(_ peerconnectionClient: PeerConnectionClient) {
-        <#code#>
-    }
-    
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, addedLocalIceCandidate iceCandidate: RTCIceCandidate) {
-        <#code#>
-    }
-    
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, received dataChannelMessage: OWSWebRTCProtosData) {
-        <#code#>
-    }
-    
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, didUpdateLocalVideoCaptureSession captureSession: AVCaptureSession?) {
-        <#code#>
-    }
-    
-    func peerConnectionClient(_ peerconnectionClient: PeerConnectionClient, didUpdateRemoteVideoTrack videoTrack: RTCVideoTrack?) {
-        <#code#>
-    }
-    
 }

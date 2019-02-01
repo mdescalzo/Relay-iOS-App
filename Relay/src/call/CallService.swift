@@ -735,7 +735,6 @@ private class RelayCallData: NSObject {
             let answerControlMessage = OutgoingControlMessage(thread: thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
             return self.messageSender.sendPromise(message: answerControlMessage)
 
-          // GEP JUST FINISHED THIS
             }.then { () -> Promise<Void> in
             guard self.call == newCall else {
                 throw CallError.obsoleteCall(description: "sendPromise(message: ) response for obsolete call")
@@ -753,6 +752,7 @@ private class RelayCallData: NSObject {
 
             // This will be fulfilled (potentially) by the RTCDataChannel delegate method
             return race(callData.callConnectedPromise, timeout)
+          // GEP JUST FINISHED THIS
         }.done {
             Logger.info(self.call == newCall
                 ? "\(self.logTag) incoming call connected: \(newCall.identifiersForLogs)."
