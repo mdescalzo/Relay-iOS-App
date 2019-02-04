@@ -5,19 +5,19 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class OWSRecipientIdentity;
-@class RelayCall;
+@class ConferenceCall;
 
 @protocol OWSCallNotificationsAdaptee <NSObject>
 
-- (void)presentIncomingCall:(RelayCall *)call callerName:(NSString *)callerName;
+- (void)presentIncomingCall:(ConferenceCall *)call callerName:(NSString *)callerName;
 
-- (void)presentMissedCall:(RelayCall *)call callerName:(NSString *)callerName;
+- (void)presentMissedCall:(ConferenceCall *)call callerName:(NSString *)callerName;
 
-- (void)presentMissedCallBecauseOfNewIdentity:(RelayCall *)call
+- (void)presentMissedCallBecauseOfNewIdentity:(ConferenceCall *)call
                                    callerName:(NSString *)callerName
     NS_SWIFT_NAME(presentMissedCallBecauseOfNewIdentity(call:callerName:));
 
-- (void)presentMissedCallBecauseOfNoLongerVerifiedIdentity:(RelayCall *)call
+- (void)presentMissedCallBecauseOfNoLongerVerifiedIdentity:(ConferenceCall *)call
                                                 callerName:(NSString *)callerName
     NS_SWIFT_NAME(presentMissedCallBecauseOfNoLongerVerifiedIdentity(call:callerName:));
 

@@ -232,17 +232,17 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
     init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String) {
         AssertIsOnMainThread(file: #function)
 
-        delegate = delegate
-        userId = userId
-        peerId = peerId
+        self.delegate = delegate
+        self.userId = userId
+        self.peerId = peerId
         
         super.init()
         
         (self.readyToSendIceCandidatesPromise, self.readyToSendIceCandidatesResolver) = Promise<Void>.pending()
-        proxy.set(value: self)
+        self.proxy.set(value: self)
     }
     
-    public func acceptOffer(sessionDescription: String) {
+    public func handleOffer(sessionDescription: String) {
         firstly {
             ConferenceCallService.shared.iceServers
         }.then { (iceServers: [RTCIceServer]) -> Promise<HardenedRTCSessionDescription> in
@@ -322,6 +322,9 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
         return self.messageSender.sendPromise(message: message)
     }
     
+    func sendOffer() {
+        // TODO: do the offer dance
+    }
 
     deinit {
         // TODO: We can demote this log level to debug once we're confident that

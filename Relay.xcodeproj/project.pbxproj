@@ -828,6 +828,8 @@
 		DBEB8B9321FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
 		DBEB8B9521FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */; };
 		DBEB8B9621FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */; };
+		DBF235BA2208F6FC00E5EC3E /* CallAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */; };
+		DBF235BB2208F6FC00E5EC3E /* CallAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */; };
 		E1368CBE18A1C36B00109378 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EB5ABC1884C002007CBB57 /* MessageUI.framework */; };
 		E6431F0E7EAC0CB73D75A38B /* Pods_Relay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE34D2C7844709C73962401 /* Pods_Relay.framework */; };
 		EF764C351DB67CC5000D9A87 /* UIViewController+Permissions.m in Sources */ = {isa = PBXBuildFile; fileRef = EF764C341DB67CC5000D9A87 /* UIViewController+Permissions.m */; };
@@ -1626,6 +1628,7 @@
 		DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Forsta-values.plist"; sourceTree = "<group>"; };
 		DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallService.swift; sourceTree = "<group>"; };
 		DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCall.swift; sourceTree = "<group>"; };
+		DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallAudioService.swift; sourceTree = "<group>"; };
 		DD2F0E9696373921805C505E /* Pods-RelayShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayShareExtension/Pods-RelayShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		E1A0AD8B16E13FDD0071E604 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		EDECD29AA2892699CD63E5D8 /* Pods_Common_RelayMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_RelayMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3008,6 +3011,7 @@
 			isa = PBXGroup;
 			children = (
 				DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */,
+				DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */,
 				DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */,
 				DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */,
 			);
@@ -4260,6 +4264,7 @@
 				7D2CD586214C3C9C004E957A /* NotificationSettingsOptionsViewController.m in Sources */,
 				DBEB8B9621FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */,
 				7D2CD587214C3C9C004E957A /* DebugUISessionState.m in Sources */,
+				DBF235BB2208F6FC00E5EC3E /* CallAudioService.swift in Sources */,
 				7D2CD588214C3C9C004E957A /* main.m in Sources */,
 				7D2CD589214C3C9C004E957A /* HttpResponse.m in Sources */,
 				7D2CD58A214C3C9C004E957A /* ExperienceUpgradesPageViewController.swift in Sources */,
@@ -4467,6 +4472,7 @@
 				340FC8A9204DAC8D007AEB0F /* NotificationSettingsOptionsViewController.m in Sources */,
 				DBEB8B9521FF7C5E005D4FE2 /* ConferenceCall.swift in Sources */,
 				452037D11EE84975004E4CDF /* DebugUISessionState.m in Sources */,
+				DBF235BA2208F6FC00E5EC3E /* CallAudioService.swift in Sources */,
 				D221A09A169C9E5E00537ABF /* main.m in Sources */,
 				7DD5A733211B7CA500965478 /* HttpResponse.m in Sources */,
 				34B3F87B1E8DF1700035BE1A /* ExperienceUpgradesPageViewController.swift in Sources */,

@@ -12,6 +12,15 @@ import RelayServiceKit
 import RelayMessaging
 import UIKit
 
+public enum CallError: Error {
+    case providerReset
+    case assertionError(description: String)
+    case disconnected
+    case externalError(underlyingError: Error)
+    case timeout(description: String)
+    case obsoleteCall(description: String)
+}
+
 enum ConferenceCallDirection {
     case outgoing, incoming
 }
@@ -38,7 +47,7 @@ class ConferenceCall: PeerConnectionClientDelegate {
     let callId: String;
     let originatorId: String;
     
-    var observers = [Weak<ConferenceCallDelegate>]()
+    var delegates = [Weak<ConferenceCallDelegate>]()
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
 
     var callRecord: TSCall? {
@@ -65,8 +74,8 @@ class ConferenceCall: PeerConnectionClientDelegate {
             
             updateCallRecordType()
             
-            for observer in observers {
-                observer.value?.stateDidChange(call: self, state: state)
+            for delegate in delegates {
+                delegate.value?.stateDidChange(call: self, state: state)
             }
         }
     }
@@ -82,22 +91,24 @@ class ConferenceCall: PeerConnectionClientDelegate {
     
     public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
         // skip it if we've already received this one
-        if let pcc = self.peerConnectionClients[peerId] {
-            Logger.debug("\(TAG) received ANOTHER offer for an existing peerId!: \(peerId)")
+        if self.peerConnectionClients[peerId] != nil {
+            Logger.debug("\(TAG) ignoring redundant offer for an existing peerId!: \(peerId)")
             return
         }
         
         // throw away any existing connections from this user
-        for pId in self.peerConnectionClients.filter(where: { $0.userId == senderId }).keys() {
-            let pcc = self.peerConnectionClients[pId]
+        for pId in (self.peerConnectionClients.filter { $0.value.userId == senderId }).keys {
+            guard let pcc = self.peerConnectionClients[pId] else {
+                continue;
+            }
             self.peerConnectionClients.removeValue(forKey: pId)
-            pcc.uninit()
+            pcc.terminate()
         }
 
         // now get this new peer connection underway
-        let pcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId)
-        self.peerConnectionClients[peerId] = pcc
-        pcc.acceptOffer(sessionDescription)
+        let newPcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId)
+        self.peerConnectionClients[peerId] = newPcc
+        newPcc.handleOffer(sessionDescription: sessionDescription)
         
         // and also kick off peer connections to other parties in the thread (if not already underway)
         self.inviteMissingParticipants()
@@ -105,13 +116,32 @@ class ConferenceCall: PeerConnectionClientDelegate {
     
     func inviteMissingParticipants() {
         for userId in self.thread.participantIds {
-            if (userId == TSAccountManager.localUID()! || self.peerConnectionClients.contains { $0.userId == userId }) {
+            if (userId == TSAccountManager.localUID()! || self.peerConnectionClients.contains { $0.value.userId == userId }) {
                 continue;
             }
             let newPeerId = NSUUID().uuidString.lowercased()
             let pcc = PeerConnectionClient(delegate: self, userId: userId, peerId: newPeerId)
             self.peerConnectionClients[newPeerId] = pcc
             pcc.sendOffer()
+        }
+    }
+    
+    func addRemoteIceCandidates(peerId: String, iceCandidates: [Any]) {
+        if let pcc = this.peerConnectionClients[peerId] {
+            Logger.debug("\(TAG) ignoring ice candidates for nonexistent peer \(peerId)")
+            return
+        } else {
+            for candidate in iceCandidates {
+                if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
+                    if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
+                        let sdpMid: String = candidateDictiontary["sdpMid"] as? String,
+                        let sdp: String = candidateDictiontary["candidate"] as? String {
+                        pcc.addRemoteIceCandidate(RTCIceCandidate(sdp: sdp, sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid))
+                    } else {
+                        Logger.debug("\(TAG) dropping bad ice candidate for peer \(peerId)")
+                    }
+                }
+            }
         }
     }
 
@@ -131,15 +161,15 @@ class ConferenceCall: PeerConnectionClientDelegate {
         }
     }
     
-    func addDelegate(observer: ConferenceCallDelegate) {
+    func addDelegate(delegate: ConferenceCallDelegate) {
         AssertIsOnMainThread(file: #function)
-        observers.append(Weak(value: observer))
+        delegates.append(Weak(value: delegate))
     }
     
-    func removeDelegate(_ observer: ConferenceCallDelegate) {
+    func removeDelegate(_ delegate: ConferenceCallDelegate) {
         AssertIsOnMainThread(file: #function)
-        while let index = observers.index(where: { $0.value === observer }) {
-            observers.remove(at: index)
+        while let index = delegates.index(where: { $0.value === delegate }) {
+            delegates.remove(at: index)
         }
     }
     

@@ -30,21 +30,21 @@ public class CallNotificationsAdapter: NSObject {
         SwiftSingletons.register(self)
     }
 
-    func presentIncomingCall(_ call: RelayCall, callerName: String) {
+    func presentIncomingCall(_ call: ConferenceCall, callerName: String) {
         Logger.debug("\(TAG) in \(#function)")
         adaptee.presentIncomingCall(call, callerName: callerName)
     }
 
-    func presentMissedCall(_ call: RelayCall, callerName: String) {
+    func presentMissedCall(_ call: ConferenceCall, callerName: String) {
         Logger.debug("\(TAG) in \(#function)")
         adaptee.presentMissedCall(call, callerName: callerName)
     }
 
-    public func presentMissedCallBecauseOfNoLongerVerifiedIdentity(call: RelayCall, callerName: String) {
+    func presentMissedCallBecauseOfNoLongerVerifiedIdentity(call: ConferenceCall, callerName: String) {
         adaptee.presentMissedCallBecauseOfNoLongerVerifiedIdentity(call: call, callerName: callerName)
     }
 
-    public func presentMissedCallBecauseOfNewIdentity(call: RelayCall, callerName: String) {
+    func presentMissedCallBecauseOfNewIdentity(call: ConferenceCall, callerName: String) {
        adaptee.presentMissedCallBecauseOfNewIdentity(call: call, callerName: callerName)
     }
 

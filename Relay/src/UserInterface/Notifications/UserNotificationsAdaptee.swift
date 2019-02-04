@@ -62,6 +62,18 @@ struct AppNotifications {
 
 @available(iOS 10.0, *)
 class UserNotificationsAdaptee: NSObject, OWSCallNotificationsAdaptee, UNUserNotificationCenterDelegate {
+    func presentIncomingCall(_ call: ConferenceCall, callerName: String) {
+    }
+
+    func presentMissedCall(_ call: ConferenceCall, callerName: String) {
+    }
+
+    func presentMissedCallBecauseOfNewIdentity(call: ConferenceCall, callerName: String) {
+    }
+
+    func presentMissedCallBecauseOfNoLongerVerifiedIdentity(call: ConferenceCall, callerName: String) {
+    }
+
     let TAG = "[UserNotificationsAdaptee]"
 
     private let center: UNUserNotificationCenter
@@ -100,13 +112,14 @@ class UserNotificationsAdaptee: NSObject, OWSCallNotificationsAdaptee, UNUserNot
 
     // MARK: - OWSCallNotificationsAdaptee
 
-    public func presentIncomingCall(_ call: RelayCall, callerName: String) {
+    /*
+    public func presentIncomingCall(_ call: ConferenceCall, callerName: String) {
         Logger.debug("\(TAG) \(#function) is no-op, because it's handled with callkit.")
         // TODO since CallKit doesn't currently work on the simulator,
         // we could implement UNNotifications for simulator testing, or if people have opted out of callkit.
     }
 
-    public func presentMissedCall(_ call: RelayCall, callerName: String) {
+    public func presentMissedCall(_ call: ConferenceCall, callerName: String) {
         Logger.debug("\(TAG) \(#function)")
 
         let content = UNMutableNotificationContent()
@@ -132,7 +145,7 @@ class UserNotificationsAdaptee: NSObject, OWSCallNotificationsAdaptee, UNUserNot
         center.add(request)
     }
 
-    public func presentMissedCallBecauseOfNoLongerVerifiedIdentity(call: RelayCall, callerName: String) {
+    public func presentMissedCallBecauseOfNoLongerVerifiedIdentity(call: ConferenceCall, callerName: String) {
         Logger.debug("\(TAG) \(#function)")
 
         let content = UNMutableNotificationContent()
@@ -158,7 +171,7 @@ class UserNotificationsAdaptee: NSObject, OWSCallNotificationsAdaptee, UNUserNot
         center.add(request)
     }
 
-    public func presentMissedCallBecauseOfNewIdentity(call: RelayCall, callerName: String) {
+    public func presentMissedCallBecauseOfNewIdentity(call: ConferenceCall, callerName: String) {
         Logger.debug("\(TAG) \(#function)")
 
         let content = UNMutableNotificationContent()
@@ -183,4 +196,5 @@ class UserNotificationsAdaptee: NSObject, OWSCallNotificationsAdaptee, UNUserNot
 
         center.add(request)
     }
+    */
 }

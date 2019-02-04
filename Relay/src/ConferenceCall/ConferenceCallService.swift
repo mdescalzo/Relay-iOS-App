@@ -10,13 +10,17 @@ import Foundation
 import RelayServiceKit
 import PromiseKit
 
-class ConferenceCallService: NSObject, FLCallMessageHandler {
+protocol CallServiceObserver: class {
+}
+
+public class ConferenceCallService: NSObject, FLCallMessageHandler {
     static let shared = ConferenceCallService()
     let rtcQueue = DispatchQueue(label: "WebRTCDanceCard")
     var iceServers: Promise<[RTCIceServer]>
+    var observers = [Weak<CallServiceObserver>]()
 
     override init() {
-        iceServers = getIceServers()
+        iceServers = ConferenceCallService.getIceServers()
         super.init()
     }
     
@@ -40,8 +44,11 @@ class ConferenceCallService: NSObject, FLCallMessageHandler {
     }
     
     public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {
-        // ensure thread/call/peer are all good and drop if not
-        // update connection stuff for this peer
+        if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
+            Logger.debug("Ignoring ice candidates from/for an unknown call")
+            return
+        }
+        conferenceCall?.addRemoteIceCandidates(peerId: peerId, iceCandidates: iceCandidates)
     }
     
     public func receivedLeave(with thread: TSThread, callId: String, peerId: String) {
@@ -50,13 +57,13 @@ class ConferenceCallService: NSObject, FLCallMessageHandler {
         // if this is the only peer other than us, then shut down the whole call
     }
     
-    private func getIceServers() -> Promise<[RTCIceServer]> {
+    private static func getIceServers() -> Promise<[RTCIceServer]> {
         AssertIsOnMainThread(file: #function)
         
         return firstly {
             SignalApp.shared().accountManager.getTurnServerInfo()
             }.map { turnServerInfo -> [RTCIceServer] in
-                Logger.debug("\(self.logTag) got turn server urls: \(turnServerInfo.urls)")
+                Logger.debug("got turn server urls: \(turnServerInfo.urls)")
                 
                 return turnServerInfo.urls.map { url in
                         if url.hasPrefix("turn") {
@@ -69,10 +76,36 @@ class ConferenceCallService: NSObject, FLCallMessageHandler {
                         }
                     } + [RTCIceServer(urlStrings: [fallbackIceServerUrl])]
             }.recover { (error: Error) -> Guarantee<[RTCIceServer]> in
-                Logger.error("\(self.logTag) fetching ICE servers failed with error: \(error)")
-                Logger.warn("\(self.logTag) using fallback ICE Server")
+                Logger.error("fetching ICE servers failed with error: \(error)")
+                Logger.warn("using fallback ICE Server")
                 
                 return Guarantee.value([RTCIceServer(urlStrings: [fallbackIceServerUrl])])
         }
     }
+
+    // MARK: - Observers
+    
+    // The observer-related methods should be invoked on the main thread.
+    func addObserverAndSyncState(observer: CallServiceObserver) {
+        AssertIsOnMainThread(file: #function)
+        
+        observers.append(Weak(value: observer))
+    }
+    
+    // The observer-related methods should be invoked on the main thread.
+    func removeObserver(_ observer: CallServiceObserver) {
+        AssertIsOnMainThread(file: #function)
+        
+        while let index = observers.index(where: { $0.value === observer }) {
+            observers.remove(at: index)
+        }
+    }
+    
+    // The observer-related methods should be invoked on the main thread.
+    func removeAllObservers() {
+        AssertIsOnMainThread(file: #function)
+        
+        observers = []
+    }
+
 }

@@ -6,19 +6,23 @@ import RelayServiceKit
 
 @objc
 public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
-    public func receivedAcceptOffer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
+    public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedIceCandidates(withThreadId threadId: String, callId: String, peerId: String, iceCandidates: [Any]) {
+    public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedLeave(withThreadId threadId: String, callId: String, peerId: String) {
+    public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedAnswer(withThreadId threadId: String, callId: String, peerId: String, sessionDescription: String) {
+    public func receivedLeave(with thread: TSThread, callId: String, peerId: String) {
+        owsFailDebug("\(self.logTag) in \(#function).")
+    }
+    
+    public func receivedAnswer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
@@ -26,15 +30,11 @@ public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedIceUpdate(withThreadId threadId: String, sessionDescription sdp: String, sdpMid: String, sdpMLineIndex: Int32) {
+    public func receivedIceUpdate(with thread: TSThread, sessionDescription sdp: String, sdpMid: String, sdpMLineIndex: Int32) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedOffer(withThreadId threadId: String, callId: String, peerId originatorId: String, originatorId peerId: String, sessionDescription: String) {
-        owsFailDebug("\(self.logTag) in \(#function).")
-    }
-    
-    public func receivedOffer(withThreadId threadId: String, peerId: String, sessionDescription: String) {
+    public func receivedOffer(with thread: TSThread, peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
 

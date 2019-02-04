@@ -99,7 +99,7 @@ class ControlMessageManager : NSObject
             }
 
             guard let iceCandidates: [NSDictionary] = dataBlob.object(forKey: "icecandidates") as? [NSDictionary] else {
-                Logger.debug("Received callICECandidates message with no peerId.")
+                Logger.debug("Received callICECandidates message with no candidates.")
                 return
             }
             
@@ -217,12 +217,7 @@ class ControlMessageManager : NSObject
             Logger.info("Received callLeave message with no data object.")
             return
         }
-        
-        guard let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as? String else {
-            Logger.info("Received callLeave message with no threadId.")
-            return
-        }
-        
+
         guard let callId = dataBlob.object(forKey: "callId") as? String else {
             Logger.info("Received callLeave message without callId.")
             return
@@ -234,7 +229,7 @@ class ControlMessageManager : NSObject
         }
         
         DispatchQueue.main.async {
-            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(withThreadId: threadId, callId: callId, peerId: peerId)
+            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread, callId: callId, peerId: peerId)
         }
     }
     
