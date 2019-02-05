@@ -1392,11 +1392,13 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
     // Perform the first step.
     if (self.presentedViewController) {
+        /*
         if ([self.presentedViewController isKindOfClass:[CallViewController class]]) {
             DDLogError(@"errorCouldNotPresentViewDueToCall");
             return;
         }
         [self.presentedViewController dismissViewControllerAnimated:animateDismissal completion:dismissNavigationBlock];
+         */
     } else {
         dismissNavigationBlock();
     }

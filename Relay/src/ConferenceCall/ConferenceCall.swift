@@ -19,6 +19,7 @@ public enum CallError: Error {
     case externalError(underlyingError: Error)
     case timeout(description: String)
     case obsoleteCall(description: String)
+    case other(description: String)
 }
 
 enum ConferenceCallDirection {
@@ -37,7 +38,7 @@ protocol ConferenceCallDelegate: class {
     func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String)
 }
 
-class ConferenceCall: PeerConnectionClientDelegate {
+@objc class ConferenceCall: NSObject, PeerConnectionClientDelegate {
     let TAG = "[ConferenceCall]"
     
     var joinedDate: NSDate?
@@ -86,7 +87,7 @@ class ConferenceCall: PeerConnectionClientDelegate {
         self.thread = thread
         self.callId = callId
         self.originatorId = originatorId
-        if (direction == .outgoing) { self.state = .joined }
+        self.state = (direction == .outgoing) ? .joined : .ringing
     }
     
     public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
@@ -127,19 +128,18 @@ class ConferenceCall: PeerConnectionClientDelegate {
     }
     
     func addRemoteIceCandidates(peerId: String, iceCandidates: [Any]) {
-        if let pcc = this.peerConnectionClients[peerId] {
+        guard let pcc = self.peerConnectionClients[peerId] else {
             Logger.debug("\(TAG) ignoring ice candidates for nonexistent peer \(peerId)")
             return
-        } else {
-            for candidate in iceCandidates {
-                if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
-                    if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
-                        let sdpMid: String = candidateDictiontary["sdpMid"] as? String,
-                        let sdp: String = candidateDictiontary["candidate"] as? String {
-                        pcc.addRemoteIceCandidate(RTCIceCandidate(sdp: sdp, sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid))
-                    } else {
-                        Logger.debug("\(TAG) dropping bad ice candidate for peer \(peerId)")
-                    }
+        }
+        for candidate in iceCandidates {
+            if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
+                if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
+                    let sdpMid: String = candidateDictiontary["sdpMid"] as? String,
+                    let sdp: String = candidateDictiontary["candidate"] as? String {
+                    pcc.addRemoteIceCandidate(RTCIceCandidate(sdp: sdp, sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid))
+                } else {
+                    Logger.debug("\(TAG) dropping bad ice candidate for peer \(peerId)")
                 }
             }
         }
@@ -174,13 +174,37 @@ class ConferenceCall: PeerConnectionClientDelegate {
     }
     
     // MARK: - PeerConnectionClientDelegate Implementation
-    func peerConnectionFailed(pcc: PeerConnectionClient) {
-        self.peerConnectionClients.removeValue(forKey: pcc.peerId)
-        pcc.uninit()
+    func owningCall() -> ConferenceCall {
+        return self;
+    }
+    
+    func peerConnectionFailed(strongPcc: PeerConnectionClient) {
+        self.peerConnectionClients.removeValue(forKey: strongPcc.peerId)
+        strongPcc.terminate()
 
         // depending on policy maybe give up on the entire call, or try connecting again to all the missing participants like this:
         self.inviteMissingParticipants();
         
         // tell ui delegate that stuff happened
+    }
+    
+    func iceConnected(strongPcc: PeerConnectionClient) {
+        Logger.debug("ice connected for peer \(strongPcc.peerId)")
+    }
+    
+    func iceFailed(strongPcc: PeerConnectionClient) {
+        Logger.debug("ice failed for peer \(strongPcc.peerId)")
+    }
+    
+    func iceDisconnected(strongPcc: PeerConnectionClient) {
+        Logger.debug("ice disconnected for peer \(strongPcc.peerId)")
+    }
+    
+    func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack) {
+        Logger.debug("updated remote video track for peer \(strongPcc.peerId)")
+    }
+    
+    func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?) {
+        Logger.debug("updated local video capture for peer \(strongPcc.peerId)")
     }
 }

@@ -93,13 +93,12 @@ protocol CallAudioServiceDelegate: class {
 
 @objc class CallAudioService: NSObject, ConferenceCallDelegate {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
-        <#code#>
+        // stub
     }
     
     func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String) {
-        <#code#>
+        // stub
     }
-    
 
     private var vibrateTimer: Timer?
     private let audioPlayer = AVAudioPlayer()
@@ -155,7 +154,7 @@ protocol CallAudioServiceDelegate: class {
 
     private func stopPlayingAnySounds() {
         currentPlayer?.stop()
-        stopAnyRingingVibration()
+        // stopAnyRingingVibration()
     }
 
     private func play(sound: OWSSound) {

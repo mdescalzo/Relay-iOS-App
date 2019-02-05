@@ -34,88 +34,37 @@ final class CallKitCallManager: NSObject {
 
     // MARK: Actions
 
-    func startCall(_ call: RelayCall) {
-        
-        let handle = CXHandle(type: .generic, value: call.thread.displayName())
-        
-//        var handle: CXHandle
-//
-//        if showNamesOnCallScreen {
-//            handle = CXHandle(type: .phoneNumber, value: call.callId)
-//        } else {
-//            let callKitId = CallKitCallManager.kAnonymousCallHandlePrefix + call.localId.uuidString
-//            handle = CXHandle(type: .generic, value: callKitId)
-//            OWSPrimaryStorage.shared().setPhoneNumber(call.callId, forCallKitId: callKitId)
-//        }
-
-        let startCallAction = CXStartCallAction(call: call.localId, handle: handle)
-
-        startCallAction.isVideo = call.hasLocalVideo
-
-        let transaction = CXTransaction()
-        transaction.addAction(startCallAction)
-
-        requestTransaction(transaction)
+    func startCall(_ call: ConferenceCall) {
     }
 
-    func localHangup(call: RelayCall) {
-        let endCallAction = CXEndCallAction(call: call.localId)
-        let transaction = CXTransaction()
-        transaction.addAction(endCallAction)
-
-        requestTransaction(transaction)
+    func localHangup(call: ConferenceCall) {
     }
 
-    func setHeld(call: RelayCall, onHold: Bool) {
-        let setHeldCallAction = CXSetHeldCallAction(call: call.localId, onHold: onHold)
-        let transaction = CXTransaction()
-        transaction.addAction(setHeldCallAction)
-
-        requestTransaction(transaction)
+    func setHeld(call: ConferenceCall, onHold: Bool) {
     }
 
-    func setIsMuted(call: RelayCall, isMuted: Bool) {
-        let muteCallAction = CXSetMutedCallAction(call: call.localId, muted: isMuted)
-        let transaction = CXTransaction()
-        transaction.addAction(muteCallAction)
-
-        requestTransaction(transaction)
+    func setIsMuted(call: ConferenceCall, isMuted: Bool) {
     }
 
-    func answer(call: RelayCall) {
-        let answerCallAction = CXAnswerCallAction(call: call.localId)
-        let transaction = CXTransaction()
-        transaction.addAction(answerCallAction)
-
-        requestTransaction(transaction)
+    func answer(call: ConferenceCall) {
     }
 
     private func requestTransaction(_ transaction: CXTransaction) {
-        callController.request(transaction) { error in
-            if let error = error {
-                Logger.error("\(self.logTag) Error requesting transaction: \(error)")
-            } else {
-                Logger.debug("\(self.logTag) Requested transaction successfully")
-            }
-        }
     }
 
     // MARK: Call Management
 
-    private(set) var calls = [RelayCall]()
+    private(set) var calls = [ConferenceCall]()
 
-    func callWithLocalId(_ localId: UUID) -> RelayCall? {
-        guard let index = calls.index(where: { $0.localId == localId }) else {
-            return nil
-        }
-        return calls[index]
+    func callWithLocalId(_ localId: UUID) -> ConferenceCall? {
+        return nil
     }
 
-    func addCall(_ call: RelayCall) {
+    func addCall(_ call: ConferenceCall) {
         calls.append(call)
     }
 
-    func removeCall(_ call: RelayCall) {
+    func removeCall(_ call: ConferenceCall) {
         calls.removeFirst(where: { $0 === call })
     }
 

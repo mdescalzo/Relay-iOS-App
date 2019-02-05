@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SignalApp ()
 
-@property (nonatomic) CallService *callService;
+@property (nonatomic) ConferenceCallService *conferenceCallService;
 @property (nonatomic) OutboundCallInitiator *outboundCallInitiator;
 @property (nonatomic) OWSMessageFetcherJob *messageFetcherJob;
 @property (nonatomic) NotificationsManager *notificationsManager;
@@ -61,33 +61,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Singletons
 
-- (CallService *)callService
+- (ConferenceCallService *)conferenceCallService
 {
     @synchronized(self)
     {
-        if (!_callService) {
-            OWSAssert(self.accountManager);
-            OWSAssert(Environment.current.contactsManager);
-            OWSAssert(Environment.current.messageSender);
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeCallLoggingPreference:) name:OWSPreferencesCallLoggingDidChangeNotification object:nil];
-            
-            _callService = [[CallService alloc] initWithAccountManager:self.accountManager
-                                                       contactsManager:Environment.current.contactsManager
-                                                         messageSender:Environment.current.messageSender
-                                                  notificationsAdapter:[OWSCallNotificationsAdapter new]];
+        if (!_conferenceCallService) {
+            _conferenceCallService = [ConferenceCallService new];
         }
     }
 
-    return _callService;
+    return _conferenceCallService;
 }
 
 - (CallUIAdapter *)callUIAdapter
 {
-    return self.callService.callUIAdapter;
+    return nil;
 }
 
 - (OutboundCallInitiator *)outboundCallInitiator
 {
+    /*
     @synchronized(self)
     {
         if (!_outboundCallInitiator) {
@@ -100,6 +93,8 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     return _outboundCallInitiator;
+    */
+    return nil;
 }
 
 - (OWSMessageFetcherJob *)messageFetcherJob
@@ -230,9 +225,8 @@ NS_ASSUME_NONNULL_BEGIN
     });
 }
 
-- (void)didChangeCallLoggingPreference:(NSNotification *)notitication
+- (void)didChangeCallLoggingPreference:(NSNotification *)notification
 {
-    [self.callService createCallUIAdapter];
 }
 
 #pragma mark - Methods

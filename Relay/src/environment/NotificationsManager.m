@@ -48,6 +48,7 @@
  */
 - (void)presentIncomingCall:(RelayCall *)call callerName:(NSString *)callerName
 {
+    /*
     DDLogDebug(@"%@ incoming call from: %@", self.logTag, call.callId);
 
     UILocalNotification *notification = [UILocalNotification new];
@@ -73,6 +74,7 @@
     notification.alertBody = [NSString stringWithFormat:@"☎️ %@", alertMessage];
 
     [self presentNotification:notification identifier:localCallId];
+     */
 }
 
 /**
@@ -80,6 +82,7 @@
  */
 - (void)presentMissedCall:(RelayCall *)call callerName:(NSString *)callerName
 {
+    /*
     TSThread *thread = [TSThread getOrCreateThreadWithId:call.callId];
     OWSAssert(thread != nil);
 
@@ -113,11 +116,13 @@
     notification.alertBody = [NSString stringWithFormat:@"☎️ %@", alertMessage];
 
     [self presentNotification:notification identifier:localCallId];
+     */
 }
 
 
 - (void)presentMissedCallBecauseOfNewIdentity:(RelayCall *)call callerName:(NSString *)callerName
 {
+    /*
     TSThread *thread = [TSThread getOrCreateThreadWithId:call.callId];
     OWSAssert(thread != nil);
 
@@ -151,10 +156,12 @@
     notification.alertBody = [NSString stringWithFormat:@"☎️ %@", alertMessage];
 
     [self presentNotification:notification identifier:localCallId];
+     */
 }
 
 - (void)presentMissedCallBecauseOfNoLongerVerifiedIdentity:(RelayCall *)call callerName:(NSString *)callerName
 {
+    /*
     TSThread *thread = [TSThread getOrCreateThreadWithId:call.callId];
     OWSAssert(thread != nil);
 
@@ -188,6 +195,7 @@
     notification.alertBody = [NSString stringWithFormat:@"☎️ %@", alertMessage];
 
     [self presentNotification:notification identifier:localCallId];
+     */
 }
 
 #pragma mark - Signal Messages
