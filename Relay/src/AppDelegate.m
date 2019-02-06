@@ -125,9 +125,8 @@ static NSTimeInterval launchStartedAt;
     // This block will be cleared in storageIsReady.
     [DeviceSleepManager.sharedInstance addBlockWithBlockObject:self];
 
-    /*
     [AppSetup setupEnvironmentWithCallMessageHandlerBlock:^{
-        return SignalApp.sharedApp.callMessageHandler;
+        return ConferenceCallService.shared; // SignalApp.sharedApp.callMessageHandler;
     }
         notificationsProtocolBlock:^{
             return SignalApp.sharedApp.notificationsManager;
@@ -137,7 +136,6 @@ static NSTimeInterval launchStartedAt;
 
             [self versionMigrationsDidComplete];
         }];
-     */
 
     [UIUtil setupSignalAppearence];
 
@@ -1070,7 +1068,7 @@ static NSTimeInterval launchStartedAt;
     DDLogInfo(@"%@ checkIfAppIsReady", self.logTag);
 
     // TODO: Once "app ready" logic is moved into AppSetup, move this line there.
-    [[OWSProfileManager sharedManager] ensureLocalProfileCached];
+    // [[OWSProfileManager sharedManager] ensureLocalProfileCached];
     
     // Note that this does much more than set a flag;
     // it will also run all deferred blocks.
@@ -1159,7 +1157,7 @@ static NSTimeInterval launchStartedAt;
         // Start running the disappearing messages job in case the newly registered user
         // enables this feature
         [[OWSDisappearingMessagesJob sharedJob] startIfNecessary];
-        [[OWSProfileManager sharedManager] ensureLocalProfileCached];
+        // [[OWSProfileManager sharedManager] ensureLocalProfileCached];
 
         // For non-legacy users, read receipts are on by default.
         [OWSReadReceiptManager.sharedManager setAreReadReceiptsEnabled:NO];

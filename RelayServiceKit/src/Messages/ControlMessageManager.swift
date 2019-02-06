@@ -93,7 +93,7 @@ class ControlMessageManager : NSObject
                 return
             }
             
-            guard let peerId: String = dataBlob.object(forKey: "peerIdallId") as? String else {
+            guard let peerId: String = dataBlob.object(forKey: "peerId") as? String else {
                 Logger.debug("Received callICECandidates message with no peerId.")
                 return
             }
@@ -156,7 +156,7 @@ class ControlMessageManager : NSObject
         let thread = message.thread
         thread.update(withPayload: forstaPayload as! [AnyHashable : Any])
         thread.participantIds = members! as! [String]
-        thread.save()
+        thread.save(with: transaction)
         
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: thread,

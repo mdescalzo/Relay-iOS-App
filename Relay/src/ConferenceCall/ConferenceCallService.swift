@@ -13,17 +13,12 @@ import PromiseKit
 protocol CallServiceObserver: class {
 }
 
-public class ConferenceCallService: NSObject, FLCallMessageHandler {
-    static let shared = ConferenceCallService()
+@objc public class ConferenceCallService: NSObject, FLCallMessageHandler {
+    @objc static let shared = ConferenceCallService()
     let rtcQueue = DispatchQueue(label: "WebRTCDanceCard")
-    var iceServers: Promise<[RTCIceServer]>
+    lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
     var observers = [Weak<CallServiceObserver>]()
 
-    override init() {
-        iceServers = ConferenceCallService.getIceServers()
-        super.init()
-    }
-    
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
 
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
@@ -62,24 +57,24 @@ public class ConferenceCallService: NSObject, FLCallMessageHandler {
         
         return firstly {
             SignalApp.shared().accountManager.getTurnServerInfo()
-            }.map { turnServerInfo -> [RTCIceServer] in
-                Logger.debug("got turn server urls: \(turnServerInfo.urls)")
-                
-                return turnServerInfo.urls.map { url in
-                        if url.hasPrefix("turn") {
-                            // Only "turn:" servers require authentication. Don't include the credentials to other ICE servers
-                            // as 1.) they aren't used, and 2.) the non-turn servers might not be under our control.
-                            // e.g. we use a public fallback STUN server.
-                            return RTCIceServer(urlStrings: [url], username: turnServerInfo.username, credential: turnServerInfo.password)
-                        } else {
-                            return RTCIceServer(urlStrings: [url])
-                        }
-                    } + [RTCIceServer(urlStrings: [fallbackIceServerUrl])]
-            }.recover { (error: Error) -> Guarantee<[RTCIceServer]> in
-                Logger.error("fetching ICE servers failed with error: \(error)")
-                Logger.warn("using fallback ICE Server")
-                
-                return Guarantee.value([RTCIceServer(urlStrings: [fallbackIceServerUrl])])
+        }.map { turnServerInfo -> [RTCIceServer] in
+            Logger.debug("got turn server urls: \(turnServerInfo.urls)")
+            
+            return turnServerInfo.urls.map { url in
+                    if url.hasPrefix("turn") {
+                        // Only "turn:" servers require authentication. Don't include the credentials to other ICE servers
+                        // as 1.) they aren't used, and 2.) the non-turn servers might not be under our control.
+                        // e.g. we use a public fallback STUN server.
+                        return RTCIceServer(urlStrings: [url], username: turnServerInfo.username, credential: turnServerInfo.password)
+                    } else {
+                        return RTCIceServer(urlStrings: [url])
+                    }
+                } + [RTCIceServer(urlStrings: [fallbackIceServerUrl])]
+        }.recover { (error: Error) -> Guarantee<[RTCIceServer]> in
+            Logger.error("fetching ICE servers failed with error: \(error)")
+            Logger.warn("using fallback ICE Server")
+            
+            return Guarantee.value([RTCIceServer(urlStrings: [fallbackIceServerUrl])])
         }
     }
 
