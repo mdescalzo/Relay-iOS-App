@@ -103,7 +103,7 @@ class ControlMessageManager : NSObject
                 return
             }
             
-            DispatchQueue.main.async {
+            DispatchMainThreadSafe {
                 TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: message.thread,
                                                                                    callId: callId,
                                                                                    peerId: peerId,
@@ -203,7 +203,7 @@ class ControlMessageManager : NSObject
             return
         }
         
-        DispatchQueue.main.async {
+        DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(with: message.thread, callId: callId, peerId: peerId, sessionDescription: sdp)
         }
     }
@@ -228,7 +228,7 @@ class ControlMessageManager : NSObject
             return
         }
         
-        DispatchQueue.main.async {
+        DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread, callId: callId, peerId: peerId)
         }
     }

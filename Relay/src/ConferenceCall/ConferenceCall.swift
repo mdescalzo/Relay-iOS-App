@@ -103,7 +103,7 @@ protocol ConferenceCallDelegate: class {
                 continue;
             }
             self.peerConnectionClients.removeValue(forKey: pId)
-            pcc.terminate()
+            pcc.terminatePeer()
         }
 
         // now get this new peer connection underway
@@ -127,7 +127,7 @@ protocol ConferenceCallDelegate: class {
         }
     }
     
-    func addRemoteIceCandidates(peerId: String, iceCandidates: [Any]) {
+    func handleRemoteIceCandidates(peerId: String, iceCandidates: [Any]) {
         guard let pcc = self.peerConnectionClients[peerId] else {
             Logger.debug("\(TAG) ignoring ice candidates for nonexistent peer \(peerId)")
             return
@@ -144,7 +144,29 @@ protocol ConferenceCallDelegate: class {
             }
         }
     }
+    
+    func handlePeerLeave(peerId: String) {
+        guard let pcc = self.peerConnectionClients[peerId] else {
+            Logger.debug("\(TAG) ignoring leave nonexistent peer \(peerId)")
+            return
+        }
+        self.peerConnectionClients.removeValue(forKey: pcc.peerId)
+        pcc.terminatePeer();
 
+        // terminate the entire call if there are no other peers
+        if self.peerConnectionClients.count == 0 {
+            self.terminateCall()
+        }
+    }
+    
+    func terminateCall() {
+        for (_, pcc) in self.peerConnectionClients {
+            pcc.terminatePeer()
+        }
+        self.peerConnectionClients.removeAll()
+    }
+    
+    
     // MARK: - Class Helpers
     private func updateCallRecordType() {
         AssertIsOnMainThread(file: #function)
@@ -180,7 +202,7 @@ protocol ConferenceCallDelegate: class {
     
     func peerConnectionFailed(strongPcc: PeerConnectionClient) {
         self.peerConnectionClients.removeValue(forKey: strongPcc.peerId)
-        strongPcc.terminate()
+        strongPcc.terminatePeer()
 
         // depending on policy maybe give up on the entire call, or try connecting again to all the missing participants like this:
         self.inviteMissingParticipants();

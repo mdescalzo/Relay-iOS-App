@@ -306,7 +306,6 @@
 		4539B5861F79348F007141FF /* PushRegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539B5851F79348F007141FF /* PushRegistrationManager.swift */; };
 		4541B71D209D3B7A0008608F /* ContactShareViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4541B71A209D2DAE0008608F /* ContactShareViewModel.swift */; };
 		4542DF54208D40AC007B4E76 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4542DF53208D40AC007B4E76 /* LoadingViewController.swift */; };
-		45464DBC1DFA041F001D3FD6 /* DataChannelMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45464DBB1DFA041F001D3FD6 /* DataChannelMessage.swift */; };
 		454A84042059C787008B8C75 /* MediaTileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A84032059C787008B8C75 /* MediaTileViewController.swift */; };
 		454A965A1FD6017E008D2A0E /* SignalAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D913491F62D4A500722898 /* SignalAttachment.swift */; };
 		454A965B1FD601BF008D2A0E /* MediaMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA1C281F7164F700E51C51 /* MediaMessageView.swift */; };
@@ -328,7 +327,6 @@
 		45847E871E4283C30080EAB3 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45847E861E4283C30080EAB3 /* Intents.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4585C4681ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4585C4671ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift */; };
 		458967111DC117CC00E9DD21 /* AccountManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458967101DC117CC00E9DD21 /* AccountManagerTest.swift */; };
-		458DE9D91DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 458DE9D81DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m */; };
 		458E38371D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 458E38361D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m */; };
 		458E383A1D6699FA0094BD24 /* OWSDeviceProvisioningURLParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 458E38391D6699FA0094BD24 /* OWSDeviceProvisioningURLParserTest.m */; };
 		459311FC1D75C948008DD4F0 /* OWSDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 459311FB1D75C948008DD4F0 /* OWSDeviceTableViewCell.m */; };
@@ -339,7 +337,6 @@
 		45A2F005204473A3002E978A /* NewMessage.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45A2F004204473A3002E978A /* NewMessage.aifc */; };
 		45A663C51F92EC760027B59E /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A663C41F92EC760027B59E /* GroupTableViewCell.swift */; };
 		45A6DAD61EBBF85500893231 /* ReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A6DAD51EBBF85500893231 /* ReminderView.swift */; };
-		45AE48511E0732D6004D96C2 /* TurnServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AE48501E0732D6004D96C2 /* TurnServerInfo.swift */; };
 		45B27B862037FFB400A539DF /* DebugUIFileBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B27B852037FFB400A539DF /* DebugUIFileBrowser.swift */; };
 		45B5360E206DD8BB00D61655 /* UIResponder+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */; };
 		45B74A742044AAB600CD42F8 /* aurora-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5B2044AAB300CD42F8 /* aurora-quiet.aifc */; };
@@ -454,7 +451,6 @@
 		7D2CD567214C3C9C004E957A /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D992148252400488180 /* NewConversationViewController.swift */; };
 		7D2CD568214C3C9C004E957A /* CompareSafetyNumbersActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DF5DF11DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift */; };
 		7D2CD569214C3C9C004E957A /* EvpMessageDigest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E7211CB19B00F9EF53 /* EvpMessageDigest.m */; };
-		7D2CD56A214C3C9C004E957A /* OWSWebRTCDataProtos.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 458DE9D81DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m */; };
 		7D2CD56B214C3C9C004E957A /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451166BF1FD86B98000739BA /* AccountManager.swift */; };
 		7D2CD56C214C3C9C004E957A /* OWSBackupLazyRestoreJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCD120618B2F00CB1A14 /* OWSBackupLazyRestoreJob.swift */; };
 		7D2CD56D214C3C9C004E957A /* GiphyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3430FE171F7751D4000EC51B /* GiphyAPI.swift */; };
@@ -490,7 +486,6 @@
 		7D2CD58B214C3C9C004E957A /* RegistrationUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5DC8120D8050D00C08145 /* RegistrationUtils.m */; };
 		7D2CD58C214C3C9C004E957A /* AttachmentPointerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452EA09D1EA7ABE00078744B /* AttachmentPointerView.swift */; };
 		7D2CD58D214C3C9C004E957A /* DebugUICalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45638BDB1F3DD0D400128435 /* DebugUICalling.swift */; };
-		7D2CD58E214C3C9C004E957A /* DataChannelMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45464DBB1DFA041F001D3FD6 /* DataChannelMessage.swift */; };
 		7D2CD58F214C3C9C004E957A /* AudioProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E3E5671EC4B19400495BAC /* AudioProgressView.swift */; };
 		7D2CD590214C3C9C004E957A /* GiphyDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0511F7E8EA30066283D /* GiphyDownloader.swift */; };
 		7D2CD591214C3C9C004E957A /* FingerprintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */; };
@@ -536,7 +531,6 @@
 		7D2CD5BD214C3C9C004E957A /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705DA6214827EF00488180 /* DirectoryCell.swift */; };
 		7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */; };
 		7D2CD5BF214C3C9C004E957A /* NonCallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659811E1BE77000444429 /* NonCallKitCallUIAdaptee.swift */; };
-		7D2CD5C0214C3C9C004E957A /* TurnServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AE48501E0732D6004D96C2 /* TurnServerInfo.swift */; };
 		7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */; };
 		7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
 		7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */; };
@@ -821,6 +815,8 @@
 		D2AEACDC16C426DA00C364C0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AEACDB16C426DA00C364C0 /* CFNetwork.framework */; };
 		DB2326B02200DF440063CB09 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */; };
 		DB2326B12200DF440063CB09 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */; };
+		DBCF627E220B8F4C00D710D2 /* TurnServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */; };
+		DBCF627F220B8F4C00D710D2 /* TurnServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */; };
 		DBD6CEE82146CD790088B4A4 /* Forsta-values.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */; };
 		DBEB8B9221FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
 		DBEB8B9321FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
@@ -1319,7 +1315,6 @@
 		4523149F1F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionalPanGestureRecognizer.swift; sourceTree = "<group>"; };
 		4523D015206EDC2B00A2AB51 /* LRUCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LRUCache.swift; sourceTree = "<group>"; };
 		452B998F20A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactShareToExistingContactViewController.swift; sourceTree = "<group>"; };
-		452C468E1E427E200087B011 /* OutboundCallInitiator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutboundCallInitiator.swift; sourceTree = "<group>"; };
 		452D1AF02081059C00A67F7F /* StringAdditionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringAdditionsTest.swift; sourceTree = "<group>"; };
 		452D1AF220810B6F00A67F7F /* String+OWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+OWS.swift"; sourceTree = "<group>"; };
 		452EA09D1EA7ABE00078744B /* AttachmentPointerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentPointerView.swift; sourceTree = "<group>"; };
@@ -1340,7 +1335,6 @@
 		4541B71A209D2DAE0008608F /* ContactShareViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactShareViewModel.swift; sourceTree = "<group>"; };
 		4542DF51208B82E9007B4E76 /* ThreadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadViewModel.swift; sourceTree = "<group>"; };
 		4542DF53208D40AC007B4E76 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
-		45464DBB1DFA041F001D3FD6 /* DataChannelMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataChannelMessage.swift; sourceTree = "<group>"; };
 		454A84032059C787008B8C75 /* MediaTileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaTileViewController.swift; sourceTree = "<group>"; };
 		454A965E1FD60EA2008D2A0E /* OWSFlatButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OWSFlatButton.swift; path = RelayMessaging/Views/OWSFlatButton.swift; sourceTree = SOURCE_ROOT; };
 		4551DB59205C562300C8AE75 /* Collection+OWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+OWS.swift"; sourceTree = "<group>"; };
@@ -1355,7 +1349,6 @@
 		45666EC81D994C0D008FE134 /* OWSGroupAvatarBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSGroupAvatarBuilder.m; sourceTree = "<group>"; };
 		45666F571D9B2880008FE134 /* OWSScrubbingLogFormatterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSScrubbingLogFormatterTest.m; sourceTree = "<group>"; };
 		456F6E2E1E261D1000FD2210 /* PeerConnectionClientTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConnectionClientTest.swift; sourceTree = "<group>"; };
-		4574A5D51DD6704700C6B692 /* CallService.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CallService.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4579431C1E7C8CE9008ED0C0 /* Pastelog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pastelog.h; sourceTree = "<group>"; };
 		4579431D1E7C8CE9008ED0C0 /* Pastelog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pastelog.m; sourceTree = "<group>"; };
 		45794E851E00620000066731 /* CallUIAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallUIAdapter.swift; path = UserInterface/CallUIAdapter.swift; sourceTree = "<group>"; };
@@ -1367,8 +1360,6 @@
 		4585C4671ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafetyNumberConfirmationAlert.swift; sourceTree = "<group>"; };
 		4589670F1DC117CC00E9DD21 /* SignalTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SignalTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		458967101DC117CC00E9DD21 /* AccountManagerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManagerTest.swift; path = Models/AccountManagerTest.swift; sourceTree = "<group>"; };
-		458DE9D71DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSWebRTCDataProtos.pb.h; sourceTree = "<group>"; };
-		458DE9D81DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSWebRTCDataProtos.pb.m; sourceTree = "<group>"; };
 		458E38351D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSDeviceProvisioningURLParser.h; sourceTree = "<group>"; };
 		458E38361D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSDeviceProvisioningURLParser.m; sourceTree = "<group>"; };
 		458E38391D6699FA0094BD24 /* OWSDeviceProvisioningURLParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OWSDeviceProvisioningURLParserTest.m; path = Models/OWSDeviceProvisioningURLParserTest.m; sourceTree = "<group>"; };
@@ -1382,7 +1373,6 @@
 		45A60E7220AC674100FB1ABF /* ReturnToCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnToCallViewController.swift; sourceTree = "<group>"; };
 		45A663C41F92EC760027B59E /* GroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		45A6DAD51EBBF85500893231 /* ReminderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderView.swift; sourceTree = "<group>"; };
-		45AE48501E0732D6004D96C2 /* TurnServerInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurnServerInfo.swift; sourceTree = "<group>"; };
 		45B201741DAECBFD00C461E0 /* Relay-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Relay-Bridging-Header.h"; sourceTree = "<group>"; };
 		45B27B852037FFB400A539DF /* DebugUIFileBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUIFileBrowser.swift; sourceTree = "<group>"; };
 		45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIResponder+OWS.swift"; path = "util/UI Categories/UIResponder+OWS.swift"; sourceTree = "<group>"; };
@@ -1430,7 +1420,6 @@
 		45E5A6981F61E6DD001E4A8A /* MarqueeLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarqueeLabel.swift; sourceTree = "<group>"; };
 		45E7A6A61E71CA7E00D44FB5 /* DisplayableTextFilterTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayableTextFilterTest.swift; sourceTree = "<group>"; };
 		45F170AB1E2F0351003FC1F2 /* OWSAudioSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OWSAudioSession.swift; sourceTree = "<group>"; };
-		45F170BA1E2FC5D3003FC1F2 /* CallAudioService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallAudioService.swift; sourceTree = "<group>"; };
 		45F170D51E315310003FC1F2 /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		45F32C1D205718B000A300D5 /* MediaPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MediaPageViewController.swift; path = Relay/src/ViewControllers/MediaPageViewController.swift; sourceTree = SOURCE_ROOT; };
 		45F3AEB51DFDE7900080CE33 /* AvatarImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarImageView.swift; sourceTree = "<group>"; };
@@ -1438,7 +1427,6 @@
 		45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallKitCallUIAdaptee.swift; sourceTree = "<group>"; };
 		45F659811E1BE77000444429 /* NonCallKitCallUIAdaptee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonCallKitCallUIAdaptee.swift; sourceTree = "<group>"; };
 		45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallKitCallManager.swift; sourceTree = "<group>"; };
-		45FBC5D01DF8592E00E9B410 /* RelayCall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelayCall.swift; sourceTree = "<group>"; };
 		45FDA43420A4D22700396358 /* OWSNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OWSNavigationBar.swift; sourceTree = "<group>"; };
 		4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HapticFeedback.swift; path = UserInterface/HapticFeedback.swift; sourceTree = "<group>"; };
 		4C11AA4F20FD59C700351FBD /* MessageStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStatusView.swift; sourceTree = "<group>"; };
@@ -1622,6 +1610,7 @@
 		D562B853DF3F1C3D5A1CB00B /* Pods-RelayTests.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayTests.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests.app store release.xcconfig"; sourceTree = "<group>"; };
 		D7BCBE6C7CD3E58FF656F0AC /* Pods-RelayDevShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDevShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDevShareExtension/Pods-RelayDevShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
 		DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConnectionClient.swift; sourceTree = "<group>"; };
+		DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurnServerInfo.swift; sourceTree = "<group>"; };
 		DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Forsta-values.plist"; sourceTree = "<group>"; };
 		DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallService.swift; sourceTree = "<group>"; };
 		DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCall.swift; sourceTree = "<group>"; };
@@ -2460,17 +2449,6 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		45464DB81DFA03D8001D3FD6 /* Signaling */ = {
-			isa = PBXGroup;
-			children = (
-				45AE48501E0732D6004D96C2 /* TurnServerInfo.swift */,
-				458DE9D71DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.h */,
-				458DE9D81DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m */,
-				45464DBB1DFA041F001D3FD6 /* DataChannelMessage.swift */,
-			);
-			name = Signaling;
-			sourceTree = "<group>";
-		};
 		454A96571FD600B4008D2A0E /* attachments */ = {
 			isa = PBXGroup;
 			children = (
@@ -2586,11 +2564,6 @@
 			isa = PBXGroup;
 			children = (
 				45794E841E0061CF00066731 /* UserInterface */,
-				45464DB81DFA03D8001D3FD6 /* Signaling */,
-				45FBC5D01DF8592E00E9B410 /* RelayCall.swift */,
-				4574A5D51DD6704700C6B692 /* CallService.swift */,
-				45F170BA1E2FC5D3003FC1F2 /* CallAudioService.swift */,
-				452C468E1E427E200087B011 /* OutboundCallInitiator.swift */,
 			);
 			path = call;
 			sourceTree = "<group>";
@@ -3008,6 +2981,7 @@
 			children = (
 				DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */,
 				DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */,
+				DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */,
 				DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */,
 				DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */,
 			);
@@ -4181,6 +4155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D2CD53A214C3C9C004E957A /* Conversions.m in Sources */,
+				DBCF627F220B8F4C00D710D2 /* TurnServerInfo.swift in Sources */,
 				7D2CD53B214C3C9C004E957A /* ConversationConfigurationSyncOperation.swift in Sources */,
 				7D2CD53C214C3C9C004E957A /* ExperienceUpgradeFinder.swift in Sources */,
 				7D2CD53D214C3C9C004E957A /* AttachmentUploadView.m in Sources */,
@@ -4227,7 +4202,6 @@
 				7D2CD568214C3C9C004E957A /* CompareSafetyNumbersActivity.swift in Sources */,
 				7D1A107E216C043700A45F19 /* NewAccountViewController.swift in Sources */,
 				7D2CD569214C3C9C004E957A /* EvpMessageDigest.m in Sources */,
-				7D2CD56A214C3C9C004E957A /* OWSWebRTCDataProtos.pb.m in Sources */,
 				7D2CD56B214C3C9C004E957A /* AccountManager.swift in Sources */,
 				7D2CD56C214C3C9C004E957A /* OWSBackupLazyRestoreJob.swift in Sources */,
 				7D2CD56D214C3C9C004E957A /* GiphyAPI.swift in Sources */,
@@ -4268,7 +4242,6 @@
 				7D2CD58B214C3C9C004E957A /* RegistrationUtils.m in Sources */,
 				7D2CD58C214C3C9C004E957A /* AttachmentPointerView.swift in Sources */,
 				7D2CD58D214C3C9C004E957A /* DebugUICalling.swift in Sources */,
-				7D2CD58E214C3C9C004E957A /* DataChannelMessage.swift in Sources */,
 				7D2CD58F214C3C9C004E957A /* AudioProgressView.swift in Sources */,
 				7D2CD590214C3C9C004E957A /* GiphyDownloader.swift in Sources */,
 				7D2CD591214C3C9C004E957A /* FingerprintViewController.m in Sources */,
@@ -4316,7 +4289,6 @@
 				7D2CD5BD214C3C9C004E957A /* DirectoryCell.swift in Sources */,
 				7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */,
 				7D2CD5BF214C3C9C004E957A /* NonCallKitCallUIAdaptee.swift in Sources */,
-				7D2CD5C0214C3C9C004E957A /* TurnServerInfo.swift in Sources */,
 				7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */,
 				7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */,
 				7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */,
@@ -4388,6 +4360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D8517E5211CB08500F9EF53 /* Conversions.m in Sources */,
+				DBCF627E220B8F4C00D710D2 /* TurnServerInfo.swift in Sources */,
 				4CC0B59C20EC5F2E00CF6EE0 /* ConversationConfigurationSyncOperation.swift in Sources */,
 				3461293E1FD1D72B00532771 /* ExperienceUpgradeFinder.swift in Sources */,
 				34D1F0BD1F8D108C0066283D /* AttachmentUploadView.m in Sources */,
@@ -4434,7 +4407,6 @@
 				45DF5DF21DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift in Sources */,
 				7D1A107D216C043700A45F19 /* NewAccountViewController.swift in Sources */,
 				7D8517EC211CB19C00F9EF53 /* EvpMessageDigest.m in Sources */,
-				458DE9D91DEE7B360071BB03 /* OWSWebRTCDataProtos.pb.m in Sources */,
 				451166C01FD86B98000739BA /* AccountManager.swift in Sources */,
 				34D2CCD220618B3000CB1A14 /* OWSBackupLazyRestoreJob.swift in Sources */,
 				3430FE181F7751D4000EC51B /* GiphyAPI.swift in Sources */,
@@ -4475,7 +4447,6 @@
 				34E5DC8220D8050D00C08145 /* RegistrationUtils.m in Sources */,
 				452EA09E1EA7ABE00078744B /* AttachmentPointerView.swift in Sources */,
 				45638BDC1F3DD0D400128435 /* DebugUICalling.swift in Sources */,
-				45464DBC1DFA041F001D3FD6 /* DataChannelMessage.swift in Sources */,
 				34E3E5681EC4B19400495BAC /* AudioProgressView.swift in Sources */,
 				34D1F0521F7E8EA30066283D /* GiphyDownloader.swift in Sources */,
 				340FC8BC204DAC8D007AEB0F /* FingerprintViewController.m in Sources */,
@@ -4523,7 +4494,6 @@
 				7D705DA7214827EF00488180 /* DirectoryCell.swift in Sources */,
 				45B5360E206DD8BB00D61655 /* UIResponder+OWS.swift in Sources */,
 				45F659821E1BE77000444429 /* NonCallKitCallUIAdaptee.swift in Sources */,
-				45AE48511E0732D6004D96C2 /* TurnServerInfo.swift in Sources */,
 				34B3F8771E8DF1700035BE1A /* ContactsPicker.swift in Sources */,
 				45C0DC1B1E68FE9000E04C47 /* UIApplication+OWS.swift in Sources */,
 				45FBC5C81DF8575700E9B410 /* CallKitCallManager.swift in Sources */,

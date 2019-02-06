@@ -43,13 +43,16 @@ protocol CallServiceObserver: class {
             Logger.debug("Ignoring ice candidates from/for an unknown call")
             return
         }
-        conferenceCall?.addRemoteIceCandidates(peerId: peerId, iceCandidates: iceCandidates)
+        conferenceCall?.handleRemoteIceCandidates(peerId: peerId, iceCandidates: iceCandidates)
     }
     
     public func receivedLeave(with thread: TSThread, callId: String, peerId: String) {
-        // ensure thread/call/peer are all ready and drop if not
-        // shut down this peer's connection, mark them as having left
-        // if this is the only peer other than us, then shut down the whole call
+        if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
+            Logger.debug("Ignoring leave from/for an unknown call")
+            return
+        }
+        
+        conferenceCall?.handlePeerLeave(peerId: peerId);
     }
     
     private static func getIceServers() -> Promise<[RTCIceServer]> {
