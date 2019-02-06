@@ -376,7 +376,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
         // FIXME - do we require mic permissions at this point?
         // if so maybe it would be better to not even add the track until the call is connected
         // instead of creating it and disabling it.
-        localVideoTrack.isEnabled = false
+        localVideoTrack.isEnabled = true
 
         let capturer = RTCCameraVideoCapturer(delegate: videoSource)
         self.videoCaptureController = VideoCaptureController(capturer: capturer, settingsDelegate: self)
@@ -486,7 +486,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, RTCDataChannelD
         // FIXME - do we require mic permissions at this point?
         // if so maybe it would be better to not even add the track until the call is connected
         // instead of creating it and disabling it.
-        audioTrack.isEnabled = false
+        audioTrack.isEnabled = true
 
         let audioSender = peerConnection.sender(withKind: kAudioTrackType, streamId: Identifiers.mediaStream.rawValue)
         audioSender.track = audioTrack

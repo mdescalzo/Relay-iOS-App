@@ -47,7 +47,7 @@ protocol CallServiceObserver: class {
     }
     
     public func receivedLeave(with thread: TSThread, callId: String, peerId: String) {
-        // ensure thread/call/peer are all readl and drop if not
+        // ensure thread/call/peer are all ready and drop if not
         // shut down this peer's connection, mark them as having left
         // if this is the only peer other than us, then shut down the whole call
     }

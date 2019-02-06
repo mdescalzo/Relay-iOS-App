@@ -190,6 +190,7 @@ protocol ConferenceCallDelegate: class {
     
     func iceConnected(strongPcc: PeerConnectionClient) {
         Logger.debug("ice connected for peer \(strongPcc.peerId)")
+        strongPcc.peerConnectedResolver.fulfill(())
     }
     
     func iceFailed(strongPcc: PeerConnectionClient) {
