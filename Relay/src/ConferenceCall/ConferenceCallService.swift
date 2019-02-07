@@ -33,9 +33,11 @@ protocol CallServiceObserver: class {
     }
 
     public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
-        // drop this if ConferenceCall for callId doesn't exist
-        // drop this if peer for that call doesn't exist
-        // otherwise continue connection dance for this peer
+        if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
+            Logger.debug("Ignoring ice candidates from/for an unknown call")
+            return
+        }
+        conferenceCall!.handleAcceptOffer(peerId: peerId, sessionDescription: sessionDescription)
     }
     
     public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {

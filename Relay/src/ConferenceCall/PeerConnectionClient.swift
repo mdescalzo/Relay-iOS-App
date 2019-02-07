@@ -315,6 +315,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     
     func sendOffer() {
         // TODO: do the offer dance
+        Logger.info("in sendOffer for peer \(self.peerId)")
+    }
+    
+    func handleAcceptOffer(sessionDescription: String) {
+        Logger.info("in handleAcceptOffer for \(self.peerId)")
     }
 
     deinit {

@@ -115,6 +115,16 @@ protocol ConferenceCallDelegate: class {
         self.inviteMissingParticipants()
     }
     
+    public func handleAcceptOffer(peerId: String, sessionDescription: String) {
+        // drop it if there's no such peer
+        guard let pcc = self.peerConnectionClients[peerId] else {
+            Logger.debug("\(TAG) ignoring AcceptOffer for nonexistent peer: \(peerId)")
+            return
+        }
+        
+        pcc.handleAcceptOffer(sessionDescription: sessionDescription)
+    }
+    
     func inviteMissingParticipants() {
         for userId in self.thread.participantIds {
             if (userId == TSAccountManager.localUID()! || self.peerConnectionClients.contains { $0.value.userId == userId }) {
