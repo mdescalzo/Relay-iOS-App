@@ -11,7 +11,7 @@ import UIKit
 class PeerViewCell: UICollectionViewCell {
 
    
-    @IBOutlet weak var avView: UIView!
+    @IBOutlet weak var avView: RemoteVideoView!
     @IBOutlet weak var avatarImageView: UIImageView!
     
 }

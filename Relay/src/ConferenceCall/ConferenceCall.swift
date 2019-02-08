@@ -36,6 +36,8 @@ enum ConferenceCallState {
 protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
     func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String)
+    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
+    func videoTrackDidUpdateFor(peerId: String)
 }
 
 @objc class ConferenceCall: NSObject, PeerConnectionClientDelegate {

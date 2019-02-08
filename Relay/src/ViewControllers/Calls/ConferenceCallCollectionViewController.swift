@@ -10,45 +10,26 @@ import UIKit
 
 private let reuseIdentifier = "peerCell"
 
-class ConferenceCallCollectionViewController: UIViewController {
-    
-    // Test UI begin
-    @IBAction func addPeerTap(_ sender: Any) {
-        let totalItems = self.collectionView.numberOfItems(inSection: 0)
+class ConferenceCallCollectionViewController: UIViewController, CallServiceObserver, ConferenceCallDelegate {
 
-        if totalItems < 20 {
-            self.peers.append(PeerPlaceholder())
-            self.updatePeerViewHeight()
-            self.collectionView.performBatchUpdates({
-                self.collectionView.insertItems(at: [IndexPath(item: totalItems, section: 0)])
-            }, completion: nil)
+    var peerIds = [String]()
+    var mainPeerId: String?
+    
+    func secondaryPeerIds() -> [String] {
+        guard peerIds.count > 0 else {
+            return [String]()
         }
-    }
-    @IBAction func removePeerTap(_ sender: Any) {
-        let totalItems = self.collectionView.numberOfItems(inSection: 0)
-
-        if totalItems > 0 {
-            self.peers.remove(at: totalItems - 1)
-            self.updatePeerViewHeight()
-            self.collectionView.performBatchUpdates({
-                self.collectionView.deleteItems(at: [IndexPath(item: totalItems-1, section: 0)])
-            }, completion: nil)
-        }
+        return peerIds.filter({ (peer) -> Bool in
+            peer != mainPeerId
+        })
     }
     
-    private func buildPeerCollection(count: Int) {
-        self.peers.removeAll()
-        // populate dummy content
-        for _ in 0..<count { peers.append(PeerPlaceholder()) }
-    }
-    // Test UI end
-    
-    var peers = [PeerPlaceholder]()
+    var peerAVViews = [String : RTCVideoRenderer]()
 
     @IBOutlet var stackContainerView: UIStackView!
 
-    @IBOutlet weak var mainPeerAVView: UIView!
-    @IBOutlet weak var localAVView: UIView!
+    @IBOutlet weak var mainPeerAVView: RemoteVideoView!
+    @IBOutlet weak var localAVView: RTCCameraPreviewView!
     @IBOutlet weak var localAvatarImageView: UIImageView!
     @IBOutlet weak var infoContainerView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -58,10 +39,11 @@ class ConferenceCallCollectionViewController: UIViewController {
     @IBOutlet weak var videoToggleButton: UIButton!
     @IBOutlet weak var audioOutButton: UIButton!
     
+//    let thread: TSThread
+//    let call: ConferenceCall
+    
     override func loadView() {
         super.loadView()
-        
-        self.buildPeerCollection(count: 6)
         
         // Main Container View setup
         
@@ -108,7 +90,7 @@ class ConferenceCallCollectionViewController: UIViewController {
         
         var newValue: CGFloat
         
-        if self.peers.count > 0 {
+        if self.secondaryPeerIds().count > 0 {
             newValue = UIScreen.main.bounds.width/4 - 8
         } else {
             newValue = 0
@@ -240,15 +222,39 @@ class ConferenceCallCollectionViewController: UIViewController {
     }
     */
 
-
-
+    // MARK: - Call & Call Service Delegate methods
+    func rendererViewFor(peerId: String) -> RTCVideoRenderer? {
+        if let peerView = self.peerAVViews[peerId] {
+            return peerView
+        } else {
+            Logger.info("Received video track update for unknown peer: \(peerId)")
+            return nil
+        }
+    }
+    
+    func videoTrackDidUpdateFor(peerId: String) {
+        <#code#>
+    }
+    
+    func updateCall(call: ConferenceCall) {
+        <#code#>
+    }
+    
+    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
+        <#code#>
+    }
+    
+    func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String) {
+        <#code#>
+    }
 
 }
+
+// MARK: - UICollectionViewDelegate & UICollectionViewDataSource methods
 
 extension ConferenceCallCollectionViewController : UICollectionViewDelegate, UICollectionViewDataSource, PeerViewsLayoutDelegate
 {
     
-    // MARK: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -258,7 +264,7 @@ extension ConferenceCallCollectionViewController : UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return self.peers.count
+        return self.secondaryPeerIds().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -274,15 +280,13 @@ extension ConferenceCallCollectionViewController : UICollectionViewDelegate, UIC
     }
     
 
+    /*
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let index = indexPath.row
-        
         let cell = collectionView.cellForItem(at: indexPath) as! PeerViewCell
         cell.avView.isHidden = false
     }
+     */
     
-    // MARK: UICollectionViewDelegate
-
     /*
      // Uncomment this method to specify if the specified item should be highlighted during tracking
      override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
@@ -316,9 +320,4 @@ extension ConferenceCallCollectionViewController : UICollectionViewDelegate, UIC
     func peerViewDiameter() -> CGFloat {
         return 100
     }
-}
-
-class PeerPlaceholder: UIImage
-{
-    let avatar = UIImage(named: "avatar")
 }

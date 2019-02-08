@@ -21,4 +21,12 @@ extension CallUIAdaptee {
  * Driven by either a CallKit or System notifications adaptee
  */
 @objc public class CallUIAdapter: NSObject, CallServiceObserver {
+    func peerConnectionUpdatedVideoTrack(peerId: String, videoTrack: RTCVideoTrack) {
+        // A stub
+    }
+    
+    func updateCall(call: ConferenceCall) {
+        // A stub
+    }
+    
 }

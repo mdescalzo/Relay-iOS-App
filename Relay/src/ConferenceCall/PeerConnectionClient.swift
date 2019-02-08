@@ -149,6 +149,11 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
         self.get()?.peerConnection(peerConnection, didRemove: candidates)
     }
+    
+    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        self.get()?.peerConnection(peerConnection, didOpen: dataChannel)
+    }
+
 }
 
 /**
@@ -1038,6 +1043,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
         Logger.debug("\(logTag) didRemove IceCandidates:\(candidates)")
     }
+    
+    internal func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        Logger.debug("\(logTag) didOpen dataChannel:\(dataChannel.description)")
+    }
+
 
     // MARK: Helpers
 
