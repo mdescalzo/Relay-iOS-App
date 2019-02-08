@@ -88,6 +88,10 @@ protocol ConferenceCallDelegate: class {
         self.callId = callId
         self.originatorId = originatorId
         self.state = (direction == .outgoing) ? .joined : .ringing
+        
+        let cr = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: self.callId, callType: RPRecentCallTypeOutgoingIncomplete, in: self.thread)
+        cr.save()
+        self.callRecord = cr
     }
     
     public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
@@ -215,7 +219,7 @@ protocol ConferenceCallDelegate: class {
         strongPcc.terminatePeer()
 
         // depending on policy maybe give up on the entire call, or try connecting again to all the missing participants like this:
-        self.inviteMissingParticipants();
+        // self.inviteMissingParticipants();
         
         // tell ui delegate that stuff happened
     }

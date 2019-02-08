@@ -57,6 +57,17 @@ protocol CallServiceObserver: class {
         conferenceCall?.handlePeerLeave(peerId: peerId);
     }
     
+    @objc public func callOut(with thread: TSThread) {
+//        if conferenceCall != nil {
+//            Logger.debug("no new call while existing call is in place")
+//            return
+//        }
+        let newCallId = NSUUID().uuidString.lowercased()
+        let originatorId = TSAccountManager.localUID()!
+        conferenceCall = ConferenceCall(direction: .outgoing, thread: thread, callId: newCallId, originatorId: originatorId)
+        conferenceCall!.inviteMissingParticipants()
+    }
+    
     private static func getIceServers() -> Promise<[RTCIceServer]> {
         AssertIsOnMainThread(file: #function)
         

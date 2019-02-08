@@ -314,12 +314,98 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     }
     
     func sendOffer() {
-        // TODO: do the offer dance
-        Logger.info("in sendOffer for peer \(self.peerId)")
+        firstly {
+            ConferenceCallService.shared.iceServers
+        }.then { (iceServers: [RTCIceServer]) -> Promise<HardenedRTCSessionDescription> in
+            self.configuration = RTCConfiguration()
+            self.configuration!.iceServers = iceServers
+            self.configuration!.bundlePolicy = .maxBundle
+            self.configuration!.rtcpMuxPolicy = .require
+            
+            let connectionConstraintsDict = ["DtlsSrtpKeyAgreement": "true"]
+            self.connectionConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: connectionConstraintsDict)
+            
+            self.audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            self.cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            
+            self.peerConnection = PeerConnectionClient.rtcFactory.peerConnection(with: self.configuration!,
+                                                                                 constraints: self.connectionConstraints!,
+                                                                                 delegate: self.proxy)
+            self.createAudioSender()
+            self.createVideoSender()
+            
+            return self.createSessionDescriptionOffer()
+            
+            // let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
+            // let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            // return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
+        }.then { (sessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
+            return firstly {
+                self.setLocalSessionDescription(sessionDescription)
+            }.then { _ -> Promise<Void> in
+                guard let call = self.delegate?.owningCall() else {
+                    Logger.info("sendCallAcceptOffer can't get owning call")
+                    return Promise(error: CallError.other(description: "can't get owning call"))
+                }
+                guard let messageSender = Environment.current()?.messageSender else {
+                    Logger.info("sendCallAcceptOffer can't get messageSender")
+                    return Promise(error: CallError.other(description: "can't get messageSender"))
+                }
+                let allTheData = [ "callId" : call.callId,
+                                   "members" : call.thread.participantIds,
+                                   "originator" : TSAccountManager.localUID()!,
+                                   "peerId" : self.peerId,
+                                   "offer" : [ "type" : "offer",
+                                               "sdp" : sessionDescription.sdp ],
+                                   ] as NSMutableDictionary
+                
+                let offerControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallOfferKey, moreData: allTheData)
+                
+                return messageSender.sendPromise(message: offerControlMessage)
+            }
+        }.then { () -> Promise<Void> in
+            self.readyToSendIceCandidatesResolver.fulfill(())
+            
+            // Don't let the outgoing call ring forever. We don't support inbound ringing forever anyway.
+            let timeout: Promise<Void> = after(seconds: connectingTimeoutSeconds).done {
+                // This code will always be called, whether or not the call has timed out.
+                // However, if the call has already connected, the `race` promise will have already been
+                // fulfilled. Rejecting an already fulfilled promise is a no-op.
+                throw CallError.timeout(description: "timed out waiting to receive call answer")
+            }
+            
+            return race(timeout, self.peerConnectedPromise)
+        }.done {
+            Logger.info("callOffer connected for peer \(self.peerId)")
+        }.recover { error in
+            Logger.error("\(self.logTag) call offer for peer \(self.peerId) failed with error: \(error)")
+            if let callError = error as? CallError {
+                self.handleFailedConnection(error: callError)
+            } else {
+                let externalError = CallError.externalError(underlyingError: error)
+                self.handleFailedConnection(error: externalError)
+            }
+        }.retainUntilComplete()
     }
     
     func handleAcceptOffer(sessionDescription: String) {
         Logger.info("in handleAcceptOffer for \(self.peerId)")
+        AssertIsOnMainThread(file: #function)
+        
+        let sessionDescription = RTCSessionDescription(type: .answer, sdp: sessionDescription)
+        firstly {
+            self.setRemoteSessionDescription(sessionDescription)
+        }.done {
+                Logger.debug("\(self.logTag) successfully set remote description")
+        }.catch { error in
+            Logger.error("\(self.logTag) setting remote session description for peer \(self.peerId) failed with error: \(error)")
+            if let callError = error as? CallError {
+                self.handleFailedConnection(error: callError)
+            } else {
+                let externalError = CallError.externalError(underlyingError: error)
+                self.handleFailedConnection(error: externalError)
+            }
+        }.retainUntilComplete()
     }
 
     deinit {
@@ -512,7 +598,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
         return RTCMediaConstraints(mandatoryConstraints: mandatoryConstraints, optionalConstraints: nil)
     }
 
-    public func createOffer() -> Promise<HardenedRTCSessionDescription> {
+    public func createSessionDescriptionOffer() -> Promise<HardenedRTCSessionDescription> {
         AssertIsOnMainThread(file: #function)
         let proxyCopy = self.proxy
         let (promise, resolver) = Promise<HardenedRTCSessionDescription>.pending()
