@@ -576,28 +576,7 @@
         <!--Conference Call Collection View Controller-->
         <scene sceneID="tDu-Ee-gq5">
             <objects>
-                <tapGestureRecognizer numberOfTapsRequired="2" id="nDu-NG-Lef" userLabel="Main Peer Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="didDoubleTapMainPeerView:" destination="WPy-fR-KZT" id="fzY-6g-zqI"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Bly-WK-2CS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="4HJ-KB-3U9" userLabel="Main Long Press Gesture Recognizer">
-                    <connections>
-                        <action selector="didLongPressMainPeerView:" destination="WPy-fR-KZT" id="HR2-mC-f0z"/>
-                    </connections>
-                </pongPressGestureRecognizer>
-                <tapGestureRecognizer numberOfTapsRequired="2" id="5um-jd-Xcx" userLabel="Local View Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="didDoubleTapLocalUserView:" destination="WPy-fR-KZT" id="3Yb-UD-ZcH"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="WpE-LI-aVM" userLabel="Local View Long Press Gesture Recognizer">
-                    <connections>
-                        <action selector="didLongPressLocalUserView:" destination="WPy-fR-KZT" id="Pbk-wk-OvN"/>
-                    </connections>
-                </pongPressGestureRecognizer>
-                <viewController id="WPy-fR-KZT" customClass="ConferenceCallCollectionViewController" customModule="CallUITestBed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="WPy-fR-KZT" customClass="ConferenceCallCollectionViewController" customModule="Forsta" customModuleProvider="target" sceneMemberID="viewController">
                     <stackView key="view" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" id="7P0-4s-sDt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -692,9 +671,9 @@
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="kcJ-k4-bMF">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                         <color key="backgroundColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <collectionViewLayout key="collectionViewLayout" id="syP-JU-Gzh" customClass="PeerViewsLayout" customModule="CallUITestBed" customModuleProvider="target"/>
+                                        <collectionViewLayout key="collectionViewLayout" id="syP-JU-Gzh" customClass="PeerViewsLayout" customModule="Forsta" customModuleProvider="target"/>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="peerCell" id="SSi-bV-h67" customClass="PeerViewCell" customModule="CallUITestBed" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="peerCell" id="SSi-bV-h67" customClass="PeerViewCell" customModule="Forsta" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -835,6 +814,27 @@
                         <outlet property="videoToggleButton" destination="VtT-ua-KrE" id="XfY-iF-yas"/>
                     </connections>
                 </viewController>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="nDu-NG-Lef" userLabel="Main Peer Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="didDoubleTapMainPeerView:" destination="WPy-fR-KZT" id="fzY-6g-zqI"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bly-WK-2CS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="4HJ-KB-3U9" userLabel="Main Long Press Gesture Recognizer">
+                    <connections>
+                        <action selector="didLongPressMainPeerView:" destination="WPy-fR-KZT" id="HR2-mC-f0z"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="5um-jd-Xcx" userLabel="Local View Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="didDoubleTapLocalUserView:" destination="WPy-fR-KZT" id="3Yb-UD-ZcH"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="WpE-LI-aVM" userLabel="Local View Long Press Gesture Recognizer">
+                    <connections>
+                        <action selector="didLongPressLocalUserView:" destination="WPy-fR-KZT" id="Pbk-wk-OvN"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-3622" y="-3565"/>
         </scene>

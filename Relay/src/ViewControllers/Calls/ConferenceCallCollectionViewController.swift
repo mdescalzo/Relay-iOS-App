@@ -233,19 +233,19 @@ class ConferenceCallCollectionViewController: UIViewController, CallServiceObser
     }
     
     func videoTrackDidUpdateFor(peerId: String) {
-        <#code#>
+        // a stub
     }
     
     func updateCall(call: ConferenceCall) {
-        <#code#>
+        // a stub
     }
     
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
-        <#code#>
+        // a stub
     }
     
     func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String) {
-        <#code#>
+        // a stub
     }
 
 }
