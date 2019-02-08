@@ -168,8 +168,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     enum Identifiers: String {
         case mediaStream = "ARDAMS",
              videoTrack = "ARDAMSv0",
-             audioTrack = "ARDAMSa0",
-             dataChannelSignaling = "signaling"
+             audioTrack = "ARDAMSa0"
     }
 
     // Delegate is notified of key events in the call lifecycle.
@@ -182,10 +181,6 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     private var peerConnection: RTCPeerConnection?
     private var connectionConstraints: RTCMediaConstraints?
     private var configuration: RTCConfiguration?
-
-    // DataChannel
-
-    private var dataChannel: RTCDataChannel?
 
     // Audio
 
@@ -270,7 +265,6 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
                 throw CallError.timeout(description: "timed out waiting for peer connect")
             }
             
-            // This will be fulfilled (potentially) by the RTCDataChannel delegate method
             return race(self.peerConnectedPromise, timeout)
         }.done {
             Logger.debug("peer \(self.peerId) connected")
@@ -289,11 +283,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
 
     private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> {
         guard let call = self.delegate?.owningCall() else {
-            Logger.info("sendCallAcceptOffer can't get owning call")
+            Logger.info("can't get owning call")
             return Promise(error: CallError.other(description: "can't get owning call"))
         }
         guard let messageSender = Environment.current()?.messageSender else {
-            Logger.info("sendCallAcceptOffer can't get messageSender")
+            Logger.info("can't get messageSender")
             return Promise(error: CallError.other(description: "can't get messageSender"))
         }
         let callId = call.callId
@@ -314,9 +308,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     }
     
     func sendOffer() {
+        Logger.info("GEP: for \(self.peerId)")
         firstly {
             ConferenceCallService.shared.iceServers
         }.then { (iceServers: [RTCIceServer]) -> Promise<HardenedRTCSessionDescription> in
+            Logger.info("GEP: have iceServers for \(self.peerId)")
             self.configuration = RTCConfiguration()
             self.configuration!.iceServers = iceServers
             self.configuration!.bundlePolicy = .maxBundle
@@ -340,9 +336,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
             // let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
             // return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
         }.then { (sessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
+            Logger.info("GEP: have sessionDescription for \(self.peerId)")
             return firstly {
                 self.setLocalSessionDescription(sessionDescription)
             }.then { _ -> Promise<Void> in
+                Logger.info("GEP: have setLocalSessionDescription for \(self.peerId)")
                 guard let call = self.delegate?.owningCall() else {
                     Logger.info("sendCallAcceptOffer can't get owning call")
                     return Promise(error: CallError.other(description: "can't get owning call"))
@@ -364,6 +362,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
                 return messageSender.sendPromise(message: offerControlMessage)
             }
         }.then { () -> Promise<Void> in
+            Logger.info("GEP: have sent callOffer message for \(self.peerId)")
             self.readyToSendIceCandidatesResolver.fulfill(())
             
             // Don't let the outgoing call ring forever. We don't support inbound ringing forever anyway.
@@ -376,8 +375,10 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
             
             return race(timeout, self.peerConnectedPromise)
         }.done {
+            Logger.info("GEP: call connected for \(self.peerId)")
             Logger.info("callOffer connected for peer \(self.peerId)")
         }.recover { error in
+            Logger.info("GEP: error for \(self.peerId): \(error)")
             Logger.error("\(self.logTag) call offer for peer \(self.peerId) failed with error: \(error)")
             if let callError = error as? CallError {
                 self.handleFailedConnection(error: callError)
@@ -389,15 +390,17 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     }
     
     func handleAcceptOffer(sessionDescription: String) {
-        Logger.info("in handleAcceptOffer for \(self.peerId)")
+        Logger.info("\nGEP: for \(self.peerId)\n")
         AssertIsOnMainThread(file: #function)
         
         let sessionDescription = RTCSessionDescription(type: .answer, sdp: sessionDescription)
         firstly {
             self.setRemoteSessionDescription(sessionDescription)
         }.done {
-                Logger.debug("\(self.logTag) successfully set remote description")
+            Logger.info("GEP: set remote session description for \(self.peerId)")
+            Logger.debug("\(self.logTag) successfully set remote description")
         }.catch { error in
+            Logger.info("GEP: set remote session description failed for \(self.peerId): \(error)")
             Logger.error("\(self.logTag) setting remote session description for peer \(self.peerId) failed with error: \(error)")
             if let callError = error as? CallError {
                 self.handleFailedConnection(error: callError)
@@ -861,11 +864,6 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
         localVideoTrack?.isEnabled = false
         remoteVideoTrack?.isEnabled = false
 
-        if let dataChannel = self.dataChannel {
-            dataChannel.delegate = nil
-        }
-
-        dataChannel = nil
         audioSender = nil
         audioTrack = nil
         videoSender = nil
@@ -878,16 +876,6 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
             peerConnection.close()
         }
         peerConnection = nil
-    }
-
-    // MARK: - Data Channel
-
-    // should only be accessed on ConferenceCallService.rtcQueue
-    var pendingDataChannelMessages: [PendingDataChannelMessage] = []
-    struct PendingDataChannelMessage {
-        let data: Data
-        let description: String
-        let isCritical: Bool
     }
 
     // MARK: - RTCPeerConnectionDelegate
@@ -1069,17 +1057,6 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
         var result: RTCPeerConnection? = nil
         ConferenceCallService.shared.rtcQueue.sync {
             result = peerConnection
-            Logger.info("\(self.logTag) called \(#function)")
-        }
-        return result!
-    }
-
-    internal func dataChannelForTests() -> RTCDataChannel {
-        AssertIsOnMainThread(file: #function)
-
-        var result: RTCDataChannel? = nil
-        ConferenceCallService.shared.rtcQueue.sync {
-            result = dataChannel
             Logger.info("\(self.logTag) called \(#function)")
         }
         return result!
