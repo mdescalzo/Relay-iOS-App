@@ -157,19 +157,12 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
  * It is primarily a wrapper around `RTCPeerConnection`, which is responsible for sending and receiving our call data
  * including audio, video, and some post-connected signaling (hangup, add video)
  */
-class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSettingsDelegate {
-    private static let rtcFactory = RTCPeerConnectionFactory()
+class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     private var pendingIceCandidates = Set<RTCIceCandidate>()
     private var iceCandidatesDebounceTimer: Timer?
     
     let userId: String
     var peerId: String
-
-    enum Identifiers: String {
-        case mediaStream = "ARDAMS",
-             videoTrack = "ARDAMSv0",
-             audioTrack = "ARDAMSa0"
-    }
 
     // Delegate is notified of key events in the call lifecycle.
     //
@@ -177,28 +170,14 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     private weak var delegate: PeerConnectionClientDelegate?
 
     // Connection
-
     private var peerConnection: RTCPeerConnection?
-    private var connectionConstraints: RTCMediaConstraints?
-    private var configuration: RTCConfiguration?
-
-    // Audio
-
-    private var audioSender: RTCRtpSender?
-    private var audioTrack: RTCAudioTrack?
-    private var audioConstraints: RTCMediaConstraints?
-
-    // Video
-
-    private var videoCaptureController: VideoCaptureController?
-    private var videoSender: RTCRtpSender?
-
+    
+    var audioSender: RTCRtpSender?
+    var videoSender: RTCRtpSender?
     // RTCVideoTrack is fragile and prone to throwing exceptions and/or
     // causing deadlock in its destructor.  Therefore we take great care
     // with this property.
-    private var localVideoTrack: RTCVideoTrack?
     private var remoteVideoTrack: RTCVideoTrack?
-    private var cameraConstraints: RTCMediaConstraints?
 
     private let proxy = PeerConnectionProxy()
     // Note that we're deliberately leaking proxy instances using this
@@ -229,26 +208,28 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     }
     
     public func handleOffer(sessionDescription: String) {
+        guard let cc = self.delegate?.owningCall() else {
+            Logger.error("handleOffer owning call isn't available")
+            return
+        }
+        
         firstly {
-            ConferenceCallService.shared.iceServers
-        }.then { (iceServers: [RTCIceServer]) -> Promise<HardenedRTCSessionDescription> in
-            self.configuration = RTCConfiguration()
-            self.configuration!.iceServers = iceServers
-            self.configuration!.bundlePolicy = .maxBundle
-            self.configuration!.rtcpMuxPolicy = .require
+            return cc.setUpLocalAV()
+        }.then { (Void) -> Promise<HardenedRTCSessionDescription> in
+            Logger.info("GEP: have local AV for \(self.peerId)")
+            self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
+                                                                                  constraints: cc.connectionConstraints!,
+                                                                                  delegate: self.proxy)
+        
             
-            let connectionConstraintsDict = ["DtlsSrtpKeyAgreement": "true"]
-            self.connectionConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: connectionConstraintsDict)
+            let videoSender = self.peerConnection!.sender(withKind: kVideoTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
+            videoSender.track = cc.localVideoTrack
+            self.videoSender = videoSender
             
-            self.audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-            self.cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-            
-            self.peerConnection = PeerConnectionClient.rtcFactory.peerConnection(with: self.configuration!,
-                                                                              constraints: self.connectionConstraints!,
-                                                                              delegate: self.proxy)
-            self.createAudioSender()
-            self.createVideoSender()
-            
+            let audioSender = self.peerConnection!.sender(withKind: kAudioTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
+            audioSender.track = cc.audioTrack
+            self.audioSender = audioSender
+
             let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
             let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
             
@@ -304,37 +285,33 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
                            ] as NSMutableDictionary
         
         let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
-        return messageSender.sendPromise(message: message)
+        return messageSender.sendPromise(message: message, recipientIds: [self.userId])
     }
     
     func sendOffer() {
         Logger.info("GEP: for \(self.peerId)")
+        guard let cc = self.delegate?.owningCall() else {
+            Logger.error("sendOffer owning call isn't available")
+            return
+        }
+        
         firstly {
-            ConferenceCallService.shared.iceServers
-        }.then { (iceServers: [RTCIceServer]) -> Promise<HardenedRTCSessionDescription> in
-            Logger.info("GEP: have iceServers for \(self.peerId)")
-            self.configuration = RTCConfiguration()
-            self.configuration!.iceServers = iceServers
-            self.configuration!.bundlePolicy = .maxBundle
-            self.configuration!.rtcpMuxPolicy = .require
+            return cc.setUpLocalAV()
+        }.then { (Void) -> Promise<HardenedRTCSessionDescription> in
+            Logger.info("GEP: have local AV for \(self.peerId)")
+            self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
+                                                                                  constraints: cc.connectionConstraints!,
+                                                                                  delegate: self.proxy)
             
-            let connectionConstraintsDict = ["DtlsSrtpKeyAgreement": "true"]
-            self.connectionConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: connectionConstraintsDict)
+            let videoSender = self.peerConnection!.sender(withKind: kVideoTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
+            videoSender.track = cc.localVideoTrack
+            self.videoSender = videoSender
             
-            self.audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-            self.cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-            
-            self.peerConnection = PeerConnectionClient.rtcFactory.peerConnection(with: self.configuration!,
-                                                                                 constraints: self.connectionConstraints!,
-                                                                                 delegate: self.proxy)
-            self.createAudioSender()
-            self.createVideoSender()
-            
+            let audioSender = self.peerConnection!.sender(withKind: kAudioTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
+            audioSender.track = cc.audioTrack
+            self.audioSender = audioSender
+
             return self.createSessionDescriptionOffer()
-            
-            // let offerSessionDescription = RTCSessionDescription(type: .offer, sdp: sessionDescription)
-            // let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
-            // return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
         }.then { (sessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
             Logger.info("GEP: have sessionDescription for \(self.peerId)")
             return firstly {
@@ -342,16 +319,16 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
             }.then { _ -> Promise<Void> in
                 Logger.info("GEP: have setLocalSessionDescription for \(self.peerId)")
                 guard let call = self.delegate?.owningCall() else {
-                    Logger.info("sendCallAcceptOffer can't get owning call")
+                    Logger.info("can't get owning call")
                     return Promise(error: CallError.other(description: "can't get owning call"))
                 }
                 guard let messageSender = Environment.current()?.messageSender else {
-                    Logger.info("sendCallAcceptOffer can't get messageSender")
+                    Logger.info("can't get messageSender")
                     return Promise(error: CallError.other(description: "can't get messageSender"))
                 }
                 let allTheData = [ "callId" : call.callId,
                                    "members" : call.thread.participantIds,
-                                   "originator" : TSAccountManager.localUID()!,
+                                   "originator" : call.originatorId,
                                    "peerId" : self.peerId,
                                    "offer" : [ "type" : "offer",
                                                "sdp" : sessionDescription.sdp ],
@@ -359,7 +336,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
                 
                 let offerControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallOfferKey, moreData: allTheData)
                 
-                return messageSender.sendPromise(message: offerControlMessage)
+                return messageSender.sendPromise(message: offerControlMessage, recipientIds: [self.userId])
             }
         }.then { () -> Promise<Void> in
             Logger.info("GEP: have sent callOffer message for \(self.peerId)")
@@ -390,7 +367,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
     }
     
     func handleAcceptOffer(sessionDescription: String) {
-        Logger.info("\nGEP: for \(self.peerId)\n")
+        Logger.info("\nGEP: handleAcceptOffer for \(self.peerId)\n")
         AssertIsOnMainThread(file: #function)
         
         let sessionDescription = RTCSessionDescription(type: .answer, sdp: sessionDescription)
@@ -426,169 +403,6 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
         
         Logger.error("\(self.logTag) connection failed with error: \(error)")
         self.terminatePeer()
-    }
-
-    // MARK: - Video
-
-    fileprivate func createVideoSender() {
-        AssertIsOnMainThread(file: #function)
-        Logger.debug("\(logTag) in \(#function)")
-        assert(self.videoSender == nil, "\(#function) should only be called once.")
-
-        guard !Platform.isSimulator else {
-            Logger.warn("\(logTag) Refusing to create local video track on simulator which has no capture device.")
-            return
-        }
-        guard let peerConnection = peerConnection else {
-            Logger.debug("\(logTag) \(#function) Ignoring obsolete event in terminated client")
-            return
-        }
-
-        let videoSource = PeerConnectionClient.rtcFactory.videoSource()
-
-        let localVideoTrack = PeerConnectionClient.rtcFactory.videoTrack(with: videoSource, trackId: Identifiers.videoTrack.rawValue)
-        self.localVideoTrack = localVideoTrack
-        // Disable by default until call is connected.
-        // FIXME - do we require mic permissions at this point?
-        // if so maybe it would be better to not even add the track until the call is connected
-        // instead of creating it and disabling it.
-        localVideoTrack.isEnabled = true
-
-        let capturer = RTCCameraVideoCapturer(delegate: videoSource)
-        self.videoCaptureController = VideoCaptureController(capturer: capturer, settingsDelegate: self)
-        
-        // playing around... remove later
-        self.videoCaptureController!.startCapture()
-        
-
-        let videoSender = peerConnection.sender(withKind: kVideoTrackType, streamId: Identifiers.mediaStream.rawValue)
-        videoSender.track = localVideoTrack
-        self.videoSender = videoSender
-    }
-
-    public func setCameraSource(isUsingFrontCamera: Bool) {
-        AssertIsOnMainThread(file: #function)
-
-        let proxyCopy = self.proxy
-        ConferenceCallService.shared.rtcQueue.async {
-            guard let strongSelf = proxyCopy.get() else { return }
-
-            guard let captureController = strongSelf.videoCaptureController else {
-                owsFailDebug("\(self.logTag) in \(#function) captureController was unexpectedly nil")
-                return
-            }
-
-            captureController.switchCamera(isUsingFrontCamera: isUsingFrontCamera)
-        }
-    }
-
-    public func setLocalVideoEnabled(enabled: Bool) {
-        AssertIsOnMainThread(file: #function)
-        let proxyCopy = self.proxy
-        let completion = {
-            guard let strongSelf = proxyCopy.get() else { return }
-            guard let strongDelegate = strongSelf.delegate else { return }
-
-            let captureSession: AVCaptureSession? = {
-                guard enabled else {
-                    return nil
-                }
-
-                guard let captureController = strongSelf.videoCaptureController else {
-                    owsFailDebug("\(self.logTag) in \(#function) videoCaptureController was unexpectedly nil")
-                    return nil
-                }
-
-                return captureController.captureSession
-            }()
-
-            strongDelegate.updatedLocalVideoCaptureSession(strongPcc: strongSelf, captureSession: captureSession)
-        }
-
-        ConferenceCallService.shared.rtcQueue.async {
-            guard let strongSelf = proxyCopy.get() else { return }
-            guard strongSelf.peerConnection != nil else {
-                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
-                return
-            }
-
-            guard let videoCaptureController = strongSelf.videoCaptureController else {
-                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
-                return
-            }
-
-            guard let localVideoTrack = strongSelf.localVideoTrack else {
-                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
-                return
-            }
-            localVideoTrack.isEnabled = enabled
-
-            if enabled {
-                Logger.debug("\(strongSelf.logTag) in \(#function) starting video capture")
-                videoCaptureController.startCapture()
-            } else {
-                Logger.debug("\(strongSelf.logTag) in \(#function) stopping video capture")
-                videoCaptureController.stopCapture()
-            }
-
-            DispatchQueue.main.async(execute: completion)
-        }
-    }
-
-    // MARK: VideoCaptureSettingsDelegate
-
-    var videoWidth: Int32 {
-        return 400
-    }
-
-    var videoHeight: Int32 {
-        return 400
-    }
-
-    // MARK: - Audio
-
-    fileprivate func createAudioSender() {
-        AssertIsOnMainThread(file: #function)
-        Logger.debug("\(logTag) in \(#function)")
-        assert(self.audioSender == nil, "\(#function) should only be called once.")
-
-        guard let peerConnection = peerConnection else {
-            Logger.debug("\(logTag) \(#function) Ignoring obsolete event in terminated client")
-            return
-        }
-
-        let audioSource = PeerConnectionClient.rtcFactory.audioSource(with: self.audioConstraints)
-
-        let audioTrack = PeerConnectionClient.rtcFactory.audioTrack(with: audioSource, trackId: Identifiers.audioTrack.rawValue)
-        self.audioTrack = audioTrack
-
-        // Disable by default until call is connected.
-        // FIXME - do we require mic permissions at this point?
-        // if so maybe it would be better to not even add the track until the call is connected
-        // instead of creating it and disabling it.
-        audioTrack.isEnabled = true
-
-        let audioSender = peerConnection.sender(withKind: kAudioTrackType, streamId: Identifiers.mediaStream.rawValue)
-        audioSender.track = audioTrack
-        self.audioSender = audioSender
-    }
-
-    public func setAudioEnabled(enabled: Bool) {
-        AssertIsOnMainThread(file: #function)
-        let proxyCopy = self.proxy
-        ConferenceCallService.shared.rtcQueue.async {
-            guard let strongSelf = proxyCopy.get() else { return }
-            guard strongSelf.peerConnection != nil else {
-                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
-                return
-            }
-            guard let audioTrack = strongSelf.audioTrack else {
-                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
-                return
-            }
-
-            audioTrack.isEnabled = enabled
-        }
     }
 
     // MARK: - Session negotiation
@@ -861,15 +675,15 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
         // become nil when it was only a weak property. So we retain it and manually nil the reference here, because
         // we are likely to crash if we retain any peer connection properties when the peerconnection is released
 
-        localVideoTrack?.isEnabled = false
+        // localVideoTrack?.isEnabled = false
         remoteVideoTrack?.isEnabled = false
 
         audioSender = nil
-        audioTrack = nil
+        // audioTrack = nil
         videoSender = nil
-        localVideoTrack = nil
+        // localVideoTrack = nil
         remoteVideoTrack = nil
-        videoCaptureController = nil
+        // videoCaptureController = nil
 
         if let peerConnection = peerConnection {
             peerConnection.delegate = nil
@@ -914,6 +728,9 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
             }
             let remoteVideoTrack = stream.videoTracks[0]
             Logger.debug("\(strongSelf.logTag) didAdd stream:\(stream) video tracks: \(stream.videoTracks.count) audio tracks: \(stream.audioTracks.count)")
+            Logger.info("GEP: didAdd stream:\(stream)")
+            Logger.info("GEP: didAdd video tracks: \(stream.videoTracks.count)")
+            Logger.info("GEP: didAdd audio tracks: \(stream.audioTracks.count)")
 
             strongSelf.remoteVideoTrack = remoteVideoTrack
 
@@ -1079,14 +896,14 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
         
         // Wait until we've sent the CallOffer before sending any ice updates for the call to ensure
         // intuitive message ordering for other clients.
-        self.readyToSendIceCandidatesPromise.done {
+        self.readyToSendIceCandidatesPromise.then { _ -> Promise<Void> in
             guard let call = self.delegate?.owningCall() else {
                 Logger.debug("could not send ice candidates without owning call")
-                return
+                return Promise(error: CallError.other(description: "can't get owning call"))
             }
             guard let messageSender = Environment.current()?.messageSender else {
-                Logger.info("sendCallAcceptOffer can't get messageSender")
-                return
+                Logger.info("can't get messageSender")
+                return Promise(error: CallError.other(description: "can't get messageSender"))
             }
             
             var payloadCandidates = [NSDictionary]()
@@ -1105,7 +922,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
             
             guard payloadCandidates.count > 0 else {
                 Logger.debug("Attempt to build ice candidate message with no ice candidates.")
-                return
+                return Promise(error: CallError.other(description: "can't send zero ice candidates"))
             }
             
             let allTheData = [ "callId": call.callId ,
@@ -1116,8 +933,9 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate, VideoCaptureSet
             
             let iceControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallICECandidatesKey, moreData: allTheData)
             Logger.info("\(self.logTag) in \(#function) sending ICE Candidate to peer \(self.peerId).")
-            let sendPromise = messageSender.sendPromise(message: iceControlMessage)
-            sendPromise.retainUntilComplete()
+            return messageSender.sendPromise(message: iceControlMessage, recipientIds: [self.userId])
+        }.done {
+            Logger.info("\(self.logTag) in \(#function) done sending ice candidates to \(self.peerId).")
         }.catch { error in
             Logger.error("\(self.logTag) in \(#function) waitUntilReadyToSendIceUpdates failed with error: \(error)")
         }.retainUntilComplete()
@@ -1152,129 +970,6 @@ class HardenedRTCSessionDescription {
         description = audioLevelRegex.stringByReplacingMatches(in: description, options: [], range: NSRange(location: 0, length: description.count), withTemplate: "")
 
         return RTCSessionDescription.init(type: rtcSessionDescription.type, sdp: description)
-    }
-}
-
-protocol VideoCaptureSettingsDelegate: class {
-    var videoWidth: Int32 { get }
-    var videoHeight: Int32 { get }
-}
-
-class VideoCaptureController {
-
-    private let capturer: RTCCameraVideoCapturer
-    private weak var settingsDelegate: VideoCaptureSettingsDelegate?
-    private let serialQueue = DispatchQueue(label: "org.signal.videoCaptureController")
-    private var isUsingFrontCamera: Bool = true
-
-    public var captureSession: AVCaptureSession {
-        return capturer.captureSession
-    }
-
-    public init(capturer: RTCCameraVideoCapturer, settingsDelegate: VideoCaptureSettingsDelegate) {
-        self.capturer = capturer
-        self.settingsDelegate = settingsDelegate
-    }
-
-    public func startCapture() {
-        serialQueue.sync { [weak self] in
-            guard let strongSelf = self else {
-                return
-            }
-
-            strongSelf.startCaptureSync()
-        }
-    }
-
-    public func stopCapture() {
-        serialQueue.sync { [weak self] in
-            guard let strongSelf = self else {
-                return
-            }
-
-            strongSelf.capturer.stopCapture()
-        }
-    }
-
-    public func switchCamera(isUsingFrontCamera: Bool) {
-        serialQueue.sync { [weak self] in
-            guard let strongSelf = self else {
-                return
-            }
-
-            strongSelf.isUsingFrontCamera = isUsingFrontCamera
-            strongSelf.startCaptureSync()
-        }
-    }
-
-    private func assertIsOnSerialQueue() {
-        if _isDebugAssertConfiguration(), #available(iOS 10.0, *) {
-            assertOnQueue(serialQueue)
-        }
-    }
-
-    private func startCaptureSync() {
-        assertIsOnSerialQueue()
-
-        let position: AVCaptureDevice.Position = isUsingFrontCamera ? .front : .back
-        guard let device: AVCaptureDevice = self.device(position: position) else {
-            owsFailDebug("unable to find captureDevice")
-            return
-        }
-
-        guard let format: AVCaptureDevice.Format = self.format(device: device) else {
-            owsFailDebug("unable to find captureDevice")
-            return
-        }
-
-        let fps = self.framesPerSecond(format: format)
-        capturer.startCapture(with: device, format: format, fps: fps)
-    }
-
-    private func device(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        let captureDevices = RTCCameraVideoCapturer.captureDevices()
-        guard let device = (captureDevices.first { $0.position == position }) else {
-            Logger.debug("unable to find desired position: \(position)")
-            return captureDevices.first
-        }
-
-        return device
-    }
-
-    private func format(device: AVCaptureDevice) -> AVCaptureDevice.Format? {
-        let formats = RTCCameraVideoCapturer.supportedFormats(for: device)
-        let targetWidth = settingsDelegate?.videoWidth ?? 0
-        let targetHeight = settingsDelegate?.videoHeight ?? 0
-
-        var selectedFormat: AVCaptureDevice.Format?
-        var currentDiff: Int32 = Int32.max
-
-        for format in formats {
-            let dimension = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
-            let diff = abs(targetWidth - dimension.width) + abs(targetHeight - dimension.height)
-            if diff < currentDiff {
-                selectedFormat = format
-                currentDiff = diff
-            }
-        }
-
-        if _isDebugAssertConfiguration(), let selectedFormat = selectedFormat {
-            let dimension = CMVideoFormatDescriptionGetDimensions(selectedFormat.formatDescription)
-            Logger.debug("in \(#function) selected format width: \(dimension.width) height: \(dimension.height)")
-        }
-
-        assert(selectedFormat != nil)
-
-        return selectedFormat
-    }
-
-    private func framesPerSecond(format: AVCaptureDevice.Format) -> Int {
-        var maxFrameRate: Float64 = 0
-        for range in format.videoSupportedFrameRateRanges {
-            maxFrameRate = max(maxFrameRate, range.maxFrameRate)
-        }
-
-        return Int(maxFrameRate)
     }
 }
 
