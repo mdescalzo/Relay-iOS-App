@@ -12,6 +12,13 @@ import RelayServiceKit
 import RelayMessaging
 import UIKit
 
+
+public enum CCIdentifiers: String {
+    case mediaStream = "ARDAMS",
+    videoTrack = "ARDAMSv0",
+    audioTrack = "ARDAMSa0"
+}
+
 public enum CallError: Error {
     case providerReset
     case assertionError(description: String)
@@ -40,7 +47,7 @@ protocol ConferenceCallDelegate: class {
 //    func videoTrackDidUpdateFor(peerId: String)
 }
 
-@objc class ConferenceCall: NSObject, PeerConnectionClientDelegate {
+@objc class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
     let TAG = "[ConferenceCall]"
     
     var joinedDate: NSDate?
@@ -86,6 +93,18 @@ protocol ConferenceCallDelegate: class {
     }
     
     
+    // local connection stuff common to all peer connections
+    var connectionConstraints: RTCMediaConstraints?
+    var configuration: RTCConfiguration?
+    
+    var audioTrack: RTCAudioTrack?
+    var audioConstraints: RTCMediaConstraints?
+    
+    var videoCaptureController: VideoCaptureController?
+
+    var localVideoTrack: RTCVideoTrack? // RTCVideoTrack is fragile and prone to throwing exceptions and/or causing deadlock in its destructor.  Therefore we take great care with this property.
+    
+    
     public required init(direction: ConferenceCallDirection, thread: TSThread, callId: String, originatorId: String) {
         self.direction = direction
         self.thread = thread
@@ -100,6 +119,35 @@ protocol ConferenceCallDelegate: class {
         self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
     }
     
+    // make sure all of the local audio/video local peer connection config is in place
+    public func setUpLocalAV() -> Promise<Void> {
+        if self.configuration != nil {
+            return Promise<Void>.value(())
+        }
+        
+        return firstly {
+            ConferenceCallService.shared.iceServers
+        }.then { (iceServers: [RTCIceServer]) -> Promise<Void> in
+            if self.configuration != nil {
+                return Promise<Void>.value(())
+            }
+            self.configuration = RTCConfiguration()
+            self.configuration!.iceServers = iceServers
+            self.configuration!.bundlePolicy = .maxBundle
+            self.configuration!.rtcpMuxPolicy = .require
+            
+            let connectionConstraintsDict = ["DtlsSrtpKeyAgreement": "true"]
+            self.connectionConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: connectionConstraintsDict)
+            
+            self.audioConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
+            
+            self.createAudioSender()
+            self.createVideoCaptureController()
+            
+            return Promise<Void>.value(())
+        }
+    }
+    
     public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
         // skip it if we've already received this one
         if self.peerConnectionClients[peerId] != nil {
@@ -112,6 +160,7 @@ protocol ConferenceCallDelegate: class {
             guard let pcc = self.peerConnectionClients[pId] else {
                 continue;
             }
+            Logger.info("GEP: throwing away existing peer \(pId) for user \(self.peerConnectionClients[pId]!.userId)")
             self.peerConnectionClients.removeValue(forKey: pId)
             pcc.terminatePeer()
         }
@@ -257,4 +306,259 @@ protocol ConferenceCallDelegate: class {
     func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?) {
         Logger.debug("updated local video capture for peer \(strongPcc.peerId)")
     }
+    
+    // MARK: - Video
+    
+    fileprivate func createVideoCaptureController() {
+        AssertIsOnMainThread(file: #function)
+        Logger.debug("\(logTag) in \(#function)")
+        assert(self.videoCaptureController == nil, "\(#function) should only be called once.")
+        
+        guard !Platform.isSimulator else {
+            Logger.warn("\(logTag) Refusing to create local video track on simulator which has no capture device.")
+            return
+        }
+
+        let videoSource = ConferenceCallService.rtcFactory.videoSource()
+        
+        let localVideoTrack = ConferenceCallService.rtcFactory.videoTrack(with: videoSource, trackId: CCIdentifiers.videoTrack.rawValue)
+        self.localVideoTrack = localVideoTrack
+        // Disable by default until call is connected.
+        // FIXME - do we require mic permissions at this point?
+        // if so maybe it would be better to not even add the track until the call is connected
+        // instead of creating it and disabling it.
+        localVideoTrack.isEnabled = true
+        
+        let capturer = RTCCameraVideoCapturer(delegate: videoSource)
+        self.videoCaptureController = VideoCaptureController(capturer: capturer, settingsDelegate: self)
+        
+        // playing around... remove later
+        self.videoCaptureController!.startCapture()
+    }
+    
+    public func setCameraSource(isUsingFrontCamera: Bool) {
+        AssertIsOnMainThread(file: #function)
+        
+        let strongSelf = self
+        ConferenceCallService.shared.rtcQueue.async {
+            guard let captureController = strongSelf.videoCaptureController else {
+                owsFailDebug("\(self.logTag) in \(#function) captureController was unexpectedly nil")
+                return
+            }
+            
+            captureController.switchCamera(isUsingFrontCamera: isUsingFrontCamera)
+        }
+    }
+    
+    public func setLocalVideoEnabled(enabled: Bool) {
+        AssertIsOnMainThread(file: #function)
+        let strongSelf = self
+        let completion = {
+            let captureSession: AVCaptureSession? = {
+                guard enabled else {
+                    return nil
+                }
+                
+                guard let captureController = strongSelf.videoCaptureController else {
+                    owsFailDebug("\(self.logTag) in \(#function) videoCaptureController was unexpectedly nil")
+                    return nil
+                }
+                
+                return captureController.captureSession
+            }()
+        }
+        
+        ConferenceCallService.shared.rtcQueue.async {
+            let strongSelf = self
+
+            guard let videoCaptureController = strongSelf.videoCaptureController else {
+                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
+                return
+            }
+            
+            guard let localVideoTrack = strongSelf.localVideoTrack else {
+                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
+                return
+            }
+            localVideoTrack.isEnabled = enabled
+            
+            if enabled {
+                Logger.debug("\(strongSelf.logTag) in \(#function) starting video capture")
+                videoCaptureController.startCapture()
+            } else {
+                Logger.debug("\(strongSelf.logTag) in \(#function) stopping video capture")
+                videoCaptureController.stopCapture()
+            }
+            
+            DispatchQueue.main.async(execute: completion)
+        }
+    }
+    
+    // MARK: VideoCaptureSettingsDelegate
+    
+    var videoWidth: Int32 {
+        return 400
+    }
+    
+    var videoHeight: Int32 {
+        return 400
+    }
+    
+    // MARK: - Audio
+    
+    fileprivate func createAudioSender() {
+        AssertIsOnMainThread(file: #function)
+        Logger.debug("\(logTag) in \(#function)")
+
+        let audioSource = ConferenceCallService.rtcFactory.audioSource(with: self.audioConstraints)
+        
+        let audioTrack = ConferenceCallService.rtcFactory.audioTrack(with: audioSource, trackId: CCIdentifiers.audioTrack.rawValue)
+        self.audioTrack = audioTrack
+        
+        // Disable by default until call is connected.
+        // FIXME - do we require mic permissions at this point?
+        // if so maybe it would be better to not even add the track until the call is connected
+        // instead of creating it and disabling it.
+        audioTrack.isEnabled = true
+    }
+    
+    public func setAudioEnabled(enabled: Bool) {
+        AssertIsOnMainThread(file: #function)
+        let strongSelf = self
+        ConferenceCallService.shared.rtcQueue.async {
+            guard let audioTrack = strongSelf.audioTrack else {
+                Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
+                return
+            }
+            
+            audioTrack.isEnabled = enabled
+        }
+    }
+
 }
+
+
+
+protocol VideoCaptureSettingsDelegate: class {
+    var videoWidth: Int32 { get }
+    var videoHeight: Int32 { get }
+}
+
+class VideoCaptureController {
+    
+    private let capturer: RTCCameraVideoCapturer
+    private weak var settingsDelegate: VideoCaptureSettingsDelegate?
+    private let serialQueue = DispatchQueue(label: "org.signal.videoCaptureController")
+    private var isUsingFrontCamera: Bool = true
+    
+    public var captureSession: AVCaptureSession {
+        return capturer.captureSession
+    }
+    
+    public init(capturer: RTCCameraVideoCapturer, settingsDelegate: VideoCaptureSettingsDelegate) {
+        self.capturer = capturer
+        self.settingsDelegate = settingsDelegate
+    }
+    
+    public func startCapture() {
+        serialQueue.sync { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            strongSelf.startCaptureSync()
+        }
+    }
+    
+    public func stopCapture() {
+        serialQueue.sync { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            strongSelf.capturer.stopCapture()
+        }
+    }
+    
+    public func switchCamera(isUsingFrontCamera: Bool) {
+        serialQueue.sync { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            strongSelf.isUsingFrontCamera = isUsingFrontCamera
+            strongSelf.startCaptureSync()
+        }
+    }
+    
+    private func assertIsOnSerialQueue() {
+        if _isDebugAssertConfiguration(), #available(iOS 10.0, *) {
+            assertOnQueue(serialQueue)
+        }
+    }
+    
+    private func startCaptureSync() {
+        assertIsOnSerialQueue()
+        
+        let position: AVCaptureDevice.Position = isUsingFrontCamera ? .front : .back
+        guard let device: AVCaptureDevice = self.device(position: position) else {
+            owsFailDebug("unable to find captureDevice")
+            return
+        }
+        
+        guard let format: AVCaptureDevice.Format = self.format(device: device) else {
+            owsFailDebug("unable to find captureDevice")
+            return
+        }
+        
+        let fps = self.framesPerSecond(format: format)
+        capturer.startCapture(with: device, format: format, fps: fps)
+    }
+    
+    private func device(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let captureDevices = RTCCameraVideoCapturer.captureDevices()
+        guard let device = (captureDevices.first { $0.position == position }) else {
+            Logger.debug("unable to find desired position: \(position)")
+            return captureDevices.first
+        }
+        
+        return device
+    }
+    
+    private func format(device: AVCaptureDevice) -> AVCaptureDevice.Format? {
+        let formats = RTCCameraVideoCapturer.supportedFormats(for: device)
+        let targetWidth = settingsDelegate?.videoWidth ?? 0
+        let targetHeight = settingsDelegate?.videoHeight ?? 0
+        
+        var selectedFormat: AVCaptureDevice.Format?
+        var currentDiff: Int32 = Int32.max
+        
+        for format in formats {
+            let dimension = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+            let diff = abs(targetWidth - dimension.width) + abs(targetHeight - dimension.height)
+            if diff < currentDiff {
+                selectedFormat = format
+                currentDiff = diff
+            }
+        }
+        
+        if _isDebugAssertConfiguration(), let selectedFormat = selectedFormat {
+            let dimension = CMVideoFormatDescriptionGetDimensions(selectedFormat.formatDescription)
+            Logger.debug("in \(#function) selected format width: \(dimension.width) height: \(dimension.height)")
+        }
+        
+        assert(selectedFormat != nil)
+        
+        return selectedFormat
+    }
+    
+    private func framesPerSecond(format: AVCaptureDevice.Format) -> Int {
+        var maxFrameRate: Float64 = 0
+        for range in format.videoSupportedFrameRateRanges {
+            maxFrameRate = max(maxFrameRate, range.maxFrameRate)
+        }
+        
+        return Int(maxFrameRate)
+    }
+}
+

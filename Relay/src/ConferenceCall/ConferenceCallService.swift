@@ -8,12 +8,14 @@
 
 import Foundation
 import RelayServiceKit
+import WebRTC
 import PromiseKit
 
 protocol CallServiceObserver: class {
 }
 
 @objc public class ConferenceCallService: NSObject, FLCallMessageHandler {
+    static let rtcFactory = RTCPeerConnectionFactory()
     @objc static let shared = ConferenceCallService()
     
     // Exposed by environment.m
