@@ -36,26 +36,13 @@ protocol CallUIAdaptee {
 extension CallUIAdaptee {
     internal func showCall(_ call: ConferenceCall) {
         AssertIsOnMainThread(file: #function)
+
+        let callViewController = UIStoryboard(name: "Main",
+                                                 bundle: nil).instantiateViewController(withIdentifier: "ConferenceCallViewController")
         
-        let callViewController = CallViewController(call: call)
         callViewController.modalTransitionStyle = .crossDissolve
         
-        if CallViewController.kShowCallViewOnSeparateWindow {
-            OWSWindowManager.shared().startCall(callViewController)
-        } else {
-            guard let presentingViewController = UIApplication.shared.frontmostViewControllerIgnoringAlerts else {
-                owsFailDebug("in \(#function) view controller unexpectedly nil")
-                return
-            }
-            
-            if let presentedViewController = presentingViewController.presentedViewController {
-                presentedViewController.dismiss(animated: false) {
-                    presentingViewController.present(callViewController, animated: true)
-                }
-            } else {
-                presentingViewController.present(callViewController, animated: true)
-            }
-        }
+        OWSWindowManager.shared().startCall(callViewController)
     }
     
     internal func reportMissedCall(_ call: ConferenceCall, callerName: String) {
@@ -73,7 +60,7 @@ extension CallUIAdaptee {
         }
         
         let call = self.startOutgoingCall(threadId: recipientId)
-        call.hasLocalVideo = hasLocalVideo
+//        call.hasLocalVideo = hasLocalVideo
         self.showCall(call)
     }
 }
@@ -90,10 +77,11 @@ extension CallUIAdaptee {
     internal let audioService: CallAudioService
     internal let callService: ConferenceCallService
     
-    public required init(callService: ConferenceCallService, contactsManager: FLContactsManager, notificationsAdapter: CallNotificationsAdapter) {
+    @available(iOS 10.0, *)
+    public required init(callService: ConferenceCallService, notificationsAdapter: CallNotificationsAdapter) {
         AssertIsOnMainThread(file: #function)
         
-        self.contactsManager = contactsManager
+        self.contactsManager = FLContactsManager.shared
         self.callService = callService
         
         if #available(iOS 11, *) {
@@ -102,7 +90,7 @@ extension CallUIAdaptee {
             let useSystemCallLog = Environment.preferences().isSystemCallLogEnabled()
             
             adaptee = CallKitCallUIAdaptee(callService: callService, contactsManager: contactsManager, notificationsAdapter: notificationsAdapter, showNamesOnCallScreen: showNames, useSystemCallLog: useSystemCallLog)
-        } else if #available(iOS 10.0, *), Environment.current().preferences.isCallKitEnabled() {
+        } else {
             Logger.info("Choosing callkit adaptee for iOS10")
             let hideNames = Environment.preferences().isCallKitPrivacyEnabled() || Environment.preferences().notificationPreviewType() == .noNameNoPreview
             let showNames = !hideNames
@@ -246,13 +234,16 @@ extension CallUIAdaptee {
         // AudioSource is not handled by CallKit (e.g. there is no CXAction), so we handle it w/o going through the
         // adaptee, relying on the AudioService CallObserver to put the system in a state consistent with the call's
         // assigned property.
-        call.audioSource = audioSource
+        
+        // XXXXX
+//        call.audioSource = audioSource
     }
     
     internal func setCameraSource(call: ConferenceCall, isUsingFrontCamera: Bool) {
         AssertIsOnMainThread(file: #function)
         
-        callService.setCameraSource(call: call, isUsingFrontCamera: isUsingFrontCamera)
+        // XXXXX
+//        callService.setCameraSource(call: call, isUsingFrontCamera: isUsingFrontCamera)
     }
     
     // CallKit handles ringing state on it's own. But for non-call kit we trigger ringing start/stop manually.
@@ -267,7 +258,8 @@ extension CallUIAdaptee {
     internal func didUpdateCall(call: ConferenceCall?) {
         AssertIsOnMainThread(file: #function)
         
-        call?.addObserverAndSyncState(observer: audioService)
+        // XXXXX
+//      call?.addObserverAndSyncState(observer: audioService)
     }
     
     internal func didUpdateVideoTracks(call: ConferenceCall?,
@@ -275,6 +267,7 @@ extension CallUIAdaptee {
                                        remoteVideoTrack: RTCVideoTrack?) {
         AssertIsOnMainThread(file: #function)
         
-        audioService.didUpdateVideoTracks(call: call)
+        // XXXXX
+//        audioService.didUpdateVideoTracks(call: call)
     }
 }

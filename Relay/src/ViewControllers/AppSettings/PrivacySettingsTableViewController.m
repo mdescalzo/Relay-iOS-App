@@ -145,26 +145,8 @@ NS_ASSUME_NONNULL_BEGIN
         callKitSection.footerTitle = NSLocalizedString(
             @"SETTINGS_PRIVACY_CALLKIT_SYSTEM_CALL_LOG_PREFERENCE_DESCRIPTION", @"Settings table section footer.");
         [contents addSection:callKitSection];
-    } else if (@available(iOS 10, *)) {
-        OWSTableSection *callKitSection = [OWSTableSection new];
-        callKitSection.footerTitle
-            = NSLocalizedString(@"SETTINGS_SECTION_CALL_KIT_DESCRIPTION", @"Settings table section footer.");
-        [callKitSection addItem:[OWSTableItem switchItemWithText:NSLocalizedString(@"SETTINGS_PRIVACY_CALLKIT_TITLE",
-                                                                     @"Short table cell label")
-                                                            isOn:[Environment.preferences isCallKitEnabled]
-                                                          target:weakSelf
-                                                        selector:@selector(didToggleEnableCallKitSwitch:)]];
-        if (Environment.preferences.isCallKitEnabled) {
-            [callKitSection
-                addItem:[OWSTableItem switchItemWithText:NSLocalizedString(@"SETTINGS_PRIVACY_CALLKIT_PRIVACY_TITLE",
-                                                             @"Label for 'CallKit privacy' preference")
-                                                    isOn:![Environment.preferences isCallKitPrivacyEnabled]
-                                                  target:weakSelf
-                                                selector:@selector(didToggleEnableCallKitPrivacySwitch:)]];
-        }
-        [contents addSection:callKitSection];
     }
-
+    
     OWSTableSection *twoFactorAuthSection = [OWSTableSection new];
     twoFactorAuthSection.headerTitle = NSLocalizedString(
         @"SETTINGS_TWO_FACTOR_AUTH_TITLE", @"Title for the 'two factor auth' section of the privacy settings.");

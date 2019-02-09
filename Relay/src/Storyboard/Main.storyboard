@@ -573,10 +573,10 @@
             </objects>
             <point key="canvasLocation" x="-4388" y="-3565"/>
         </scene>
-        <!--Conference Call Collection View Controller-->
+        <!--Conference Call View Controller-->
         <scene sceneID="tDu-Ee-gq5">
             <objects>
-                <viewController id="WPy-fR-KZT" customClass="ConferenceCallCollectionViewController" customModule="Forsta" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ConferenceCallViewController" id="WPy-fR-KZT" customClass="ConferenceCallViewController" customModule="Forsta" customModuleProvider="target" sceneMemberID="viewController">
                     <stackView key="view" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" id="7P0-4s-sDt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

@@ -15,11 +15,24 @@ protocol CallServiceObserver: class {
 
 @objc public class ConferenceCallService: NSObject, FLCallMessageHandler {
     @objc static let shared = ConferenceCallService()
+    
+    // Exposed by environment.m
+    internal let notificationsAdapter: CallNotificationsAdapter
+    @objc public var callUIAdapter: CallUIAdapter
+    
     let rtcQueue = DispatchQueue(label: "WebRTCDanceCard")
     lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
     var observers = [Weak<CallServiceObserver>]()
 
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
+    
+    override init() {
+        super.init()
+        
+        self.callUIAdapter = CallUIAdapter(callService: self,
+                                           notificationsAdapter: <#T##CallNotificationsAdapter#>)
+    }
+    
 
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
@@ -119,4 +132,38 @@ protocol CallServiceObserver: class {
         observers = []
     }
 
+}
+
+extension ConferenceCallService : ConferenceCallDelegate {
+    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
+        switch state {
+        case .ringing:
+            do {
+                // Short UI for outgoing
+            }
+        case .rejected:
+            do {
+                // Hang it up
+            }
+        case .joined:
+            do {
+                // For outgoing notify UI
+                // For incoming display incoming call UI
+            }
+        case .left:
+            do {
+                // Hang it up
+            }
+        case .failed:
+            do {
+                
+            }
+        }
+    }
+    
+    func peerConnectionsDidConnect(peerId: String) {
+        <#code#>
+    }
+    
+    
 }

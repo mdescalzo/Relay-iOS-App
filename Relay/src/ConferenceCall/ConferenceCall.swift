@@ -35,7 +35,7 @@ enum ConferenceCallState {
 
 protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
-    func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String)
+    func peerConnectionsDidConnect(peerId: String)
 //    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
 //    func videoTrackDidUpdateFor(peerId: String)
 }
@@ -61,6 +61,8 @@ protocol ConferenceCallDelegate: class {
             updateCallRecordType()
         }
     }
+    
+    let audioActivity: AudioActivity
     
     var state: ConferenceCallState {
         didSet {
@@ -94,6 +96,8 @@ protocol ConferenceCallDelegate: class {
         let cr = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: self.callId, callType: RPRecentCallTypeOutgoingIncomplete, in: self.thread)
         cr.save()
         self.callRecord = cr
+        
+        self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
     }
     
     public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
@@ -228,6 +232,13 @@ protocol ConferenceCallDelegate: class {
     
     func iceConnected(strongPcc: PeerConnectionClient) {
         Logger.debug("ice connected for peer \(strongPcc.peerId)")
+        
+        self.state = .joined
+        // TODO:  Make call that leads to UI adapter which will display new call UI here
+        for delegate in delegates {
+            delegate.value?.peerConnectionsDidConnect(peerId: strongPcc.peerId)
+        }
+
         strongPcc.peerConnectedResolver.fulfill(())
     }
     
