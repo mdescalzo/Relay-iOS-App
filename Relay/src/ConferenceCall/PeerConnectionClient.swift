@@ -81,6 +81,10 @@ protocol PeerConnectionClientDelegate: class {
 //   accepts call or hangs up.  If accepted, Alice or Bob (randomly) hangs up.
 //   Repeat immediately, as fast as you can, 10-20x.
 class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
+    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        Logger.info("[PeerConnectionProxy] yo not needed, for now")
+    }
+    
 
     private var value: PeerConnectionClient?
 
@@ -158,6 +162,10 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
  * including audio, video, and some post-connected signaling (hangup, add video)
  */
 class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
+    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        Logger.info("[PeerConnectionProxy] yo not needed, for now")
+    }
+    
     private var pendingIceCandidates = Set<RTCIceCandidate>()
     private var iceCandidatesDebounceTimer: Timer?
     
