@@ -1475,7 +1475,7 @@ typedef enum : NSUInteger {
     }
 
     // [self.outboundCallInitiator initiateCallWithRecipientId:self.thread.uniqueId isVideo:isVideo];
-    [ConferenceCallService.shared callOutWith:self.thread];
+    [ConferenceCallService.shared startCallWithThread:self.thread];
 }
 
 - (BOOL)canCall
