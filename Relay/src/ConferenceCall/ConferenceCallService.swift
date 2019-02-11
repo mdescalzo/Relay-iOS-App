@@ -11,7 +11,8 @@ import RelayServiceKit
 import WebRTC
 import PromiseKit
 
-protocol CallServiceObserver: class {
+protocol ConferenceCallServiceDelegate: class {
+    func createdConferenceCall(call: ConferenceCall)
 }
 
 @objc public class ConferenceCallService: NSObject, FLCallMessageHandler {
@@ -24,7 +25,7 @@ protocol CallServiceObserver: class {
     
     let rtcQueue = DispatchQueue(label: "WebRTCDanceCard")
     lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
-    var observers = [Weak<CallServiceObserver>]()
+    var delegates = [Weak<ConferenceCallServiceDelegate>]()
 
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
@@ -37,6 +38,27 @@ protocol CallServiceObserver: class {
     }
     
 
+    func addDelegate(delegate: ConferenceCallServiceDelegate) {
+        AssertIsOnMainThread(file: #function)
+        delegates.append(Weak(value: delegate))
+    }
+    
+    func removeDelegate(_ delegate: ConferenceCallServiceDelegate) {
+        AssertIsOnMainThread(file: #function)
+        while let index = delegates.index(where: { $0.value === delegate }) {
+            delegates.remove(at: index)
+        }
+    }
+    
+    func notifyDelegates(todo: (_ theDelegate: ConferenceCallServiceDelegate) -> Void) {
+        for delegate in delegates {
+            if delegate.value != nil {
+                todo(delegate.value!)
+            }
+        }
+    }
+        
+
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
             Logger.debug("Ignoring call offer from/for a new call")
@@ -44,6 +66,7 @@ protocol CallServiceObserver: class {
         }
         if conferenceCall == nil {
             conferenceCall = ConferenceCall(direction: .incoming, thread: thread, callId: callId, originatorId: originatorId)
+            notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
         self.callUIAdapter?.reportIncomingCall(conferenceCall!, thread: thread)
@@ -82,6 +105,7 @@ protocol CallServiceObserver: class {
         let newCallId = NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
         conferenceCall = ConferenceCall(direction: .outgoing, thread: thread, callId: newCallId, originatorId: originatorId)
+        notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
     }
     
@@ -114,18 +138,18 @@ protocol CallServiceObserver: class {
     // MARK: - Observers
     
     // The observer-related methods should be invoked on the main thread.
-    func addObserverAndSyncState(observer: CallServiceObserver) {
+    func addObserverAndSyncState(observer: ConferenceCallServiceDelegate) {
         AssertIsOnMainThread(file: #function)
         
-        observers.append(Weak(value: observer))
+        delegates.append(Weak(value: observer))
     }
     
     // The observer-related methods should be invoked on the main thread.
-    func removeObserver(_ observer: CallServiceObserver) {
+    func removeObserver(_ observer: ConferenceCallServiceDelegate) {
         AssertIsOnMainThread(file: #function)
         
-        while let index = observers.index(where: { $0.value === observer }) {
-            observers.remove(at: index)
+        while let index = delegates.index(where: { $0.value === observer }) {
+            delegates.remove(at: index)
         }
     }
     
@@ -133,7 +157,7 @@ protocol CallServiceObserver: class {
     func removeAllObservers() {
         AssertIsOnMainThread(file: #function)
         
-        observers = []
+        delegates = []
     }
 
 }
