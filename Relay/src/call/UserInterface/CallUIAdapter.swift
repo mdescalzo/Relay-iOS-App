@@ -38,8 +38,8 @@ extension CallUIAdaptee {
         AssertIsOnMainThread(file: #function)
 
         let callViewController = UIStoryboard(name: "Main",
-                                                 bundle: nil).instantiateViewController(withIdentifier: "ConferenceCallViewController")
-        
+                                              bundle: nil).instantiateViewController(withIdentifier: "ConferenceCallViewController") as! ConferenceCallViewController
+        callViewController.configure(call: call)
         callViewController.modalTransitionStyle = .crossDissolve
         
         OWSWindowManager.shared().startCall(callViewController)

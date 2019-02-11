@@ -117,6 +117,45 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
     func reportIncomingCall(_ call: ConferenceCall, callerName: String) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(self.TAG) \(#function)")
+        
+        guard let callUUID = UUID.init(uuidString:call.callId) else {
+            Logger.error("\(self.TAG) received call object with maformed id: \(call.callId)")
+            return
+        }
+
+        // Construct a CXCallUpdate describing the incoming call, including the caller.
+        let update = CXCallUpdate()
+
+        update.localizedCallerName = call.thread.displayName() // self.contactsManager.displayName(forRecipientId: call.callId)
+        update.remoteHandle = CXHandle(type: .generic, value: call.thread.displayName())
+
+//        if showNamesOnCallScreen {
+//            update.localizedCallerName = self.contactsManager.displayName(forRecipientId: call.callId)
+//            update.remoteHandle = CXHandle(type: .phoneNumber, value: call.callId)
+//        } else {
+//            let callKitId = CallKitCallManager.kAnonymousCallHandlePrefix + call.localId.uuidString
+//            update.remoteHandle = CXHandle(type: .generic, value: callKitId)
+//            OWSPrimaryStorage.shared().setPhoneNumber(call.callId, forCallKitId: callKitId)
+//            update.localizedCallerName = NSLocalizedString("CALLKIT_ANONYMOUS_CONTACT_NAME", comment: "The generic name used for calls if CallKit privacy is enabled")
+//        }
+
+        update.hasVideo = (call.localVideoTrack != nil) ? true : false
+
+        disableUnsupportedFeatures(callUpdate: update)
+
+        // Report the incoming call to the system
+        provider.reportNewIncomingCall(with: callUUID, update: update) { error in
+            /*
+             Only add incoming call to the app's list of calls if the call was allowed (i.e. there was no error)
+             since calls may be "denied" for various legitimate reasons. See CXErrorCodeIncomingCallError.
+             */
+            guard error == nil else {
+                Logger.error("\(self.TAG) failed to report new incoming call")
+                return
+            }
+
+            self.callManager.addCall(call)
+        }
     }
 
     func answerCall(localId: UUID) {
@@ -154,6 +193,7 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
     func localHangupCall(_ call: ConferenceCall) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(self.TAG) \(#function)")
+        callManager.localHangup(call: call)
     }
 
     func remoteDidHangupCall(_ call: ConferenceCall) {
@@ -176,7 +216,7 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
         Logger.debug("\(self.TAG) \(#function)")
     }
 
-    // MARK: CXProviderDelegate
+    // MARK: - CXProviderDelegate
 
     func providerDidReset(_ provider: CXProvider) {
         AssertIsOnMainThread(file: #function)
@@ -191,13 +231,23 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
 
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         AssertIsOnMainThread(file: #function)
-
         Logger.info("\(TAG) Received \(#function) CXAnswerCallAction")
+        guard ConferenceCallService.shared.conferenceCall?.callId.lowercased() == action.callUUID.uuidString.lowercased() else {
+            Logger.debug("\(TAG) Ignoring action for obsolete call.")
+            return
+        }
+        self.answerCall(ConferenceCallService.shared.conferenceCall!)
+        self.showCall(ConferenceCallService.shared.conferenceCall!)
     }
 
     public func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(TAG) Received \(#function) CXEndCallAction")
+        guard ConferenceCallService.shared.conferenceCall?.callId.lowercased() == action.callUUID.uuidString.lowercased() else {
+            Logger.debug("\(TAG) Ignoring action for obsolete call.")
+            return
+        }
+        self.declineCall(ConferenceCallService.shared.conferenceCall!)
     }
 
     public func provider(_ provider: CXProvider, perform action: CXSetHeldCallAction) {

@@ -25,6 +25,7 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
     }
     
     var peerAVViews = [String : RTCVideoRenderer]()
+    var hasDismissed = false
 
     @IBOutlet var stackContainerView: UIStackView!
 
@@ -40,6 +41,7 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
     @IBOutlet weak var audioOutButton: UIButton!
     
     var call: ConferenceCall?
+    lazy var callUIAdapter:CallUIAdapter? = { return ConferenceCallService.shared.callUIAdapter }()
 
     func configure(call: ConferenceCall) {
         self.call = call
@@ -105,6 +107,29 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
             }
         }
     }
+    
+    internal func dismissIfPossible(shouldDelay: Bool, completion: (() -> Void)? = nil) {
+        callUIAdapter!.audioService.delegate = nil
+        
+        if hasDismissed {
+            // Don't dismiss twice.
+            return
+        } else if shouldDelay {
+            hasDismissed = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.dismissImmediately(completion: completion)
+            }
+        } else {
+            hasDismissed = true
+            dismissImmediately(completion: completion)
+        }
+    }
+    
+    internal func dismissImmediately(completion: (() -> Void)?) {
+        OWSWindowManager.shared().endCall(self)
+        completion?()
+    }
 
     // MARK: - Action handlers
     @objc func didDoubleTapCollectionView(gesture: UITapGestureRecognizer) {
@@ -135,6 +160,12 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
     }
     
     @IBAction func didTapEndCallButton(_ sender: Any) {
+        if self.call != nil,
+            self.callUIAdapter != nil {
+            self.callUIAdapter!.localHangupCall(self.call!)
+        }
+        
+        self.dismissIfPossible(shouldDelay: false, completion: nil)
     }
     
     @IBAction func didDoubleTapLocalUserView(_ sender: UITapGestureRecognizer) {
@@ -247,7 +278,7 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
         // a stub
     }
     
-    func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String) {
+    func peerConnectionDidConnect(peerId: String) {
         // a stub
     }
 

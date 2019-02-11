@@ -19,8 +19,8 @@ protocol CallServiceObserver: class {
     @objc static let shared = ConferenceCallService()
     
     // Exposed by environment.m
-    internal let notificationsAdapter: CallNotificationsAdapter
-    @objc public var callUIAdapter: CallUIAdapter
+    internal let notificationsAdapter = CallNotificationsAdapter()
+    @objc public var callUIAdapter: CallUIAdapter?
     
     let rtcQueue = DispatchQueue(label: "WebRTCDanceCard")
     lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
@@ -28,11 +28,12 @@ protocol CallServiceObserver: class {
 
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
-    override init() {
+    required override init() {
         super.init()
         
-        self.callUIAdapter = CallUIAdapter(callService: self,
-                                           notificationsAdapter: <#T##CallNotificationsAdapter#>)
+        if #available(iOS 10.0, *) {
+            self.callUIAdapter = CallUIAdapter(callService: self, notificationsAdapter: self.notificationsAdapter)
+        }
     }
     
 
@@ -45,6 +46,7 @@ protocol CallServiceObserver: class {
             conferenceCall = ConferenceCall(direction: .incoming, thread: thread, callId: callId, originatorId: originatorId)
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
+        self.callUIAdapter?.reportIncomingCall(conferenceCall!, thread: thread)
     }
 
     public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
@@ -138,6 +140,11 @@ protocol CallServiceObserver: class {
 
 extension ConferenceCallService : ConferenceCallDelegate {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
+        guard call == self.conferenceCall else {
+            Logger.debug("Dropping stale call reference.")
+            return
+        }
+        
         switch state {
         case .ringing:
             do {
@@ -151,6 +158,7 @@ extension ConferenceCallService : ConferenceCallDelegate {
             do {
                 // For outgoing notify UI
                 // For incoming display incoming call UI
+                self.callUIAdapter!.showCall(call)
             }
         case .left:
             do {
@@ -163,8 +171,8 @@ extension ConferenceCallService : ConferenceCallDelegate {
         }
     }
     
-    func peerConnectionsDidConnect(peerId: String) {
-        <#code#>
+    func peerConnectionDidConnect(peerId: String) {
+        // stub
     }
     
     

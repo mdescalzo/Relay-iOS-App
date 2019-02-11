@@ -42,7 +42,7 @@ enum ConferenceCallState {
 
 protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
-    func peerConnectionsDidConnect(peerId: String)
+    func peerConnectionDidConnect(peerId: String)
 //    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
 //    func videoTrackDidUpdateFor(peerId: String)
 }
@@ -112,7 +112,14 @@ protocol ConferenceCallDelegate: class {
         self.originatorId = originatorId
         self.state = (direction == .outgoing) ? .joined : .ringing
         
-        let cr = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: self.callId, callType: RPRecentCallTypeOutgoingIncomplete, in: self.thread)
+        var callType: RPRecentCallType
+        switch self.direction {
+        case .outgoing:
+            callType = RPRecentCallTypeOutgoingIncomplete
+        case .incoming:
+            callType = RPRecentCallTypeIncoming
+        }
+        let cr = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: self.callId, callType: callType, in: self.thread)
         cr.save()
         self.callRecord = cr
         
@@ -285,7 +292,7 @@ protocol ConferenceCallDelegate: class {
         self.state = .joined
         // TODO:  Make call that leads to UI adapter which will display new call UI here
         for delegate in delegates {
-            delegate.value?.peerConnectionsDidConnect(peerId: strongPcc.peerId)
+            delegate.value?.peerConnectionDidConnect(peerId: strongPcc.peerId)
         }
 
         strongPcc.peerConnectedResolver.fulfill(())

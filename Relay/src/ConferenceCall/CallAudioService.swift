@@ -92,6 +92,10 @@ protocol CallAudioServiceDelegate: class {
 }
 
 @objc class CallAudioService: NSObject, ConferenceCallDelegate {
+    func peerConnectionDidConnect(peerId: String) {
+        // stub
+    }
+    
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
         // stub
     }
