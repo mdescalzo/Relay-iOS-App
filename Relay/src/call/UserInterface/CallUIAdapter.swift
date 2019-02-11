@@ -20,5 +20,8 @@ extension CallUIAdaptee {
  * Notify the user of call related activities.
  * Driven by either a CallKit or System notifications adaptee
  */
-@objc public class CallUIAdapter: NSObject, CallServiceObserver {
+@objc public class CallUIAdapter: NSObject, ConferenceCallServiceDelegate {
+    func createdConferenceCall(call: ConferenceCall) {
+        Logger.debug("TODO: handle createdConferenceCall")
+    }
 }
