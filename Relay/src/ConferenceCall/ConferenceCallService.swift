@@ -51,7 +51,7 @@ protocol ConferenceCallServiceDelegate: class {
             return
         }
         if conferenceCall == nil {
-            conferenceCall = ConferenceCall(direction: .incoming, thread: thread, callId: callId, originatorId: originatorId)
+            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId)
             notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
@@ -86,7 +86,7 @@ protocol ConferenceCallServiceDelegate: class {
     @objc public func startCall(thread: TSThread) {
         let newCallId = NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
-        conferenceCall = ConferenceCall(direction: .outgoing, thread: thread, callId: newCallId, originatorId: originatorId)
+        conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId)
         notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
     }
