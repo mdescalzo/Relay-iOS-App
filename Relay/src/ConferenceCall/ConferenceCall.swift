@@ -98,6 +98,10 @@ protocol ConferenceCallDelegate: class {
             for delegate in delegates {
                 delegate.value?.stateDidChange(call: self, state: state)
             }
+            
+            if self.state == .joined && (oldValue == .ringing || oldValue == .vibrating) {
+                answerPendingOffers()
+            }
         }
     }
     
@@ -156,6 +160,12 @@ protocol ConferenceCallDelegate: class {
         }
     }
     
+    func answerPendingOffers() {
+        for (_, pcc) in self.peerConnectionClients {
+            pcc.readyToAnswerResolver.fulfill(())
+        }
+    }
+    
     public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
         // skip it if we've already received this one
         if self.peerConnectionClients[peerId] != nil {
@@ -177,6 +187,9 @@ protocol ConferenceCallDelegate: class {
         let newPcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId)
         self.peerConnectionClients[peerId] = newPcc
         newPcc.handleOffer(sessionDescription: sessionDescription)
+        if (self.state == .joined) {
+            newPcc.readyToAnswerResolver.fulfill(())
+        }
         
         // and also kick off peer connections to other parties in the thread (if not already underway)
         self.inviteMissingParticipants()
