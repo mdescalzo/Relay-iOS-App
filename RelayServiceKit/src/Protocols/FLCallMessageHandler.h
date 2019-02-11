@@ -12,25 +12,25 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol FLCallMessageHandler <NSObject>
 
 -(void)receivedOfferWithThread:(TSThread *)thread
-                          callId:(NSString *)callId
-                        senderId:(NSString *)senderId
-                          peerId:(NSString *)peerId
-                    originatorId:(NSString *)originatorId
-              sessionDescription:(NSString *)sessionDescription;
+                        callId:(NSString *)callId
+                      senderId:(NSString *)senderId
+                        peerId:(NSString *)peerId
+                  originatorId:(NSString *)originatorId
+            sessionDescription:(NSString *)sessionDescription;
 
 -(void)receivedAcceptOfferWithThread:(TSThread *)thread
-                                callId:(NSString *)callId
-                                peerId:(NSString *)peerId
-                    sessionDescription:(NSString *)sessionDescription;
+                              callId:(NSString *)callId
+                              peerId:(NSString *)peerId
+                  sessionDescription:(NSString *)sessionDescription;
 
 -(void)receivedIceCandidatesWithThread:(TSThread *)thread
-                                  callId:(NSString *)callId
-                                  peerId:(NSString *)peerId
-                           iceCandidates:(NSArray *)iceCandidates;
+                                callId:(NSString *)callId
+                                peerId:(NSString *)peerId
+                         iceCandidates:(NSArray *)iceCandidates;
 
 -(void)receivedLeaveWithThread:(TSThread *)thread
-                          callId:(NSString *)callId
-                          peerId:(NSString *)peerId;
+                        callId:(NSString *)callId
+                      senderId:(NSString *)senderId;
 
 @end
 

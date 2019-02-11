@@ -34,10 +34,13 @@ enum ConferenceCallDirection {
 }
 
 enum ConferenceCallState {
-    case ringing            // after receiving or sending an offer
-    case rejected, joined   // after ringing
+    case undefined          // (briefly) at creation
+    case ringing            // after receiving offer
+    case vibrating          // after some other device of mine has accepted that offer
+    case rejected           // after ringing or vibrating
+    case joined             // after ringing or vibrating (or having initiated a call)
     case left               // after joined
-    case failed             // after ringing or joined
+    case failed             // after ringing/vibrating or joined
 }
 
 protocol ConferenceCallDelegate: class {
@@ -52,7 +55,16 @@ protocol ConferenceCallDelegate: class {
     
     var joinedDate: NSDate?
 
-    let direction: ConferenceCallDirection
+    var direction: ConferenceCallDirection {
+        get {
+            if self.originatorId == TSAccountManager.localUID()! {
+                return .outgoing
+            } else {
+                return .incoming
+            }
+        }
+    }
+    
     let thread: TSThread;
     let callId: String;
     let originatorId: String;
@@ -105,12 +117,13 @@ protocol ConferenceCallDelegate: class {
     var localVideoTrack: RTCVideoTrack? // RTCVideoTrack is fragile and prone to throwing exceptions and/or causing deadlock in its destructor.  Therefore we take great care with this property.
     
     
-    public required init(direction: ConferenceCallDirection, thread: TSThread, callId: String, originatorId: String) {
-        self.direction = direction
+    public required init(thread: TSThread, callId: String, originatorId: String) {
         self.thread = thread
         self.callId = callId
         self.originatorId = originatorId
-        self.state = (direction == .outgoing) ? .joined : .ringing
+        self.state = .undefined
+        super.init()
+        self.state = (self.direction == .outgoing) ? .joined : .ringing
         
         var callType: RPRecentCallType
         switch self.direction {
@@ -223,7 +236,7 @@ protocol ConferenceCallDelegate: class {
     
     func handlePeerLeave(peerId: String) {
         guard let pcc = self.peerConnectionClients[peerId] else {
-            Logger.debug("\(TAG) ignoring leave nonexistent peer \(peerId)")
+            Logger.debug("\(TAG) ignoring leave for nonexistent peer \(peerId)")
             return
         }
         self.peerConnectionClients.removeValue(forKey: pcc.peerId)

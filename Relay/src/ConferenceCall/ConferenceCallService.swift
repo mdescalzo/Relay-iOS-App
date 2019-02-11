@@ -65,7 +65,7 @@ protocol ConferenceCallServiceDelegate: class {
             return
         }
         if conferenceCall == nil {
-            conferenceCall = ConferenceCall(direction: .incoming, thread: thread, callId: callId, originatorId: originatorId)
+            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId)
             notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
@@ -88,20 +88,25 @@ protocol ConferenceCallServiceDelegate: class {
         conferenceCall?.handleRemoteIceCandidates(peerId: peerId, iceCandidates: iceCandidates)
     }
     
-    public func receivedLeave(with thread: TSThread, callId: String, peerId: String) {
+    public func receivedLeave(with thread: TSThread, callId: String, senderId: String) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
             Logger.debug("Ignoring leave from/for an unknown call")
             return
         }
         
-        conferenceCall?.handlePeerLeave(peerId: peerId);
+        guard let (_, pcc) = (conferenceCall!.peerConnectionClients.first { (k, v) in v.userId == senderId }) else {
+            Logger.debug("unable to find a PeerConnectionClient for sender \(senderId)")
+            return
+        }
+        
+        conferenceCall?.handlePeerLeave(peerId: pcc.peerId);
     }
     
     // initiate an outbound call
     @objc public func startCall(thread: TSThread) {
         let newCallId = NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
-        conferenceCall = ConferenceCall(direction: .outgoing, thread: thread, callId: newCallId, originatorId: originatorId)
+        conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId)
         notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
     }
