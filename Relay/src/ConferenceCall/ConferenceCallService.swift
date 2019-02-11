@@ -82,16 +82,23 @@ protocol ConferenceCallServiceDelegate: class {
         conferenceCall?.handlePeerLeave(peerId: peerId);
     }
     
-    @objc public func callOut(with thread: TSThread) {
-//        if conferenceCall != nil {
-//            Logger.debug("no new call while existing call is in place")
-//            return
-//        }
+    // initiate an outbound call
+    @objc public func startCall(thread: TSThread) {
         let newCallId = NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
         conferenceCall = ConferenceCall(direction: .outgoing, thread: thread, callId: newCallId, originatorId: originatorId)
         notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
+    }
+    
+    // terminate an existing call
+    func endCall(call: ConferenceCall) {
+        if (call != self.conferenceCall) {
+            Logger.debug("Ignoring endCall for an unknown call")
+            return
+        }
+        call.terminateCall()
+        self.conferenceCall = nil
     }
     
     private static func getIceServers() -> Promise<[RTCIceServer]> {
