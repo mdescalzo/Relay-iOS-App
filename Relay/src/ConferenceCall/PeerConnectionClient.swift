@@ -162,7 +162,7 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
  * including audio, video, and some post-connected signaling (hangup, add video)
  */
 class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
-    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+    private func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
         Logger.info("[PeerConnectionProxy] yo not needed, for now")
     }
     

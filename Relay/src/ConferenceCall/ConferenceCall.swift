@@ -39,7 +39,8 @@ enum ConferenceCallState {
     case vibrating          // after some other device of mine has accepted that offer
     case rejected           // after ringing or vibrating
     case joined             // after ringing or vibrating (or having initiated a call)
-    case left               // after joined
+    case leaving            // after joined
+    case left               // after leaving or after last peer has left
     case failed             // after ringing/vibrating or joined
 }
 
@@ -231,8 +232,12 @@ protocol ConferenceCallDelegate: class {
 
         // terminate the entire call if there are no other peers
         if self.peerConnectionClients.count == 0 {
-            self.terminateCall()
+            self.state = .left
         }
+    }
+    
+    func leaveCall() {
+        self.state = .leaving
     }
     
     func terminateCall() {
@@ -240,6 +245,7 @@ protocol ConferenceCallDelegate: class {
             pcc.terminatePeer()
         }
         self.peerConnectionClients.removeAll()
+        self.state = .left
     }
     
     

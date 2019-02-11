@@ -102,8 +102,7 @@ protocol ConferenceCallServiceDelegate: class {
             Logger.debug("Ignoring endCall for an unknown call")
             return
         }
-        call.terminateCall()
-        self.conferenceCall = nil
+        call.endCall()
     }
     
     private static func getIceServers() -> Promise<[RTCIceServer]> {
