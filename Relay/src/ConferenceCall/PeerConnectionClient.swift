@@ -8,18 +8,13 @@ import WebRTC
 import RelayServiceKit
 import RelayMessaging
 
-public enum PeerConnectionState: String {
-    case idle
-    case dialing
-    case answering
-    case remoteRinging
-    case localRinging
+public enum PeerConnectionClientState: String {
+    case undefined
+    case readyToSendCallAcceptOffer
+    case sentCallAcceptOffer
+    case readyToReceiveCallAcceptOffer
+    case receivedCallAcceptOffer
     case connected
-    case reconnecting
-    case localFailure // terminal
-    case localHangup // terminal
-    case remoteHangup // terminal
-    case remoteBusy // terminal
 }
 
 // HACK - Seeing crazy SEGFAULTs on iOS9 when accessing these objc externs.
@@ -169,6 +164,8 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     
     let userId: String
     var peerId: String
+    
+    var state: PeerConnectionClientState
 
     // Delegate is notified of key events in the call lifecycle.
     //
@@ -192,6 +189,8 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     private static var expiredProxies = [PeerConnectionProxy]()
     
     // promises and their resolvers for controlling ordering of async actions
+    let readyToAnswerPromise: Promise<Void>
+    let readyToAnswerResolver: Resolver<Void>
     let readyToSendIceCandidatesPromise: Promise<Void>
     let readyToSendIceCandidatesResolver: Resolver<Void>
     let peerConnectedPromise: Promise<Void>
@@ -204,7 +203,9 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         self.delegate = delegate
         self.userId = userId
         self.peerId = peerId
+        self.state = .undefined
 
+        (self.readyToAnswerPromise, self.readyToAnswerResolver) = Promise<Void>.pending()
         (self.readyToSendIceCandidatesPromise, self.readyToSendIceCandidatesResolver) = Promise<Void>.pending()
         (self.peerConnectedPromise, self.peerConnectedResolver) = Promise<Void>.pending()
 
@@ -219,9 +220,12 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return
         }
         
+        self.state = .readyToSendCallAcceptOffer
         firstly {
-            return cc.setUpLocalAV()
-        }.then { (Void) -> Promise<HardenedRTCSessionDescription> in
+            self.readyToAnswerPromise
+        }.then { _ -> Promise<Void> in
+            cc.setUpLocalAV()
+        }.then { _ -> Promise<HardenedRTCSessionDescription> in
             Logger.info("GEP: have local AV for \(self.peerId)")
             self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
                                                                                   constraints: cc.connectionConstraints!,
@@ -244,6 +248,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return self.sendCallAcceptOffer(peerId: self.peerId, negotiatedSessionDescription: hardenedSessionDesc)
         }.then { () -> Promise<Void> in
             Logger.debug("\(self.logTag) successfully sent callAcceptOffer for peer: \(self.peerId)")
+            self.state = .sentCallAcceptOffer
             
             self.readyToSendIceCandidatesResolver.fulfill(())
             
@@ -255,6 +260,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return race(self.peerConnectedPromise, timeout)
         }.done {
             Logger.debug("peer \(self.peerId) connected")
+            self.state = .connected
         }.recover { error in
             if let callError = error as? CallError {
                 self.handleFailedConnection(error: callError)
@@ -346,6 +352,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             }
         }.then { () -> Promise<Void> in
             Logger.info("GEP: have sent callOffer message for \(self.peerId)")
+            self.state = .readyToReceiveCallAcceptOffer
             self.readyToSendIceCandidatesResolver.fulfill(())
             
             // Don't let the outgoing call ring forever. We don't support inbound ringing forever anyway.
@@ -358,6 +365,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             
             return race(timeout, self.peerConnectedPromise)
         }.done {
+            self.state = .connected
             Logger.info("GEP: call connected for \(self.peerId)")
             Logger.info("callOffer connected for peer \(self.peerId)")
         }.recover { error in
@@ -382,6 +390,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         }.done {
             Logger.info("GEP: set remote session description for \(self.peerId)")
             Logger.debug("\(self.logTag) successfully set remote description")
+            self.state = .receivedCallAcceptOffer
         }.catch { error in
             Logger.info("GEP: set remote session description failed for \(self.peerId): \(error)")
             Logger.error("\(self.logTag) setting remote session description for peer \(self.peerId) failed with error: \(error)")
