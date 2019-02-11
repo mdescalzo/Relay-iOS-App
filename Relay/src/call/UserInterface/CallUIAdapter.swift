@@ -17,6 +17,7 @@ protocol CallUIAdaptee {
     func startOutgoingCall(threadId: String) -> ConferenceCall
     func reportIncomingCall(_ call: ConferenceCall, callerName: String)
     func reportMissedCall(_ call: ConferenceCall, callerName: String)
+    func reportCallAnsweredByOtherDevice(_ call: ConferenceCall)
     func answerCall(localId: UUID)
     func answerCall(_ call: ConferenceCall)
     func declineCall(localId: UUID)
@@ -69,7 +70,7 @@ extension CallUIAdaptee {
  * Notify the user of call related activities.
  * Driven by either a CallKit or System notifications adaptee
  */
-@objc public class CallUIAdapter: NSObject, CallServiceObserver {
+@objc public class CallUIAdapter: NSObject, ConferenceCallServiceDelegate {    
     
     let TAG = "[CallUIAdapter]"
     private let adaptee: CallUIAdaptee
@@ -253,7 +254,12 @@ extension CallUIAdaptee {
         return adaptee.hasManualRinger
     }
     
-    // MARK: - CallServiceObserver
+    // MARK: - CallServiceDelegate
+    internal func createdConferenceCall(call: ConferenceCall) {
+        AssertIsOnMainThread(file: #function)
+// XXXXXXXX
+    }
+
     
     internal func didUpdateCall(call: ConferenceCall?) {
         AssertIsOnMainThread(file: #function)

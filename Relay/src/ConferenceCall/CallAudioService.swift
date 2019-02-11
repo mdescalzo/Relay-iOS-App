@@ -92,6 +92,10 @@ protocol CallAudioServiceDelegate: class {
 }
 
 @objc class CallAudioService: NSObject, ConferenceCallDelegate {
+    func didUpdateRemoteVideoTrack(peer: PeerConnectionClient, videoTrack: RTCVideoTrack) {
+        // CallAudioService don't care (probably)
+    }
+    
     func peerConnectionDidConnect(peerId: String) {
         // stub
     }

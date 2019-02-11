@@ -170,6 +170,10 @@ protocol ConferenceCallServiceDelegate: class {
 }
 
 extension ConferenceCallService : ConferenceCallDelegate {
+    func didUpdateRemoteVideoTrack(peer: PeerConnectionClient, videoTrack: RTCVideoTrack) {
+        // ConferenceCallSerice don't care (probably)
+    }
+    
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
         guard call == self.conferenceCall else {
             Logger.debug("Dropping stale call reference.")

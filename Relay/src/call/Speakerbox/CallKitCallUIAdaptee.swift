@@ -182,7 +182,6 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(self.TAG) \(#function)")
 
-        callManager.localHangup(call: call)
     }
 
     func recipientAcceptedCall(_ call: ConferenceCall) {
@@ -193,6 +192,13 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
     func localHangupCall(_ call: ConferenceCall) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(self.TAG) \(#function)")
+        callManager.localHangup(call: call)
+    }
+    
+    func reportCallAnsweredByOtherDevice(_ call: ConferenceCall) {
+        if let callUUID = UUID(uuidString:call.callId) {
+            provider.reportCall(with: callUUID, endedAt: Date(), reason: .answeredElsewhere)
+        }
         callManager.localHangup(call: call)
     }
 

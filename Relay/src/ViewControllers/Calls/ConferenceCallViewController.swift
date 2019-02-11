@@ -10,7 +10,7 @@ import UIKit
 
 private let reuseIdentifier = "peerCell"
 
-class ConferenceCallViewController: UIViewController, CallServiceObserver, ConferenceCallDelegate {
+class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate {
 
     var peerIds = [String]()
     var mainPeerId: String?
@@ -45,6 +45,13 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
 
     func configure(call: ConferenceCall) {
         self.call = call
+        
+        for peerId in call.thread.participantIds {
+            guard peerId != TSAccountManager.localUID() else {
+                continue
+            }
+            peerIds.append(peerId)
+        }
     }
     
     override func loadView() {
@@ -69,6 +76,12 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
 //        self.collectionView!.register(PeerViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
+        
+        // Build collection of references to the AV views
+        if self.mainPeerId != nil {
+            self.peerAVViews[mainPeerId!] = self.mainPeerAVView
+        }
+        
         self.updatePeerViewHeight()
         
         // Peer view setup
@@ -256,24 +269,12 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
     }
     */
 
-    // MARK: - Call & Call Service Delegate methods
-    func rendererViewFor(peerId: String) -> RTCVideoRenderer? {
-        if let peerView = self.peerAVViews[peerId] {
-            return peerView
-        } else {
-            Logger.info("Received video track update for unknown peer: \(peerId)")
-            return nil
-        }
-    }
-    
-    func videoTrackDidUpdateFor(peerId: String) {
+    // MARK: - Call Service Delegate methods
+    func createdConferenceCall(call: ConferenceCall) {
         // a stub
     }
     
-    func updateCall(call: ConferenceCall) {
-        // a stub
-    }
-    
+    // MARK: - Call delegate methods
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
         // a stub
     }
@@ -281,6 +282,48 @@ class ConferenceCallViewController: UIViewController, CallServiceObserver, Confe
     func peerConnectionDidConnect(peerId: String) {
         // a stub
     }
+    
+    func didUpdateRemoteVideoTrack(peer: PeerConnectionClient, videoTrack: RTCVideoTrack) {
+        guard self.peerIds.contains(peer.peerId) else {
+            Logger.debug("\(self.logTag): Ignoring video track update for non-member peer: \(peer.peerId)")
+            return
+        }
+        
+        guard let avView = self.peerAVViews[peer.peerId] else {
+            owsFailDebug("\(self.logTag):")
+            return
+        }
+        
+        videoTrack.add(avView)
+        let view = avView as! UIView
+        view.isHidden = false
+    }
+
+
+//    func rendererViewFor(peerId: String) -> RTCVideoRenderer? {
+//        if let peerView = self.peerAVViews[peerId] {
+//            return peerView
+//        } else {
+//            Logger.info("Received video track update for unknown peer: \(peerId)")
+//            return nil
+//        }
+//    }
+//
+//    func videoTrackDidUpdateFor(peerId: String) {
+//        // a stub
+//    }
+//
+//    func updateCall(call: ConferenceCall) {
+//        // a stub
+//    }
+//
+//    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
+//        // a stub
+//    }
+//
+//    func peerConnectionDidConnect(peerId: String) {
+//        // a stub
+//    }
 
 }
 
@@ -305,10 +348,13 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
         let cell: PeerViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PeerViewCell
 
         cell.avatarImageView.image = UIImage(named: "avatar")
-
         cell.avView.backgroundColor = UIColor.green
+
+        let peerId = self.secondaryPeerIds()[indexPath.item]
+        self.peerAVViews[peerId] = cell.avView
         
-        cell.layer.cornerRadius = self.peerViewDiameter()/8
+        // TODO: put a fine black line border
+//        cell.layer.cornerRadius = self.peerViewDiameter()/8
 
         return cell
     }

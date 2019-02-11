@@ -40,7 +40,7 @@ final class CallKitCallManager: NSObject {
     }
 
     func localHangup(call: ConferenceCall) {
-//        self.callService.leaveCall
+        self.callService?.endCall(call: call)
     }
 
     func setHeld(call: ConferenceCall, onHold: Bool) {
