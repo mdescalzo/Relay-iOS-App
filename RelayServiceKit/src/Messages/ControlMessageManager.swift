@@ -223,13 +223,13 @@ class ControlMessageManager : NSObject
             return
         }
         
-        guard let peerId = dataBlob.object(forKey: "peerId") as? String else {
-            Logger.info("Received callLeave message without peerId.")
+        guard let senderId = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as? String else {
+            Logger.debug("Received callLeave message with no senderId.")
             return
         }
         
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread, callId: callId, peerId: peerId)
+            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread, callId: callId, senderId: senderId)
         }
     }
     

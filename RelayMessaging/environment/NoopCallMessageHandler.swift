@@ -18,7 +18,7 @@ public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedLeave(with thread: TSThread, callId: String, peerId: String) {
+    public func receivedLeave(with thread: TSThread, callId: String, senderId peerId: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     

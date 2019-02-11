@@ -73,13 +73,18 @@ protocol ConferenceCallServiceDelegate: class {
         conferenceCall?.handleRemoteIceCandidates(peerId: peerId, iceCandidates: iceCandidates)
     }
     
-    public func receivedLeave(with thread: TSThread, callId: String, peerId: String) {
+    public func receivedLeave(with thread: TSThread, callId: String, senderId: String) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
             Logger.debug("Ignoring leave from/for an unknown call")
             return
         }
         
-        conferenceCall?.handlePeerLeave(peerId: peerId);
+        guard let (_, pcc) = (conferenceCall!.peerConnectionClients.first { (k, v) in v.userId == senderId }) else {
+            Logger.debug("unable to find a PeerConnectionClient for sender \(senderId)")
+            return
+        }
+        
+        conferenceCall?.handlePeerLeave(peerId: pcc.peerId);
     }
     
     // initiate an outbound call

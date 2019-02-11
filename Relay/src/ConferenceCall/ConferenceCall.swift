@@ -223,7 +223,7 @@ protocol ConferenceCallDelegate: class {
     
     func handlePeerLeave(peerId: String) {
         guard let pcc = self.peerConnectionClients[peerId] else {
-            Logger.debug("\(TAG) ignoring leave nonexistent peer \(peerId)")
+            Logger.debug("\(TAG) ignoring leave for nonexistent peer \(peerId)")
             return
         }
         self.peerConnectionClients.removeValue(forKey: pcc.peerId)
