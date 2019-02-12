@@ -149,7 +149,7 @@ class ControlMessageManager : NSObject
         let sdpString = offer?.object(forKey: "sdp") as? String
         
         guard sdpString != nil else {
-            Logger.debug("sdb string missing from call offer.")
+            Logger.debug("sdb string missing from callOffer.")
             return
         }
         

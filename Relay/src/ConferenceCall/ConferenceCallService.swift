@@ -61,7 +61,7 @@ protocol ConferenceCallServiceDelegate: class {
 
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
-            Logger.debug("Ignoring call offer from/for a new call")
+            Logger.debug("Ignoring callOffer from/for a new call")
             return
         }
         if conferenceCall == nil {

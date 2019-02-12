@@ -160,18 +160,28 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
     }
 
-    @IBAction func didTapMuteButton(_ sender: Any) {
+    @IBAction func didTapMuteButton(_ sender: UIButton) {
+        Logger.info("\(self.logTag) called \(#function)")
+
         self.muteButton.isSelected = !self.muteButton.isSelected
+
+        self.callUIAdapter?.setIsMuted(call: self.call!, isMuted: self.muteButton.isSelected)
     }
     
-    @IBAction func didTapVideoToggleButton(_ sender: Any) {
+    @IBAction func didTapVideoToggleButton(_ sender: UIButton) {
+        Logger.info("\(self.logTag) called \(#function)")
         self.videoToggleButton.isSelected = !self.videoToggleButton.isSelected
+        
+        self.callUIAdapter?.setHasLocalVideo(call: self.call!, hasLocalVideo: self.videoToggleButton.isSelected)
+
     }
     
     @IBAction func didTapAudioOutputButton(_ sender: Any) {
+        Logger.info("\(self.logTag) called \(#function)")
     }
     
     @IBAction func didTapEndCallButton(_ sender: Any) {
+        Logger.info("\(self.logTag) called \(#function)")
         if self.call != nil,
             self.callUIAdapter != nil {
             self.callUIAdapter!.localHangupCall(self.call!)
