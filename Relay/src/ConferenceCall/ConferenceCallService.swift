@@ -106,7 +106,7 @@ protocol ConferenceCallServiceDelegate: class {
     
     // initiate an outbound call
     @objc public func startCall(thread: TSThread) {
-        let newCallId = NSUUID().uuidString.lowercased()
+        let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
         conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId)
         notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
