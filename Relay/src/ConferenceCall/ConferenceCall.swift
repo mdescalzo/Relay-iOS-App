@@ -46,7 +46,9 @@ enum ConferenceCallState {
 
 protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
-    func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String)
+    func peerConnectionDidConnect(peerId: String)
+//    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
+    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
 }
 
 @objc class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
@@ -79,6 +81,8 @@ protocol ConferenceCallDelegate: class {
             updateCallRecordType()
         }
     }
+    
+    let audioActivity: AudioActivity
     
     var state: ConferenceCallState {
         didSet {
@@ -123,12 +127,22 @@ protocol ConferenceCallDelegate: class {
         self.callId = callId
         self.originatorId = originatorId
         self.state = .undefined
+        self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
+
         super.init()
         self.state = (self.direction == .outgoing) ? .joined : .ringing
         
-        let cr = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: self.callId, callType: RPRecentCallTypeOutgoingIncomplete, in: self.thread)
+        var callType: RPRecentCallType
+        switch self.direction {
+        case .outgoing:
+            callType = RPRecentCallTypeOutgoingIncomplete
+        case .incoming:
+            callType = RPRecentCallTypeIncoming
+        }
+        let cr = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: self.callId, callType: callType, in: self.thread)
         cr.save()
         self.callRecord = cr
+        
     }
     
     // make sure all of the local audio/video local peer connection config is in place
@@ -259,6 +273,7 @@ protocol ConferenceCallDelegate: class {
     
     func leaveCall() {
         self.state = .leaving
+        self.terminateCall()
     }
     
     func terminateCall() {
@@ -315,6 +330,13 @@ protocol ConferenceCallDelegate: class {
     
     func iceConnected(strongPcc: PeerConnectionClient) {
         Logger.debug("ice connected for peer \(strongPcc.peerId)")
+        
+        self.state = .joined
+        // TODO:  Make call that leads to UI adapter which will display new call UI here
+        for delegate in delegates {
+            delegate.value?.peerConnectionDidConnect(peerId: strongPcc.peerId)
+        }
+
         strongPcc.peerConnectedResolver.fulfill(())
     }
     
@@ -328,6 +350,9 @@ protocol ConferenceCallDelegate: class {
     
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack) {
         Logger.debug("updated remote video track for peer \(strongPcc.peerId)")
+        for delegate in delegates {
+            delegate.value?.peerConnectiongDidUpdateRemoteVideoTrack(peerId: strongPcc.peerId)
+        }
     }
     
     func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?) {

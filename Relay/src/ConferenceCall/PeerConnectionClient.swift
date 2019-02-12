@@ -76,10 +76,6 @@ protocol PeerConnectionClientDelegate: class {
 //   accepts call or hangs up.  If accepted, Alice or Bob (randomly) hangs up.
 //   Repeat immediately, as fast as you can, 10-20x.
 class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
-    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-        Logger.info("[PeerConnectionProxy] yo not needed, for now")
-    }
-    
 
     private var value: PeerConnectionClient?
 
@@ -148,6 +144,11 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
         self.get()?.peerConnection(peerConnection, didRemove: candidates)
     }
+    
+    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        self.get()?.peerConnection(peerConnection, didOpen: dataChannel)
+    }
+
 }
 
 /**
@@ -157,9 +158,6 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
  * including audio, video, and some post-connected signaling (hangup, add video)
  */
 class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
-    private func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-        Logger.info("[PeerConnectionProxy] yo not needed, for now")
-    }
     
     private var pendingIceCandidates = Set<RTCIceCandidate>()
     private var iceCandidatesDebounceTimer: Timer?
@@ -182,7 +180,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     // RTCVideoTrack is fragile and prone to throwing exceptions and/or
     // causing deadlock in its destructor.  Therefore we take great care
     // with this property.
-    private var remoteVideoTrack: RTCVideoTrack?
+    var remoteVideoTrack: RTCVideoTrack?
 
     private let proxy = PeerConnectionProxy()
     // Note that we're deliberately leaking proxy instances using this
@@ -872,6 +870,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
         Logger.debug("\(logTag) didRemove IceCandidates:\(candidates)")
     }
+    
+    internal func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        Logger.debug("\(logTag) didOpen dataChannel:\(dataChannel.description)")
+    }
+
 
     // MARK: Helpers
 

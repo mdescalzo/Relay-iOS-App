@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (!self) {
         return self;
     }
+    self.messageType = @"content";
 
     return self;
 }

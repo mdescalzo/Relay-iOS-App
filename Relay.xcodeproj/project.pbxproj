@@ -383,7 +383,6 @@
 		45F59A082028E4FB00E8D2B0 /* OWSAudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F170AB1E2F0351003FC1F2 /* OWSAudioSession.swift */; };
 		45F59A0A2029140500E8D2B0 /* OWSVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F59A092029140500E8D2B0 /* OWSVideoPlayer.swift */; };
 		45F659731E1BD99C00444429 /* CallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */; };
-		45F659821E1BE77000444429 /* NonCallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659811E1BE77000444429 /* NonCallKitCallUIAdaptee.swift */; };
 		45FBC5C81DF8575700E9B410 /* CallKitCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */; };
 		4C090A1B210FD9C7001FD7F9 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */; };
 		4C11AA5020FD59C700351FBD /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11AA4F20FD59C700351FBD /* MessageStatusView.swift */; };
@@ -530,7 +529,6 @@
 		7D2CD5BC214C3C9C004E957A /* BlockListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC887204DAC8C007AEB0F /* BlockListViewController.m */; };
 		7D2CD5BD214C3C9C004E957A /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705DA6214827EF00488180 /* DirectoryCell.swift */; };
 		7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */; };
-		7D2CD5BF214C3C9C004E957A /* NonCallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659811E1BE77000444429 /* NonCallKitCallUIAdaptee.swift */; };
 		7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */; };
 		7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
 		7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */; };
@@ -737,6 +735,12 @@
 		7D8517E5211CB08500F9EF53 /* Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E3211CB08400F9EF53 /* Conversions.m */; };
 		7D8517EC211CB19C00F9EF53 /* EvpMessageDigest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E7211CB19B00F9EF53 /* EvpMessageDigest.m */; };
 		7D8517ED211CB19C00F9EF53 /* EvpSymetricUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E8211CB19B00F9EF53 /* EvpSymetricUtil.m */; };
+		7D92E4CE220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
+		7D92E4CF220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
+		7D92E4D0220E0A1600542694 /* PeerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CC220E0A1500542694 /* PeerViewCell.swift */; };
+		7D92E4D1220E0A1600542694 /* PeerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CC220E0A1500542694 /* PeerViewCell.swift */; };
+		7D92E4D2220E0A1600542694 /* PeerViewsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */; };
+		7D92E4D3220E0A1600542694 /* PeerViewsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */; };
 		7DCA3B3E21BB00F700733FF2 /* ThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCA3B3D21BB00F600733FF2 /* ThreadManager.swift */; };
 		7DD5A72D211B7B1100965478 /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72C211B7B1000965478 /* HttpRequest.m */; };
 		7DD5A730211B7C7100965478 /* HttpRequestOrResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72F211B7C7100965478 /* HttpRequestOrResponse.m */; };
@@ -1425,7 +1429,6 @@
 		45F3AEB51DFDE7900080CE33 /* AvatarImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarImageView.swift; sourceTree = "<group>"; };
 		45F59A092029140500E8D2B0 /* OWSVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OWSVideoPlayer.swift; sourceTree = "<group>"; };
 		45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallKitCallUIAdaptee.swift; sourceTree = "<group>"; };
-		45F659811E1BE77000444429 /* NonCallKitCallUIAdaptee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonCallKitCallUIAdaptee.swift; sourceTree = "<group>"; };
 		45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallKitCallManager.swift; sourceTree = "<group>"; };
 		45FDA43420A4D22700396358 /* OWSNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OWSNavigationBar.swift; sourceTree = "<group>"; };
 		4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HapticFeedback.swift; path = UserInterface/HapticFeedback.swift; sourceTree = "<group>"; };
@@ -1515,6 +1518,9 @@
 		7D8517E9211CB19B00F9EF53 /* EvpMessageDigest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpMessageDigest.h; sourceTree = "<group>"; };
 		7D8517EA211CB19C00F9EF53 /* EvpUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpUtil.h; sourceTree = "<group>"; };
 		7D8517EB211CB19C00F9EF53 /* EvpSymetricUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpSymetricUtil.h; sourceTree = "<group>"; };
+		7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConferenceCallViewController.swift; sourceTree = "<group>"; };
+		7D92E4CC220E0A1500542694 /* PeerViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerViewCell.swift; sourceTree = "<group>"; };
+		7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerViewsLayout.swift; sourceTree = "<group>"; };
 		7D95D84B215C5E99000E783D /* RelayDev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RelayDev-Info.plist"; sourceTree = "<group>"; };
 		7D9DCFCA21B5D7AE00120954 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		7DCA3B3D21BB00F600733FF2 /* ThreadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadManager.swift; sourceTree = "<group>"; };
@@ -2179,6 +2185,7 @@
 				340FC87A204DAC8C007AEB0F /* AppSettings */,
 				34D5CCA71EAE3D30005515DB /* AvatarViewHelper.h */,
 				34D5CCA81EAE3D30005515DB /* AvatarViewHelper.m */,
+				7D92E4CA220E09F200542694 /* Calls */,
 				348BB25C20A0C5530047AEC2 /* ContactShareViewHelper.swift */,
 				34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */,
 				34B3F83F1E8DF1700035BE1A /* ContactsPicker.xib */,
@@ -2473,7 +2480,6 @@
 				45E2E91E1E13EE3500457AA0 /* OWSCallNotificationsAdaptee.h */,
 				451A13B01E13DED2000A50FD /* CallNotificationsAdapter.swift */,
 				45794E851E00620000066731 /* CallUIAdapter.swift */,
-				45F659811E1BE77000444429 /* NonCallKitCallUIAdaptee.swift */,
 			);
 			name = UserInterface;
 			sourceTree = "<group>";
@@ -2714,6 +2720,16 @@
 				7D8517CD211CAC0D00F9EF53 /* CryptoTools.m */,
 			);
 			path = crypto;
+			sourceTree = "<group>";
+		};
+		7D92E4CA220E09F200542694 /* Calls */ = {
+			isa = PBXGroup;
+			children = (
+				7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */,
+				7D92E4CC220E0A1500542694 /* PeerViewCell.swift */,
+				7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */,
+			);
+			path = Calls;
 			sourceTree = "<group>";
 		};
 		9404664EC513585B05DF1350 /* Pods */ = {
@@ -4161,6 +4177,7 @@
 				7D2CD53D214C3C9C004E957A /* AttachmentUploadView.m in Sources */,
 				7D2CD53E214C3C9C004E957A /* MediaGalleryViewController.swift in Sources */,
 				7D2CD53F214C3C9C004E957A /* HomeViewCell.m in Sources */,
+				7D92E4D3220E0A1600542694 /* PeerViewsLayout.swift in Sources */,
 				7D2CD540214C3C9C004E957A /* ArrayUtil.m in Sources */,
 				7D2CD541214C3C9C004E957A /* OWSBubbleShapeView.m in Sources */,
 				7D2CD542214C3C9C004E957A /* OWSAudioMessageView.m in Sources */,
@@ -4274,6 +4291,7 @@
 				7D2CD5AC214C3C9C004E957A /* OWSBackupIO.m in Sources */,
 				7D2CD5AD214C3C9C004E957A /* OWSDeviceProvisioningURLParser.m in Sources */,
 				7D7DBD15215DB50200AE6C7F /* FLAnnouncementViewController.m in Sources */,
+				7D92E4D1220E0A1600542694 /* PeerViewCell.swift in Sources */,
 				7D2CD5AE214C3C9C004E957A /* ContactCell.swift in Sources */,
 				7D2CD5AF214C3C9C004E957A /* DomainFrontingCountryViewController.m in Sources */,
 				7D2CD5B0214C3C9C004E957A /* SlugCell.swift in Sources */,
@@ -4288,7 +4306,6 @@
 				7D2CD5BC214C3C9C004E957A /* BlockListViewController.m in Sources */,
 				7D2CD5BD214C3C9C004E957A /* DirectoryCell.swift in Sources */,
 				7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */,
-				7D2CD5BF214C3C9C004E957A /* NonCallKitCallUIAdaptee.swift in Sources */,
 				7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */,
 				7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */,
 				7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */,
@@ -4334,6 +4351,7 @@
 				7D2CD5F1214C3C9C004E957A /* OWSSystemMessageCell.m in Sources */,
 				7D2CD5F2214C3C9C004E957A /* GroupTableViewCell.swift in Sources */,
 				7D2CD5F3214C3C9C004E957A /* OWSContactShareView.m in Sources */,
+				7D92E4CF220E0A1600542694 /* ConferenceCallViewController.swift in Sources */,
 				7D2CD5F4214C3C9C004E957A /* ConversationViewController.m in Sources */,
 				7D2CD5F5214C3C9C004E957A /* OWSMessageTimerView.m in Sources */,
 				7D2CD5F6214C3C9C004E957A /* DateUtil.m in Sources */,
@@ -4366,6 +4384,7 @@
 				34D1F0BD1F8D108C0066283D /* AttachmentUploadView.m in Sources */,
 				452EC6DF205E9E30000E787C /* MediaGalleryViewController.swift in Sources */,
 				34386A52207D0C01009F5D9C /* HomeViewCell.m in Sources */,
+				7D92E4D2220E0A1600542694 /* PeerViewsLayout.swift in Sources */,
 				7D8517DC211CADDE00F9EF53 /* ArrayUtil.m in Sources */,
 				34DBF007206C3CB200025978 /* OWSBubbleShapeView.m in Sources */,
 				34D1F0BA1F8800D90066283D /* OWSAudioMessageView.m in Sources */,
@@ -4479,6 +4498,7 @@
 				340FC8D0205BF2FA007AEB0F /* OWSBackupIO.m in Sources */,
 				458E38371D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m in Sources */,
 				7D7DBD14215DB50200AE6C7F /* FLAnnouncementViewController.m in Sources */,
+				7D92E4D0220E0A1600542694 /* PeerViewCell.swift in Sources */,
 				4517642B1DE939FD00EDB8B9 /* ContactCell.swift in Sources */,
 				340FC8AB204DAC8D007AEB0F /* DomainFrontingCountryViewController.m in Sources */,
 				7D705DA22148258100488180 /* SlugCell.swift in Sources */,
@@ -4493,7 +4513,6 @@
 				340FC8B1204DAC8D007AEB0F /* BlockListViewController.m in Sources */,
 				7D705DA7214827EF00488180 /* DirectoryCell.swift in Sources */,
 				45B5360E206DD8BB00D61655 /* UIResponder+OWS.swift in Sources */,
-				45F659821E1BE77000444429 /* NonCallKitCallUIAdaptee.swift in Sources */,
 				34B3F8771E8DF1700035BE1A /* ContactsPicker.swift in Sources */,
 				45C0DC1B1E68FE9000E04C47 /* UIApplication+OWS.swift in Sources */,
 				45FBC5C81DF8575700E9B410 /* CallKitCallManager.swift in Sources */,
@@ -4539,6 +4558,7 @@
 				34D1F0B01F867BFC0066283D /* OWSSystemMessageCell.m in Sources */,
 				45A663C51F92EC760027B59E /* GroupTableViewCell.swift in Sources */,
 				34CA631B2097806F00E526A0 /* OWSContactShareView.m in Sources */,
+				7D92E4CE220E0A1600542694 /* ConferenceCallViewController.swift in Sources */,
 				34D1F0861F8678AA0066283D /* ConversationViewController.m in Sources */,
 				3427C64320F500E000EEC730 /* OWSMessageTimerView.m in Sources */,
 				B90418E6183E9DD40038554A /* DateUtil.m in Sources */,

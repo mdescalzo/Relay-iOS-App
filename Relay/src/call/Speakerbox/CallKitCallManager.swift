@@ -19,6 +19,8 @@ final class CallKitCallManager: NSObject {
 
     let callController = CXCallController()
     let showNamesOnCallScreen: Bool
+    
+    lazy var callService: ConferenceCallService? = { return ConferenceCallService.shared }()
 
 //    @objc static let kAnonymousCallHandlePrefix = "Forsta:"
     @objc static let kAnonymousCallHandlePrefix = ""
@@ -38,6 +40,7 @@ final class CallKitCallManager: NSObject {
     }
 
     func localHangup(call: ConferenceCall) {
+        self.callService?.endCall(call: call)
     }
 
     func setHeld(call: ConferenceCall, onHold: Bool) {
@@ -47,6 +50,7 @@ final class CallKitCallManager: NSObject {
     }
 
     func answer(call: ConferenceCall) {
+        call.state = .joined
     }
 
     private func requestTransaction(_ transaction: CXTransaction) {
@@ -57,7 +61,9 @@ final class CallKitCallManager: NSObject {
     private(set) var calls = [ConferenceCall]()
 
     func callWithLocalId(_ localId: UUID) -> ConferenceCall? {
-        return nil
+        return self.calls.filter { (call) -> Bool in
+            localId == UUID.init(uuidString: call.callId)
+        }.last
     }
 
     func addCall(_ call: ConferenceCall) {

@@ -174,7 +174,7 @@ void VerifyRegistrationsForPrimaryStorage(OWSStorage *storage)
 {
     OWSAssertIsOnMainThread();
     
-    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
     [self updateUIDatabaseConnectionToLatest];
 }
 
