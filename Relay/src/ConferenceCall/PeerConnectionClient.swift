@@ -739,20 +739,20 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 owsFailDebug("\(strongSelf.logTag) in \(#function) mismatched peerConnection callback.")
                 return
             }
-            guard stream.videoTracks.count > 0 else {
-                owsFailDebug("\(strongSelf.logTag) in \(#function) didAdd stream missing stream.")
-                return
-            }
-            let remoteVideoTrack = stream.videoTracks[0]
-            Logger.debug("\(strongSelf.logTag) didAdd stream:\(stream) video tracks: \(stream.videoTracks.count) audio tracks: \(stream.audioTracks.count)")
+            
             Logger.info("GEP: didAdd stream:\(stream)")
             Logger.info("GEP: didAdd video tracks: \(stream.videoTracks.count)")
             Logger.info("GEP: didAdd audio tracks: \(stream.audioTracks.count)")
+            
+            if stream.videoTracks.count > 0 {
+                let remoteVideoTrack = stream.videoTracks[0]
+                strongSelf.remoteVideoTrack = remoteVideoTrack
 
-            strongSelf.remoteVideoTrack = remoteVideoTrack
-
-            DispatchQueue.main.async {
-                completion(remoteVideoTrack)
+                DispatchQueue.main.async {
+                    completion(remoteVideoTrack)
+                }
+            } else {
+                Logger.debug("\(strongSelf.logTag) didAdd stream:\(stream) didn't have any video tracks")
             }
         }
     }

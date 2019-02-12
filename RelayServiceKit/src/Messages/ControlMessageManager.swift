@@ -130,23 +130,16 @@ class ControlMessageManager : NSObject
             return
         }
         
-        let callId = dataBlob?.object(forKey: "callId") as? String
-        let members = dataBlob?.object(forKey: "members") as? NSArray
-        let originator = dataBlob?.object(forKey: "originator") as? String
-        let peerId = dataBlob?.object(forKey: "peerId") as? String
-        let offer = dataBlob?.object(forKey: "offer") as? NSDictionary
-        
-        guard originator != TSAccountManager.localUID() else {
-            Logger.info("\(self.tag): Ignoring callOffer control message from self.")
-            return
-        }
-        
-        guard threadId != nil && callId != nil && members != nil && originator != nil && peerId != nil && offer != nil else {
+        guard let callId = dataBlob?.object(forKey: "callId") as? String,
+            let members = dataBlob?.object(forKey: "members") as? NSArray,
+            let originator = dataBlob?.object(forKey: "originator") as? String,
+            let peerId = dataBlob?.object(forKey: "peerId") as? String,
+            let offer = dataBlob?.object(forKey: "offer") as? NSDictionary else {
             Logger.debug("Received callOffer message missing required objects.")
             return
         }
         
-        let sdpString = offer?.object(forKey: "sdp") as? String
+        let sdpString = offer.object(forKey: "sdp") as? String
         
         guard sdpString != nil else {
             Logger.debug("sdb string missing from call offer.")
@@ -155,15 +148,15 @@ class ControlMessageManager : NSObject
         
         let thread = message.thread
         thread.update(withPayload: forstaPayload as! [AnyHashable : Any])
-        thread.participantIds = members! as! [String]
+        thread.participantIds = members as! [String]
         thread.save(with: transaction)
         
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: thread,
-                                                                       callId: callId!,
+                                                                       callId: callId,
                                                                        senderId: message.authorId,
-                                                                       peerId: peerId!,
-                                                                       originatorId: originator!,
+                                                                       peerId: peerId,
+                                                                       originatorId: originator,
                                                                        sessionDescription: sdpString!)
         }
     }
@@ -199,7 +192,7 @@ class ControlMessageManager : NSObject
         
         // If the callAccept came from self, another device picked up.  Stop local processing.
         guard message.authorId != TSAccountManager.localUID() else {
-            Logger.info("Received call accept offer from another device.  Ignoring")
+            Logger.info("Another device of self has answered -- update this call's state from ringing to vibrating... ")
             return
         }
         
