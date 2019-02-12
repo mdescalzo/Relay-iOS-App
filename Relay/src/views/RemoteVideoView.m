@@ -24,9 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation RemoteVideoView
 
-- (instancetype)init
+-(nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super init];
+    self = [super initWithCoder:aDecoder];
     if (!self) {
         return self;
     }
