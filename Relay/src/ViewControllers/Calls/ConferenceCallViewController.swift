@@ -11,18 +11,10 @@ import UIKit
 private let reuseIdentifier = "peerCell"
 
 class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate {
-
-    var peerIds = [String]()
+    
     var mainPeerId: String?
     
-    func secondaryPeerIds() -> [String] {
-        guard peerIds.count > 0 else {
-            return [String]()
-        }
-        return peerIds.filter({ (peer) -> Bool in
-            peer != mainPeerId
-        })
-    }
+    var secondaryPeerIds = [String]()
     
     var peerAVViews = [String : RTCVideoRenderer]()
     var hasDismissed = false
@@ -45,13 +37,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
 
     func configure(call: ConferenceCall) {
         self.call = call
-        
-        for peerId in call.thread.participantIds {
-            guard peerId != TSAccountManager.localUID() else {
-                continue
-            }
-            peerIds.append(peerId)
-        }
+        self.call?.addDelegate(delegate: self)
+        self.mainPeerId = self.call?.peerConnectionClients.keys.first
+        self.secondaryPeerIds = (self.call?.peerConnectionClients.keys.filter({ (peer) -> Bool in
+            peer != mainPeerId
+        }))!
     }
     
     override func loadView() {
@@ -78,8 +68,17 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         // Do any additional setup after loading the view.
         
         // Build collection of references to the AV views
+        guard self.call != nil else {
+            owsFailDebug("\(self.logTag): CallViewController loaded with nil object!")
+            self.dismissImmediately(completion: nil)
+            return
+        }
+        
         if self.mainPeerId != nil {
             self.peerAVViews[mainPeerId!] = self.mainPeerAVView
+            if let client = self.call?.peerConnectionClients[mainPeerId!] {
+                client.remoteVideoTrack?.add(self.mainPeerAVView)
+            }
         }
         
         self.updatePeerViewHeight()
@@ -108,7 +107,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         var newValue: CGFloat
         
-        if self.secondaryPeerIds().count > 0 {
+        if self.secondaryPeerIds.count > 0 {
             newValue = UIScreen.main.bounds.width/4 - 8
         } else {
             newValue = 0
@@ -283,22 +282,16 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         // a stub
     }
     
-    func didUpdateRemoteVideoTrack(peer: PeerConnectionClient, videoTrack: RTCVideoTrack) {
-        guard self.peerIds.contains(peer.peerId) else {
-            Logger.debug("\(self.logTag): Ignoring video track update for non-member peer: \(peer.peerId)")
+    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
+        guard let peerConnection = self.call?.peerConnectionClients[peerId] else {
+            Logger.debug("\(self.logTag): received video track update for unknown peerId: \(peerId)")
             return
         }
-        
-        guard let avView = self.peerAVViews[peer.peerId] else {
-            owsFailDebug("\(self.logTag):")
-            return
+        if self.peerAVViews[peerId] != nil {
+            peerConnection.remoteVideoTrack?.add(self.peerAVViews[peerId]!)
+            (self.peerAVViews[peerId]! as! UIView).isHidden = false
         }
-        
-        videoTrack.add(avView)
-        let view = avView as! UIView
-        view.isHidden = false
     }
-
 
 //    func rendererViewFor(peerId: String) -> RTCVideoRenderer? {
 //        if let peerView = self.peerAVViews[peerId] {
@@ -341,17 +334,19 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return self.secondaryPeerIds().count
+        return self.secondaryPeerIds.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PeerViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PeerViewCell
-
+        
         cell.avatarImageView.image = UIImage(named: "avatar")
         cell.avView.backgroundColor = UIColor.green
 
-        let peerId = self.secondaryPeerIds()[indexPath.item]
+        let peerId = self.secondaryPeerIds[indexPath.item]
         self.peerAVViews[peerId] = cell.avView
+        
+        self.call?.peerConnectionClients[peerId]?.remoteVideoTrack?.add(cell.avView)
         
         // TODO: put a fine black line border
 //        cell.layer.cornerRadius = self.peerViewDiameter()/8

@@ -98,7 +98,9 @@ protocol ConferenceCallServiceDelegate: class {
             Logger.debug("unable to find a PeerConnectionClient for sender \(senderId)")
             return
         }
-        
+        if conferenceCall?.state == .ringing {
+            self.callUIAdapter?.remoteDidHangupCall(conferenceCall!)
+        }
         conferenceCall?.handlePeerLeave(peerId: pcc.peerId);
     }
     
@@ -174,10 +176,10 @@ protocol ConferenceCallServiceDelegate: class {
 }
 
 extension ConferenceCallService : ConferenceCallDelegate {
-    func didUpdateRemoteVideoTrack(peer: PeerConnectionClient, videoTrack: RTCVideoTrack) {
+    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
         // ConferenceCallSerice don't care (probably)
     }
-    
+        
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
         guard call == self.conferenceCall else {
             Logger.debug("Dropping stale call reference.")
@@ -207,6 +209,12 @@ extension ConferenceCallService : ConferenceCallDelegate {
             do {
                 
             }
+        case .undefined:
+            do {}
+        case .vibrating:
+            do {}
+        case .leaving:
+            do {}
         }
     }
     

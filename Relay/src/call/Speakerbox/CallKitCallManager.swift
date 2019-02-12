@@ -50,7 +50,7 @@ final class CallKitCallManager: NSObject {
     }
 
     func answer(call: ConferenceCall) {
-        
+        call.state = .joined
     }
 
     private func requestTransaction(_ transaction: CXTransaction) {

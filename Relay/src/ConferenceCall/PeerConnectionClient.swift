@@ -180,7 +180,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     // RTCVideoTrack is fragile and prone to throwing exceptions and/or
     // causing deadlock in its destructor.  Therefore we take great care
     // with this property.
-    private var remoteVideoTrack: RTCVideoTrack?
+    var remoteVideoTrack: RTCVideoTrack?
 
     private let proxy = PeerConnectionProxy()
     // Note that we're deliberately leaking proxy instances using this

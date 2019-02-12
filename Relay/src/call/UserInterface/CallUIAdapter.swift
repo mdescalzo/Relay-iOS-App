@@ -193,7 +193,7 @@ extension CallUIAdaptee {
     
     internal func localHangupCall(_ call: ConferenceCall) {
         AssertIsOnMainThread(file: #function)
-        
+        OWSAudioSession.shared.endAudioActivity(call.audioActivity)
         adaptee.localHangupCall(call)
     }
     

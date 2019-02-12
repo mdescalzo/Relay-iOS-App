@@ -196,6 +196,7 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
     }
     
     func reportCallAnsweredByOtherDevice(_ call: ConferenceCall) {
+        AssertIsOnMainThread(file: #function)
         if let callUUID = UUID(uuidString:call.callId) {
             provider.reportCall(with: callUUID, endedAt: Date(), reason: .answeredElsewhere)
         }
@@ -205,6 +206,9 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
     func remoteDidHangupCall(_ call: ConferenceCall) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(self.TAG) \(#function)")
+        if let callUUID = UUID(uuidString:call.callId) {
+            provider.reportCall(with: callUUID, endedAt: Date(), reason: CXCallEndedReason.remoteEnded)
+        }
     }
 
     func remoteBusy(_ call: ConferenceCall) {
@@ -240,20 +244,24 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
         Logger.info("\(TAG) Received \(#function) CXAnswerCallAction")
         guard ConferenceCallService.shared.conferenceCall?.callId.lowercased() == action.callUUID.uuidString.lowercased() else {
             Logger.debug("\(TAG) Ignoring action for obsolete call.")
+            action.fail()
             return
         }
         self.answerCall(ConferenceCallService.shared.conferenceCall!)
         self.showCall(ConferenceCallService.shared.conferenceCall!)
-    }
+        action.fulfill()
+   }
 
     public func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(TAG) Received \(#function) CXEndCallAction")
         guard ConferenceCallService.shared.conferenceCall?.callId.lowercased() == action.callUUID.uuidString.lowercased() else {
             Logger.debug("\(TAG) Ignoring action for obsolete call.")
+            action.fail()
             return
         }
         self.declineCall(ConferenceCallService.shared.conferenceCall!)
+        action.fulfill()
     }
 
     public func provider(_ provider: CXProvider, perform action: CXSetHeldCallAction) {
@@ -283,6 +291,7 @@ final class CallKitCallUIAdaptee: NSObject, CallUIAdaptee, CXProviderDelegate {
 
         Logger.debug("\(TAG) Timed out \(#function) while performing \(action)")
 
+        action.fail()
         // React to the action timeout if necessary, such as showing an error UI.
     }
 

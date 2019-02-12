@@ -48,7 +48,7 @@ protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
     func peerConnectionDidConnect(peerId: String)
 //    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
-//    func videoTrackDidUpdateFor(peerId: String)
+    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
 }
 
 @objc class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
@@ -127,6 +127,8 @@ protocol ConferenceCallDelegate: class {
         self.callId = callId
         self.originatorId = originatorId
         self.state = .undefined
+        self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
+
         super.init()
         self.state = (self.direction == .outgoing) ? .joined : .ringing
         
@@ -141,7 +143,6 @@ protocol ConferenceCallDelegate: class {
         cr.save()
         self.callRecord = cr
         
-        self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
     }
     
     // make sure all of the local audio/video local peer connection config is in place
@@ -264,6 +265,7 @@ protocol ConferenceCallDelegate: class {
     
     func leaveCall() {
         self.state = .leaving
+        self.terminateCall()
     }
     
     func terminateCall() {
@@ -340,6 +342,9 @@ protocol ConferenceCallDelegate: class {
     
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack) {
         Logger.debug("updated remote video track for peer \(strongPcc.peerId)")
+        for delegate in delegates {
+            delegate.value?.peerConnectiongDidUpdateRemoteVideoTrack(peerId: strongPcc.peerId)
+        }
     }
     
     func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?) {
