@@ -51,7 +51,7 @@ protocol ConferenceCallDelegate: class {
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
 }
 
-@objc class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
+@objc public class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
     let TAG = "[ConferenceCall]"
     
     var joinedDate: NSDate?
@@ -201,7 +201,7 @@ protocol ConferenceCallDelegate: class {
         let newPcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId)
         self.peerConnectionClients[peerId] = newPcc
         newPcc.handleOffer(sessionDescription: sessionDescription)
-        if (self.state == .joined) {
+        if (true || self.state == .joined) {
             newPcc.readyToAnswerResolver.fulfill(())
         }
         
@@ -273,18 +273,18 @@ protocol ConferenceCallDelegate: class {
     
     func leaveCall() {
         self.state = .leaving
-        self.terminateCall()
-    }
-    
-    func terminateCall() {
+        var all: [Promise<Void>] = []
+        
         for (_, pcc) in self.peerConnectionClients {
-            pcc.terminatePeer()
+            all.append(pcc.sendCallLeave().done { _ in pcc.terminatePeer() })
         }
-        self.peerConnectionClients.removeAll()
-        self.state = .left
+        
+        when(fulfilled: all).ensure {
+            self.peerConnectionClients.removeAll()
+            self.state = .left
+        }.retainUntilComplete()
     }
-    
-    
+
     // MARK: - Class Helpers
     private func updateCallRecordType() {
         AssertIsOnMainThread(file: #function)

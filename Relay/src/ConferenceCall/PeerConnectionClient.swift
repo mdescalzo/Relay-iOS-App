@@ -145,7 +145,7 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
         self.get()?.peerConnection(peerConnection, didRemove: candidates)
     }
     
-    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+    private func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
         self.get()?.peerConnection(peerConnection, didOpen: dataChannel)
     }
 
@@ -245,7 +245,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             
             return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
         }.then { hardenedSessionDesc -> Promise<Void> in
-            return self.sendCallAcceptOffer(peerId: self.peerId, negotiatedSessionDescription: hardenedSessionDesc)
+            return self.sendCallAcceptOffer(negotiatedSessionDescription: hardenedSessionDesc)
         }.then { () -> Promise<Void> in
             Logger.debug("\(self.logTag) successfully sent callAcceptOffer for peer: \(self.peerId)")
             self.state = .sentCallAcceptOffer
@@ -274,7 +274,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
 
 
-    private func sendCallAcceptOffer(peerId: String, negotiatedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> {
+    private func sendCallAcceptOffer(negotiatedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> {
         guard let call = self.delegate?.owningCall() else {
             Logger.info("can't get owning call")
             return Promise(error: CallError.other(description: "can't get owning call"))
@@ -293,12 +293,36 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                            "callId" : callId,
                            "members" : members,
                            "originator" : originator,
-                           "peerId" : peerId,
+                           "peerId" : self.peerId,
                            ] as NSMutableDictionary
         
         let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
         return messageSender.sendPromise(message: message, recipientIds: [self.userId])
     }
+
+    func sendCallLeave() -> Promise<Void> {
+        guard let call = self.delegate?.owningCall() else {
+            Logger.info("can't get owning call")
+            return Promise(error: CallError.other(description: "can't get owning call"))
+        }
+        guard let messageSender = Environment.current()?.messageSender else {
+            Logger.info("can't get messageSender")
+            return Promise(error: CallError.other(description: "can't get messageSender"))
+        }
+        let callId = call.callId
+        let members = call.thread.participantIds
+        let originator = call.originatorId
+
+        let allTheData = [ "callId" : callId,
+                           "members" : members,
+                           "originator" : originator,
+                           "peerId" : self.peerId,
+                           ] as NSMutableDictionary
+        
+        let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
+        return messageSender.sendPromise(message: message, recipientIds: [self.userId])
+    }
+    
     
     func sendOffer() {
         Logger.info("GEP: for \(self.peerId)")

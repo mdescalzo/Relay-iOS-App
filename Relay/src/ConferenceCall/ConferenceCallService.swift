@@ -114,12 +114,13 @@ protocol ConferenceCallServiceDelegate: class {
     }
     
     // initiate an outbound call
-    @objc public func startCall(thread: TSThread) {
+    @objc public func startCall(thread: TSThread) -> ConferenceCall {
         let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
         conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId)
         notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
+        return conferenceCall!
     }
     
     // terminate an existing call
