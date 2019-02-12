@@ -6,6 +6,10 @@ import RelayServiceKit
 
 @objc
 public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
+    public func receivedSelfAcceptOffer(with thread: TSThread, callId: String, deviceId: UInt32) {
+        owsFailDebug("\(self.logTag) in \(#function).")
+    }
+    
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }

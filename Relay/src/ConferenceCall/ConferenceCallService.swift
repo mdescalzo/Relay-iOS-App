@@ -47,7 +47,7 @@ protocol ConferenceCallServiceDelegate: class {
 
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
-            Logger.debug("Ignoring call offer from/for a new call")
+            Logger.debug("Ignoring call-offer from/for a new call since we already have one running")
             return
         }
         if conferenceCall == nil {
@@ -59,11 +59,20 @@ protocol ConferenceCallServiceDelegate: class {
 
     public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
-            Logger.debug("Ignoring ice candidates from/for an unknown call")
+            Logger.debug("Ignoring accept-offer from/for an unknown call")
             return
         }
         conferenceCall!.handleAcceptOffer(peerId: peerId, sessionDescription: sessionDescription)
     }
+
+    public func receivedSelfAcceptOffer(with thread: TSThread, callId: String, deviceId: UInt32) {
+        if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
+            Logger.debug("Ignoring self-accept-offer from/for an unknown call")
+            return
+        }
+        conferenceCall!.handleSelfAcceptOffer(deviceId: deviceId)
+    }
+    
     
     public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {

@@ -205,6 +205,14 @@ protocol ConferenceCallDelegate: class {
         pcc.handleAcceptOffer(sessionDescription: sessionDescription)
     }
     
+    public func handleSelfAcceptOffer(deviceId: UInt32) {
+        Logger.info("GEP: handling accept-offer from self, device id \(deviceId)")
+        if self.state == .ringing {
+            self.state = .vibrating
+            Logger.info("GEP: changed call state from .ringing to .vibrating")
+        }
+    }
+    
     func inviteMissingParticipants() {
         for userId in self.thread.participantIds {
             if (userId == TSAccountManager.localUID()! || self.peerConnectionClients.contains { $0.value.userId == userId }) {

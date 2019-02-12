@@ -192,7 +192,11 @@ class ControlMessageManager : NSObject
         
         // If the callAccept came from self, another device picked up.  Stop local processing.
         guard message.authorId != TSAccountManager.localUID() else {
-            Logger.info("Another device of self has answered -- update this call's state from ringing to vibrating... ")
+            Logger.info("Another device of self has answered a call")
+            let deviceId = message.sourceDeviceId
+            DispatchMainThreadSafe {
+                TextSecureKitEnv.shared().callMessageHandler.receivedSelfAcceptOffer(with: message.thread, callId: callId, deviceId: deviceId)
+            }
             return
         }
         
