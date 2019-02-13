@@ -19,6 +19,9 @@ public enum PeerConnectionClientState: String {
     case readyToReceiveCallAcceptOffer
     case receivedCallAcceptOffer
     case connected
+    case peerLeft       // the peer sent us a callLeave
+    case leftPeer       // we sent the peer a callLeave
+    case discarded      // owning call is just throwing it away
     case failed
 }
 
@@ -40,7 +43,7 @@ private let connectingTimeoutSeconds: TimeInterval = 60
  * The delegate's methods will always be called on the main thread.
  */
 protocol PeerConnectionClientDelegate: class {
-    func peerConnectionFailed(strongPcc: PeerConnectionClient)
+    func stateDidChange(peerId: String, newState: PeerConnectionClientState)
     func owningCall() -> ConferenceCall
     func iceConnected(strongPcc: PeerConnectionClient)
     func iceFailed(strongPcc: PeerConnectionClient)
@@ -168,7 +171,12 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     let userId: String
     var peerId: String
     
-    var state: PeerConnectionClientState
+    var state: PeerConnectionClientState {
+        didSet {
+            AssertIsOnMainThread(file: #function)
+            delegate?.stateDidChange(peerId: peerId, newState: state)
+        }
+    }
 
     // Delegate is notified of key events in the call lifecycle.
     //
@@ -303,6 +311,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         return messageSender.sendPromise(message: message, recipientIds: [self.userId])
     }
 
+    func handleCallLeave() {
+        Logger.info("peer \(self.peerId) sent us a callLeave")
+        self.state = .peerLeft
+    }
+    
     func sendCallLeave() -> Promise<Void> {
         guard let call = self.delegate?.owningCall() else {
             Logger.info("can't get owning call")
@@ -323,7 +336,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                            ] as NSMutableDictionary
         
         let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
-        return messageSender.sendPromise(message: message, recipientIds: [self.userId])
+        return messageSender.sendPromise(message: message, recipientIds: [self.userId]).done({ _ in self.state = .leftPeer })
     }
     
     
@@ -438,13 +451,9 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     
     private func handleFailedConnection(error: CallError) {
         AssertIsOnMainThread(file: #function)
-        
-        if case CallError.assertionError(description: let description) = error {
-            owsFailDebug(description)
-        }
-        
+        self.state = .failed
+
         Logger.error("\(self.logTag) connection failed with error: \(error)")
-        self.terminatePeer()
     }
 
     // MARK: - Session negotiation
@@ -813,7 +822,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             guard let strongDelegate = strongSelf.delegate else { return }
             strongDelegate.iceDisconnected(strongPcc: strongSelf)
         }
-
+        
         ConferenceCallService.shared.rtcQueue.async {
             guard let strongSelf = proxyCopy.get() else { return }
             guard let peerConnection = strongSelf.peerConnection else {

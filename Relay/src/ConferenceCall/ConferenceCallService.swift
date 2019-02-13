@@ -33,7 +33,7 @@ protocol ConferenceCallServiceDelegate: class {
         }
         if conferenceCall == nil {
             conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId)
-            notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
+            notifyDelegates(todo: { delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
     }
@@ -81,7 +81,7 @@ protocol ConferenceCallServiceDelegate: class {
         let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
         conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId)
-        notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
+        notifyDelegates(todo: { delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
         return conferenceCall!
     }

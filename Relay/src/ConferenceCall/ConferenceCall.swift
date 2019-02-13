@@ -46,7 +46,7 @@ enum ConferenceCallState {
 
 protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
-    func peerConnectionDidConnect(peerId: String)
+    func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState)
 //    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
 }
@@ -193,8 +193,7 @@ protocol ConferenceCallDelegate: class {
                 continue;
             }
             Logger.info("GEP: throwing away existing peer \(pId) for user \(self.peerConnectionClients[pId]!.userId)")
-            self.peerConnectionClients.removeValue(forKey: pId)
-            pcc.terminatePeer()
+            pcc.state = .discarded
         }
 
         // now get this new peer connection underway
@@ -262,8 +261,7 @@ protocol ConferenceCallDelegate: class {
             Logger.debug("\(TAG) ignoring leave for nonexistent peer \(peerId)")
             return
         }
-        self.peerConnectionClients.removeValue(forKey: pcc.peerId)
-        pcc.terminatePeer();
+        pcc.handleCallLeave()
     }
     
     func leaveCall() {
@@ -271,11 +269,10 @@ protocol ConferenceCallDelegate: class {
         var all: [Promise<Void>] = []
         
         for (_, pcc) in self.peerConnectionClients {
-            all.append(pcc.sendCallLeave().done { _ in pcc.terminatePeer() })
+            all.append(pcc.sendCallLeave())
         }
         
         when(fulfilled: all).ensure {
-            self.peerConnectionClients.removeAll()
             self.state = .left
         }.retainUntilComplete()
     }
@@ -308,29 +305,40 @@ protocol ConferenceCallDelegate: class {
         }
     }
     
+    func notifyDelegates(todo: (_ theDelegate: ConferenceCallDelegate) -> Void) {
+        for delegate in delegates {
+            if delegate.value != nil {
+                todo(delegate.value!)
+            }
+        }
+    }
+    
     // MARK: - PeerConnectionClientDelegate Implementation
+
+    func stateDidChange(peerId: String, newState: PeerConnectionClientState) {
+        Logger.debug("GEP: call \(self.callId) PEER \(peerId) STATE CHANGED TO \(newState)")
+        
+        notifyDelegates(todo: { delegate in delegate.peerConnectionStateDidChange(peerId: peerId, newState: newState) })
+        
+        switch newState {
+        case .failed, .peerLeft, .leftPeer, .discarded:
+            guard let pcc = self.peerConnectionClients[peerId] else {
+                Logger.debug("can't terminate missing failed peer \(peerId) for call \(callId)")
+                return
+            }
+            Logger.debug("GEP: blowing away call \(self.callId) PEER \(peerId)")
+            pcc.terminatePeer()
+            self.peerConnectionClients.removeValue(forKey: peerId)
+        default: return
+        }
+    }
+    
     func owningCall() -> ConferenceCall {
         return self;
     }
     
-    func peerConnectionFailed(strongPcc: PeerConnectionClient) {
-        self.peerConnectionClients.removeValue(forKey: strongPcc.peerId)
-        strongPcc.terminatePeer()
-
-        // depending on policy maybe give up on the entire call, or try connecting again to all the missing participants like this:
-        // self.inviteMissingParticipants();
-        
-        // tell ui delegate that stuff happened
-    }
-    
     func iceConnected(strongPcc: PeerConnectionClient) {
         Logger.debug("ice connected for peer \(strongPcc.peerId)")
-        
-        self.state = .joined
-        for delegate in delegates {
-            delegate.value?.peerConnectionDidConnect(peerId: strongPcc.peerId)
-        }
-
         strongPcc.peerConnectedResolver.fulfill(())
     }
     

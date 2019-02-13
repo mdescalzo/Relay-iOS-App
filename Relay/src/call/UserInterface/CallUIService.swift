@@ -15,7 +15,10 @@ import WebRTC
  */
 @objc
 public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceCallDelegate, CXProviderDelegate {
-    
+    func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState) {
+        // TODO
+    }
+
     @objc static let shared = CallUIService()
     
     let TAG = "[CallUIAdapter]"
