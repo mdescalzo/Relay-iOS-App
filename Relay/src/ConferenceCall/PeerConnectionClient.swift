@@ -19,6 +19,7 @@ public enum PeerConnectionClientState: String {
     case readyToReceiveCallAcceptOffer
     case receivedCallAcceptOffer
     case connected
+    case failed
 }
 
 // HACK - Seeing crazy SEGFAULTs on iOS9 when accessing these objc externs.
@@ -148,6 +149,10 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
     public func peerConnection(_ peerConnection: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
         self.get()?.peerConnection(peerConnection, didRemove: candidates)
     }
+    
+    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        // noop
+    }
 }
 
 /**
@@ -157,7 +162,6 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
  * including audio, video, and some post-connected signaling (hangup, add video)
  */
 class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
-    
     private var pendingIceCandidates = Set<RTCIceCandidate>()
     private var iceCandidatesDebounceTimer: Timer?
     
@@ -432,7 +436,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         Logger.info("[PeerConnectionClient] deinit")
     }
     
-    public func handleFailedConnection(error: CallError) {
+    private func handleFailedConnection(error: CallError) {
         AssertIsOnMainThread(file: #function)
         
         if case CallError.assertionError(description: let description) = error {
@@ -894,6 +898,10 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         Logger.debug("\(logTag) didRemove IceCandidates:\(candidates)")
     }
     
+    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        // noop
+    }
+
 
     // MARK: Helpers
 
