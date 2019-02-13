@@ -25,26 +25,6 @@ protocol ConferenceCallServiceDelegate: class {
 
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
-    func addDelegate(delegate: ConferenceCallServiceDelegate) {
-        AssertIsOnMainThread(file: #function)
-        delegates.append(Weak(value: delegate))
-    }
-    
-    func removeDelegate(_ delegate: ConferenceCallServiceDelegate) {
-        AssertIsOnMainThread(file: #function)
-        while let index = delegates.index(where: { $0.value === delegate }) {
-            delegates.remove(at: index)
-        }
-    }
-    
-    func notifyDelegates(todo: (_ theDelegate: ConferenceCallServiceDelegate) -> Void) {
-        for delegate in delegates {
-            if delegate.value != nil {
-                todo(delegate.value!)
-            }
-        }
-    }
-        
 
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
@@ -141,29 +121,30 @@ protocol ConferenceCallServiceDelegate: class {
         }
     }
 
-    // MARK: - Observers
+    // MARK: - Delegates
     
-    // The observer-related methods should be invoked on the main thread.
-    func addObserverAndSyncState(observer: ConferenceCallServiceDelegate) {
+    func addDelegate(delegate: ConferenceCallServiceDelegate) {
         AssertIsOnMainThread(file: #function)
-        
-        delegates.append(Weak(value: observer))
+        delegates.append(Weak(value: delegate))
     }
     
-    // The observer-related methods should be invoked on the main thread.
-    func removeObserver(_ observer: ConferenceCallServiceDelegate) {
+    func removeDelegate(_ delegate: ConferenceCallServiceDelegate) {
         AssertIsOnMainThread(file: #function)
-        
-        while let index = delegates.index(where: { $0.value === observer }) {
+        while let index = delegates.index(where: { $0.value === delegate }) {
             delegates.remove(at: index)
         }
     }
     
-    // The observer-related methods should be invoked on the main thread.
-    func removeAllObservers() {
+    func removeAllDelegates() {
         AssertIsOnMainThread(file: #function)
-        
         delegates = []
     }
-
+    
+    func notifyDelegates(todo: (_ theDelegate: ConferenceCallServiceDelegate) -> Void) {
+        for delegate in delegates {
+            if delegate.value != nil {
+                todo(delegate.value!)
+            }
+        }
+    }
 }

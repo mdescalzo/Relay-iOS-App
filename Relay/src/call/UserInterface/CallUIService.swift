@@ -75,7 +75,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
 
         self.provider.setDelegate(self, queue: nil)
         
-        callService.addObserverAndSyncState(observer: self)
+        callService.addDelegate(delegate: self)
     }
     
     internal func reportIncomingCall(_ call: ConferenceCall) {
