@@ -489,7 +489,6 @@ protocol ConferenceCallDelegate: class {
 }
 
 
-
 protocol VideoCaptureSettingsDelegate: class {
     var videoWidth: Int32 { get }
     var videoHeight: Int32 { get }
