@@ -153,9 +153,10 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
         self.get()?.peerConnection(peerConnection, didRemove: candidates)
     }
     
-    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-        // noop
+    public func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        self.get()?.peerConnection(peerConnection, didOpen: dataChannel)
     }
+
 }
 
 /**
@@ -904,13 +905,12 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     /** Called when a group of local Ice candidates have been removed. */
     internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
-        Logger.debug("\(logTag) didRemove IceCandidates:\(candidates)")
+        Logger.debug("\(logTag) didRemove IceCandidates:\(candidates.debugDescription)")
     }
     
-    func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-        // noop
+    internal func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+        Logger.debug("\(logTag) didRemove IceCandidates:\(dataChannel.debugDescription)")
     }
-
 
     // MARK: Helpers
 

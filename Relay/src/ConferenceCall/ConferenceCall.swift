@@ -49,6 +49,7 @@ protocol ConferenceCallDelegate: class {
     func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState)
 //    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
+    func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?)
 }
 
 @objc public class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
@@ -385,9 +386,6 @@ protocol ConferenceCallDelegate: class {
         
         let capturer = RTCCameraVideoCapturer(delegate: videoSource)
         self.videoCaptureController = VideoCaptureController(capturer: capturer, settingsDelegate: self)
-        
-        // playing around... remove later
-        self.videoCaptureController!.startCapture()
     }
     
     public func setCameraSource(isUsingFrontCamera: Bool) {

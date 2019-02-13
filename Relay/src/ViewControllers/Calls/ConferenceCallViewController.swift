@@ -22,11 +22,17 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     var peerAVViews = [String : RTCVideoRenderer]()
     var hasDismissed = false
+    
+    lazy var callKitService = {
+       return CallUIService.shared
+    }()
 
     @IBOutlet var stackContainerView: UIStackView!
 
     @IBOutlet weak var mainPeerAVView: RemoteVideoView!
     @IBOutlet weak var localAVView: RTCCameraPreviewView!
+    var hasLocalVideo = true
+    
     @IBOutlet weak var localAvatarImageView: UIImageView!
     @IBOutlet weak var infoContainerView: UIView!
     @IBOutlet weak var infoLabel: UILabel!
@@ -104,6 +110,14 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         self.collectionView.addGestureRecognizer(longPressGestureRecognizer)
 
         self.infoLabel.text = call?.thread.displayName()
+        
+        // Local AV
+        if let captureSession = self.call?.videoCaptureController?.captureSession {
+            self.localAVView.captureSession = captureSession
+            self.localAVView.isHidden = false
+        } else {
+            self.localAVView.isHidden = true
+        }
     }
     
     // MARK: - Helpers
@@ -170,15 +184,19 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
 
         self.muteButton.isSelected = !self.muteButton.isSelected
 
-        // self.callUIAdapter?.setIsMuted(call: self.call!, isMuted: self.muteButton.isSelected)
+        guard let call = self.call else {
+            Logger.debug("\(self.logTag): Dropping mute set for obsolete call.")
+            return
+        }
+        
+        self.callKitService.setIsMuted(call: call, isMuted: self.muteButton.isSelected)
     }
     
     @IBAction func didTapVideoToggleButton(_ sender: UIButton) {
         Logger.info("\(self.logTag) called \(#function)")
         self.videoToggleButton.isSelected = !self.videoToggleButton.isSelected
         
-        // self.callUIAdapter?.setHasLocalVideo(call: self.call!, hasLocalVideo: self.videoToggleButton.isSelected)
-
+        self.call?.setLocalVideoEnabled(enabled: self.videoToggleButton.isSelected)
     }
     
     @IBAction func didTapAudioOutputButton(_ sender: Any) {
@@ -188,7 +206,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBAction func didTapEndCallButton(_ sender: Any) {
         Logger.info("\(self.logTag) called \(#function)")
         if self.call != nil {
-            CallUIService.shared.localHangupCall(call!)
+            self.callKitService.localHangupCall(call!)
+            self.call = nil
         }
         self.dismissIfPossible(shouldDelay: false, completion: nil)
     }
@@ -305,32 +324,15 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             (self.peerAVViews[peerId]! as! UIView).isHidden = false
         }
     }
-
-//    func rendererViewFor(peerId: String) -> RTCVideoRenderer? {
-//        if let peerView = self.peerAVViews[peerId] {
-//            return peerView
-//        } else {
-//            Logger.info("Received video track update for unknown peer: \(peerId)")
-//            return nil
-//        }
-//    }
-//
-//    func videoTrackDidUpdateFor(peerId: String) {
-//        // a stub
-//    }
-//
-//    func updateCall(call: ConferenceCall) {
-//        // a stub
-//    }
-//
-//    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
-//        // a stub
-//    }
-//
-//    func peerConnectionDidConnect(peerId: String) {
-//        // a stub
-//    }
-
+    
+    func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+        if captureSession != nil {
+            self.localAVView.captureSession = captureSession
+            self.localAVView.isHidden = false
+        } else {
+            self.localAVView.isHidden = true
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegate & UICollectionViewDataSource methods

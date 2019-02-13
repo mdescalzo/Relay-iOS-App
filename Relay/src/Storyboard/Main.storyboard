@@ -620,10 +620,6 @@
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3xB-Ps-yNX" userLabel="Local View Container">
                                         <rect key="frame" x="287" y="8" width="80" height="80"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar" translatesAutoresizingMaskIntoConstraints="NO" id="elh-NN-W8G" userLabel="Avatar View">
-                                                <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
-                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </imageView>
                                             <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xoS-jH-cJp" userLabel="AV View" customClass="RTCCameraPreviewView">
                                                 <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                                 <color key="backgroundColor" red="0.69019607839999997" green="0.61568627450000002" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -632,14 +628,10 @@
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="9E4-6b-dR5"/>
-                                            <constraint firstItem="elh-NN-W8G" firstAttribute="leading" secondItem="3xB-Ps-yNX" secondAttribute="leading" id="BhU-vH-a6O"/>
-                                            <constraint firstAttribute="bottom" secondItem="elh-NN-W8G" secondAttribute="bottom" id="Kvb-Vz-Pce"/>
-                                            <constraint firstAttribute="trailing" secondItem="elh-NN-W8G" secondAttribute="trailing" id="Lcx-cL-McL"/>
                                             <constraint firstItem="xoS-jH-cJp" firstAttribute="top" secondItem="3xB-Ps-yNX" secondAttribute="top" id="RWW-Qw-vWO"/>
                                             <constraint firstAttribute="width" secondItem="3xB-Ps-yNX" secondAttribute="height" multiplier="1:1" id="Wig-PX-pve"/>
                                             <constraint firstAttribute="trailing" secondItem="xoS-jH-cJp" secondAttribute="trailing" id="Zk5-DJ-wHu"/>
                                             <constraint firstItem="xoS-jH-cJp" firstAttribute="leading" secondItem="3xB-Ps-yNX" secondAttribute="leading" id="fUA-20-yue"/>
-                                            <constraint firstItem="elh-NN-W8G" firstAttribute="top" secondItem="3xB-Ps-yNX" secondAttribute="top" id="joU-wZ-rw1"/>
                                             <constraint firstAttribute="bottom" secondItem="xoS-jH-cJp" secondAttribute="bottom" id="zne-4j-5Yd"/>
                                         </constraints>
                                         <connections>
@@ -808,7 +800,6 @@
                         <outlet property="infoContainerView" destination="W7G-G0-5Jr" id="CvY-cv-K0k"/>
                         <outlet property="infoLabel" destination="KQy-8M-VYB" id="yNl-dg-Chm"/>
                         <outlet property="localAVView" destination="xoS-jH-cJp" id="O0Q-NK-Vuu"/>
-                        <outlet property="localAvatarImageView" destination="elh-NN-W8G" id="sQJ-Tg-a7h"/>
                         <outlet property="mainPeerAVView" destination="ezq-Vb-WSP" id="9bE-m5-onW"/>
                         <outlet property="muteButton" destination="xaF-F4-TC2" id="OjQ-oi-lTv"/>
                         <outlet property="stackContainerView" destination="7P0-4s-sDt" id="VUR-RG-tKt"/>

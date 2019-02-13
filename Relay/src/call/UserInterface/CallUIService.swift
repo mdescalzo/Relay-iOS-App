@@ -166,6 +166,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         AssertIsOnMainThread(file: #function)
         
         if let call = call {
+            OWSAudioSession.shared.endAudioActivity(self.audioActivity)
             OWSAudioSession.shared.endAudioActivity(call.audioActivity)
             self.submitEndCallAction(call: call)
         }
@@ -230,7 +231,16 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
         
-        // With CallKit, muting is handled by a CXAction, so it must go through the adaptee
+        guard let callUUID = UUID(uuidString: call.callId) else {
+            Logger.debug("\(self.logTag) received call with malformed callId: \(call.callId)")
+            return
+        }
+        
+        let muteAction = CXSetMutedCallAction(call: callUUID, muted: isMuted)
+        let transaction = CXTransaction()
+        transaction.addAction(muteAction)
+        requestTransaction(transaction)
+
     }
     
     internal func setHasLocalVideo(call: ConferenceCall, hasLocalVideo: Bool) {
@@ -264,13 +274,9 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     class func buildProviderConfiguration(useSystemCallLog: Bool) -> CXProviderConfiguration {
         let localizedName = NSLocalizedString("APPLICATION_NAME", comment: "Name of application")
         let providerConfiguration = CXProviderConfiguration(localizedName: localizedName)
-        
         providerConfiguration.supportsVideo = true
-        
         providerConfiguration.maximumCallGroups = 1
-        
         providerConfiguration.maximumCallsPerCallGroup = 1
-        
         providerConfiguration.supportedHandleTypes = [.phoneNumber, .generic]
         
         let iconMaskImage = #imageLiteral(resourceName: "logoForsta")
@@ -327,6 +333,8 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     internal func createdConferenceCall(call: ConferenceCall) {
         AssertIsOnMainThread(file: #function)
         call.addDelegate(delegate: self)
+        self.reportIncomingCall(call)
+
     }
 
     
@@ -352,13 +360,16 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         case .undefined:
             do {}
         case .ringing:
-            do {}
+            do {
+                self.reportIncomingCall(call)
+            }
         case .vibrating:
             do {}
         case .rejected:
             do {}
         case .joined:
-            do {}
+            do {
+            }
         case .leaving:
             do {}
         case .left:
@@ -370,6 +381,10 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
                 self.didTerminateCall(call)
             }
         }
+    }
+    
+    func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+        Logger.info("\(self.TAG) \(#function)")
     }
     
     func peerConnectionDidConnect(peerId: String) {
@@ -413,10 +428,12 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(TAG) Received \(#function) CXEndCallAction")
         guard ConferenceCallService.shared.conferenceCall?.callId.lowercased() == action.callUUID.uuidString.lowercased() else {
             Logger.debug("\(TAG) Ignoring action for obsolete call.")
-            action.fail()
+            action.fulfill()
             return
         }
+        // Not
         self.callService.endCall(call: ConferenceCallService.shared.conferenceCall!)
+        
         action.fulfill()
     }
     
@@ -428,6 +445,10 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     public func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(TAG) Received \(#function) CXSetMutedCallAction")
+        
+        // TODO:  Add mute call logic here
+        
+        action.fulfill()
     }
     
     public func provider(_ provider: CXProvider, perform action: CXSetGroupCallAction) {

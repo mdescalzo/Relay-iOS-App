@@ -93,7 +93,11 @@ protocol CallAudioServiceDelegate: class {
 
 @objc class CallAudioService: NSObject, ConferenceCallDelegate {
     func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState) {
-        // TODO
+        // CallAudioService don't care (probably)
+    }
+    
+    func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+        // CallAudioService don't care (probably)        
     }
     
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
@@ -101,15 +105,15 @@ protocol CallAudioServiceDelegate: class {
     }
         
     func peerConnectionDidConnect(peerId: String) {
-        // stub
+        // CallAudioService don't care (probably)
     }
     
     func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
-        // stub
+        // CallAudioService don't care (probably)
     }
     
     func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String) {
-        // stub
+        // CallAudioService don't care (probably)
     }
 
     private var vibrateTimer: Timer?

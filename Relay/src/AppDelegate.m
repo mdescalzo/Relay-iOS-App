@@ -126,7 +126,8 @@ static NSTimeInterval launchStartedAt;
     [DeviceSleepManager.sharedInstance addBlockWithBlockObject:self];
 
     [AppSetup setupEnvironmentWithCallMessageHandlerBlock:^{
-        return ConferenceCallService.shared; // SignalApp.sharedApp.callMessageHandler;
+        [CallUIService shared];
+        return ConferenceCallService.shared;
     }
         notificationsProtocolBlock:^{
             return SignalApp.sharedApp.notificationsManager;
