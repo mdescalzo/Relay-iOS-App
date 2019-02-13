@@ -69,7 +69,7 @@ class DebugUINotifications: DebugUIPage {
                     }
 
                     strongSelf.delayedNotificationDispatchWithFakeCall(thread: thread) { call in
-                        strongSelf.notificationsAdapter.presentMissedCall(call, callerName: thread.title!)
+                        strongSelf.notificationsAdapter.presentMissedCall(call, callName: thread.title!)
                     }
                 },
                 OWSTableItem(title: "Call Rejected: New Safety Number") { [weak self] in

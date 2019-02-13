@@ -806,6 +806,7 @@
                         <outlet property="collectionViewHeightConstraint" destination="ClG-74-dli" id="oiT-bT-uHq"/>
                         <outlet property="controlsContainerView" destination="A42-Qq-3vw" id="D0l-c4-D2P"/>
                         <outlet property="infoContainerView" destination="W7G-G0-5Jr" id="CvY-cv-K0k"/>
+                        <outlet property="infoLabel" destination="KQy-8M-VYB" id="yNl-dg-Chm"/>
                         <outlet property="localAVView" destination="xoS-jH-cJp" id="O0Q-NK-Vuu"/>
                         <outlet property="localAvatarImageView" destination="elh-NN-W8G" id="sQJ-Tg-a7h"/>
                         <outlet property="mainPeerAVView" destination="ezq-Vb-WSP" id="9bE-m5-onW"/>

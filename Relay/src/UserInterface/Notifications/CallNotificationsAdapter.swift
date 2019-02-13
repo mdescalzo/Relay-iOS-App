@@ -35,9 +35,9 @@ public class CallNotificationsAdapter: NSObject {
         adaptee.presentIncomingCall(call, callerName: callerName)
     }
 
-    func presentMissedCall(_ call: ConferenceCall, callerName: String) {
+    func presentMissedCall(_ call: ConferenceCall, callName: String) {
         Logger.debug("\(TAG) in \(#function)")
-        adaptee.presentMissedCall(call, callerName: callerName)
+        adaptee.presentMissedCall(call, callerName: callName)
     }
 
     func presentMissedCallBecauseOfNoLongerVerifiedIdentity(call: ConferenceCall, callerName: String) {

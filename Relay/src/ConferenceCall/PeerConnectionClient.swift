@@ -145,7 +145,7 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
         self.get()?.peerConnection(peerConnection, didRemove: candidates)
     }
     
-    private func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+    internal func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
         self.get()?.peerConnection(peerConnection, didOpen: dataChannel)
     }
 

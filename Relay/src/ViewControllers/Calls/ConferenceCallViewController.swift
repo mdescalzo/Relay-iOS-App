@@ -25,6 +25,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var localAVView: RTCCameraPreviewView!
     @IBOutlet weak var localAvatarImageView: UIImageView!
     @IBOutlet weak var infoContainerView: UIView!
+    @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var controlsContainerView: UIView!
@@ -33,7 +34,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var audioOutButton: UIButton!
     
     var call: ConferenceCall?
-    lazy var callUIAdapter:CallUIAdapter? = { return ConferenceCallService.shared.callUIAdapter }()
+    lazy var callUIAdapter:CallUIService? = { return ConferenceCallService.shared.callUIService }()
 
     func configure(call: ConferenceCall) {
         self.call = call
@@ -78,6 +79,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.peerAVViews[mainPeerId!] = self.mainPeerAVView
             if let client = self.call?.peerConnectionClients[mainPeerId!] {
                 client.remoteVideoTrack?.add(self.mainPeerAVView)
+                self.mainPeerAVView.isHidden = false
             }
         }
         
@@ -98,7 +100,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                                                                 action: #selector(ConferenceCallViewController.didLongPressCollectionView(gesture:)))
         self.collectionView.addGestureRecognizer(longPressGestureRecognizer)
 
-        
+        self.infoLabel.text = call?.thread.displayName()
     }
     
     // MARK: - Helpers
@@ -182,11 +184,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     @IBAction func didTapEndCallButton(_ sender: Any) {
         Logger.info("\(self.logTag) called \(#function)")
-        if self.call != nil,
-            self.callUIAdapter != nil {
-            self.callUIAdapter!.localHangupCall(self.call!)
+        if self.call != nil {
+            CallUIService.shared.localHangupCall(call!)
         }
-        
         self.dismissIfPossible(shouldDelay: false, completion: nil)
     }
     
@@ -356,7 +356,10 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
         let peerId = self.secondaryPeerIds[indexPath.item]
         self.peerAVViews[peerId] = cell.avView
         
+        if self.call?.peerConnectionClients[peerId]?.remoteVideoTrack != nil {
         self.call?.peerConnectionClients[peerId]?.remoteVideoTrack?.add(cell.avView)
+            cell.avView.isHidden = false
+        }
         
         // TODO: put a fine black line border
 //        cell.layer.cornerRadius = self.peerViewDiameter()/8

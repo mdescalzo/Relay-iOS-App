@@ -100,7 +100,10 @@ public class OWSAudioSession: NSObject {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 
-        self.currentActivities.append(Weak(value: audioActivity))
+        if !self.currentActivities.contains(where: { return $0.value == audioActivity}) {
+            self.currentActivities.append(Weak(value: audioActivity))
+        }
+        
     }
 
     @objc
