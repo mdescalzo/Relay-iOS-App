@@ -21,7 +21,7 @@ protocol ConferenceCallServiceDelegate: class {
     
     // Exposed by environment.m
     internal let notificationsAdapter = CallNotificationsAdapter()
-    @objc public var callUIAdapter: CallUIAdapter?
+    lazy var callUIService: CallUIService = { return CallUIService.shared }()
     
     let rtcQueue = DispatchQueue(label: "WebRTCDanceCard")
     lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
@@ -29,13 +29,9 @@ protocol ConferenceCallServiceDelegate: class {
 
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
-    required override init() {
-        super.init()
-        
-        if #available(iOS 10.0, *) {
-            self.callUIAdapter = CallUIAdapter(callService: self, notificationsAdapter: self.notificationsAdapter)
-        }
-    }
+//    required override init() {
+//        super.init()
+//    }
     
 
     func addDelegate(delegate: ConferenceCallServiceDelegate) {
@@ -69,7 +65,7 @@ protocol ConferenceCallServiceDelegate: class {
             notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
-        self.callUIAdapter?.reportIncomingCall(conferenceCall!, thread: thread)
+        self.callUIService.reportIncomingCall(conferenceCall!)
     }
 
     public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
@@ -108,7 +104,7 @@ protocol ConferenceCallServiceDelegate: class {
             return
         }
         if conferenceCall?.state == .ringing {
-            self.callUIAdapter?.remoteDidHangupCall(conferenceCall!)
+            self.callUIService.remoteDidHangupCall(conferenceCall!)
         }
         conferenceCall?.handlePeerLeave(peerId: pcc.peerId);
     }
@@ -209,7 +205,7 @@ extension ConferenceCallService : ConferenceCallDelegate {
             do {
                 // For outgoing notify UI
                 // For incoming display incoming call UI
-                self.callUIAdapter!.showCall(call)
+                self.callUIService.showCall(call)
             }
         case .left:
             do {

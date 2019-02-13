@@ -791,16 +791,6 @@ static NSTimeInterval launchStartedAt;
         }
 
         [AppReadiness runNowOrWhenAppIsReady:^{
-            NSString *_Nullable phoneNumber = handle;
-            if ([handle hasPrefix:CallKitCallManager.kAnonymousCallHandlePrefix]) {
-                phoneNumber = [[OWSPrimaryStorage sharedManager] phoneNumberForCallKitId:handle];
-                if (phoneNumber.length < 1) {
-                    DDLogWarn(
-                        @"%@ ignoring attempt to initiate video call to unknown anonymous signal user.", self.logTag);
-                    return;
-                }
-            }
-
             // This intent can be received from more than one user interaction.
             //
             // * It can be received if the user taps the "video" button in the CallKit UI for an
@@ -822,6 +812,7 @@ static NSTimeInterval launchStartedAt;
                 }
             }
 
+             // TODO Implement this
             OutboundCallInitiator *outboundCallInitiator = SignalApp.sharedApp.outboundCallInitiator;
             OWSAssert(outboundCallInitiator);
             [outboundCallInitiator initiateCallWithHandle:phoneNumber];
@@ -852,16 +843,7 @@ static NSTimeInterval launchStartedAt;
         }
 
         [AppReadiness runNowOrWhenAppIsReady:^{
-            NSString *_Nullable phoneNumber = handle;
-            if ([handle hasPrefix:CallKitCallManager.kAnonymousCallHandlePrefix]) {
-                phoneNumber = [[OWSPrimaryStorage sharedManager] phoneNumberForCallKitId:handle];
-                if (phoneNumber.length < 1) {
-                    DDLogWarn(
-                        @"%@ ignoring attempt to initiate audio call to unknown anonymous signal user.", self.logTag);
-                    return;
-                }
-            }
-
+            // TODO: Implement this
             /*
             if (SignalApp.sharedApp.callService.call != nil) {
                 DDLogWarn(@"%@ ignoring INStartAudioCallIntent due to ongoing WebRTC call.", self.logTag);

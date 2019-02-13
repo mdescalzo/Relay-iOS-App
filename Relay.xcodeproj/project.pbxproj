@@ -321,7 +321,7 @@
 		456C38961DC7B882007536A7 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451DE9F11DC1585F00810E42 /* PromiseKit.framework */; };
 		456F6E2F1E261D1000FD2210 /* PeerConnectionClientTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F6E2E1E261D1000FD2210 /* PeerConnectionClientTest.swift */; };
 		4579431E1E7C8CE9008ED0C0 /* Pastelog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4579431D1E7C8CE9008ED0C0 /* Pastelog.m */; };
-		45794E861E00620000066731 /* CallUIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45794E851E00620000066731 /* CallUIAdapter.swift */; };
+		45794E861E00620000066731 /* CallUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45794E851E00620000066731 /* CallUIService.swift */; };
 		457C87B82032645C008D52D6 /* DebugUINotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457C87B72032645C008D52D6 /* DebugUINotifications.swift */; };
 		457F671B20746193000EABCD /* QuotedReplyPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457F671A20746193000EABCD /* QuotedReplyPreview.swift */; };
 		45847E871E4283C30080EAB3 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45847E861E4283C30080EAB3 /* Intents.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -382,8 +382,6 @@
 		45F32C242057297A00A300D5 /* MessageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */; };
 		45F59A082028E4FB00E8D2B0 /* OWSAudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F170AB1E2F0351003FC1F2 /* OWSAudioSession.swift */; };
 		45F59A0A2029140500E8D2B0 /* OWSVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F59A092029140500E8D2B0 /* OWSVideoPlayer.swift */; };
-		45F659731E1BD99C00444429 /* CallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */; };
-		45FBC5C81DF8575700E9B410 /* CallKitCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */; };
 		4C090A1B210FD9C7001FD7F9 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */; };
 		4C11AA5020FD59C700351FBD /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11AA4F20FD59C700351FBD /* MessageStatusView.swift */; };
 		4C13C9F620E57BA30089A98B /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13C9F520E57BA30089A98B /* ColorPickerViewController.swift */; };
@@ -439,7 +437,7 @@
 		7D2CD55C214C3C9C004E957A /* DictionaryUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517DE211CAE1000F9EF53 /* DictionaryUtil.m */; };
 		7D2CD55D214C3C9C004E957A /* SyncPushTokensJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CD81EE1DC030E7004C9430 /* SyncPushTokensJob.swift */; };
 		7D2CD55E214C3C9C004E957A /* DebugUIMessagesAssetLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCDC206939B200CB1A14 /* DebugUIMessagesAssetLoader.m */; };
-		7D2CD55F214C3C9C004E957A /* CallUIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45794E851E00620000066731 /* CallUIAdapter.swift */; };
+		7D2CD55F214C3C9C004E957A /* CallUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45794E851E00620000066731 /* CallUIService.swift */; };
 		7D2CD560214C3C9C004E957A /* FingerprintViewScanController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */; };
 		7D2CD561214C3C9C004E957A /* StringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517D1211CACA200F9EF53 /* StringUtil.m */; };
 		7D2CD562214C3C9C004E957A /* SafetyNumberConfirmationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4585C4671ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift */; };
@@ -531,7 +529,6 @@
 		7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */; };
 		7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */; };
 		7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
-		7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */; };
 		7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539B5851F79348F007141FF /* PushRegistrationManager.swift */; };
 		7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */; };
 		7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8BF204DB7D2007AEB0F /* OWSBackupExportJob.m */; };
@@ -543,7 +540,6 @@
 		7D2CD5D0214C3C9C004E957A /* OWSConversationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */; };
 		7D2CD5D1214C3C9C004E957A /* GifPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2D1F7ABCE000D7438D /* GifPickerViewController.swift */; };
 		7D2CD5D2214C3C9C004E957A /* MessageRecipientStatusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0BF1F8EC1760066283D /* MessageRecipientStatusUtils.swift */; };
-		7D2CD5D3214C3C9C004E957A /* CallKitCallUIAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */; };
 		7D2CD5D4214C3C9C004E957A /* OWSQuotedMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34277A5C20751BDC006049F2 /* OWSQuotedMessageView.m */; };
 		7D2CD5D6214C3C9C004E957A /* ConversationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDA6232090CEB500DE97F8 /* ConversationHeaderView.swift */; };
 		7D2CD5D7214C3C9C004E957A /* MessageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */; };
@@ -1355,7 +1351,7 @@
 		456F6E2E1E261D1000FD2210 /* PeerConnectionClientTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConnectionClientTest.swift; sourceTree = "<group>"; };
 		4579431C1E7C8CE9008ED0C0 /* Pastelog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pastelog.h; sourceTree = "<group>"; };
 		4579431D1E7C8CE9008ED0C0 /* Pastelog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pastelog.m; sourceTree = "<group>"; };
-		45794E851E00620000066731 /* CallUIAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallUIAdapter.swift; path = UserInterface/CallUIAdapter.swift; sourceTree = "<group>"; };
+		45794E851E00620000066731 /* CallUIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallUIService.swift; path = UserInterface/CallUIService.swift; sourceTree = "<group>"; };
 		457C87B72032645C008D52D6 /* DebugUINotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUINotifications.swift; sourceTree = "<group>"; };
 		457F671A20746193000EABCD /* QuotedReplyPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotedReplyPreview.swift; sourceTree = "<group>"; };
 		45847E861E4283C30080EAB3 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
@@ -1428,8 +1424,6 @@
 		45F32C1D205718B000A300D5 /* MediaPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MediaPageViewController.swift; path = Relay/src/ViewControllers/MediaPageViewController.swift; sourceTree = SOURCE_ROOT; };
 		45F3AEB51DFDE7900080CE33 /* AvatarImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarImageView.swift; sourceTree = "<group>"; };
 		45F59A092029140500E8D2B0 /* OWSVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OWSVideoPlayer.swift; sourceTree = "<group>"; };
-		45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallKitCallUIAdaptee.swift; sourceTree = "<group>"; };
-		45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallKitCallManager.swift; sourceTree = "<group>"; };
 		45FDA43420A4D22700396358 /* OWSNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OWSNavigationBar.swift; sourceTree = "<group>"; };
 		4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HapticFeedback.swift; path = UserInterface/HapticFeedback.swift; sourceTree = "<group>"; };
 		4C11AA4F20FD59C700351FBD /* MessageStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStatusView.swift; sourceTree = "<group>"; };
@@ -2476,10 +2470,9 @@
 		45794E841E0061CF00066731 /* UserInterface */ = {
 			isa = PBXGroup;
 			children = (
-				45FBC57A1DF8575700E9B410 /* CallKit */,
 				45E2E91E1E13EE3500457AA0 /* OWSCallNotificationsAdaptee.h */,
 				451A13B01E13DED2000A50FD /* CallNotificationsAdapter.swift */,
-				45794E851E00620000066731 /* CallUIAdapter.swift */,
+				45794E851E00620000066731 /* CallUIService.swift */,
 			);
 			name = UserInterface;
 			sourceTree = "<group>";
@@ -2526,16 +2519,6 @@
 				4CC0B59B20EC5F2E00CF6EE0 /* ConversationConfigurationSyncOperation.swift */,
 			);
 			path = Jobs;
-			sourceTree = "<group>";
-		};
-		45FBC57A1DF8575700E9B410 /* CallKit */ = {
-			isa = PBXGroup;
-			children = (
-				45FBC59A1DF8575700E9B410 /* CallKitCallManager.swift */,
-				45F659721E1BD99C00444429 /* CallKitCallUIAdaptee.swift */,
-			);
-			name = CallKit;
-			path = Speakerbox;
 			sourceTree = "<group>";
 		};
 		4C3EF8002109184A0007EBF7 /* SSKTests */ = {
@@ -4207,7 +4190,7 @@
 				7D2CD55C214C3C9C004E957A /* DictionaryUtil.m in Sources */,
 				7D2CD55D214C3C9C004E957A /* SyncPushTokensJob.swift in Sources */,
 				7D2CD55E214C3C9C004E957A /* DebugUIMessagesAssetLoader.m in Sources */,
-				7D2CD55F214C3C9C004E957A /* CallUIAdapter.swift in Sources */,
+				7D2CD55F214C3C9C004E957A /* CallUIService.swift in Sources */,
 				7D2CD560214C3C9C004E957A /* FingerprintViewScanController.m in Sources */,
 				7D2CD561214C3C9C004E957A /* StringUtil.m in Sources */,
 				7D2CD562214C3C9C004E957A /* SafetyNumberConfirmationAlert.swift in Sources */,
@@ -4308,7 +4291,6 @@
 				7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */,
 				7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */,
 				7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */,
-				7D2CD5C4214C3C9C004E957A /* CallKitCallManager.swift in Sources */,
 				7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */,
 				7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */,
 				7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */,
@@ -4320,7 +4302,6 @@
 				7D2CD5D0214C3C9C004E957A /* OWSConversationSettingsViewController.m in Sources */,
 				7D2CD5D1214C3C9C004E957A /* GifPickerViewController.swift in Sources */,
 				7D2CD5D2214C3C9C004E957A /* MessageRecipientStatusUtils.swift in Sources */,
-				7D2CD5D3214C3C9C004E957A /* CallKitCallUIAdaptee.swift in Sources */,
 				7D2CD5D4214C3C9C004E957A /* OWSQuotedMessageView.m in Sources */,
 				7D2CD5D6214C3C9C004E957A /* ConversationHeaderView.swift in Sources */,
 				7D2CD5D7214C3C9C004E957A /* MessageDetailViewController.swift in Sources */,
@@ -4414,7 +4395,7 @@
 				7D8517E1211CAE1200F9EF53 /* DictionaryUtil.m in Sources */,
 				45CD81EF1DC030E7004C9430 /* SyncPushTokensJob.swift in Sources */,
 				34D2CCE0206939B400CB1A14 /* DebugUIMessagesAssetLoader.m in Sources */,
-				45794E861E00620000066731 /* CallUIAdapter.swift in Sources */,
+				45794E861E00620000066731 /* CallUIService.swift in Sources */,
 				340FC8BA204DAC8D007AEB0F /* FingerprintViewScanController.m in Sources */,
 				7D8517D2211CACA300F9EF53 /* StringUtil.m in Sources */,
 				4585C4681ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift in Sources */,
@@ -4515,7 +4496,6 @@
 				45B5360E206DD8BB00D61655 /* UIResponder+OWS.swift in Sources */,
 				34B3F8771E8DF1700035BE1A /* ContactsPicker.swift in Sources */,
 				45C0DC1B1E68FE9000E04C47 /* UIApplication+OWS.swift in Sources */,
-				45FBC5C81DF8575700E9B410 /* CallKitCallManager.swift in Sources */,
 				4539B5861F79348F007141FF /* PushRegistrationManager.swift in Sources */,
 				340FC8BB204DAC8D007AEB0F /* OWSAddToContactViewController.m in Sources */,
 				340FC8C0204DB7D2007AEB0F /* OWSBackupExportJob.m in Sources */,
@@ -4527,7 +4507,6 @@
 				340FC8B7204DAC8D007AEB0F /* OWSConversationSettingsViewController.m in Sources */,
 				34BECE2E1F7ABCE000D7438D /* GifPickerViewController.swift in Sources */,
 				34D1F0C01F8EC1760066283D /* MessageRecipientStatusUtils.swift in Sources */,
-				45F659731E1BD99C00444429 /* CallKitCallUIAdaptee.swift in Sources */,
 				34277A5E20751BDC006049F2 /* OWSQuotedMessageView.m in Sources */,
 				45DDA6242090CEB500DE97F8 /* ConversationHeaderView.swift in Sources */,
 				45F32C242057297A00A300D5 /* MessageDetailViewController.swift in Sources */,
@@ -4707,7 +4686,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "RelayShareExtension/RelayShareExtension-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relay.shareextension;
@@ -4780,7 +4759,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "RelayShareExtension/RelayShareExtension-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relay.shareextension;
@@ -4835,7 +4814,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = RelayMessaging/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relay.RelayMessaging;
@@ -4909,7 +4888,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = RelayMessaging/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relay.RelayMessaging;
@@ -4972,7 +4951,7 @@
 					"\"$(SRCROOT)/Libraries\"/**",
 				);
 				INFOPLIST_FILE = "Relay/RelayDev-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5040,7 +5019,7 @@
 					"\"$(SRCROOT)/Libraries\"/**",
 				);
 				INFOPLIST_FILE = "Relay/RelayDev-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5102,7 +5081,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "RelayShareExtension/RelayDevShareExtension-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DDEVELOPMENT";
@@ -5177,7 +5156,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "RelayShareExtension/RelayDevShareExtension-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DDEVELOPMENT";
@@ -5383,7 +5362,7 @@
 					"\"$(SRCROOT)/Libraries\"/**",
 				);
 				INFOPLIST_FILE = "Relay/Relay-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5451,7 +5430,7 @@
 					"\"$(SRCROOT)/Libraries\"/**",
 				);
 				INFOPLIST_FILE = "Relay/Relay-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

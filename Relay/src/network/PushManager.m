@@ -232,7 +232,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
             return;
         }
 
-         [self.callUIAdapter answerCallWithLocalId:localId];
+         [CallUIService.shared answerCallWithLocalId:localId];
         completionHandler();
     } else if ([identifier isEqualToString:PushManagerActionsDeclineCall]) {
         NSString *localIdString = notification.userInfo[PushManagerUserInfoKeysLocalCallId];
@@ -247,7 +247,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
             return;
         }
 
-         [self.callUIAdapter declineCallWithLocalId:localId];
+         [CallUIService.shared declineCallWithLocalId:localId];
         completionHandler();
     } else if ([identifier isEqualToString:PushManagerActionsCallBack]) {
         NSString *recipientId = notification.userInfo[PushManagerUserInfoKeysCallBackSignalRecipientId];
@@ -256,7 +256,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
             return;
         }
 
-         [self.callUIAdapter startAndShowOutgoingCallWithRecipientId:recipientId hasLocalVideo:NO];
+         [CallUIService.shared startAndShowOutgoingCallWithRecipientId:recipientId hasLocalVideo:NO];
         completionHandler();
     } else if ([identifier isEqualToString:PushManagerActionsShowThread]) {
         NSString *threadId = notification.userInfo[Signal_Thread_UserInfo_Key];
