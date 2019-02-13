@@ -33,7 +33,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var localAVView: RTCCameraPreviewView!
     var hasLocalVideo = true
     
-    @IBOutlet weak var localAvatarImageView: UIImageView!
     @IBOutlet weak var infoContainerView: UIView!
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -42,6 +41,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var muteButton: UIButton!
     @IBOutlet weak var videoToggleButton: UIButton!
     @IBOutlet weak var audioOutButton: UIButton!
+    @IBOutlet weak var leaveCallButton: UIButton!
     
     var call: ConferenceCall?
 
@@ -57,13 +57,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     override func loadView() {
         super.loadView()
         
-        // Main Container View setup
-        
-        // Infomation container view setup
-
-        // Collection view setup
-        
-        // Controls container view setup
     }
     
     override func viewDidLoad() {
