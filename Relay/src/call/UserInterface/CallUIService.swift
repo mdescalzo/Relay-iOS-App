@@ -31,7 +31,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     private let provider: CXProvider
     var showNamesOnCallScreen: Bool
     var useSystemCallLog: Bool
-    internal let notificationsAdapter: CallNotificationsAdapter
 
     // Instantiating more than one CXProvider can cause us to miss call transactions, so
     // we maintain the provider across Adaptees using a singleton pattern
@@ -72,8 +71,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
 
         self.provider = type(of: self).sharedProvider(useSystemCallLog: useSystemCallLog)
 
-        notificationsAdapter = ConferenceCallService.shared.notificationsAdapter
-    
         super.init()
 
         self.provider.setDelegate(self, queue: nil)
@@ -128,7 +125,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         AssertIsOnMainThread(file: #function)
         
         let callName = call.thread.displayName()
-        self.notificationsAdapter.presentMissedCall(call, callName: callName)
+        // self.notificationsAdapter.presentMissedCall(call, callName: callName)
     }
     
     internal func startOutgoingCall(_ call: ConferenceCall) {

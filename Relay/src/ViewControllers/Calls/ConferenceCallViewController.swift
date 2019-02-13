@@ -34,7 +34,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var audioOutButton: UIButton!
     
     var call: ConferenceCall?
-    lazy var callUIAdapter:CallUIService? = { return ConferenceCallService.shared.callUIService }()
 
     func configure(call: ConferenceCall) {
         self.call = call
@@ -123,7 +122,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     internal func dismissIfPossible(shouldDelay: Bool, completion: (() -> Void)? = nil) {
-        callUIAdapter!.audioService.delegate = nil
+        // callUIAdapter!.audioService.delegate = nil
         
         if hasDismissed {
             // Don't dismiss twice.
@@ -167,14 +166,14 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
 
         self.muteButton.isSelected = !self.muteButton.isSelected
 
-        self.callUIAdapter?.setIsMuted(call: self.call!, isMuted: self.muteButton.isSelected)
+        // self.callUIAdapter?.setIsMuted(call: self.call!, isMuted: self.muteButton.isSelected)
     }
     
     @IBAction func didTapVideoToggleButton(_ sender: UIButton) {
         Logger.info("\(self.logTag) called \(#function)")
         self.videoToggleButton.isSelected = !self.videoToggleButton.isSelected
         
-        self.callUIAdapter?.setHasLocalVideo(call: self.call!, hasLocalVideo: self.videoToggleButton.isSelected)
+        // self.callUIAdapter?.setHasLocalVideo(call: self.call!, hasLocalVideo: self.videoToggleButton.isSelected)
 
     }
     

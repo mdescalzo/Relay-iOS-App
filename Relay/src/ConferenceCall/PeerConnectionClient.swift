@@ -1,5 +1,8 @@
 //
-//  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
+//  PeerConnectionClient.swift
+//  Relay
+//
+//  Copyright © 2019 Forsta, Inc. All rights reserved.
 //
 
 import Foundation

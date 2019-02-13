@@ -1,5 +1,5 @@
 //
-//  CallController.swift
+//  ConferenceCallService.swift
 //  Relay
 //
 //  Created by Greg Perkins on 1/28/19.
@@ -19,21 +19,12 @@ protocol ConferenceCallServiceDelegate: class {
     static let rtcFactory = RTCPeerConnectionFactory()
     @objc static let shared = ConferenceCallService()
     
-    // Exposed by environment.m
-    internal let notificationsAdapter = CallNotificationsAdapter()
-    lazy var callUIService: CallUIService = { return CallUIService.shared }()
-    
     let rtcQueue = DispatchQueue(label: "WebRTCDanceCard")
     lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
     var delegates = [Weak<ConferenceCallServiceDelegate>]()
 
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
-//    required override init() {
-//        super.init()
-//    }
-    
-
     func addDelegate(delegate: ConferenceCallServiceDelegate) {
         AssertIsOnMainThread(file: #function)
         delegates.append(Weak(value: delegate))
@@ -65,7 +56,6 @@ protocol ConferenceCallServiceDelegate: class {
             notifyDelegates(todo: { del in del.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
-        self.callUIService.reportIncomingCall(conferenceCall!)
     }
 
     public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
@@ -102,9 +92,6 @@ protocol ConferenceCallServiceDelegate: class {
         guard let (_, pcc) = (conferenceCall!.peerConnectionClients.first { (k, v) in v.userId == senderId }) else {
             Logger.debug("unable to find a PeerConnectionClient for sender \(senderId)")
             return
-        }
-        if conferenceCall?.state == .ringing {
-            self.callUIService.remoteDidHangupCall(conferenceCall!)
         }
         conferenceCall?.handlePeerLeave(peerId: pcc.peerId);
     }
@@ -179,54 +166,4 @@ protocol ConferenceCallServiceDelegate: class {
         delegates = []
     }
 
-}
-
-extension ConferenceCallService : ConferenceCallDelegate {
-    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
-        // ConferenceCallSerice don't care (probably)
-    }
-        
-    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
-        guard call == self.conferenceCall else {
-            Logger.debug("Dropping stale call reference.")
-            return
-        }
-        
-        switch state {
-        case .ringing:
-            do {
-                // Short UI for outgoing
-            }
-        case .rejected:
-            do {
-                // Hang it up
-            }
-        case .joined:
-            do {
-                // For outgoing notify UI
-                // For incoming display incoming call UI
-                self.callUIService.showCall(call)
-            }
-        case .left:
-            do {
-                // Hang it up
-            }
-        case .failed:
-            do {
-                
-            }
-        case .undefined:
-            do {}
-        case .vibrating:
-            do {}
-        case .leaving:
-            do {}
-        }
-    }
-    
-    func peerConnectionDidConnect(peerId: String) {
-        // stub
-    }
-    
-    
 }

@@ -332,7 +332,6 @@ protocol ConferenceCallDelegate: class {
         Logger.debug("ice connected for peer \(strongPcc.peerId)")
         
         self.state = .joined
-        // TODO:  Make call that leads to UI adapter which will display new call UI here
         for delegate in delegates {
             delegate.value?.peerConnectionDidConnect(peerId: strongPcc.peerId)
         }
@@ -406,7 +405,7 @@ protocol ConferenceCallDelegate: class {
         AssertIsOnMainThread(file: #function)
         let strongSelf = self
         let completion = {
-            let captureSession: AVCaptureSession? = {
+            let _: AVCaptureSession? = {
                 guard enabled else {
                     return nil
                 }
