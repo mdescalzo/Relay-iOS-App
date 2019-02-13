@@ -264,11 +264,6 @@ protocol ConferenceCallDelegate: class {
         }
         self.peerConnectionClients.removeValue(forKey: pcc.peerId)
         pcc.terminatePeer();
-
-        // terminate the entire call if there are no other peers
-        if self.peerConnectionClients.count == 0 {
-            self.state = .left
-        }
     }
     
     func leaveCall() {
