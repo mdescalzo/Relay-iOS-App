@@ -11,7 +11,11 @@ import UIKit
 private let reuseIdentifier = "peerCell"
 
 class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate {
-    func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState) {
+    func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
+        // TODO
+    }
+    
+    public func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         // TODO
     }
     

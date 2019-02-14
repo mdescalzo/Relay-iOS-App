@@ -30,10 +30,6 @@ public enum PeerConnectionClientState: String {
 // Binding them to a file constant seems to work around the problem.
 let kAudioTrackType = kRTCMediaStreamTrackKindAudio
 let kVideoTrackType = kRTCMediaStreamTrackKindVideo
-let kMediaConstraintsMinWidth = kRTCMediaConstraintsMinWidth
-let kMediaConstraintsMaxWidth = kRTCMediaConstraintsMaxWidth
-let kMediaConstraintsMinHeight = kRTCMediaConstraintsMinHeight
-let kMediaConstraintsMaxHeight = kRTCMediaConstraintsMaxHeight
 
 private let connectingTimeoutSeconds: TimeInterval = 60
 
@@ -43,7 +39,7 @@ private let connectingTimeoutSeconds: TimeInterval = 60
  * The delegate's methods will always be called on the main thread.
  */
 protocol PeerConnectionClientDelegate: class {
-    func stateDidChange(peerId: String, newState: PeerConnectionClientState)
+    func stateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
     func owningCall() -> ConferenceCall
     func iceConnected(strongPcc: PeerConnectionClient)
     func iceFailed(strongPcc: PeerConnectionClient)
@@ -169,13 +165,13 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     private var pendingIceCandidates = Set<RTCIceCandidate>()
     private var iceCandidatesDebounceTimer: Timer?
     
+    let callId: String
     let userId: String
     var peerId: String
     
     var state: PeerConnectionClientState {
         didSet {
-            AssertIsOnMainThread(file: #function)
-            delegate?.stateDidChange(peerId: peerId, newState: state)
+            delegate?.stateDidChange(callId: self.callId, peerId: self.peerId, oldState: oldValue, newState: self.state)
         }
     }
 
@@ -209,10 +205,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     let peerConnectedResolver: Resolver<Void>
 
 
-    init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String) {
+    init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String, callId: String) {
         AssertIsOnMainThread(file: #function)
 
         self.delegate = delegate
+        self.callId = callId
         self.userId = userId
         self.peerId = peerId
         self.state = .undefined
@@ -222,7 +219,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         (self.peerConnectedPromise, self.peerConnectedResolver) = Promise<Void>.pending()
 
         super.init()
-        
+
         self.proxy.set(value: self)
     }
     
@@ -295,14 +292,13 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             Logger.info("can't get messageSender")
             return Promise(error: CallError.other(description: "can't get messageSender"))
         }
-        let callId = call.callId
         let members = call.thread.participantIds
         let originator = call.originatorId
         let answer = [ "type" : "answer",
                        "sdp" : negotiatedSessionDescription.sdp ]
         
         let allTheData = [ "answer" : answer,
-                           "callId" : callId,
+                           "callId" : self.callId,
                            "members" : members,
                            "originator" : originator,
                            "peerId" : self.peerId,
@@ -326,11 +322,10 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             Logger.info("can't get messageSender")
             return Promise(error: CallError.other(description: "can't get messageSender"))
         }
-        let callId = call.callId
         let members = call.thread.participantIds
         let originator = call.originatorId
 
-        let allTheData = [ "callId" : callId,
+        let allTheData = [ "callId" : self.callId,
                            "members" : members,
                            "originator" : originator,
                            "peerId" : self.peerId,
@@ -379,7 +374,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                     Logger.info("can't get messageSender")
                     return Promise(error: CallError.other(description: "can't get messageSender"))
                 }
-                let allTheData = [ "callId" : call.callId,
+                let allTheData = [ "callId" : self.callId,
                                    "members" : call.thread.participantIds,
                                    "originator" : call.originatorId,
                                    "peerId" : self.peerId,
@@ -981,7 +976,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 return Promise(error: CallError.other(description: "can't send zero ice candidates"))
             }
             
-            let allTheData = [ "callId": call.callId ,
+            let allTheData = [ "callId": self.callId ,
                                "peerId": self.peerId,
                                "originator" : call.originatorId,
                                "icecandidates" : payloadCandidates

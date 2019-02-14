@@ -33,7 +33,7 @@ enum ConferenceCallDirection {
     case outgoing, incoming
 }
 
-enum ConferenceCallState {
+public enum ConferenceCallState {
     case undefined          // (briefly) at creation
     case ringing            // after receiving offer
     case vibrating          // after some other device of mine has accepted that offer
@@ -44,10 +44,9 @@ enum ConferenceCallState {
     case failed             // after ringing/vibrating or joined
 }
 
-protocol ConferenceCallDelegate: class {
-    func stateDidChange(call: ConferenceCall, state: ConferenceCallState)
-    func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState)
-//    func rendererViewFor(peerId: String) -> RTCVideoRenderer?
+public protocol ConferenceCallDelegate: class {
+    func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState)
+    func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?)
 }
@@ -101,7 +100,7 @@ protocol ConferenceCallDelegate: class {
             updateCallRecordType()
             
             for delegate in delegates {
-                delegate.value?.stateDidChange(call: self, state: state)
+                delegate.value?.stateDidChange(call: self, oldState: oldValue, newState: self.state)
             }
             
             if self.state == .joined && (oldValue == .ringing || oldValue == .vibrating) {
@@ -122,8 +121,9 @@ protocol ConferenceCallDelegate: class {
 
     var localVideoTrack: RTCVideoTrack? // RTCVideoTrack is fragile and prone to throwing exceptions and/or causing deadlock in its destructor.  Therefore we take great care with this property.
     
+
     
-    public required init(thread: TSThread, callId: String, originatorId: String) {
+    public required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?) {
         self.thread = thread
         self.callId = callId
         self.originatorId = originatorId
@@ -131,6 +131,7 @@ protocol ConferenceCallDelegate: class {
         self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
 
         super.init()
+        if delegate != nil { self.addDelegate(delegate: delegate!) }
         self.state = (self.direction == .outgoing) ? .joined : .ringing
         
         var callType: RPRecentCallType
@@ -198,7 +199,7 @@ protocol ConferenceCallDelegate: class {
         }
 
         // now get this new peer connection underway
-        let newPcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId)
+        let newPcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId, callId: self.callId)
         self.peerConnectionClients[peerId] = newPcc
         newPcc.handleOffer(sessionDescription: sessionDescription)
         if (true || self.state == .joined) {
@@ -233,7 +234,7 @@ protocol ConferenceCallDelegate: class {
                 continue;
             }
             let newPeerId = NSUUID().uuidString.lowercased()
-            let pcc = PeerConnectionClient(delegate: self, userId: userId, peerId: newPeerId)
+            let pcc = PeerConnectionClient(delegate: self, userId: userId, peerId: newPeerId, callId: self.callId)
             self.peerConnectionClients[newPeerId] = pcc
             pcc.sendOffer()
         }
@@ -316,10 +317,8 @@ protocol ConferenceCallDelegate: class {
     
     // MARK: - PeerConnectionClientDelegate Implementation
 
-    func stateDidChange(peerId: String, newState: PeerConnectionClientState) {
-        Logger.debug("GEP: call \(self.callId) PEER \(peerId) STATE CHANGED TO \(newState)")
-        
-        notifyDelegates(todo: { delegate in delegate.peerConnectionStateDidChange(peerId: peerId, newState: newState) })
+    func stateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+        notifyDelegates(todo: { delegate in delegate.peerConnectionStateDidChange(callId: callId, peerId: peerId, oldState: oldState, newState: newState) })
         
         switch newState {
         case .failed, .peerLeft, .leftPeer, .discarded:
