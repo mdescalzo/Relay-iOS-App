@@ -688,7 +688,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         }
     }
 
-    public func terminatePeer() {
+    public func cleanupBeforeDestruction() {
         AssertIsOnMainThread(file: #function)
         Logger.debug("\(logTag) in \(#function)")
 
@@ -703,11 +703,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
         // Don't use [weak self]; we always want to perform terminateInternal().
         ConferenceCallService.shared.rtcQueue.async {
-            self.terminateInternal()
+            self.cleanupBeforeDestructionInternal()
         }
     }
 
-    private func terminateInternal() {
+    private func cleanupBeforeDestructionInternal() {
         assertOnSignalingQueue()
         Logger.debug("\(logTag) in \(#function)")
 

@@ -135,7 +135,7 @@ protocol ConferenceCallServiceDelegate: class {
         }
         self.conferenceCall?.leaveCall()
     }
-    
+
     private static func getIceServers() -> Promise<[RTCIceServer]> {
         AssertIsOnMainThread(file: #function)
         
@@ -168,6 +168,7 @@ protocol ConferenceCallServiceDelegate: class {
         self.events.append(.CallStateChange(timestamp: Date(), callId: call.callId, oldState: oldState, newState: newState))
         Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
         if oldState == .leaving && newState == .left && self.conferenceCall == call {
+            self.conferenceCall?.cleanupBeforeDestruction()
             self.conferenceCall = nil
         }
     }

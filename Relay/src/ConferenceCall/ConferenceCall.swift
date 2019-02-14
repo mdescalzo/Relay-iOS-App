@@ -82,8 +82,6 @@ public protocol ConferenceCallDelegate: class {
         }
     }
     
-    let audioActivity: AudioActivity
-    
     var state: ConferenceCallState {
         didSet {
             AssertIsOnMainThread(file: #function)
@@ -109,7 +107,8 @@ public protocol ConferenceCallDelegate: class {
         }
     }
     
-    
+    let audioActivity: AudioActivity
+
     // local connection stuff common to all peer connections
     var connectionConstraints: RTCMediaConstraints?
     var configuration: RTCConfiguration?
@@ -145,6 +144,21 @@ public protocol ConferenceCallDelegate: class {
         cr.save()
         self.callRecord = cr
         
+    }
+    
+    public func cleanupBeforeDestruction() {
+        // any needed careful teardown before the call object is destroyed
+        self.removeAllDelegates()
+
+        // audioTrack is a strong property because we need access to it to mute/unmute, but I was seeing it
+        // become nil when it was only a weak property. So we retain it and manually nil the reference here, because
+        // we are likely to crash if we retain any peer connection properties when the peerconnection is released
+        
+        localVideoTrack?.isEnabled = false
+
+        audioTrack = nil
+        localVideoTrack = nil
+        videoCaptureController = nil
     }
     
     // make sure all of the local audio/video local peer connection config is in place
@@ -307,6 +321,11 @@ public protocol ConferenceCallDelegate: class {
         }
     }
     
+    func removeAllDelegates() {
+        AssertIsOnMainThread(file: #function)
+        delegates = []
+    }
+
     func notifyDelegates(_ todo: (_ theDelegate: ConferenceCallDelegate) -> Void) {
         for delegate in delegates {
             if delegate.value != nil {
@@ -327,7 +346,7 @@ public protocol ConferenceCallDelegate: class {
                 return
             }
             Logger.debug("GEP: blowing away call \(self.callId) PEER \(peerId)")
-            pcc.terminatePeer()
+            pcc.cleanupBeforeDestruction()
             self.peerConnectionClients.removeValue(forKey: peerId)
         default: return
         }
