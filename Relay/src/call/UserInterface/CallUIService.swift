@@ -351,15 +351,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
 //      call?.addObserverAndSyncState(observer: audioService)
     }
     
-    internal func didUpdateVideoTracks(call: ConferenceCall?,
-                                       localCaptureSession: AVCaptureSession?,
-                                       remoteVideoTrack: RTCVideoTrack?) {
-        AssertIsOnMainThread(file: #function)
-        
-        // XXXXX
-//        audioService.didUpdateVideoTracks(call: call)
-    }
-    
     // MARK: - ConferenceCallDelegate
     public func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
         switch call.state {
