@@ -74,7 +74,7 @@ protocol ConferenceCallServiceDelegate: class {
         }
         if conferenceCall == nil {
             conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self)
-            notifyDelegates(todo: { delegate in delegate.createdConferenceCall(call: conferenceCall!) })
+            notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
     }
@@ -122,7 +122,7 @@ protocol ConferenceCallServiceDelegate: class {
         let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
         conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self)
-        notifyDelegates(todo: { delegate in delegate.createdConferenceCall(call: conferenceCall!) })
+        notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
         return conferenceCall!
     }
@@ -202,7 +202,7 @@ protocol ConferenceCallServiceDelegate: class {
         delegates = []
     }
     
-    func notifyDelegates(todo: (_ theDelegate: ConferenceCallServiceDelegate) -> Void) {
+    func notifyDelegates(_ todo: (_ theDelegate: ConferenceCallServiceDelegate) -> Void) {
         for delegate in delegates {
             if delegate.value != nil {
                 todo(delegate.value!)
