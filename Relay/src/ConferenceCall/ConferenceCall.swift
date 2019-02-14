@@ -307,7 +307,7 @@ public protocol ConferenceCallDelegate: class {
         }
     }
     
-    func notifyDelegates(todo: (_ theDelegate: ConferenceCallDelegate) -> Void) {
+    func notifyDelegates(_ todo: (_ theDelegate: ConferenceCallDelegate) -> Void) {
         for delegate in delegates {
             if delegate.value != nil {
                 todo(delegate.value!)
@@ -318,7 +318,7 @@ public protocol ConferenceCallDelegate: class {
     // MARK: - PeerConnectionClientDelegate Implementation
 
     func stateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
-        notifyDelegates(todo: { delegate in delegate.peerConnectionStateDidChange(callId: callId, peerId: peerId, oldState: oldState, newState: newState) })
+        notifyDelegates({ delegate in delegate.peerConnectionStateDidChange(callId: callId, peerId: peerId, oldState: oldState, newState: newState) })
         
         switch newState {
         case .failed, .peerLeft, .leftPeer, .discarded:
@@ -405,18 +405,17 @@ public protocol ConferenceCallDelegate: class {
         AssertIsOnMainThread(file: #function)
         let strongSelf = self
         let completion = {
-            let _: AVCaptureSession? = {
-                guard enabled else {
-                    return nil
-                }
-                
-                guard let captureController = strongSelf.videoCaptureController else {
-                    owsFailDebug("\(self.logTag) in \(#function) videoCaptureController was unexpectedly nil")
-                    return nil
-                }
-                
-                return captureController.captureSession
-            }()
+            guard enabled else {
+                return
+            }
+            
+            guard let captureController = strongSelf.videoCaptureController else {
+                owsFailDebug("\(self.logTag) in \(#function) videoCaptureController was unexpectedly nil")
+                return
+            }
+            
+            let captureSession = captureController.captureSession
+            strongSelf.notifyDelegates({ delegate in delegate.didUpdateLocalVideoTrack(captureSession: captureSession) })
         }
         
         ConferenceCallService.shared.rtcQueue.async {
