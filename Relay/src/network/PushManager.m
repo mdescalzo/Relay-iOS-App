@@ -256,7 +256,8 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
             return;
         }
 
-         [CallUIService.shared startAndShowOutgoingCallWithRecipientId:recipientId hasLocalVideo:NO];
+        // TODO: See if we can get a thread here and wire this up
+//        [ConferenceCallService.shared startCallWithThread:<#(TSThread * _Nonnull)#>]
         completionHandler();
     } else if ([identifier isEqualToString:PushManagerActionsShowThread]) {
         NSString *threadId = notification.userInfo[Signal_Thread_UserInfo_Key];

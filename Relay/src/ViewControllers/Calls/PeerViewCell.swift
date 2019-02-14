@@ -9,9 +9,7 @@
 import UIKit
 
 class PeerViewCell: UICollectionViewCell {
-
-   
     @IBOutlet weak var avView: RemoteVideoView!
     @IBOutlet weak var avatarImageView: UIImageView!
-    
+    @IBOutlet weak var statusIndicatorView: UIView!
 }

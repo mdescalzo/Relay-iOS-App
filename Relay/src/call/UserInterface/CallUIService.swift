@@ -128,13 +128,15 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         AssertIsOnMainThread(file: #function)
         
         let callName = call.thread.displayName()
+        // TODO:  Fix this?
         // self.notificationsAdapter.presentMissedCall(call, callName: callName)
     }
     
     internal func startOutgoingCall(_ call: ConferenceCall) {
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
-        // TODO: Needs implementation
+
+        self.showCall(call)
     }
     
     @objc public func answerCall(localId: UUID) {
@@ -172,11 +174,11 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         }
     }
     
-    @objc public func startAndShowOutgoingCall(recipientId: String, hasLocalVideo: Bool) {
-        Logger.info("\(self.logTag) called \(#function)")
-        AssertIsOnMainThread(file: #function)
-        
-    }
+//    @objc public func startAndShowOutgoingCall(recipientId: String, hasLocalVideo: Bool) {
+//        Logger.info("\(self.logTag) called \(#function)")
+//        AssertIsOnMainThread(file: #function)
+//
+//    }
     
     internal func recipientAcceptedCall(_ call: ConferenceCall) {
         Logger.info("\(self.logTag) called \(#function)")
@@ -333,8 +335,12 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     internal func createdConferenceCall(call: ConferenceCall) {
         AssertIsOnMainThread(file: #function)
         call.addDelegate(delegate: self)
-        self.reportIncomingCall(call)
-
+        
+        if call.direction == .incoming {
+            self.reportIncomingCall(call)
+        } else {
+            self.startOutgoingCall(call)
+        }
     }
 
     

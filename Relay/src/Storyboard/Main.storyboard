@@ -653,6 +653,14 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </view>
+                                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htH-qg-uxZ" userLabel="statusIndicatorView">
+                                                                    <rect key="frame" x="37" y="3" width="10" height="10"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="htH-qg-uxZ" secondAttribute="height" multiplier="1:1" id="9l6-8C-lna"/>
+                                                                        <constraint firstAttribute="width" constant="10" id="ay3-em-JWd"/>
+                                                                    </constraints>
+                                                                </view>
                                                             </subviews>
                                                         </view>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -664,11 +672,14 @@
                                                             <constraint firstItem="6Z2-55-MBL" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" id="TLH-VJ-fsC"/>
                                                             <constraint firstItem="ePH-9p-Irg" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" id="kcs-3A-xs5"/>
                                                             <constraint firstAttribute="bottom" secondItem="6Z2-55-MBL" secondAttribute="bottom" id="mcd-hm-tAF"/>
+                                                            <constraint firstItem="htH-qg-uxZ" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" constant="3" id="pev-Ms-cp3"/>
                                                             <constraint firstItem="6Z2-55-MBL" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" id="sBE-Bb-MO1"/>
+                                                            <constraint firstAttribute="trailing" secondItem="htH-qg-uxZ" secondAttribute="trailing" constant="3" id="vTl-dX-mZ8"/>
                                                         </constraints>
                                                         <connections>
                                                             <outlet property="avView" destination="6Z2-55-MBL" id="c62-BX-tJg"/>
                                                             <outlet property="avatarImageView" destination="ePH-9p-Irg" id="04u-4b-Cdw"/>
+                                                            <outlet property="statusIndicatorView" destination="htH-qg-uxZ" id="TxB-MK-xUA"/>
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
@@ -844,7 +855,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-3622" y="-3565"/>
+            <point key="canvasLocation" x="-3623.1999999999998" y="-3565.3673163418293"/>
         </scene>
     </scenes>
     <resources>
