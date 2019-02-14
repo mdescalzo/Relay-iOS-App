@@ -11,11 +11,50 @@ import RelayServiceKit
 import WebRTC
 import PromiseKit
 
+enum ConferenceCallEvent {
+    case CallStateChange(timestamp: Date,
+                         callId: String,
+                         oldState: ConferenceCallState,
+                         newState: ConferenceCallState)
+    case PeerStateChange(timestamp: Date,
+                         callId: String,
+                         peerId: String,
+                         oldState: PeerConnectionClientState,
+                         newState: PeerConnectionClientState)
+}
+
+extension Formatter {
+    static let withCommas: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = ","
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+}
+extension Double {
+    var formattedWithCommas: String {
+        return Formatter.withCommas.string(for: self) ?? ""
+    }
+}
+
+extension ConferenceCallEvent {
+    func str(_ epoch: Date) -> String {
+        switch self {
+        case .CallStateChange(timestamp: let timestamp, callId: let callId, oldState: let oldState, newState: let newState):
+            let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
+            return "call transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms call \(callId)"
+        case .PeerStateChange(timestamp: let timestamp, callId: let callId, peerId: let peerId, oldState: let oldState, newState: let newState):
+            let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
+            return "peer transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms peer \(peerId) call \(callId)"
+        }
+    }
+}
+
 protocol ConferenceCallServiceDelegate: class {
     func createdConferenceCall(call: ConferenceCall)
 }
 
-@objc public class ConferenceCallService: NSObject, FLCallMessageHandler {
+@objc public class ConferenceCallService: NSObject, FLCallMessageHandler, ConferenceCallDelegate {
     static let rtcFactory = RTCPeerConnectionFactory()
     @objc static let shared = ConferenceCallService()
     
@@ -23,16 +62,18 @@ protocol ConferenceCallServiceDelegate: class {
     lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
     var delegates = [Weak<ConferenceCallServiceDelegate>]()
 
+    var events = [ConferenceCallEvent]()
+    var eventsEpoch = Date()
+    
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
-
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
             Logger.debug("Ignoring call-offer from/for a new call since we already have one running")
             return
         }
         if conferenceCall == nil {
-            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId)
+            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self)
             notifyDelegates(todo: { delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
@@ -80,7 +121,7 @@ protocol ConferenceCallServiceDelegate: class {
     @objc public func startCall(thread: TSThread) -> ConferenceCall {
         let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
-        conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId)
+        conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self)
         notifyDelegates(todo: { delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
         return conferenceCall!
@@ -120,6 +161,27 @@ protocol ConferenceCallServiceDelegate: class {
             return Guarantee.value([RTCIceServer(urlStrings: [fallbackIceServerUrl])])
         }
     }
+    
+    // MARK: - ConferenceCallDelegate implementation
+    
+    public func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
+        self.events.append(.CallStateChange(timestamp: Date(), callId: call.callId, oldState: oldState, newState: newState))
+        Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
+    }
+    
+    public func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+        self.events.append(.PeerStateChange(timestamp: Date(), callId: callId, peerId: peerId, oldState: oldState, newState: newState))
+        Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
+    }
+    
+    public func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
+        // don't care
+    }
+    
+    public func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+        // don't care
+    }
+    
 
     // MARK: - Delegates
     

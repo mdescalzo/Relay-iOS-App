@@ -92,7 +92,11 @@ protocol CallAudioServiceDelegate: class {
 }
 
 @objc class CallAudioService: NSObject, ConferenceCallDelegate {
-    func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState) {
+    func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
+        // TODO
+    }
+    
+    func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         // CallAudioService don't care (probably)
     }
     

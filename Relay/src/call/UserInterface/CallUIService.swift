@@ -15,7 +15,7 @@ import WebRTC
  */
 @objc
 public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceCallDelegate, CXProviderDelegate {
-    func peerConnectionStateDidChange(peerId: String, newState: PeerConnectionClientState) {
+    public func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         // TODO
     }
 
@@ -355,7 +355,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     }
     
     // MARK: - ConferenceCallDelegate
-    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
+    public func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
         switch call.state {
         case .undefined:
             do {}
@@ -383,7 +383,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         }
     }
     
-    func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+    public func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
         Logger.info("\(self.TAG) \(#function)")
     }
     
@@ -391,7 +391,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(self.TAG) \(#function)")
     }
     
-    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
+    public func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
         Logger.info("\(self.TAG) \(#function)")
     }
 
