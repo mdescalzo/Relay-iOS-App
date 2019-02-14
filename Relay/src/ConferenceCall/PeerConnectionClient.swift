@@ -14,10 +14,11 @@ import RelayMessaging
 
 public enum PeerConnectionClientState: String {
     case undefined
-    case readyToSendCallAcceptOffer
-    case sentCallAcceptOffer
-    case readyToReceiveCallAcceptOffer
-    case receivedCallAcceptOffer
+    case sendingAcceptOffer
+    case sentAcceptOffer
+    case sendingOffer
+    case readyToReceiveAcceptOffer
+    case receivedAcceptOffer
     case connected
     case peerLeft       // the peer sent us a callLeave
     case leftPeer       // we sent the peer a callLeave
@@ -229,7 +230,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return
         }
         
-        self.state = .readyToSendCallAcceptOffer
+        self.state = .sendingAcceptOffer
         firstly {
             self.readyToAnswerPromise
         }.then { _ -> Promise<Void> in
@@ -257,7 +258,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return self.sendCallAcceptOffer(negotiatedSessionDescription: hardenedSessionDesc)
         }.then { () -> Promise<Void> in
             Logger.debug("\(self.logTag) successfully sent callAcceptOffer for peer: \(self.peerId)")
-            self.state = .sentCallAcceptOffer
+            self.state = .sentAcceptOffer
             
             self.readyToSendIceCandidatesResolver.fulfill(())
             
@@ -343,6 +344,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return
         }
         
+        self.state = .sendingOffer
         firstly {
             return cc.setUpLocalAV()
         }.then { (Void) -> Promise<HardenedRTCSessionDescription> in
@@ -388,7 +390,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             }
         }.then { () -> Promise<Void> in
             Logger.info("GEP: have sent callOffer message for \(self.peerId)")
-            self.state = .readyToReceiveCallAcceptOffer
+            self.state = .readyToReceiveAcceptOffer
             self.readyToSendIceCandidatesResolver.fulfill(())
             
             // Don't let the outgoing call ring forever. We don't support inbound ringing forever anyway.
@@ -426,7 +428,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         }.done {
             Logger.info("GEP: set remote session description for \(self.peerId)")
             Logger.debug("\(self.logTag) successfully set remote description")
-            self.state = .receivedCallAcceptOffer
+            self.state = .receivedAcceptOffer
         }.catch { error in
             Logger.info("GEP: set remote session description failed for \(self.peerId): \(error)")
             Logger.error("\(self.logTag) setting remote session description for peer \(self.peerId) failed with error: \(error)")
