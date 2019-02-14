@@ -30,6 +30,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet var stackContainerView: UIStackView!
 
     @IBOutlet weak var mainPeerAVView: RemoteVideoView!
+    @IBOutlet weak var mainPeerAvatarView: UIImageView!
     @IBOutlet weak var localAVView: RTCCameraPreviewView!
     var hasLocalVideo = true
     
@@ -48,10 +49,14 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     func configure(call: ConferenceCall) {
         self.call = call
         self.call?.addDelegate(delegate: self)
-        self.mainPeerId = self.call?.peerConnectionClients.keys.first
-        self.secondaryPeerIds = (self.call?.peerConnectionClients.keys.filter({ (peer) -> Bool in
-            peer != mainPeerId
-        }))!
+
+        for peer in (self.call?.peerConnectionClients.values)! {
+            if peer.userId == self.call?.originatorId {
+                self.mainPeerId = peer.peerId
+            } else {
+                self.secondaryPeerIds.append(peer.peerId)
+            }
+        }
     }
     
     override func loadView() {
@@ -77,7 +82,17 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             return
         }
         
+        // Setup main peer views
         if self.mainPeerId != nil {
+            // Setup the avatar view
+            if let mainPeer = self.call?.peerConnectionClients[self.mainPeerId!] {
+                if let avatarImage = FLContactsManager.shared.avatarImageRecipientId(mainPeer.userId) {
+                    self.mainPeerAvatarView.image = avatarImage
+                } else {
+                    self.mainPeerAvatarView.image = UIImage(named: "actionsheet_contact")
+                }
+            }
+            // Setup the video view
             self.peerAVViews[mainPeerId!] = self.mainPeerAVView
             if let client = self.call?.peerConnectionClients[mainPeerId!] {
                 client.remoteVideoTrack?.add(self.mainPeerAVView)
@@ -348,19 +363,25 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PeerViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PeerViewCell
         
-        cell.avatarImageView.image = UIImage(named: "avatar")
-        cell.avView.backgroundColor = UIColor.green
 
         let peerId = self.secondaryPeerIds[indexPath.item]
         self.peerAVViews[peerId] = cell.avView
+
+        let peer = self.call?.peerConnectionClients[peerId]
+        if let avatarImage = FLContactsManager.shared.avatarImageRecipientId((peer?.userId)!) {
+            cell.avatarImageView.image = avatarImage
+        } else {
+            cell.avatarImageView.image = UIImage(named: "actionsheet_contact")
+        }
         
         if self.call?.peerConnectionClients[peerId]?.remoteVideoTrack != nil {
-        self.call?.peerConnectionClients[peerId]?.remoteVideoTrack?.add(cell.avView)
+            self.call?.peerConnectionClients[peerId]?.remoteVideoTrack?.add(cell.avView)
             cell.avView.isHidden = false
         }
         
         // TODO: put a fine black line border
-//        cell.layer.cornerRadius = self.peerViewDiameter()/8
+        cell.layer.borderWidth = 0.25
+        cell.layer.borderColor = UIColor.black.cgColor
 
         return cell
     }

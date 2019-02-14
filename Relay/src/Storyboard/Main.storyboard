@@ -592,11 +592,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="467"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar" translatesAutoresizingMaskIntoConstraints="NO" id="gOX-xr-nqU" userLabel="Main Avatar View">
-                                                <rect key="frame" x="127.5" y="173.5" width="120" height="120"/>
-                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <rect key="frame" x="50" y="96" width="275" height="275"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="gOX-xr-nqU" secondAttribute="height" multiplier="1:1" id="6DX-Wl-GNA"/>
-                                                    <constraint firstAttribute="width" constant="120" id="pcO-mL-5aT"/>
                                                 </constraints>
                                             </imageView>
                                             <view hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r63-pw-tiD" userLabel="Main AV View" customClass="RemoteVideoView">
@@ -615,15 +614,21 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
+                                            <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="DG6-Oy-9VV" secondAttribute="trailing" constant="8" id="ekb-9v-hbQ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
                                             <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
+                                            <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="gOX-xr-nqU" secondAttribute="trailing" constant="50" id="pjr-IV-Dna"/>
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" id="yag-wN-0wD"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="centerY" secondItem="oYr-aF-2qo" secondAttribute="centerY" id="zPO-bl-C8e"/>
                                         </constraints>
                                         <viewLayoutGuide key="safeArea" id="NKH-TQ-vyc"/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="4HJ-KB-3U9" appends="YES" id="BNA-HZ-r6K"/>
+                                            <outletCollection property="gestureRecognizers" destination="nDu-NG-Lef" appends="YES" id="F58-Ge-PAJ"/>
+                                        </connections>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0UN-wO-Fbp" userLabel="Scrolling Peers Container">
                                         <rect key="frame" x="0.0" y="467" width="375" height="80"/>
@@ -642,6 +647,7 @@
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ePH-9p-Irg" userLabel="avatarView">
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </imageView>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Z2-55-MBL" userLabel="avView" customClass="RemoteVideoView">
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -649,7 +655,7 @@
                                                                 </view>
                                                             </subviews>
                                                         </view>
-                                                        <color key="backgroundColor" red="0.99953407049999998" green="0.98835557699999999" blue="0.47265523669999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="trailing" secondItem="ePH-9p-Irg" secondAttribute="trailing" id="L5U-tG-zRL"/>
                                                             <constraint firstItem="ePH-9p-Irg" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" id="Lik-Dw-lf4"/>
@@ -810,6 +816,7 @@
                         <outlet property="leaveCallButton" destination="MpS-8p-2NL" id="C5g-w0-U7N"/>
                         <outlet property="localAVView" destination="fIA-Fr-YdV" id="aVq-fq-MFJ"/>
                         <outlet property="mainPeerAVView" destination="r63-pw-tiD" id="GGH-nA-jCb"/>
+                        <outlet property="mainPeerAvatarView" destination="gOX-xr-nqU" id="On8-Nb-JYM"/>
                         <outlet property="muteButton" destination="GtN-JB-ZxO" id="11a-da-rcO"/>
                         <outlet property="stackContainerView" destination="bcZ-rg-G4N" id="Bsv-mn-woa"/>
                         <outlet property="videoToggleButton" destination="uUf-7R-4b2" id="L9r-Z2-IUa"/>
