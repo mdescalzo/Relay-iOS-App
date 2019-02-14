@@ -133,7 +133,7 @@ protocol ConferenceCallServiceDelegate: class {
             Logger.debug("Ignoring endCall for an unknown call")
             return
         }
-        call.leaveCall()
+        self.conferenceCall?.leaveCall()
     }
     
     private static func getIceServers() -> Promise<[RTCIceServer]> {
@@ -167,6 +167,9 @@ protocol ConferenceCallServiceDelegate: class {
     public func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
         self.events.append(.CallStateChange(timestamp: Date(), callId: call.callId, oldState: oldState, newState: newState))
         Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
+        if oldState == .leaving && newState == .left && self.conferenceCall == call {
+            self.conferenceCall = nil
+        }
     }
     
     public func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
