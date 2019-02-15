@@ -117,6 +117,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         self.call?.addDelegate(delegate: self)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.call?.state = .joined
+    }
+    
     // MARK: - Helpers
     private func setPeerIdAsMain(peerId: String) {
         

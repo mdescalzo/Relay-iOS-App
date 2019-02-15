@@ -134,7 +134,7 @@ let defaultCallAVPolicy = CallAVPolicy(includeAudio: true, startAudioMuted: fals
     }
     
     // terminate an existing call
-    func endCall(call: ConferenceCall) {
+    func endCall(_ call: ConferenceCall) {
         if (call != self.conferenceCall) {
             Logger.debug("Ignoring endCall for an unknown call")
             return

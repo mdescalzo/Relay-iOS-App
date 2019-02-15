@@ -87,9 +87,10 @@ public class CallAVPolicy {
         }
     }
     
-    let thread: TSThread
-    let callId: String
-    let originatorId: String
+    let thread: TSThread;
+    let callId: String;
+    lazy var callUUID = UUID(uuidString: self.callId)
+    let originatorId: String;
     
     var delegates = [Weak<ConferenceCallDelegate>]()
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
@@ -124,6 +125,15 @@ public class CallAVPolicy {
             
             if self.state == .joined && (oldValue == .ringing || oldValue == .vibrating) {
                 answerPendingOffers()
+            }
+        }
+    }
+    
+    var muted: Bool = false {
+        didSet {
+            // iterate over the peerconnects, toggling the audio
+            for peer in self.peerConnectionClients.values {
+                peer.audioSender?.track?.isEnabled = !self.muted
             }
         }
     }
