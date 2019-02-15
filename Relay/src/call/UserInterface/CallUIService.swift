@@ -202,7 +202,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     internal func localHangupCall(_ call: ConferenceCall) {
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
-        
         ConferenceCallService.shared.endCall(call: call)
         OWSAudioSession.shared.endAudioActivity(call.audioActivity)
         self.submitEndCallAction(call: call)
@@ -428,9 +427,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             action.fulfill()
             return
         }
-        // Not
         self.callService.endCall(call: ConferenceCallService.shared.conferenceCall!)
-        
         action.fulfill()
     }
     

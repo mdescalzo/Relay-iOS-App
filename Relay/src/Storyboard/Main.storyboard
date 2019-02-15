@@ -581,7 +581,7 @@
                         <viewControllerLayoutGuide type="top" id="FcR-Mr-tKz"/>
                         <viewControllerLayoutGuide type="bottom" id="JjJ-C7-bwd"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="X1H-78-tht">
+                    <view key="view" contentMode="scaleToFill" id="X1H-78-tht" userLabel="Container View">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -610,13 +610,23 @@
                                                     <constraint firstAttribute="width" constant="80" id="Kdj-CT-hsU"/>
                                                 </constraints>
                                             </view>
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
+                                                <rect key="frame" x="12" y="80" width="14" height="14"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="m2h-f9-fWm" secondAttribute="height" multiplier="1:1" id="0bW-dt-0yS"/>
+                                                    <constraint firstAttribute="width" constant="14" id="KHn-wW-e10"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
+                                            <constraint firstItem="m2h-f9-fWm" firstAttribute="leading" secondItem="oYr-aF-2qo" secondAttribute="leading" constant="12" id="3h8-cx-Ajy"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
+                                            <constraint firstItem="m2h-f9-fWm" firstAttribute="top" secondItem="oYr-aF-2qo" secondAttribute="top" constant="80" id="b5J-te-eeK"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="DG6-Oy-9VV" secondAttribute="trailing" constant="8" id="ekb-9v-hbQ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
                                             <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
@@ -828,6 +838,7 @@
                         <outlet property="localAVView" destination="fIA-Fr-YdV" id="aVq-fq-MFJ"/>
                         <outlet property="mainPeerAVView" destination="r63-pw-tiD" id="GGH-nA-jCb"/>
                         <outlet property="mainPeerAvatarView" destination="gOX-xr-nqU" id="On8-Nb-JYM"/>
+                        <outlet property="mainPeerStatusIndicator" destination="m2h-f9-fWm" id="3dY-ZF-Sry"/>
                         <outlet property="muteButton" destination="GtN-JB-ZxO" id="11a-da-rcO"/>
                         <outlet property="stackContainerView" destination="bcZ-rg-G4N" id="Bsv-mn-woa"/>
                         <outlet property="videoToggleButton" destination="uUf-7R-4b2" id="L9r-Z2-IUa"/>
@@ -842,16 +853,6 @@
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="4HJ-KB-3U9" userLabel="Main Long Press Gesture Recognizer">
                     <connections>
                         <action selector="didLongPressMainPeerView:" destination="WPy-fR-KZT" id="HR2-mC-f0z"/>
-                    </connections>
-                </pongPressGestureRecognizer>
-                <tapGestureRecognizer numberOfTapsRequired="2" id="5um-jd-Xcx" userLabel="Local View Tap Gesture Recognizer">
-                    <connections>
-                        <action selector="didDoubleTapLocalUserView:" destination="WPy-fR-KZT" id="3Yb-UD-ZcH"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="WpE-LI-aVM" userLabel="Local View Long Press Gesture Recognizer">
-                    <connections>
-                        <action selector="didLongPressLocalUserView:" destination="WPy-fR-KZT" id="Pbk-wk-OvN"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
