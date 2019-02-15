@@ -815,6 +815,8 @@
 		D2AEACDC16C426DA00C364C0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AEACDB16C426DA00C364C0 /* CFNetwork.framework */; };
 		DB2326B02200DF440063CB09 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */; };
 		DB2326B12200DF440063CB09 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */; };
+		DBC97B5D221773650011588E /* ConferenceCallEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC97B5C221773650011588E /* ConferenceCallEvents.swift */; };
+		DBC97B5E221773650011588E /* ConferenceCallEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC97B5C221773650011588E /* ConferenceCallEvents.swift */; };
 		DBCF627E220B8F4C00D710D2 /* TurnServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */; };
 		DBCF627F220B8F4C00D710D2 /* TurnServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */; };
 		DBD6CEE82146CD790088B4A4 /* Forsta-values.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */; };
@@ -1610,6 +1612,7 @@
 		D562B853DF3F1C3D5A1CB00B /* Pods-RelayTests.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayTests.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests.app store release.xcconfig"; sourceTree = "<group>"; };
 		D7BCBE6C7CD3E58FF656F0AC /* Pods-RelayDevShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDevShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDevShareExtension/Pods-RelayDevShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
 		DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConnectionClient.swift; sourceTree = "<group>"; };
+		DBC97B5C221773650011588E /* ConferenceCallEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallEvents.swift; sourceTree = "<group>"; };
 		DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurnServerInfo.swift; sourceTree = "<group>"; };
 		DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Forsta-values.plist"; sourceTree = "<group>"; };
 		DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallService.swift; sourceTree = "<group>"; };
@@ -2983,6 +2986,7 @@
 				DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */,
 				DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */,
 				DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */,
+				DBC97B5C221773650011588E /* ConferenceCallEvents.swift */,
 			);
 			path = ConferenceCall;
 			sourceTree = "<group>";
@@ -4253,6 +4257,7 @@
 				7D2CD597214C3C9C004E957A /* GifPickerLayout.swift in Sources */,
 				7D2CD598214C3C9C004E957A /* DebugUISyncMessages.m in Sources */,
 				7D2CD599214C3C9C004E957A /* UIStoryboard+OWS.swift in Sources */,
+				DBC97B5E221773650011588E /* ConferenceCallEvents.swift in Sources */,
 				DB2326B12200DF440063CB09 /* PeerConnectionClient.swift in Sources */,
 				7D2CD59A214C3C9C004E957A /* MessageFetcherJob.swift in Sources */,
 				7D2CD59B214C3C9C004E957A /* DebugUIProfile.swift in Sources */,
@@ -4458,6 +4463,7 @@
 				34BECE301F7ABCF800D7438D /* GifPickerLayout.swift in Sources */,
 				343A65951FC47D5E000477A1 /* DebugUISyncMessages.m in Sources */,
 				45C0DC1E1E69011F00E04C47 /* UIStoryboard+OWS.swift in Sources */,
+				DBC97B5D221773650011588E /* ConferenceCallEvents.swift in Sources */,
 				DB2326B02200DF440063CB09 /* PeerConnectionClient.swift in Sources */,
 				452ECA4D1E087E7200E2F016 /* MessageFetcherJob.swift in Sources */,
 				4556FA681F54AA9500AF40DD /* DebugUIProfile.swift in Sources */,

@@ -11,46 +11,6 @@ import RelayServiceKit
 import WebRTC
 import PromiseKit
 
-enum ConferenceCallEvent {
-    case CallStateChange(timestamp: Date,
-                         callId: String,
-                         oldState: ConferenceCallState,
-                         newState: ConferenceCallState)
-    case PeerStateChange(timestamp: Date,
-                         callId: String,
-                         peerId: String,
-                         userId: String,
-                         oldState: PeerConnectionClientState,
-                         newState: PeerConnectionClientState)
-}
-
-extension Formatter {
-    static let withCommas: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.groupingSeparator = ","
-        formatter.numberStyle = .decimal
-        return formatter
-    }()
-}
-extension Double {
-    var formattedWithCommas: String {
-        return Formatter.withCommas.string(for: self) ?? ""
-    }
-}
-
-extension ConferenceCallEvent {
-    func str(_ epoch: Date) -> String {
-        switch self {
-        case .CallStateChange(timestamp: let timestamp, callId: let callId, oldState: let oldState, newState: let newState):
-            let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
-            return "call transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms call \(callId)"
-        case .PeerStateChange(timestamp: let timestamp, callId: let callId, peerId: let peerId, userId: let userId, oldState: let oldState, newState: let newState):
-            let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
-            return "peer transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms peer \(peerId) user \(userId) call \(callId)"
-        }
-    }
-}
-
 protocol ConferenceCallServiceDelegate: class {
     func createdConferenceCall(call: ConferenceCall)
 }
@@ -66,9 +26,6 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     lazy var iceServers: Promise<[RTCIceServer]> = ConferenceCallService.getIceServers();
     var delegates = [Weak<ConferenceCallServiceDelegate>]()
 
-    var events = [ConferenceCallEvent]()
-    var eventsEpoch = Date()
-    
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
@@ -177,8 +134,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     // MARK: - ConferenceCallDelegate implementation
     
     public func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
-        self.events.append(.CallStateChange(timestamp: Date(), callId: call.callId, oldState: oldState, newState: newState))
-        Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
+        ConferenceCallEvents.add(.CallStateChange(timestamp: Date(), callId: call.callId, oldState: oldState, newState: newState))
         if oldState == .leaving && newState == .left && self.conferenceCall == call {
             self.conferenceCall?.cleanupBeforeDestruction()
             self.conferenceCall = nil
@@ -186,8 +142,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     }
     
     public func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
-        self.events.append(.PeerStateChange(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, oldState: oldState, newState: newState))
-        Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
+        ConferenceCallEvents.add(.PeerStateChange(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, oldState: oldState, newState: newState))
     }
     
     public func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
