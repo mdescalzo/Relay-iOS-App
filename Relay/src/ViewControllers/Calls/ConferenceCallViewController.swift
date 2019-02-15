@@ -396,6 +396,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     peerElements.avView?.isHidden = true
                     self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.clear, hide: true)
                 }
+            case .awaitingLocalJoin:
+                do {
+                    peerElements.avView?.isHidden = true
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.cyan, hide: true)
+                }
             case .connected:
                 do {
                     peerElements.avView?.isHidden = false

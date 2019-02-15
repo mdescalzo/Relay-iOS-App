@@ -14,6 +14,7 @@ import RelayMessaging
 
 public enum PeerConnectionClientState: String {
     case undefined
+    case awaitingLocalJoin
     case sendingAcceptOffer
     case sentAcceptOffer
     case sendingOffer
@@ -230,11 +231,12 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return
         }
         
-        self.state = .sendingAcceptOffer
+        self.state = .awaitingLocalJoin
         firstly {
             self.readyToAnswerPromise
         }.then { _ -> Promise<Void> in
-            cc.setUpLocalAV()
+            self.state = .sendingAcceptOffer
+            return cc.setUpLocalAV()
         }.then { _ -> Promise<HardenedRTCSessionDescription> in
             Logger.info("GEP: have local AV for \(self.peerId)")
             self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,

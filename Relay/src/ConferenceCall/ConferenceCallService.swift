@@ -79,6 +79,7 @@ let defaultCallAVPolicy = CallAVPolicy(includeAudio: true, startAudioMuted: fals
         if conferenceCall == nil {
             conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
             notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
+            conferenceCall!.state = .ringing
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
     }
@@ -127,6 +128,7 @@ let defaultCallAVPolicy = CallAVPolicy(includeAudio: true, startAudioMuted: fals
         let originatorId = TSAccountManager.localUID()!
         conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
         notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
+        conferenceCall!.state = .joined
         conferenceCall!.inviteMissingParticipants()
         return conferenceCall!
     }

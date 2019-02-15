@@ -153,7 +153,7 @@ public class CallAVPolicy {
 
         super.init()
         if delegate != nil { self.addDelegate(delegate: delegate!) }
-        self.state = (self.direction == .outgoing) ? .joined : .ringing
+        // self.state = (self.direction == .outgoing) ? .joined : .ringing
         
         var callType: RPRecentCallType
         switch self.direction {
@@ -238,7 +238,7 @@ public class CallAVPolicy {
         let newPcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId, callId: self.callId)
         self.peerConnectionClients[peerId] = newPcc
         newPcc.handleOffer(sessionDescription: sessionDescription)
-        if (true || self.state == .joined) {
+        if (self.state == .joined) {
             newPcc.readyToAnswerResolver.fulfill(())
         }
         
