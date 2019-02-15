@@ -513,11 +513,12 @@ public class CallAVPolicy {
         // FIXME - do we require mic permissions at this point?
         // if so maybe it would be better to not even add the track until the call is connected
         // instead of creating it and disabling it.
-        audioTrack.isEnabled = true
+        audioTrack.isEnabled = !self.policy.startAudioMuted
     }
     
     public func setAudioEnabled(enabled: Bool) {
         AssertIsOnMainThread(file: #function)
+        if !self.policy.allowAudioMuteToggle { return }
         let strongSelf = self
         ConferenceCallService.shared.rtcQueue.async {
             guard let audioTrack = strongSelf.audioTrack else {
