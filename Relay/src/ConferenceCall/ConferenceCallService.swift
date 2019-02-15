@@ -19,6 +19,7 @@ enum ConferenceCallEvent {
     case PeerStateChange(timestamp: Date,
                          callId: String,
                          peerId: String,
+                         userId: String,
                          oldState: PeerConnectionClientState,
                          newState: PeerConnectionClientState)
 }
@@ -43,9 +44,9 @@ extension ConferenceCallEvent {
         case .CallStateChange(timestamp: let timestamp, callId: let callId, oldState: let oldState, newState: let newState):
             let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
             return "call transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms call \(callId)"
-        case .PeerStateChange(timestamp: let timestamp, callId: let callId, peerId: let peerId, oldState: let oldState, newState: let newState):
+        case .PeerStateChange(timestamp: let timestamp, callId: let callId, peerId: let peerId, userId: let userId, oldState: let oldState, newState: let newState):
             let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
-            return "peer transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms peer \(peerId) call \(callId)"
+            return "peer transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms peer \(peerId) user \(userId) call \(callId)"
         }
     }
 }
@@ -177,7 +178,7 @@ let defaultCallAVPolicy = CallAVPolicy(includeAudio: true, startAudioMuted: fals
     }
     
     public func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
-        self.events.append(.PeerStateChange(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, oldState: oldState, newState: newState))
+        self.events.append(.PeerStateChange(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, oldState: oldState, newState: newState))
         Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
     }
     
