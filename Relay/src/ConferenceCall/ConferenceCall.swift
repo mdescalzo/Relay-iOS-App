@@ -52,19 +52,15 @@ public protocol ConferenceCallDelegate: class {
 }
 
 public class CallAVPolicy {
-    let includeAudio: Bool
     let startAudioMuted: Bool
     let allowAudioMuteToggle: Bool
     
-    let includeVideo: Bool
     let startVideoMuted: Bool
     let allowVideoMuteToggle: Bool
     
-    init(includeAudio: Bool, startAudioMuted: Bool, allowAudioMuteToggle: Bool, includeVideo: Bool, startVideoMuted: Bool, allowVideoMuteToggle: Bool) {
-        self.includeAudio = includeAudio
+    init(startAudioMuted: Bool, allowAudioMuteToggle: Bool, startVideoMuted: Bool, allowVideoMuteToggle: Bool) {
         self.startAudioMuted = startAudioMuted
         self.allowAudioMuteToggle = allowAudioMuteToggle
-        self.includeVideo = includeVideo
         self.startVideoMuted = startVideoMuted
         self.allowVideoMuteToggle = allowVideoMuteToggle
     }

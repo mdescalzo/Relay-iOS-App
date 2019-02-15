@@ -56,7 +56,7 @@ protocol ConferenceCallServiceDelegate: class {
 }
 
 // we'll create more of these over time, driven by the type of thread that creates the call
-let defaultCallAVPolicy = CallAVPolicy(includeAudio: true, startAudioMuted: false, allowAudioMuteToggle: true, includeVideo: true, startVideoMuted: false, allowVideoMuteToggle: true)
+let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteToggle: true, startVideoMuted: false, allowVideoMuteToggle: true)
 
 @objc public class ConferenceCallService: NSObject, FLCallMessageHandler, ConferenceCallDelegate {
     static let rtcFactory = RTCPeerConnectionFactory()
