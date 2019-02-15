@@ -51,8 +51,29 @@ public protocol ConferenceCallDelegate: class {
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?)
 }
 
+public class CallAVPolicy {
+    let includeAudio: Bool
+    let startAudioMuted: Bool
+    let allowAudioMuteToggle: Bool
+    
+    let includeVideo: Bool
+    let startVideoMuted: Bool
+    let allowVideoMuteToggle: Bool
+    
+    init(includeAudio: Bool, startAudioMuted: Bool, allowAudioMuteToggle: Bool, includeVideo: Bool, startVideoMuted: Bool, allowVideoMuteToggle: Bool) {
+        self.includeAudio = includeAudio
+        self.startAudioMuted = startAudioMuted
+        self.allowAudioMuteToggle = allowAudioMuteToggle
+        self.includeVideo = includeVideo
+        self.startVideoMuted = startVideoMuted
+        self.allowVideoMuteToggle = allowVideoMuteToggle
+    }
+}
+
 @objc public class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
     let TAG = "[ConferenceCall]"
+    
+    let policy: CallAVPolicy
     
     var joinedDate: NSDate?
 
@@ -66,9 +87,9 @@ public protocol ConferenceCallDelegate: class {
         }
     }
     
-    let thread: TSThread;
-    let callId: String;
-    let originatorId: String;
+    let thread: TSThread
+    let callId: String
+    let originatorId: String
     
     var delegates = [Weak<ConferenceCallDelegate>]()
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
@@ -122,7 +143,8 @@ public protocol ConferenceCallDelegate: class {
     
 
     
-    public required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?) {
+    public required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy) {
+        self.policy = policy
         self.thread = thread
         self.callId = callId
         self.originatorId = originatorId

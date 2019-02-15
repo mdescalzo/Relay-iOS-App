@@ -54,6 +54,9 @@ protocol ConferenceCallServiceDelegate: class {
     func createdConferenceCall(call: ConferenceCall)
 }
 
+// we'll create more of these over time, driven by the type of thread that creates the call
+let defaultCallAVPolicy = CallAVPolicy(includeAudio: true, startAudioMuted: false, allowAudioMuteToggle: true, includeVideo: true, startVideoMuted: false, allowVideoMuteToggle: true)
+
 @objc public class ConferenceCallService: NSObject, FLCallMessageHandler, ConferenceCallDelegate {
     static let rtcFactory = RTCPeerConnectionFactory()
     @objc static let shared = ConferenceCallService()
@@ -73,7 +76,7 @@ protocol ConferenceCallServiceDelegate: class {
             return
         }
         if conferenceCall == nil {
-            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self)
+            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
             notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         }
         conferenceCall!.handleOffer(senderId: senderId, peerId: peerId, sessionDescription: sessionDescription)
@@ -121,7 +124,7 @@ protocol ConferenceCallServiceDelegate: class {
     @objc public func startCall(thread: TSThread) -> ConferenceCall {
         let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
-        conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self)
+        conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
         notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         conferenceCall!.inviteMissingParticipants()
         return conferenceCall!
