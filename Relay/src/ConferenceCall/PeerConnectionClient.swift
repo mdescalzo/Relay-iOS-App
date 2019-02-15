@@ -24,7 +24,16 @@ public enum PeerConnectionClientState: String {
     case peerLeft       // the peer sent us a callLeave
     case leftPeer       // we sent the peer a callLeave
     case discarded      // owning call is just throwing it away
-    case failed
+    case disconnected   // ice disconnected
+    case failed         // ice failed
+}
+extension PeerConnectionClientState {
+    var isTerminal: Bool {
+        switch self {
+        case .peerLeft, .leftPeer, .discarded, .disconnected, .failed: return true
+        default: return false
+        }
+    }
 }
 
 // HACK - Seeing crazy SEGFAULTs on iOS9 when accessing these objc externs.
@@ -43,9 +52,6 @@ private let connectingTimeoutSeconds: TimeInterval = 60
 protocol PeerConnectionClientDelegate: class {
     func stateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
     func owningCall() -> ConferenceCall
-    func iceConnected(strongPcc: PeerConnectionClient)
-    func iceFailed(strongPcc: PeerConnectionClient)
-    func iceDisconnected(strongPcc: PeerConnectionClient)
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack)
     func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?)
 }
@@ -807,20 +813,19 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         let connectedCompletion : () -> Void = {
             AssertIsOnMainThread(file: #function)
             guard let strongSelf = proxyCopy.get() else { return }
-            guard let strongDelegate = strongSelf.delegate else { return }
-            strongDelegate.iceConnected(strongPcc: strongSelf)
+            strongSelf.peerConnectedResolver.fulfill(())
         }
         let failedCompletion : () -> Void = {
             AssertIsOnMainThread(file: #function)
             guard let strongSelf = proxyCopy.get() else { return }
-            guard let strongDelegate = strongSelf.delegate else { return }
-            strongDelegate.iceFailed(strongPcc: strongSelf)
+            Logger.error("\(strongSelf.logTag) ice connection failed")
+            strongSelf.state = .failed
         }
         let disconnectedCompletion : () -> Void = {
             AssertIsOnMainThread(file: #function)
             guard let strongSelf = proxyCopy.get() else { return }
-            guard let strongDelegate = strongSelf.delegate else { return }
-            strongDelegate.iceDisconnected(strongPcc: strongSelf)
+            Logger.error("\(strongSelf.logTag) ice connection disconnected")
+            strongSelf.state = .disconnected
         }
         
         ConferenceCallService.shared.rtcQueue.async {

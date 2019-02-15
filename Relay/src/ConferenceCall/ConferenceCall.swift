@@ -367,30 +367,15 @@ public class CallAVPolicy {
     func stateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         notifyDelegates({ delegate in delegate.peerConnectionStateDidChange(pcc: pcc, oldState: oldState, newState: newState) })
         
-        switch newState {
-        case .failed, .peerLeft, .leftPeer, .discarded:
-            Logger.debug("GEP: blowing away call \(pcc.callId) PEER \(pcc.peerId)")
-            pcc.cleanupBeforeDestruction()
+        if newState.isTerminal {
+            Logger.debug("GEP: blowing away terminal peer \(pcc.peerId) in call \(pcc.callId)")
             self.peerConnectionClients.removeValue(forKey: pcc.peerId)
-        default: return
+            pcc.cleanupBeforeDestruction()
         }
     }
     
     func owningCall() -> ConferenceCall {
         return self;
-    }
-    
-    func iceConnected(strongPcc: PeerConnectionClient) {
-        Logger.debug("ice connected for peer \(strongPcc.peerId)")
-        strongPcc.peerConnectedResolver.fulfill(())
-    }
-    
-    func iceFailed(strongPcc: PeerConnectionClient) {
-        Logger.debug("ice failed for peer \(strongPcc.peerId)")
-    }
-    
-    func iceDisconnected(strongPcc: PeerConnectionClient) {
-        Logger.debug("ice disconnected for peer \(strongPcc.peerId)")
     }
     
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack) {

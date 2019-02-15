@@ -397,8 +397,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             return
         }
         
-        // Check for a new peer and build the pieces-parts for it
-        if oldState == .undefined && newState != .discarded {
+        // Check for a SUCCESSFUL new peer and build the pieces-parts for it
+        if oldState == .undefined && !newState.isTerminal {
             if let peer = call?.peerConnectionClients[pcc.peerId] {
                 if call?.direction == .incoming {
                     if peer.userId == self.call?.originatorId {
@@ -448,6 +448,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     peerElements.avView?.isHidden = true
                     self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.black, hide: true)
                     self.removePeerFromView(peerId: pcc.peerId)
+                }
+            case .disconnected:
+                do {
+                    peerElements.avView?.isHidden = true
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.yellow, hide: false)
                 }
             case .failed:
                 do {
