@@ -119,10 +119,32 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.call?.state = .joined
+        
+        if self.call?.state == .ringing || self.call?.state == .vibrating {
+            self.call?.state = .joined
+        }
     }
     
     // MARK: - Helpers
+    private func updateUIForCallPolicy() {
+        guard let policy = self.call?.policy else {
+            Logger.debug("No policy to enforce")
+            return
+        }
+        
+        self.muteButton.isEnabled = policy.allowAudioMuteToggle
+        self.muteButton.alpha = (policy.allowAudioMuteToggle ? 1.0 : 0.75)
+        
+        self.videoToggleButton.isEnabled = policy.allowVideoMuteToggle
+        self.muteButton.alpha = (policy.allowVideoMuteToggle ? 1.0 : 0.75)
+
+        self.muteButton.isSelected = policy.startAudioMuted
+        self.callKitService.setIsMuted(call: self.call!, isMuted: self.muteButton.isSelected)
+        
+        self.videoToggleButton.isSelected = !policy.startVideoMuted
+        self.call?.setLocalVideoEnabled(enabled: self.videoToggleButton.isSelected)
+    }
+    
     private func setPeerIdAsMain(peerId: String) {
         
         // Make sure we're actually making a change
@@ -485,10 +507,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             }
         case .joined:
             do {
-                if hasLocalVideo {
-                    self.videoToggleButton.isSelected = true
-                    self.call?.setLocalVideoEnabled(enabled: self.videoToggleButton.isSelected)
-                }
+                self.updateUIForCallPolicy()
             }
         case .leaving:
             do {
