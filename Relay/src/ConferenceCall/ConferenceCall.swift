@@ -432,6 +432,7 @@ public class CallAVPolicy {
         
         let capturer = RTCCameraVideoCapturer(delegate: videoSource)
         self.videoCaptureController = VideoCaptureController(capturer: capturer, settingsDelegate: self)
+        self.notifyDelegates({ delegate in delegate.didUpdateLocalVideoTrack(captureSession: self.videoCaptureController!.captureSession) })
     }
     
     public func setCameraSource(isUsingFrontCamera: Bool) {
