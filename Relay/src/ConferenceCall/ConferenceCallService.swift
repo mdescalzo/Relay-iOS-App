@@ -123,13 +123,19 @@ let defaultCallAVPolicy = CallAVPolicy(includeAudio: true, startAudioMuted: fals
     }
     
     // initiate an outbound call
-    @objc public func startCall(thread: TSThread) -> ConferenceCall {
+    @objc public func startCall(thread: TSThread) -> ConferenceCall? {
+        if self.conferenceCall != nil {
+            // for now, we refuse to set up another call until the existing one is gone
+            Logger.debug("rejecting request to create a second ConferenceCall")
+            return nil
+        }
+        
         let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
-        conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
+        self.conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
         notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
-        conferenceCall!.state = .joined
-        conferenceCall!.inviteMissingParticipants()
+        self.conferenceCall!.state = .joined
+        self.conferenceCall!.inviteMissingParticipants()
         return conferenceCall!
     }
     

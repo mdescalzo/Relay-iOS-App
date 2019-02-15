@@ -500,9 +500,12 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             return
         }
         self.provider.reportOutgoingCall(with: action.callUUID, startedConnectingAt: Date())
-        let call = self.callService.startCall(thread: thread)
-        self.showCall(call)
-        action.fulfill()
+        if let call = self.callService.startCall(thread: thread) {
+            self.showCall(call)
+            action.fulfill()
+        } else {
+            action.fail()
+        }
     }
     
     public func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
