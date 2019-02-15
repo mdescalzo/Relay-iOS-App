@@ -358,9 +358,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     // MARK: - Call delegate methods
-    func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+    func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         
-        guard callId == self.call?.callId else {
+        guard pcc.callId == self.call?.callId else {
             Logger.debug("\(self.logTag): Dropping peer connect state change for obsolete call.")
             return
         }
@@ -372,80 +372,80 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         // Check for a new peer and build the pieces-parts for it
         if oldState == .undefined && newState != .discarded {
-            if let peer = call?.peerConnectionClients[peerId] {
+            if let peer = call?.peerConnectionClients[pcc.peerId] {
                 if call?.direction == .incoming {
                     if peer.userId == self.call?.originatorId {
-                        self.setPeerIdAsMain(peerId: peerId)
+                        self.setPeerIdAsMain(peerId: pcc.peerId)
                     } else {
-                        self.addSecondaryPeerId(peerId: peerId)
+                        self.addSecondaryPeerId(peerId: pcc.peerId)
                     }
                 } else {
                     if self.mainPeerId == nil {
-                        self.setPeerIdAsMain(peerId: peerId)
+                        self.setPeerIdAsMain(peerId: pcc.peerId)
                     } else {
-                        self.addSecondaryPeerId(peerId: peerId)
+                        self.addSecondaryPeerId(peerId: pcc.peerId)
                     }
                 }
             }
         }
         
-        if let peerElements = self.peerUIElements[peerId] {
+        if let peerElements = self.peerUIElements[pcc.peerId] {
             switch newState {
             case .undefined:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.clear, hide: true)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.clear, hide: true)
                 }
             case .connected:
                 do {
                     peerElements.avView?.isHidden = false
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.green, hide: true)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.green, hide: true)
                 }
             case .peerLeft:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.gray, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.gray, hide: false)
                 }
             case .leftPeer:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.lightGray, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.lightGray, hide: false)
                 }
             case .discarded:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.black, hide: true)
-                    self.removePeerFromView(peerId: peerId)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.black, hide: true)
+                    self.removePeerFromView(peerId: pcc.peerId)
                 }
             case .failed:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.red, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.red, hide: false)
                 }
             case .sendingAcceptOffer:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.yellow, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.yellow, hide: false)
                 }
             case .sentAcceptOffer:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.blue, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.blue, hide: false)
                 }
             case .sendingOffer:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.orange, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.orange, hide: false)
                 }
             case .readyToReceiveAcceptOffer:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.brown, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.brown, hide: false)
                 }
             case .receivedAcceptOffer:
                 do {
                     peerElements.avView?.isHidden = true
-                    self.updateStatusIndicator(peerId: peerId, color: UIColor.yellow, hide: false)
+                    self.updateStatusIndicator(peerId: pcc.peerId, color: UIColor.yellow, hide: false)
                 }
             }
         }

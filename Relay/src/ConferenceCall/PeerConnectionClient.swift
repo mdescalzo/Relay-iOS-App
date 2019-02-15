@@ -40,7 +40,7 @@ private let connectingTimeoutSeconds: TimeInterval = 60
  * The delegate's methods will always be called on the main thread.
  */
 protocol PeerConnectionClientDelegate: class {
-    func stateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
+    func stateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
     func owningCall() -> ConferenceCall
     func iceConnected(strongPcc: PeerConnectionClient)
     func iceFailed(strongPcc: PeerConnectionClient)
@@ -162,7 +162,7 @@ class PeerConnectionProxy: NSObject, RTCPeerConnectionDelegate {
  * It is primarily a wrapper around `RTCPeerConnection`, which is responsible for sending and receiving our call data
  * including audio, video, and some post-connected signaling (hangup, add video)
  */
-class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
+public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     private var pendingIceCandidates = Set<RTCIceCandidate>()
     private var iceCandidatesDebounceTimer: Timer?
     
@@ -172,7 +172,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     
     var state: PeerConnectionClientState {
         didSet {
-            delegate?.stateDidChange(callId: self.callId, peerId: self.peerId, oldState: oldValue, newState: self.state)
+            delegate?.stateDidChange(pcc: self, oldState: oldValue, newState: self.state)
         }
     }
 
@@ -744,12 +744,12 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     // MARK: - RTCPeerConnectionDelegate
 
     /** Called when the SignalingState changed. */
-    internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
+    public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
         Logger.debug("\(logTag) didChange signalingState:\(stateChanged.debugDescription)")
     }
 
     /** Called when media is received on a new stream from remote peer. */
-    internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didAdd stream: RTCMediaStream) {
+    public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didAdd stream: RTCMediaStream) {
         let proxyCopy = self.proxy
         let completion: (RTCVideoTrack) -> Void = { (remoteVideoTrack) in
             AssertIsOnMainThread(file: #function)
@@ -790,17 +790,17 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
 
     /** Called when a remote peer closes a stream. */
-    internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didRemove stream: RTCMediaStream) {
+    public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didRemove stream: RTCMediaStream) {
         Logger.debug("\(logTag) didRemove Stream:\(stream)")
     }
 
     /** Called when negotiation is needed, for example ICE has restarted. */
-    internal func peerConnectionShouldNegotiate(_ peerConnectionParam: RTCPeerConnection) {
+    public func peerConnectionShouldNegotiate(_ peerConnectionParam: RTCPeerConnection) {
         Logger.debug("\(logTag) shouldNegotiate")
     }
 
     /** Called any time the IceConnectionState changes. */
-    internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
+    public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
         let proxyCopy = self.proxy
         let connectedCompletion : () -> Void = {
             AssertIsOnMainThread(file: #function)
@@ -849,12 +849,12 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
 
     /** Called any time the IceGatheringState changes. */
-    internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didChange newState: RTCIceGatheringState) {
+    public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didChange newState: RTCIceGatheringState) {
         Logger.info("\(logTag) didChange IceGatheringState:\(newState.debugDescription)")
     }
 
     /** New ice candidate has been found. */
-    internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
+    public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
         let proxyCopy = self.proxy
         let completion: (RTCIceCandidate) -> Void = { (candidate) in
             self.pendingIceCandidates.insert(candidate)
@@ -901,11 +901,11 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
 
     /** Called when a group of local Ice candidates have been removed. */
-    internal func peerConnection(_ peerConnectionParam: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
+    public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didRemove candidates: [RTCIceCandidate]) {
         Logger.debug("\(logTag) didRemove IceCandidates:\(candidates.debugDescription)")
     }
     
-    internal func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
+    public func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
         Logger.debug("\(logTag) didRemove IceCandidates:\(dataChannel.debugDescription)")
     }
 
@@ -999,7 +999,7 @@ class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 /**
  * Restrict an RTCSessionDescription to more secure parameters
  */
-class HardenedRTCSessionDescription {
+public class HardenedRTCSessionDescription {
     let rtcSessionDescription: RTCSessionDescription
     var sdp: String { return rtcSessionDescription.sdp }
 

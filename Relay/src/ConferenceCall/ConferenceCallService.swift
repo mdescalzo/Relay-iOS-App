@@ -173,8 +173,8 @@ protocol ConferenceCallServiceDelegate: class {
         }
     }
     
-    public func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
-        self.events.append(.PeerStateChange(timestamp: Date(), callId: callId, peerId: peerId, oldState: oldState, newState: newState))
+    public func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+        self.events.append(.PeerStateChange(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, oldState: oldState, newState: newState))
         Logger.info("\n\(self.events.last!.str(self.eventsEpoch))\n")
     }
     

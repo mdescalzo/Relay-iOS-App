@@ -46,7 +46,7 @@ public enum ConferenceCallState {
 
 public protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState)
-    func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
+    func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?)
 }
@@ -336,18 +336,14 @@ public protocol ConferenceCallDelegate: class {
     
     // MARK: - PeerConnectionClientDelegate Implementation
 
-    func stateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
-        notifyDelegates({ delegate in delegate.peerConnectionStateDidChange(callId: callId, peerId: peerId, oldState: oldState, newState: newState) })
+    func stateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+        notifyDelegates({ delegate in delegate.peerConnectionStateDidChange(pcc: pcc, oldState: oldState, newState: newState) })
         
         switch newState {
         case .failed, .peerLeft, .leftPeer, .discarded:
-            guard let pcc = self.peerConnectionClients[peerId] else {
-                Logger.debug("can't terminate missing failed peer \(peerId) for call \(callId)")
-                return
-            }
-            Logger.debug("GEP: blowing away call \(self.callId) PEER \(peerId)")
+            Logger.debug("GEP: blowing away call \(pcc.callId) PEER \(pcc.peerId)")
             pcc.cleanupBeforeDestruction()
-            self.peerConnectionClients.removeValue(forKey: peerId)
+            self.peerConnectionClients.removeValue(forKey: pcc.peerId)
         default: return
         }
     }

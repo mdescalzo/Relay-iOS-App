@@ -96,7 +96,7 @@ protocol CallAudioServiceDelegate: class {
         // TODO
     }
     
-    func peerConnectionStateDidChange(callId: String, peerId: String, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+    func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         // CallAudioService don't care (probably)
     }
     
