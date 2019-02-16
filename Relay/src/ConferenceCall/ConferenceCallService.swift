@@ -19,6 +19,7 @@ protocol ConferenceCallServiceDelegate: class {
 let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteToggle: true, startVideoMuted: false, allowVideoMuteToggle: true)
 
 @objc public class ConferenceCallService: NSObject, FLCallMessageHandler, ConferenceCallDelegate {
+    
     static let rtcFactory = RTCPeerConnectionFactory()
     @objc static let shared = ConferenceCallService()
     
@@ -80,7 +81,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     }
     
     // initiate an outbound call
-    @objc public func startCall(thread: TSThread) -> ConferenceCall? {
+    @objc func startCall(thread: TSThread) -> ConferenceCall? {
         if self.conferenceCall != nil {
             // for now, we refuse to set up another call until the existing one is gone
             Logger.debug("rejecting request to create a second ConferenceCall")
@@ -132,8 +133,11 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     }
     
     // MARK: - ConferenceCallDelegate implementation
-    
-    public func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
+    func audioSourceDidChange(call: ConferenceCall, audioSource: AudioSource?) {
+        // TODO: implement
+    }
+
+    func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
         ConferenceCallEvents.add(.CallStateChange(timestamp: Date(), callId: call.callId, oldState: oldState, newState: newState))
         if oldState == .leaving && newState == .left && self.conferenceCall == call {
             self.conferenceCall?.cleanupBeforeDestruction()
@@ -141,15 +145,15 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         }
     }
     
-    public func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+    func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         ConferenceCallEvents.add(.PeerStateChange(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, oldState: oldState, newState: newState))
     }
     
-    public func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
+    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
         // don't care
     }
     
-    public func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+    func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
         // don't care
     }
     

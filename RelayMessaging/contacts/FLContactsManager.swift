@@ -89,7 +89,7 @@ import RelayServiceKit
         
         // Check the avatarCache...
         if let image = self.avatarCache.object(forKey: cacheKey!) {
-            Logger.debug("Avatar cache hit!")
+//            Logger.debug("Avatar cache hit!")
             return image;
         }
         

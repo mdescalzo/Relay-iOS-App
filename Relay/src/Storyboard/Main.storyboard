@@ -589,17 +589,17 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oYr-aF-2qo" userLabel="Main View Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="467"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="487"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar" translatesAutoresizingMaskIntoConstraints="NO" id="gOX-xr-nqU" userLabel="Main Avatar View">
-                                                <rect key="frame" x="50" y="96" width="275" height="275"/>
+                                                <rect key="frame" x="50" y="106" width="275" height="275"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="gOX-xr-nqU" secondAttribute="height" multiplier="1:1" id="6DX-Wl-GNA"/>
                                                 </constraints>
                                             </imageView>
                                             <view hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r63-pw-tiD" userLabel="Main AV View" customClass="RemoteVideoView">
-                                                <rect key="frame" x="0.0" y="20" width="375" height="447"/>
+                                                <rect key="frame" x="0.0" y="20" width="375" height="467"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DG6-Oy-9VV" userLabel="Local View Container">
@@ -641,7 +641,7 @@
                                         </connections>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0UN-wO-Fbp" userLabel="Scrolling Peers Container">
-                                        <rect key="frame" x="0.0" y="467" width="375" height="80"/>
+                                        <rect key="frame" x="0.0" y="487" width="375" height="80"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ohx-1r-onH">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
@@ -709,10 +709,10 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r7e-68-tUo">
-                                        <rect key="frame" x="0.0" y="547" width="375" height="120"/>
+                                        <rect key="frame" x="0.0" y="567" width="375" height="100"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtN-JB-ZxO" userLabel="Mute Button">
-                                                <rect key="frame" x="8" y="20" width="80" height="80"/>
+                                                <rect key="frame" x="8" y="10" width="80" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="height" multiplier="1:1" id="p9p-CD-Qf2"/>
                                                 </constraints>
@@ -723,7 +723,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUf-7R-4b2" userLabel="Video Button">
-                                                <rect key="frame" x="96" y="20" width="79.5" height="80"/>
+                                                <rect key="frame" x="96" y="10" width="79.5" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="uUf-7R-4b2" secondAttribute="height" multiplier="1:1" id="LLn-Jd-rgx"/>
                                                 </constraints>
@@ -734,7 +734,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MpS-8p-2NL" userLabel="End Call Button">
-                                                <rect key="frame" x="287.5" y="20" width="79.5" height="80"/>
+                                                <rect key="frame" x="287.5" y="10" width="79.5" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="MpS-8p-2NL" secondAttribute="height" multiplier="1:1" id="ddv-JF-fX5"/>
                                                 </constraints>
@@ -745,20 +745,21 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-8s-tr5" userLabel="Speaker Button">
-                                                <rect key="frame" x="183.5" y="20" width="80" height="80"/>
+                                                <rect key="frame" x="183.5" y="10" width="80" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="J5U-8s-tr5" secondAttribute="height" multiplier="1:1" id="agV-Ac-v3h"/>
                                                 </constraints>
                                                 <state key="normal" image="audio-call-speaker-inactive"/>
+                                                <state key="selected" image="audio-call-speaker-active"/>
                                                 <connections>
-                                                    <action selector="didTapAudioOutputButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="9Re-am-Nij"/>
+                                                    <action selector="didTapAudioButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="9Re-am-Nij"/>
                                                 </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="GtN-JB-ZxO" firstAttribute="leading" secondItem="r7e-68-tUo" secondAttribute="leading" constant="8" id="2dd-fs-pk1"/>
-                                            <constraint firstAttribute="height" constant="120" id="35a-tO-4de"/>
+                                            <constraint firstAttribute="height" constant="100" id="35a-tO-4de"/>
                                             <constraint firstAttribute="trailing" secondItem="MpS-8p-2NL" secondAttribute="trailing" constant="8" id="4HX-E6-gUc"/>
                                             <constraint firstItem="J5U-8s-tr5" firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="width" id="Aqu-JR-a0V"/>
                                             <constraint firstItem="uUf-7R-4b2" firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="width" id="ErQ-eB-ckN"/>
@@ -863,6 +864,7 @@
     <resources>
         <image name="audio-call-mute-active" width="79.919998168945312" height="79.919998168945312"/>
         <image name="audio-call-mute-inactive" width="79.919998168945312" height="79.919998168945312"/>
+        <image name="audio-call-speaker-active" width="79.919998168945312" height="79.919998168945312"/>
         <image name="audio-call-speaker-inactive" width="79.919998168945312" height="79.919998168945312"/>
         <image name="audio-call-video-active" width="79.919998168945312" height="79.919998168945312"/>
         <image name="audio-call-video-inactive" width="79.919998168945312" height="79.919998168945312"/>

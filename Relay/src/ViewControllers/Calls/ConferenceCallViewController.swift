@@ -10,7 +10,7 @@ import UIKit
 
 private let reuseIdentifier = "peerCell"
 
-class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate {
+class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate, CallAudioServiceDelegate {
     
     var mainPeerId: String?
     
@@ -29,7 +29,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var mainPeerAvatarView: UIImageView!
     @IBOutlet weak var mainPeerStatusIndicator: UIView!
     @IBOutlet weak var localAVView: RTCCameraPreviewView!
-    var hasLocalVideo = true
     
     @IBOutlet weak var infoContainerView: UIView!
     @IBOutlet weak var infoLabel: UILabel!
@@ -41,15 +40,22 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var audioOutButton: UIButton!
     @IBOutlet weak var leaveCallButton: UIButton!
     
+    lazy var allAudioSources = Set(self.callKitService.audioService.availableInputs)
+    
     var call: ConferenceCall?
     
     func configure(call: ConferenceCall) {
         self.call = call
     }
     
+    func hasLocalVideo() -> Bool {
+        return (self.call?.localVideoTrack != nil)
+    }
+    
     override func loadView() {
         super.loadView()
         self.mainPeerStatusIndicator.layer.cornerRadius = self.mainPeerStatusIndicator.frame.size.width/2
+        self.callKitService.audioService.delegate = self
     }
     
     override func viewDidLoad() {
@@ -125,6 +131,74 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
     }
     
+    // MARK: - Audio Source
+    var hasAlternateAudioSources: Bool {
+        Logger.info("available audio sources: \(allAudioSources)")
+        // internal mic and speakerphone will be the first two, any more than one indicates e.g. an attached bluetooth device.
+        // TODO is this sufficient? Are their devices w/ bluetooth but no external speaker? e.g. ipod?
+        return allAudioSources.count > 2
+    }
+    
+    var appropriateAudioSources: Set<AudioSource> {
+        if self.hasLocalVideo() {
+            let appropriateForVideo = allAudioSources.filter { audioSource in
+                if audioSource.isBuiltInSpeaker {
+                    return true
+                } else {
+                    guard let portDescription = audioSource.portDescription else {
+                        owsFailDebug("Only built in speaker should be lacking a port description.")
+                        return false
+                    }
+                    
+                    // Don't use receiver when video is enabled. Only bluetooth or speaker
+                    return portDescription.portType != AVAudioSessionPortBuiltInMic
+                }
+            }
+            return Set(appropriateForVideo)
+        } else {
+            return allAudioSources
+        }
+    }
+    
+    func presentAudioSourcePicker() {
+        AssertIsOnMainThread()
+        
+        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let dismissAction = UIAlertAction(title: CommonStrings.dismissButton, style: .cancel, handler: nil)
+        actionSheetController.addAction(dismissAction)
+        
+        let currentAudioSource = self.callKitService.audioService.currentAudioSource(self.call!)
+        for audioSource in self.appropriateAudioSources {
+            let routeAudioAction = UIAlertAction(title: audioSource.localizedName, style: .default) { _ in
+                self.callKitService.setAudioSource(call: self.call!, audioSource: audioSource)
+            }
+            
+            // HACK: private API to create checkmark for active audio source.
+            routeAudioAction.setValue(currentAudioSource == audioSource, forKey: "checked")
+            
+            // TODO: pick some icons. Leaving out for MVP
+            // HACK: private API to add image to actionsheet
+            // routeAudioAction.setValue(audioSource.image, forKey: "image")
+            actionSheetController.addAction(routeAudioAction)
+        }
+        
+        // Note: It's critical that we present from this view and
+        // not the "frontmost view controller" since this view may
+        // reside on a separate window.
+        self.present(actionSheetController, animated: true)
+    }
+
+    // MARK: - CallAudioServiceDelegate methods
+    func callAudioService(_ callAudioService: CallAudioService, didUpdateIsSpeakerphoneEnabled isEnabled: Bool) {
+        
+    }
+    
+    func callAudioServiceDidChangeAudioSession(_ callAudioService: CallAudioService) {
+        let availableInputs = callAudioService.availableInputs
+        self.allAudioSources.formUnion(availableInputs)
+    }
+
     // MARK: - Helpers
     private func updateUIForCallPolicy() {
         guard let policy = self.call?.policy else {
@@ -318,15 +392,29 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         self.call?.setLocalVideoEnabled(enabled: self.videoToggleButton.isSelected)
     }
     
-    @IBAction func didTapAudioOutputButton(_ sender: Any) {
+    @IBAction func didTapAudioButton(_ sender: UIButton) {
         Logger.info("\(self.logTag) called \(#function)")
+        
+        if self.hasAlternateAudioSources {
+            presentAudioSourcePicker()
+        } else {
+            // Toggle speakerphone
+            sender.isSelected = !sender.isSelected
+            self.callKitService.audioService.requestSpeakerphone(isEnabled: sender.isSelected)
+        }
     }
     
-    @IBAction func didTapEndCallButton(_ sender: Any) {
+    @IBAction func didTapEndCallButton(_ sender: UIButton) {
         // TODO:  Create visual reference for leaving the call, ie spinner/disable button
-        Logger.info("\(self.logTag) called \(#function)")
-        if self.call != nil {
-            self.callKitService.localHangupCall(call!)
+        
+        if sender.isSelected {
+            // restart the call
+        } else {
+            // end the call
+            Logger.info("\(self.logTag) called \(#function)")
+            if self.call != nil {
+                self.callKitService.localHangupCall(call!)
+            }
         }
     }
     
@@ -381,17 +469,20 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     // MARK: - Call Service Delegate methods
     func createdConferenceCall(call: ConferenceCall) {
-        // a stub
+        // TODO: implement
     }
     
-    // MARK: - Call delegate methods
+    // MARK: - ConferenceCall delegate methods
+    func audioSourceDidChange(call: ConferenceCall, audioSource: AudioSource?) {
+        // TODO: update UI as appropriate
+    }
+
     func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
         
         guard pcc.callId == self.call?.callId else {
             Logger.debug("\(self.logTag): Dropping peer connect state change for obsolete call.")
             return
         }
-        
         guard oldState != newState else {
             Logger.debug("\(self.logTag): Received peer connection state (\(oldState)) update that didn't change.")
             return

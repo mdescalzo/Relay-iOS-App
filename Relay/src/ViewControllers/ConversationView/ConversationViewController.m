@@ -3162,7 +3162,7 @@ typedef enum : NSUInteger {
 {
     OWSAssertIsOnMainThread();
 
-    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     if (self.shouldObserveDBModifications) {
         // External database modifications can't be converted into incremental updates,
@@ -3197,7 +3197,7 @@ typedef enum : NSUInteger {
         return;
     }
     
-    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     NSArray *notifications = notification.userInfo[OWSUIDatabaseConnectionNotificationsKey];
     OWSAssert([notifications isKindOfClass:[NSArray class]]);

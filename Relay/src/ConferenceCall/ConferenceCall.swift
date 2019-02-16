@@ -13,13 +13,13 @@ import RelayMessaging
 import UIKit
 
 
-public enum CCIdentifiers: String {
+enum CCIdentifiers: String {
     case mediaStream = "ARDAMS",
     videoTrack = "ARDAMSv0",
     audioTrack = "ARDAMSa0"
 }
 
-public enum CallError: Error {
+enum CallError: Error {
     case providerReset
     case assertionError(description: String)
     case disconnected
@@ -33,7 +33,7 @@ enum ConferenceCallDirection {
     case outgoing, incoming
 }
 
-public enum ConferenceCallState {
+enum ConferenceCallState {
     case undefined          // (briefly) at creation
     case ringing            // after receiving offer
     case vibrating          // after some other device of mine has accepted that offer
@@ -51,14 +51,15 @@ extension ConferenceCallState {
     }
 }
 
-public protocol ConferenceCallDelegate: class {
+protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState)
     func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?)
+    func audioSourceDidChange(call: ConferenceCall, audioSource: AudioSource?)
 }
 
-public class CallAVPolicy {
+class CallAVPolicy {
     let startAudioMuted: Bool
     let allowAudioMuteToggle: Bool
     
@@ -73,7 +74,7 @@ public class CallAVPolicy {
     }
 }
 
-@objc public class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
+@objc class ConferenceCall: NSObject, PeerConnectionClientDelegate, VideoCaptureSettingsDelegate {
     let TAG = "[ConferenceCall]"
     
     let policy: CallAVPolicy
@@ -156,8 +157,7 @@ public class CallAVPolicy {
     
 
     
-    public required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy) {
-        ConferenceCallEvents.add(.CallInit(timestamp: Date(), callId: callId))
+    required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy) {
         self.policy = policy
         self.thread = thread
         self.callId = callId
@@ -185,7 +185,7 @@ public class CallAVPolicy {
         ConferenceCallEvents.add(.CallDeinit(timestamp: Date(), callId: self.callId))
     }
     
-    public func cleanupBeforeDestruction() {
+    func cleanupBeforeDestruction() {
         // any needed careful teardown before the call object is destroyed
         self.removeAllDelegates()
 
@@ -201,7 +201,7 @@ public class CallAVPolicy {
     }
     
     // make sure all of the local audio/video local peer connection config is in place
-    public func setUpLocalAV() -> Promise<Void> {
+    func setUpLocalAV() -> Promise<Void> {
         if self.configuration != nil {
             return Promise<Void>.value(())
         }
@@ -505,6 +505,15 @@ public class CallAVPolicy {
     }
     
     // MARK: - Audio
+    
+    var audioSource: AudioSource? = nil {
+        didSet {
+            AssertIsOnMainThread()
+            Logger.debug("audioSource changed: \(String(describing: oldValue)) -> \(String(describing: audioSource))")
+            
+            self.notifyDelegates({ delegate in delegate.audioSourceDidChange(call: self, audioSource: audioSource) })
+        }
+    }
     
     fileprivate func createAudioSender() {
         AssertIsOnMainThread(file: #function)
