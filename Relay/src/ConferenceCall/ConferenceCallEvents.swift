@@ -115,9 +115,9 @@ extension ConferenceCallEvent {
         case .ReceivedRemoteIce(let timestamp, let callId, let peerId, _, let count):
             return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) call \(callId)"
         case .GeneratedLocalIce(let timestamp, let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) generated local ice: peer \(peerId) call \(callId)"
+            return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) call \(callId)"
         case .SentLocalIce(let timestamp, let callId, let peerId, _, let count):
-            return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) call \(callId)"
+            return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) call \(callId)"
         }
     }
 }
