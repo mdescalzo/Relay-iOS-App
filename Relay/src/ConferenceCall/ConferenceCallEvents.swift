@@ -10,25 +10,69 @@ import Foundation
 
 public class ConferenceCallEvents {
     static var events = [ConferenceCallEvent]()
-    static var eventsEpoch = Date()
+    static var epoch = Date()
     
     static func add(_ event: ConferenceCallEvent) {
         self.events.append(event)
-        Logger.info("\n\(event.str(self.eventsEpoch))\n")
+        Logger.info("\n\(event.toStr)\n")
     }
 }
 
 enum ConferenceCallEvent {
-    case CallStateChange(timestamp: Date,
+    case CallInit(
+        timestamp: Date,
+        callId: String
+    )
+    case CallDeinit(
+        timestamp: Date,
+        callId: String
+    )
+    case CallStateChange(
+        timestamp: Date,
         callId: String,
         oldState: ConferenceCallState,
-        newState: ConferenceCallState)
-    case PeerStateChange(timestamp: Date,
+        newState: ConferenceCallState
+    )
+    case PeerInit(
+        timestamp: Date,
+        callId: String,
+        peerId: String,
+        userId: String
+    )
+    case PeerDeinit(
+        timestamp: Date,
+        callId: String,
+        peerId: String,
+        userId: String
+    )
+    case PeerStateChange(
+        timestamp: Date,
         callId: String,
         peerId: String,
         userId: String,
         oldState: PeerConnectionClientState,
-        newState: PeerConnectionClientState)
+        newState: PeerConnectionClientState
+    )
+    case ReceivedRemoteIce(
+        timestamp: Date,
+        callId: String,
+        peerId: String,
+        userId: String,
+        count: Int
+    )
+    case GeneratedLocalIce(
+        timestamp: Date,
+        callId: String,
+        peerId: String,
+        userId: String
+    )
+    case SentLocalIce(
+        timestamp: Date,
+        callId: String,
+        peerId: String,
+        userId: String,
+        count: Int
+    )
 }
 
 extension Formatter {
@@ -36,6 +80,7 @@ extension Formatter {
         let formatter = NumberFormatter()
         formatter.groupingSeparator = ","
         formatter.numberStyle = .decimal
+        formatter.minimumIntegerDigits = 6
         return formatter
     }()
 }
@@ -44,16 +89,35 @@ extension Double {
         return Formatter.withCommas.string(for: self) ?? ""
     }
 }
+extension Date {
+    var msFromEpoch: String {
+        let ms = abs(round((self.timeIntervalSince(ConferenceCallEvents.epoch) * 1000)))
+        return "\(ms.formattedWithCommas)ms"
+    }
+}
 
 extension ConferenceCallEvent {
-    func str(_ epoch: Date) -> String {
+    var toStr: String {
+        let prefix = "CCE "
         switch self {
-        case .CallStateChange(timestamp: let timestamp, callId: let callId, oldState: let oldState, newState: let newState):
-            let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
-            return "call transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms call \(callId)"
-        case .PeerStateChange(timestamp: let timestamp, callId: let callId, peerId: let peerId, userId: let userId, oldState: let oldState, newState: let newState):
-            let ms = round((timestamp.timeIntervalSince(epoch) * 1000))
-            return "peer transition: \(oldState)->\(newState) @ \(ms.formattedWithCommas)ms peer \(peerId) user \(userId) call \(callId)"
+        case .CallInit(let timestamp, let callId):
+            return "\(prefix)\(timestamp.msFromEpoch) call init: \(callId)"
+        case .CallDeinit(let timestamp, let callId):
+            return "\(prefix)\(timestamp.msFromEpoch) call deinit: \(callId)"
+        case .CallStateChange(let timestamp, let callId, let oldState, let newState):
+            return "\(prefix)\(timestamp.msFromEpoch) call state: \(oldState)->\(newState) \(callId)"
+        case .PeerInit(let timestamp, let callId, let peerId, _):
+            return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId)"
+        case .PeerDeinit(let timestamp, let callId, let peerId, _):
+            return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId)"
+        case .PeerStateChange(let timestamp, let callId, let peerId, let userId, let oldState, let newState):
+            return "\(prefix)\(timestamp.msFromEpoch) peer state: \(oldState)->\(newState) peer \(peerId) user \(userId) call \(callId)"
+        case .ReceivedRemoteIce(let timestamp, let callId, let peerId, _, let count):
+            return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) call \(callId)"
+        case .GeneratedLocalIce(let timestamp, let callId, let peerId, _):
+            return "\(prefix)\(timestamp.msFromEpoch) generated local ice: peer \(peerId) call \(callId)"
+        case .SentLocalIce(let timestamp, let callId, let peerId, _, let count):
+            return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) call \(callId)"
         }
     }
 }

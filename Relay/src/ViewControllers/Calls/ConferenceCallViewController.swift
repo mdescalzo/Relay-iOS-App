@@ -526,10 +526,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 }
                 self.dismissIfPossible(shouldDelay: false, completion: nil)
             }
-        case .failed:
-            do {
-                // TODO
-            }
         }
     }
     

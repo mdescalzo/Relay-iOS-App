@@ -215,6 +215,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String, callId: String) {
         AssertIsOnMainThread(file: #function)
+        ConferenceCallEvents.add(.PeerInit(timestamp: Date(), callId: callId, peerId: peerId, userId: userId))
 
         self.delegate = delegate
         self.callId = callId
@@ -230,6 +231,11 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
         self.proxy.set(value: self)
     }
+    
+    deinit {
+        ConferenceCallEvents.add(.PeerDeinit(timestamp: Date(), callId: self.callId, peerId: self.peerId, userId: self.userId))
+    }
+    
     
     public func handleOffer(sessionDescription: String) {
         guard let cc = self.delegate?.owningCall() else {
@@ -449,12 +455,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         }.retainUntilComplete()
     }
 
-    deinit {
-        // TODO: We can demote this log level to debug once we're confident that
-        // this class is always deallocated.
-        Logger.info("[PeerConnectionClient] deinit")
-    }
-    
     private func handleFailedConnection(error: CallError) {
         AssertIsOnMainThread(file: #function)
         self.state = .failed
@@ -862,6 +862,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     /** New ice candidate has been found. */
     public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
+        ConferenceCallEvents.add(.GeneratedLocalIce(timestamp: Date(), callId: self.callId, peerId: self.peerId, userId: self.userId))
         let proxyCopy = self.proxy
         let completion: (RTCIceCandidate) -> Void = { (candidate) in
             self.pendingIceCandidates.insert(candidate)
@@ -995,7 +996,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             Logger.info("\(self.logTag) in \(#function) sending ICE Candidate to peer \(self.peerId).")
             return messageSender.sendPromise(message: iceControlMessage, recipientIds: [self.userId])
         }.done {
-            Logger.info("\(self.logTag) in \(#function) done sending ice candidates to \(self.peerId).")
+            ConferenceCallEvents.add(.SentLocalIce(timestamp: Date(), callId: self.callId, peerId: self.peerId, userId: self.userId, count: iceToSendSet.count))
         }.catch { error in
             Logger.error("\(self.logTag) in \(#function) waitUntilReadyToSendIceUpdates failed with error: \(error)")
         }.retainUntilComplete()

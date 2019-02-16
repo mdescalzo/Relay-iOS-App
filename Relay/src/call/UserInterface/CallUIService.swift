@@ -450,10 +450,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             do {
                 self.didTerminateCall(call)
             }
-        case .failed:
-            do {
-                self.didTerminateCall(call)
-            }
         }
     }
     

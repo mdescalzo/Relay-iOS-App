@@ -41,7 +41,14 @@ public enum ConferenceCallState {
     case joined             // after ringing or vibrating (or having initiated a call)
     case leaving            // after joined
     case left               // after leaving or after last peer has left
-    case failed             // after ringing/vibrating or joined
+}
+extension ConferenceCallState {
+    var isTerminal: Bool {
+        switch self {
+        case .left: return true
+        default: return false
+        }
+    }
 }
 
 public protocol ConferenceCallDelegate: class {
@@ -150,6 +157,7 @@ public class CallAVPolicy {
 
     
     public required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy) {
+        ConferenceCallEvents.add(.CallInit(timestamp: Date(), callId: callId))
         self.policy = policy
         self.thread = thread
         self.callId = callId
@@ -171,7 +179,10 @@ public class CallAVPolicy {
         let cr = TSCall(timestamp: NSDate.ows_millisecondTimeStamp(), withCallNumber: self.callId, callType: callType, in: self.thread)
         cr.save()
         self.callRecord = cr
-        
+    }
+    
+    deinit {
+        ConferenceCallEvents.add(.CallDeinit(timestamp: Date(), callId: self.callId))
     }
     
     public func cleanupBeforeDestruction() {
@@ -287,6 +298,7 @@ public class CallAVPolicy {
             Logger.debug("\(TAG) ignoring ice candidates for nonexistent peer \(peerId)")
             return
         }
+        ConferenceCallEvents.add(.ReceivedRemoteIce(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, count: iceCandidates.count))
         for candidate in iceCandidates {
             if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
                 if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
