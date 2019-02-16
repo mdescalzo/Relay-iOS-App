@@ -45,7 +45,7 @@ public enum ConferenceCallState {
 extension ConferenceCallState {
     var isTerminal: Bool {
         switch self {
-        case .left: return true
+        case .rejected, .leaving, .left: return true
         default: return false
         }
     }
@@ -318,6 +318,15 @@ public class CallAVPolicy {
             return
         }
         pcc.handleCallLeave()
+    }
+    
+    func acceptCall() {
+        self.state = .joined
+    }
+    
+    func rejectCall() {
+        self.state = .rejected
+        self.leaveCall()
     }
     
     func leaveCall() {
