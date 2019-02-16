@@ -191,7 +191,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
 
     // MARK: - CallAudioServiceDelegate methods
     func callAudioService(_ callAudioService: CallAudioService, didUpdateIsSpeakerphoneEnabled isEnabled: Bool) {
-        
+        // TODO: Fix bug in setting speaker as audio source when other devices exist
     }
     
     func callAudioServiceDidChangeAudioSession(_ callAudioService: CallAudioService) {
