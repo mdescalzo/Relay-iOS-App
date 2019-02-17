@@ -154,7 +154,7 @@ public class OWSAudioSession: NSObject {
             // By notifying when we deactivate, the other app can resume playback.
             try avAudioSession.setActive(false, with: [.notifyOthersOnDeactivation])
         } catch {
-            owsFailDebug("\(logTag) in \(#function) failed with error: \(error)")
+            Logger.debug("\(logTag) in \(#function) failed with error: \(error)")
         }
     }
 

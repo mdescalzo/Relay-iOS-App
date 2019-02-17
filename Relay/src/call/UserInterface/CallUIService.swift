@@ -255,10 +255,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
             return
         }
-        
-//        ConferenceCallService.shared.endCall(call: call)
-        OWSAudioSession.shared.endAudioActivity(self.audioActivity)
-        OWSAudioSession.shared.endAudioActivity(call.audioActivity)
         self.submitEndCallAction(call: call)
     }
     
@@ -270,10 +266,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
             return
         }
-
-//        ConferenceCallService.shared.endCall(call: call)
-        OWSAudioSession.shared.endAudioActivity(self.audioActivity)
-        OWSAudioSession.shared.endAudioActivity(call.audioActivity)
         self.submitEndCallAction(call: call)
     }
     

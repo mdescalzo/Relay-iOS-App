@@ -798,13 +798,30 @@
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RbJ-2Q-cDV">
+                                        <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="RbJ-2Q-cDV" secondAttribute="height" multiplier="1:1" id="GlE-X5-EAF"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="43"/>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="✕">
+                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didTapExitButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="5bD-h1-dyQ"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.75" alpha="0.25" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="SRo-1p-mnh" secondAttribute="trailing" id="9DZ-DB-aoo"/>
+                                    <constraint firstItem="RbJ-2Q-cDV" firstAttribute="leading" secondItem="IXc-It-DKf" secondAttribute="leading" id="C4N-Nm-Xv5"/>
                                     <constraint firstItem="SRo-1p-mnh" firstAttribute="leading" secondItem="IXc-It-DKf" secondAttribute="leading" id="Eg9-Ks-82y"/>
+                                    <constraint firstAttribute="bottom" secondItem="RbJ-2Q-cDV" secondAttribute="bottom" id="GAn-Zn-SKq"/>
                                     <constraint firstAttribute="bottom" secondItem="SRo-1p-mnh" secondAttribute="bottom" id="Oiy-l9-kBw"/>
                                     <constraint firstAttribute="height" constant="40" id="f0k-PG-mvp"/>
+                                    <constraint firstItem="RbJ-2Q-cDV" firstAttribute="top" secondItem="IXc-It-DKf" secondAttribute="top" id="ghs-Yo-ZYi"/>
                                 </constraints>
                             </view>
                             <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fIA-Fr-YdV" userLabel="AV View" customClass="RTCCameraPreviewView">
