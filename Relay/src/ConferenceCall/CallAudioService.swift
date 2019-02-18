@@ -216,7 +216,7 @@ protocol CallAudioServiceDelegate: class {
     private func ensureProperAudioSession(call: ConferenceCall?) {
         AssertIsOnMainThread()
         
-        guard let call = call, !call.state.isTerminal else {
+        guard let call = call, call.state != .left else {
             // Revert to default audio
             setAudioSession(category: AVAudioSessionCategorySoloAmbient,
                             mode: AVAudioSessionModeDefault)
