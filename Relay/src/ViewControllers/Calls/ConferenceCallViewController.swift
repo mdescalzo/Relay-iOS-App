@@ -44,6 +44,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     var call: ConferenceCall?
     
+    var uiReady = false
+    
     func configure(call: ConferenceCall) {
         self.call = call
         call.addDelegate(delegate: self)
@@ -57,6 +59,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         super.loadView()
         self.mainPeerStatusIndicator.layer.cornerRadius = self.mainPeerStatusIndicator.frame.size.width/2
         self.callKitService.audioService.delegate = self
+        self.uiReady = true
     }
     
     override func viewDidLoad() {
@@ -202,8 +205,13 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     // MARK: - Helpers
     private func updateUIForCallPolicy() {
+        guard self.uiReady else {
+            Logger.info("\(self.logTag) Call UI not ready.  Bailing.")
+            return
+        }
+        
         guard let policy = self.call?.policy else {
-            Logger.debug("No policy to enforce")
+            Logger.debug("\(self.logTag) No call policy to enforce")
             return
         }
         
@@ -603,6 +611,17 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
+        
+        guard self.call?.callId == call.callId else {
+            Logger.debug("\(self.logTag) dropping call state change mismatched callId.")
+            return
+        }
+        
+        if call.state.isTerminal {
+            self.call = nil
+            return
+        }
+        
         guard oldState != newState else {
             return
         }
@@ -634,11 +653,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             }
         case .left:
             do {
-//                if self.call != nil {
-//                    self.call?.removeDelegate(self)
-//                    self.call = nil
-//                }
-//                self.dismissIfPossible(shouldDelay: false, completion: nil)
             }
         }
     }
@@ -655,6 +669,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+        guard self.uiReady else {
+            Logger.info("\(self.logTag) Call UI not ready.  Bailing.")
+            return
+        }
+        
         if captureSession != nil {
             self.localAVView.captureSession = captureSession
             self.localAVView.isHidden = false

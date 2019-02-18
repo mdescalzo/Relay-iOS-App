@@ -521,10 +521,6 @@ class CallAVPolicy {
         let audioTrack = ConferenceCallService.rtcFactory.audioTrack(with: audioSource, trackId: CCIdentifiers.audioTrack.rawValue)
         self.audioTrack = audioTrack
         
-        // Disable by default until call is connected.
-        // FIXME - do we require mic permissions at this point?
-        // if so maybe it would be better to not even add the track until the call is connected
-        // instead of creating it and disabling it.
         audioTrack.isEnabled = !self.policy.startAudioMuted
     }
     

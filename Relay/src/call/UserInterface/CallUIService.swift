@@ -25,7 +25,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     internal let audioService: CallAudioService
     lazy var callService = ConferenceCallService.shared
     private let callController: CXCallController
-    private let audioActivity: AudioActivity
     private let provider: CXProvider
     
     var currentCallUUID: UUID?
@@ -67,7 +66,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         }
         
         audioService = CallAudioService(handleRinging: false)
-        audioActivity = AudioActivity(audioDescription: TAG)
 
         let configuration = CallUIService.buildProviderConfiguration(useSystemCallLog: useSystemCallLog)
         provider = CXProvider(configuration: configuration)
@@ -90,7 +88,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         }
 
         // make sure we don't terminate audio session during call
-        OWSAudioSession.shared.startAudioActivity(call.audioActivity)
+//        OWSAudioSession.shared.startAudioActivity(call.audioActivity)
         
         let callName = call.thread.displayName()
         
@@ -236,7 +234,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             return
         }
         
-        OWSAudioSession.shared.endAudioActivity(self.audioActivity)
         OWSAudioSession.shared.endAudioActivity(call.audioActivity)
         self.submitEndCallAction(call: call)
     }
@@ -282,7 +279,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
                                               bundle: nil).instantiateViewController(withIdentifier: "ConferenceCallViewController") as! ConferenceCallViewController
         callViewController.configure(call: call)
         callViewController.modalTransitionStyle = .crossDissolve
-        
+        call.acceptCall()
         OWSWindowManager.shared().startCall(callViewController)
     }
     
@@ -304,7 +301,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         let transaction = CXTransaction()
         transaction.addAction(muteAction)
         requestTransaction(transaction)
-
     }
     
     internal func setHasLocalVideo(call: ConferenceCall, hasLocalVideo: Bool) {
@@ -434,13 +430,11 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             do {}
         case .rejected:
             do {
-                OWSAudioSession.shared.endAudioActivity(self.audioActivity)
                 OWSAudioSession.shared.endAudioActivity(call.audioActivity)
                 self.submitEndCallAction(call: call)
             }
         case .joined:
             do {
-                OWSAudioSession.shared.startAudioActivity(self.audioActivity)
                 OWSAudioSession.shared.startAudioActivity(call.audioActivity)
             }
         case .leaving:
@@ -448,7 +442,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             }
         case .left:
             do {
-                OWSAudioSession.shared.endAudioActivity(self.audioActivity)
                 OWSAudioSession.shared.endAudioActivity(call.audioActivity)
                 self.submitEndCallAction(call: call)
             }
@@ -539,7 +532,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
 
         guard self.currentCallUUID != nil else {
             Logger.debug("\(self.logTag) Attempted to end a call with no current call!")
-            action.fulfill()
+            action.fail()
             return
         }
         
@@ -552,7 +545,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         
         if let call = ConferenceCallService.shared.conferenceCall {
             if call.state == .ringing || call.state == .vibrating {
-                call.state = .rejected
+                call.rejectCall()
             }
             call.removeDelegate(self)
             call.removeDelegate(self.audioService)
@@ -560,6 +553,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             self.currentCallUUID = nil
             action.fulfill(withDateEnded: Date())
         } else {
+            self.currentCallUUID = nil
             action.fail()
         }
     }
@@ -613,7 +607,9 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         
         Logger.debug("\(TAG) Received \(#function)")
         
-        OWSAudioSession.shared.startAudioActivity(self.audioActivity)
+        if self.callService.conferenceCall != nil {
+            OWSAudioSession.shared.startAudioActivity(self.callService.conferenceCall!.audioActivity)
+        }
         OWSAudioSession.shared.isRTCAudioEnabled = true
     }
     
@@ -622,6 +618,8 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         
         Logger.debug("\(TAG) Received \(#function)")
         OWSAudioSession.shared.isRTCAudioEnabled = false
-        OWSAudioSession.shared.endAudioActivity(self.audioActivity)
+        if self.callService.conferenceCall != nil {
+            OWSAudioSession.shared.endAudioActivity(self.callService.conferenceCall!.audioActivity)
+        }
     }
 }
