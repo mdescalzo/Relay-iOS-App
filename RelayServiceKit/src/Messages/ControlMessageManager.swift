@@ -120,11 +120,17 @@ class ControlMessageManager : NSObject
             return
         }
         
+        let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
+        let age = Date().timeIntervalSince(sendTime)
+        if age > ConferenceCallStaleOfferTimeout {
+            Logger.info("\(self.tag): Ignoring stale callOffer control message (>\(ConferenceCallStaleOfferTimeout) seconds old).")
+            return
+        }
+
         let forstaPayload = message.forstaPayload as NSDictionary
         
         let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary
-        let threadId = forstaPayload.object(forKey: "threadId") as? String
-        
+
         guard dataBlob != nil else {
             Logger.info("Received callOffer message with no data object.")
             return
