@@ -123,10 +123,8 @@ class CallAVPolicy {
             
             updateCallRecordType()
             
-            for delegate in delegates {
-                delegate.value?.stateDidChange(call: self, oldState: oldValue, newState: self.state)
-            }
-            
+            notifyDelegates({ delegate in delegate.stateDidChange(call: self, oldState: oldValue, newState: self.state) })
+
             if self.state == .joined && (oldValue == .ringing || oldValue == .vibrating) {
                 answerPendingOffers()
             }
@@ -158,6 +156,7 @@ class CallAVPolicy {
 
     
     required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy) {
+        ConferenceCallEvents.add(.CallInit(timestamp: Date(), callId: callId))
         self.policy = policy
         self.thread = thread
         self.callId = callId
@@ -401,9 +400,7 @@ class CallAVPolicy {
     
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack) {
         Logger.debug("updated remote video track for peer \(strongPcc.peerId)")
-        for delegate in delegates {
-            delegate.value?.peerConnectiongDidUpdateRemoteVideoTrack(peerId: strongPcc.peerId)
-        }
+        notifyDelegates({ delegate in delegate.peerConnectiongDidUpdateRemoteVideoTrack(peerId: strongPcc.peerId)})
     }
     
     func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?) {

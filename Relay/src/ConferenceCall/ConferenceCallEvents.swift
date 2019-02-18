@@ -80,7 +80,7 @@ extension Formatter {
         let formatter = NumberFormatter()
         formatter.groupingSeparator = ","
         formatter.numberStyle = .decimal
-        formatter.minimumIntegerDigits = 7
+        formatter.minimumIntegerDigits = 6
         return formatter
     }()
 }
