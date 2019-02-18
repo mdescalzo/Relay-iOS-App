@@ -42,14 +42,6 @@ enum ConferenceCallState {
     case leaving            // after joined
     case left               // after leaving or after last peer has left
 }
-extension ConferenceCallState {
-    var isTerminal: Bool {
-        switch self {
-        case .rejected, .leaving, .left: return true
-        default: return false
-        }
-    }
-}
 
 protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState)
@@ -166,8 +158,7 @@ class CallAVPolicy {
 
         super.init()
         if delegate != nil { self.addDelegate(delegate: delegate!) }
-        // self.state = (self.direction == .outgoing) ? .joined : .ringing
-        
+
         var callType: RPRecentCallType
         switch self.direction {
         case .outgoing:
@@ -276,7 +267,6 @@ class CallAVPolicy {
         Logger.info("GEP: handling accept-offer from self, device id \(deviceId)")
         if self.state == .ringing {
             self.state = .vibrating
-            Logger.info("GEP: changed call state from .ringing to .vibrating")
         }
     }
     
@@ -321,6 +311,7 @@ class CallAVPolicy {
     
     func acceptCall() {
         self.state = .joined
+        self.inviteMissingParticipants()
     }
     
     func rejectCall() {

@@ -31,7 +31,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     
     public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
-            Logger.debug("Ignoring call-offer from/for a new call since we already have one running")
+            Logger.debug("Ignoring call-offer from/for a different call since we already have one running")
             return
         }
         if conferenceCall == nil {
@@ -92,9 +92,8 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         let originatorId = TSAccountManager.localUID()!
         self.conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
         notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
-        self.conferenceCall!.state = .joined
-        self.conferenceCall!.inviteMissingParticipants()
-        return conferenceCall!
+        self.conferenceCall!.acceptCall() // moves state to .joined and invites all the participants
+        return self.conferenceCall!
     }
     
     // terminate an existing call
@@ -158,7 +157,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     }
     
 
-    // MARK: - Delegates
+    // MARK: - Manage Delegates
     
     func addDelegate(delegate: ConferenceCallServiceDelegate) {
         AssertIsOnMainThread(file: #function)

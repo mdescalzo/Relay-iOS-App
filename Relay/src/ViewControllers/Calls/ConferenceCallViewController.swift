@@ -131,7 +131,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         super.viewDidAppear(animated)
         
         if self.call?.state == .ringing || self.call?.state == .vibrating {
-            self.call?.state = .joined
+            self.call?.acceptCall()
         }
     }
     
@@ -614,11 +614,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         guard self.call?.callId == call.callId else {
             Logger.debug("\(self.logTag) dropping call state change mismatched callId.")
-            return
-        }
-        
-        if call.state.isTerminal {
-            self.call = nil
             return
         }
         

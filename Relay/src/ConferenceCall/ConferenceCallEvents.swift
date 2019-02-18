@@ -129,7 +129,7 @@ extension CCEContext {
         case .PeerInit(let callId, let peerId, _):
             return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) thread \(thread)"
         case .PeerDeinit(let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId) thread \(thread)"
+            return "\(prefix)\(timestamp.msFromEpoch) peer DEinit: \(peerId) call \(callId) thread \(thread)"
         case .PeerStateChange(let callId, let peerId, let userId, let oldState, let newState):
             return "\(prefix)\(timestamp.msFromEpoch) peer state: \(oldState)->\(newState) peer \(peerId) user \(userId) call \(callId) thread \(thread)"
         case .ReceivedRemoteIce(let callId, let peerId, _, let count):

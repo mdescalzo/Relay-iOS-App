@@ -279,7 +279,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
                                               bundle: nil).instantiateViewController(withIdentifier: "ConferenceCallViewController") as! ConferenceCallViewController
         callViewController.configure(call: call)
         callViewController.modalTransitionStyle = .crossDissolve
-        call.acceptCall()
         OWSWindowManager.shared().startCall(callViewController)
     }
     
