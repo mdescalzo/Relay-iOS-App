@@ -103,6 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
         DDLogInfo(@"Control sync message received: %@", controlMessageType);
         
         IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:transcript.thread
+                                                                                      timestamp:transcript.timestamp
                                                                                          author:[TSAccountManager localUID]
                                                                                         payload:jsonPayload
                                                                                     attachments:transcript.attachmentPointerProtos];

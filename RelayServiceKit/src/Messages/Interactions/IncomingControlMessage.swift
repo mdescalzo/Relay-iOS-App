@@ -14,6 +14,7 @@ import UIKit
     @objc let attachmentPointers: Array<OWSSignalServiceProtosAttachmentPointer>?
     
     @objc required public init?(thread: TSThread,
+                                timestamp: UInt64,
                                 author: String,
                                 payload: NSDictionary,
                                 attachments: Array<OWSSignalServiceProtosAttachmentPointer>?) {
@@ -45,7 +46,7 @@ import UIKit
             attachmentIds = dataBlob.object(forKey: "attachments") as! [String]
         }
 
-        super.init(incomingMessageWithTimestamp: NSDate.ows_millisecondTimeStamp(),
+        super.init(incomingMessageWithTimestamp: timestamp,
                    in: thread,
                    authorId: author,
                    sourceDeviceId: OWSDeviceManager.shared().currentDeviceId(),

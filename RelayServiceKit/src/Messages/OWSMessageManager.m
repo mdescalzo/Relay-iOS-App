@@ -833,6 +833,7 @@ NS_ASSUME_NONNULL_BEGIN
             TSThread *thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
             
             IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:thread
+                                                                                          timestamp:envelope.timestamp
                                                                                              author:envelope.source
                                                                                             payload:jsonPayload
                                                                                         attachments:dataMessage.attachments];
