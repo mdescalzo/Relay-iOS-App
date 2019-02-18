@@ -46,6 +46,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     func configure(call: ConferenceCall) {
         self.call = call
+        call.addDelegate(delegate: self)
     }
     
     func hasLocalVideo() -> Bool {
@@ -119,8 +120,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.localAVView.isHidden = true
         }
         
-        // UI Built, start listening
-        self.call?.addDelegate(delegate: self)
+        // UI Built, config it
+        self.updateUIForCallPolicy()
     }
     
     override func viewDidAppear(_ animated: Bool) {
