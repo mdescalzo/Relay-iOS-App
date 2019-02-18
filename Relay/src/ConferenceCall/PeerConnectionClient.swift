@@ -215,7 +215,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String, callId: String) {
         AssertIsOnMainThread(file: #function)
-        ConferenceCallEvents.add(.PeerInit(timestamp: Date(), callId: callId, peerId: peerId, userId: userId))
+        ConferenceCallEvents.add(.PeerInit(callId: callId, peerId: peerId, userId: userId))
 
         self.delegate = delegate
         self.callId = callId
@@ -233,7 +233,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
     
     deinit {
-        ConferenceCallEvents.add(.PeerDeinit(timestamp: Date(), callId: self.callId, peerId: self.peerId, userId: self.userId))
+        ConferenceCallEvents.add(.PeerDeinit(callId: self.callId, peerId: self.peerId, userId: self.userId))
     }
     
     
@@ -862,7 +862,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     /** New ice candidate has been found. */
     public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        ConferenceCallEvents.add(.GeneratedLocalIce(timestamp: Date(), callId: self.callId, peerId: self.peerId, userId: self.userId))
+        ConferenceCallEvents.add(.GeneratedLocalIce(callId: self.callId, peerId: self.peerId, userId: self.userId))
         let proxyCopy = self.proxy
         let completion: (RTCIceCandidate) -> Void = { (candidate) in
             self.pendingIceCandidates.insert(candidate)
@@ -996,7 +996,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             Logger.info("\(self.logTag) in \(#function) sending ICE Candidate to peer \(self.peerId).")
             return messageSender.sendPromise(message: iceControlMessage, recipientIds: [self.userId])
         }.done {
-            ConferenceCallEvents.add(.SentLocalIce(timestamp: Date(), callId: self.callId, peerId: self.peerId, userId: self.userId, count: iceToSendSet.count))
+            ConferenceCallEvents.add(.SentLocalIce(callId: self.callId, peerId: self.peerId, userId: self.userId, count: iceToSendSet.count))
         }.catch { error in
             Logger.error("\(self.logTag) in \(#function) waitUntilReadyToSendIceUpdates failed with error: \(error)")
         }.retainUntilComplete()

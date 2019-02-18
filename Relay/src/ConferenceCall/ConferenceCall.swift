@@ -156,7 +156,7 @@ class CallAVPolicy {
 
     
     required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy) {
-        ConferenceCallEvents.add(.CallInit(timestamp: Date(), callId: callId))
+        ConferenceCallEvents.add(.CallInit(callId: callId))
         self.policy = policy
         self.thread = thread
         self.callId = callId
@@ -181,7 +181,7 @@ class CallAVPolicy {
     }
     
     deinit {
-        ConferenceCallEvents.add(.CallDeinit(timestamp: Date(), callId: self.callId))
+        ConferenceCallEvents.add(.CallDeinit(callId: self.callId))
     }
     
     func cleanupBeforeDestruction() {
@@ -297,7 +297,7 @@ class CallAVPolicy {
             Logger.debug("\(TAG) ignoring ice candidates for nonexistent peer \(peerId)")
             return
         }
-        ConferenceCallEvents.add(.ReceivedRemoteIce(timestamp: Date(), callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, count: iceCandidates.count))
+        ConferenceCallEvents.add(.ReceivedRemoteIce(callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, count: iceCandidates.count))
         for candidate in iceCandidates {
             if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
                 if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,

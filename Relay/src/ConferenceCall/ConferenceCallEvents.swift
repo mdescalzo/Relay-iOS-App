@@ -9,44 +9,54 @@
 import Foundation
 
 public class ConferenceCallEvents {
-    static var events = [ConferenceCallEvent]()
+    static var events = [CCEContext]()
     static var epoch = Date()
     
     static func add(_ event: ConferenceCallEvent) {
-        self.events.append(event)
-        Logger.info("\n\(event.toStr)\n")
+        self.events.append(CCEContext(Date(), Thread.current.threadName, event))
+        Logger.info("\n\(self.events.last!.toStr)\n")
+    }
+    
+    // summarize most recent call
+    static func callSummary() {
+    }
+}
+
+public class CCEContext {
+    var timestamp: Date
+    var thread: String
+    var event: ConferenceCallEvent
+    
+    init(_ timestamp: Date, _ thread: String, _ event: ConferenceCallEvent) {
+        self.timestamp = timestamp
+        self.thread = thread
+        self.event = event
     }
 }
 
 enum ConferenceCallEvent {
     case CallInit(
-        timestamp: Date,
         callId: String
     )
     case CallDeinit(
-        timestamp: Date,
         callId: String
     )
     case CallStateChange(
-        timestamp: Date,
         callId: String,
         oldState: ConferenceCallState,
         newState: ConferenceCallState
     )
     case PeerInit(
-        timestamp: Date,
         callId: String,
         peerId: String,
         userId: String
     )
     case PeerDeinit(
-        timestamp: Date,
         callId: String,
         peerId: String,
         userId: String
     )
     case PeerStateChange(
-        timestamp: Date,
         callId: String,
         peerId: String,
         userId: String,
@@ -54,25 +64,35 @@ enum ConferenceCallEvent {
         newState: PeerConnectionClientState
     )
     case ReceivedRemoteIce(
-        timestamp: Date,
         callId: String,
         peerId: String,
         userId: String,
         count: Int
     )
     case GeneratedLocalIce(
-        timestamp: Date,
         callId: String,
         peerId: String,
         userId: String
     )
     case SentLocalIce(
-        timestamp: Date,
         callId: String,
         peerId: String,
         userId: String,
         count: Int
     )
+}
+
+extension Thread {
+    var threadName: String {
+        if let currentOperationQueue = OperationQueue.current?.name {
+            return "OperationQueue: \(currentOperationQueue)"
+        } else if let underlyingDispatchQueue = OperationQueue.current?.underlyingQueue?.label {
+            return "DispatchQueue: \(underlyingDispatchQueue)"
+        } else {
+            let name = __dispatch_queue_get_label(nil)
+            return String(cString: name, encoding: .utf8) ?? Thread.current.description
+        }
+    }
 }
 
 extension Formatter {
@@ -96,28 +116,28 @@ extension Date {
     }
 }
 
-extension ConferenceCallEvent {
+extension CCEContext {
     var toStr: String {
         let prefix = "CCE "
-        switch self {
-        case .CallInit(let timestamp, let callId):
-            return "\(prefix)\(timestamp.msFromEpoch) call init: \(callId)"
-        case .CallDeinit(let timestamp, let callId):
-            return "\(prefix)\(timestamp.msFromEpoch) call deinit: \(callId)"
-        case .CallStateChange(let timestamp, let callId, let oldState, let newState):
-            return "\(prefix)\(timestamp.msFromEpoch) call state: \(oldState)->\(newState) \(callId)"
-        case .PeerInit(let timestamp, let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId)"
-        case .PeerDeinit(let timestamp, let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId)"
-        case .PeerStateChange(let timestamp, let callId, let peerId, let userId, let oldState, let newState):
-            return "\(prefix)\(timestamp.msFromEpoch) peer state: \(oldState)->\(newState) peer \(peerId) user \(userId) call \(callId)"
-        case .ReceivedRemoteIce(let timestamp, let callId, let peerId, _, let count):
-            return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) call \(callId)"
-        case .GeneratedLocalIce(let timestamp, let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) call \(callId)"
-        case .SentLocalIce(let timestamp, let callId, let peerId, _, let count):
-            return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) call \(callId)"
+        switch self.event {
+        case .CallInit(let callId):
+            return "\(prefix)\(timestamp.msFromEpoch) call init: \(callId) thread \(thread)"
+        case .CallDeinit(let callId):
+            return "\(prefix)\(timestamp.msFromEpoch) call DEinit: \(callId) thread \(thread)"
+        case .CallStateChange(let callId, let oldState, let newState):
+            return "\(prefix)\(timestamp.msFromEpoch) call state: \(oldState)->\(newState) \(callId) thread \(thread)"
+        case .PeerInit(let callId, let peerId, _):
+            return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) thread \(thread)"
+        case .PeerDeinit(let callId, let peerId, _):
+            return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId) thread \(thread)"
+        case .PeerStateChange(let callId, let peerId, let userId, let oldState, let newState):
+            return "\(prefix)\(timestamp.msFromEpoch) peer state: \(oldState)->\(newState) peer \(peerId) user \(userId) call \(callId) thread \(thread)"
+        case .ReceivedRemoteIce(let callId, let peerId, _, let count):
+            return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) call \(callId) thread \(thread)"
+        case .GeneratedLocalIce(let callId, let peerId, _):
+            return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) call \(callId) thread \(thread)"
+        case .SentLocalIce(let callId, let peerId, _, let count):
+            return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) call \(callId) thread \(thread)"
         }
     }
 }
