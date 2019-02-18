@@ -359,8 +359,10 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     // MARK: - Action handlers
     @IBAction func didTapExitButton(_ sender: UIButton) {
         // TODO: Validate ending call if one is active
-        if let call = self.call {
-            self.callKitService.localHangupCall(call)
+        if self.call != nil {
+            self.callKitService.localHangupCall(self.call!)
+            self.call!.removeDelegate(self)
+            self.call = nil
         }
         self.dismissIfPossible(shouldDelay: false)
     }
@@ -421,22 +423,25 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
     }
     
-    @IBAction func didTapEndCallButton(_ sender: UIButton) {
+    @IBAction func didTapCallButton(_ sender: UIButton) {
         // TODO:  Create visual reference for leaving the call, ie spinner/disable button
+        
+        guard let call = self.call else {
+            self.leaveCallButton.isEnabled = false
+            self.leaveCallButton.alpha = 0.5
+            return
+        }
         
         if sender.isSelected {
             // restart the call
-            if let call = self.call {
-                self.callKitService.startOutgoingCall(call)
-            }
+            call.inviteMissingParticipants()
         } else {
             // end the call
             Logger.info("\(self.logTag) called \(#function)")
-            if let call = self.call {
-                self.callKitService.localHangupCall(call)
-            }
+            self.callKitService.localHangupCall(call)
         }
-    }
+    
+}
     
     @IBAction func didDoubleTapMainPeerView(_ sender: UITapGestureRecognizer) {
         switch sender.state {
@@ -447,9 +452,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .changed:
             do { /* Do nothin' */ }
         case .ended:
-            do {
-                /* Do nothin' */
-            }
+            do { /* Do nothin' */ }
         case .cancelled:
             do { /* Do nothin' */ }
         case .failed:
@@ -463,9 +466,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .possible:
             do { /* Do nothin' */ }
         case .began:
-            do {
-                /* Do nothin' */
-            }
+            do { /* Do nothin' */ }
         case .changed:
             do { /* Do nothin' */ }
         case .ended:
@@ -632,11 +633,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             }
         case .left:
             do {
-                if self.call != nil {
-                    self.call?.removeDelegate(self)
-                    self.call = nil
-                }
-                self.dismissIfPossible(shouldDelay: false, completion: nil)
+//                if self.call != nil {
+//                    self.call?.removeDelegate(self)
+//                    self.call = nil
+//                }
+//                self.dismissIfPossible(shouldDelay: false, completion: nil)
             }
         }
     }

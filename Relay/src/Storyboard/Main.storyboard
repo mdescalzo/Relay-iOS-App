@@ -611,7 +611,7 @@
                                                 </constraints>
                                             </view>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
-                                                <rect key="frame" x="12" y="80" width="14" height="14"/>
+                                                <rect key="frame" x="12" y="120" width="14" height="14"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="m2h-f9-fWm" secondAttribute="height" multiplier="1:1" id="0bW-dt-0yS"/>
@@ -619,14 +619,14 @@
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
                                             <constraint firstItem="m2h-f9-fWm" firstAttribute="leading" secondItem="oYr-aF-2qo" secondAttribute="leading" constant="12" id="3h8-cx-Ajy"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
-                                            <constraint firstItem="m2h-f9-fWm" firstAttribute="top" secondItem="oYr-aF-2qo" secondAttribute="top" constant="80" id="b5J-te-eeK"/>
+                                            <constraint firstItem="m2h-f9-fWm" firstAttribute="top" secondItem="oYr-aF-2qo" secondAttribute="top" constant="120" id="b5J-te-eeK"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="DG6-Oy-9VV" secondAttribute="trailing" constant="8" id="ekb-9v-hbQ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
                                             <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
@@ -645,7 +645,7 @@
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ohx-1r-onH">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewLayout key="collectionViewLayout" id="TMF-t0-32A" customClass="PeerViewsLayout" customModule="Forsta" customModuleProvider="target"/>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="peerCell" id="Ffe-py-nUD" customClass="PeerViewCell" customModule="Forsta" customModuleProvider="target">
@@ -699,7 +699,7 @@
                                                 </connections>
                                             </collectionView>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Ohx-1r-onH" secondAttribute="trailing" id="9J4-cT-s27"/>
                                             <constraint firstAttribute="bottom" secondItem="Ohx-1r-onH" secondAttribute="bottom" id="QDD-ob-LJL"/>
@@ -741,7 +741,7 @@
                                                 <state key="normal" image="hangup-active-wide"/>
                                                 <state key="selected" image="call-active-wide"/>
                                                 <connections>
-                                                    <action selector="didTapEndCallButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="VvV-Ki-VEr"/>
+                                                    <action selector="didTapCallButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="VvV-Ki-VEr"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-8s-tr5" userLabel="Speaker Button">
@@ -774,7 +774,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="0UN-wO-Fbp" firstAttribute="leading" secondItem="gyJ-OR-Eqr" secondAttribute="leading" id="BHa-WH-jdh"/>
                                     <constraint firstItem="oYr-aF-2qo" firstAttribute="trailing" secondItem="gyJ-OR-Eqr" secondAttribute="trailing" id="FYU-rr-mDx"/>
@@ -795,7 +795,7 @@
                                             <constraint firstAttribute="height" constant="21" id="kZU-9e-sl3"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RbJ-2Q-cDV">
@@ -803,13 +803,13 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="RbJ-2Q-cDV" secondAttribute="height" multiplier="1:1" id="GlE-X5-EAF"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="43"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="✕">
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                         </state>
                                         <connections>
-                                            <action selector="didTapExitButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="5bD-h1-dyQ"/>
+                                            <action selector="didTapExitButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="Uhr-fg-0Wf"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -833,7 +833,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="fIA-Fr-YdV" firstAttribute="top" secondItem="IXc-It-DKf" secondAttribute="bottom" constant="12" id="7wp-8c-141"/>
                             <constraint firstAttribute="trailing" secondItem="IXc-It-DKf" secondAttribute="trailing" id="aal-58-vTl"/>
