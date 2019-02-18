@@ -116,7 +116,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
                 // TODO: notify failed call
                 Logger.error("\(self.TAG) failed to report new incoming call")
             } else {
-                weakSelf?.currentCallUUID = call.callUUID
+                weakSelf?.currentCallUUID = callUUID
             }
         }
     }
@@ -544,13 +544,14 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         }
         
         if let call = ConferenceCallService.shared.conferenceCall {
-            if call.state == .ringing || call.state == .vibrating {
-                call.rejectCall()
-            }
             call.removeDelegate(self)
             call.removeDelegate(self.audioService)
-            self.callService.endCall(call)
             self.currentCallUUID = nil
+            if call.state == .ringing || call.state == .vibrating {
+                call.rejectCall()
+            } else {
+                call.leaveCall()
+            }
             action.fulfill(withDateEnded: Date())
         } else {
             self.currentCallUUID = nil
