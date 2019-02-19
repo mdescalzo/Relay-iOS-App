@@ -35,7 +35,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
             return
         }
         if conferenceCall == nil {
-            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
+            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy, direction: .incoming)
             notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
             conferenceCall!.state = .ringing
         }
@@ -90,7 +90,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         
         let newCallId = thread.uniqueId // temporary -- should be: NSUUID().uuidString.lowercased()
         let originatorId = TSAccountManager.localUID()!
-        self.conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy)
+        self.conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy, direction: .outgoing)
         notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
         self.conferenceCall!.acceptCall() // moves state to .joined and invites all the participants
         return self.conferenceCall!

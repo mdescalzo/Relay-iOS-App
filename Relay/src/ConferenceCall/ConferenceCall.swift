@@ -73,15 +73,7 @@ class CallAVPolicy {
     
     var joinedDate: NSDate?
 
-    var direction: ConferenceCallDirection {
-        get {
-            if self.originatorId == TSAccountManager.localUID()! {
-                return .outgoing
-            } else {
-                return .incoming
-            }
-        }
-    }
+    let direction: ConferenceCallDirection
     
     let thread: TSThread;
     let callId: String;
@@ -144,15 +136,15 @@ class CallAVPolicy {
     var videoCaptureController: VideoCaptureController?
 
     var localVideoTrack: RTCVideoTrack? // RTCVideoTrack is fragile and prone to throwing exceptions and/or causing deadlock in its destructor.  Therefore we take great care with this property.
-    
 
     
-    required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy) {
+    required init(thread: TSThread, callId: String, originatorId: String, delegate: ConferenceCallDelegate?, policy: CallAVPolicy, direction: ConferenceCallDirection) {
         ConferenceCallEvents.add(.CallInit(callId: callId))
         self.policy = policy
         self.thread = thread
         self.callId = callId
         self.originatorId = originatorId
+        self.direction = direction
         self.state = .undefined
         self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
 
