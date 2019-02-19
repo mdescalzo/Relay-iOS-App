@@ -7,16 +7,20 @@
 //
 
 import UIKit
+import CoreData
+//import PromiseKit
 
 private let reuseIdentifier = "peerCell"
 
 class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate, CallAudioServiceDelegate {
     
-    var mainPeerId: String?
+    var userPeerCollection = [ String : String ]()
     
-    var secondaryPeerIds = [String]()
+    var mainUserId: String?
     
-    var peerUIElements = [ String : PeerUI ]()
+    var secondaryUserIds = [String]()
+    
+    var peerUIElements = [ String : PeerUIElements ]()
     var hasDismissed = false
     
     lazy var callKitService = {
@@ -28,6 +32,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var mainPeerAVView: RemoteVideoView!
     @IBOutlet weak var mainPeerAvatarView: UIImageView!
     @IBOutlet weak var mainPeerStatusIndicator: UIView!
+    @IBOutlet weak var mainPeerStatusContainer: UIView!
+    @IBOutlet weak var mainPeerStatusLabel: UILabel!
     @IBOutlet weak var localAVView: RTCCameraPreviewView!
     
     @IBOutlet weak var infoContainerView: UIView!
@@ -44,22 +50,40 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     var call: ConferenceCall?
     
-    var uiReady = false
+    //    let uiReadyPromise: Promise<Void>
+    //    let uiReadyResolver: Resolver<Void>
     
     func configure(call: ConferenceCall) {
         self.call = call
-        call.addDelegate(delegate: self)
+        
+        for userId in call.thread.participantIds {
+            if userId != TSAccountManager.localUID() {
+                self.userPeerCollection[userId] = ""
+            }
+        }
     }
     
     func hasLocalVideo() -> Bool {
         return (self.call?.localVideoTrack != nil)
     }
     
+    //    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    //        (self.uiReadyPromise, self.uiReadyResolver) = Promise<Void>.pending()
+    //
+    //        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    //    }
+    //
+    //    required init?(coder aDecoder: NSCoder) {
+    //        (self.uiReadyPromise, self.uiReadyResolver) = Promise<Void>.pending()
+    //
+    //        super.init(coder: aDecoder)
+    //    }
+    
     override func loadView() {
         super.loadView()
         self.mainPeerStatusIndicator.layer.cornerRadius = self.mainPeerStatusIndicator.frame.size.width/2
         self.callKitService.audioService.delegate = self
-        self.uiReady = true
+        //        self.uiReadyResolver.fulfill()
     }
     
     override func viewDidLoad() {
@@ -80,19 +104,18 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
         
         // Collect Peers and connect to UI elements
+        var gotOne = false
         for peer in (self.call?.peerConnectionClients.values)! {
-            if call?.direction == .incoming {
-                if peer.userId == self.call?.originatorId {
-                    self.setPeerIdAsMain(peerId: peer.peerId)
-                } else {
-                    self.addSecondaryPeerId(peerId: peer.peerId)
-                }
+            self.userPeerCollection[peer.userId] = peer.peerId
+            
+            if self.call?.originatorId != TSAccountManager.localUID() {
+                self.setUserIdAsMain(peer.userId)
+                gotOne = true
+            } else if !gotOne {
+                self.setUserIdAsMain(peer.userId)
+                gotOne = true
             } else {
-                if self.mainPeerId == nil {
-                    self.setPeerIdAsMain(peerId: peer.peerId)
-                } else {
-                    self.addSecondaryPeerId(peerId: peer.peerId)
-                }
+                self.addSecondaryUserId(peer.userId)
             }
         }
         
@@ -122,6 +145,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         } else {
             self.localAVView.isHidden = true
         }
+        
+        // Start listening to the call
+        self.call!.addDelegate(delegate: self)
         
         // UI Built, config it
         self.updateUIForCallPolicy()
@@ -205,11 +231,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     // MARK: - Helpers
     private func updateUIForCallPolicy() {
-        guard self.uiReady else {
-            Logger.info("\(self.logTag) Call UI not ready.  Bailing.")
-            return
-        }
-        
         guard let policy = self.call?.policy else {
             Logger.debug("\(self.logTag) No call policy to enforce")
             return
@@ -229,94 +250,111 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.audioOutButton.isSelected = !policy.startVideoMuted
             self.callKitService.audioService.requestSpeakerphone(isEnabled: self.audioOutButton.isSelected)
         }
-        
         self.call?.setLocalVideoEnabled(enabled: self.videoToggleButton.isSelected)
     }
     
-    private func setPeerIdAsMain(peerId: String) {
-        
+    private func setUserIdAsMain(_ userId: String) {
         // Make sure we're actually making a change
-        guard self.mainPeerId != peerId else {
+        guard self.mainUserId != userId else {
+            return
+        }
+        guard let peerId = self.userPeerCollection[userId] else {
+            Logger.debug("\(self.logTag) No peer connect avaiable for userId: \(userId)")
             return
         }
         
-        let mainPeerUI = PeerUI()
-        mainPeerUI.statusIndicatorView = self.mainPeerStatusIndicator
-        mainPeerUI.avatarView = self.mainPeerAvatarView
-        mainPeerUI.avView = self.mainPeerAVView
-        self.peerUIElements[peerId] = mainPeerUI
+        let mainUserUI = PeerUIElements()
+        mainUserUI.statusIndicator = self.mainPeerStatusIndicator
+        mainUserUI.statusView = self.mainPeerStatusContainer
+        mainUserUI.statusLabel = self.mainPeerStatusLabel
+        mainUserUI.avatarView = self.mainPeerAvatarView
+        mainUserUI.avView = self.mainPeerAVView
+        self.peerUIElements[peerId] = mainUserUI
         
         
         // clean up if we are replacing a prior peer
-        if self.mainPeerId != nil {
-            if let oldPeer = self.call?.peerConnectionClients[self.mainPeerId!] {
-                oldPeer.remoteVideoTrack?.remove(mainPeerAVView)
+        if self.mainUserId != nil {
+            if let oldPeer = self.call?.peerConnectionClients[] {
+                oldPeer.remoteVideoTrack?.remove(self.mainPeerAVView)
             }
         }
         
         // Setup the video view
-        if let mainPeer = self.call?.peerConnectionClients[peerId] {
-            mainPeer.remoteVideoTrack?.add(self.mainPeerAVView)
-            
-            if let avatarImage = FLContactsManager.shared.avatarImageRecipientId(mainPeer.userId) {
-                self.mainPeerAvatarView.image = avatarImage
+        if let peerId = self.userPeerCollection[userId] {
+            if let mainPeer = self.call?.peerConnectionClients[peerId] {
+                mainPeer.remoteVideoTrack?.add(self.mainPeerAVView)
+                
+                if let avatarImage = FLContactsManager.shared.avatarImageRecipientId(mainPeer.userId) {
+                    self.mainPeerAvatarView.image = avatarImage
+                } else {
+                    self.mainPeerAvatarView.image = UIImage(named: "actionsheet_contact")
+                }
             } else {
                 self.mainPeerAvatarView.image = UIImage(named: "actionsheet_contact")
             }
-        } else {
-            self.mainPeerAvatarView.image = UIImage(named: "actionsheet_contact")
+            
+            self.mainUserId = userId
         }
         
-        self.mainPeerId = peerId
     }
     
-    private func addSecondaryPeerId(peerId: String) {
-        guard !self.secondaryPeerIds.contains(peerId) else {
+    private func addSecondaryUserId(_ userId: String) {
+        guard !self.secondaryUserIds.contains(userId) else {
+            // User is already there. Don't add them twice
             return
         }
         
         self.collectionView.performBatchUpdates({
-            let index = self.secondaryPeerIds.count
-            self.secondaryPeerIds.insert(peerId, at: index)
+            let index = self.secondaryUserIds.count
+            self.secondaryUserIds.insert(userId, at: index)
             self.collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
         }, completion: nil)
     }
     
-    private func removeSecondaryPeerId(peerId: String) {
-        guard self.secondaryPeerIds.contains(peerId) else {
+    private func removeSecondaryUserId(_ userId: String) {
+        guard self.secondaryUserIds.contains(userId) else {
+            // User isn't there to remove.  Bail.
             return
         }
         
         self.collectionView.performBatchUpdates({
-            if let index = self.secondaryPeerIds.firstIndex(of: peerId) {
-                self.secondaryPeerIds.remove(at: index)
+            if let index = self.secondaryUserIds.firstIndex(of: userId) {
+                self.secondaryUserIds.remove(at: index)
                 self.collectionView.deleteItems(at: [IndexPath(item: index, section: 0)])
             }
         }, completion: nil)
     }
     
-    private func removePeerFromView(peerId: String) {
-        if self.mainPeerId == peerId {
-            self.mainPeerId = nil
-        } else {
-            self.removeSecondaryPeerId(peerId: peerId)
+    private func removeUserFromView(userId: String) {
+        if let peerId = self.userPeerCollection[userId] {
+            if let uiElements = self.peerUIElements[peerId] {
+                uiElements.avView?.isHidden = true
+            }
         }
-        self.peerUIElements[peerId] = nil
+        
+        if self.mainUserId == userId {
+            self.mainUserId = nil
+        } else {
+            self.removeSecondaryUserId(userId)
+        }
+        if let peerId = self.userPeerCollection[userId] {
+            self.peerUIElements[peerId] = nil
+        }
     }
     
-    private func updatePeerAVElements(peerId: String, hideAV: Bool, indicatorColor: UIColor, hideIndicator: Bool) {
-        
-        if let peerElements = self.peerUIElements[peerId] {
+    private func updatePeerAVElements(peerId: String, message: String, hideAV: Bool, indicatorColor: UIColor, hideIndicator: Bool) {
+        if let userElements = self.peerUIElements[peerId] {
             let duration = 0.25
             
             UIView.animate(withDuration: duration, animations: {
-                peerElements.statusIndicatorView?.isHidden = false
-                peerElements.avView?.isHidden = hideAV
-                peerElements.statusIndicatorView?.backgroundColor = indicatorColor
+                userElements.statusView?.isHidden = false
+                userElements.statusLabel?.text = message
+                userElements.avView?.isHidden = hideAV
+                userElements.statusIndicator?.backgroundColor = indicatorColor
             }) { (complete) in
                 if indicatorColor == UIColor.clear || hideIndicator {
                     UIView.animate(withDuration: duration, animations: {
-                        peerElements.statusIndicatorView?.isHidden = true
+                        userElements.statusView?.isHidden = true
                     })
                 }
             }
@@ -329,8 +367,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         var newValue: CGFloat
         
-        if self.secondaryPeerIds.count > 0 {
-            newValue = UIScreen.main.bounds.width/4 - 8
+        if self.secondaryUserIds.count > 0 {
+            newValue = UIScreen.main.bounds.width/4
         } else {
             newValue = 0
         }
@@ -370,7 +408,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         // TODO: Validate ending call if one is active
         if self.call != nil {
             self.callKitService.localHangupCall(self.call!)
-            self.call!.removeDelegate(self)
             self.call = nil
         }
         self.dismissIfPossible(shouldDelay: false)
@@ -381,14 +418,12 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         if let selectedIndexPath = self.collectionView.indexPathForItem(at: pointInCollectionView) {
             
             // Swap this peer for the main Peer
-            let thisPeerId = self.secondaryPeerIds[selectedIndexPath.item]
-            self.removeSecondaryPeerId(peerId: thisPeerId)
-            if self.mainPeerId != nil {
-                self.addSecondaryPeerId(peerId: self.mainPeerId!)
+            let thisUserId = self.secondaryUserIds[selectedIndexPath.item]
+            self.removeSecondaryUserId(thisUserId)
+            if self.mainUserId != nil {
+                self.addSecondaryUserId(self.mainUserId!)
             }
-            self.setPeerIdAsMain(peerId: thisPeerId)
-            
-            //            let selectedCell = self.collectionView.cellForItem(at: selectedIndexPath) as! PeerViewCell
+            self.setUserIdAsMain(thisUserId)
         }
     }
     
@@ -435,22 +470,23 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBAction func didTapCallButton(_ sender: UIButton) {
         // TODO:  Create visual reference for leaving the call, ie spinner/disable button
         
-        guard let call = self.call else {
+        guard self.call != nil else {
             self.leaveCallButton.isEnabled = false
             self.leaveCallButton.alpha = 0.5
+            self.dismissIfPossible(shouldDelay: true)
             return
         }
         
         if sender.isSelected {
             // restart the call
-            call.inviteMissingParticipants()
+            self.call!.inviteMissingParticipants()
         } else {
             // end the call
             Logger.info("\(self.logTag) called \(#function)")
-            self.callKitService.localHangupCall(call)
+            self.call!.leaveCall()
         }
-    
-}
+        
+    }
     
     @IBAction func didDoubleTapMainPeerView(_ sender: UITapGestureRecognizer) {
         switch sender.state {
@@ -461,7 +497,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .changed:
             do { /* Do nothin' */ }
         case .ended:
-            do { /* Do nothin' */ }
+            do { /* Do things here */ }
         case .cancelled:
             do { /* Do nothin' */ }
         case .failed:
@@ -475,7 +511,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .possible:
             do { /* Do nothin' */ }
         case .began:
-            do { /* Do nothin' */ }
+            do { /* Do things here */ }
         case .changed:
             do { /* Do nothin' */ }
         case .ended:
@@ -514,98 +550,130 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             return
         }
         guard oldState != newState else {
-            Logger.debug("\(self.logTag): Received peer connection state (\(oldState)) update that didn't change.")
+            Logger.debug("*** GEP WTF? ***\(self.logTag): Received peer connection state (\(oldState)) update that didn't change.")
+            return
+        }
+        let userId = pcc.userId
+        
+        guard self.userPeerCollection.keys.contains(userId) else {
+            Logger.debug("\(self.logTag) Call does not include this userId: \(userId)")
             return
         }
         
         // Check for a SUCCESSFUL new peer and build the pieces-parts for it
         if oldState == .undefined && !newState.isTerminal {
-            if let peer = call?.peerConnectionClients[pcc.peerId] {
-                if call?.direction == .incoming {
-                    if peer.userId == self.call?.originatorId {
-                        self.setPeerIdAsMain(peerId: pcc.peerId)
-                    } else {
-                        self.addSecondaryPeerId(peerId: pcc.peerId)
+            if call?.peerConnectionClients[pcc.peerId] != nil {
+                // Check to see if we already have a view collection for this user
+                if self.userPeerCollection[userId]!.count > 0,
+                    let uiElements = self.peerUIElements[pcc.peerId] {
+                    if let avView = uiElements.avView {
+                        if pcc.remoteVideoTrack != nil {
+                            pcc.remoteVideoTrack?.add(avView)
+                            avView.isHidden = false
+                        }
                     }
                 } else {
-                    if self.mainPeerId == nil {
-                        self.setPeerIdAsMain(peerId: pcc.peerId)
+                    // We don't have this one, build it
+                    self.addSecondaryUserId(userId)
+                }
+                
+                self.userPeerCollection[pcc.userId] = pcc.peerId
+                
+                if call?.direction == .incoming {
+                    if userId == self.call?.originatorId {
+                        self.setUserIdAsMain(userId)
                     } else {
-                        self.addSecondaryPeerId(peerId: pcc.peerId)
+                        self.addSecondaryUserId(userId)
+                    }
+                } else {
+                    if userId == self.userPeerCollection.keys.first && self.mainUserId == nil {
+                        self.setUserIdAsMain(userId)
+                    } else {
+                        self.addSecondaryUserId(userId)
                     }
                 }
             }
         }
         
+        
         if self.peerUIElements[pcc.peerId] != nil {
             switch newState {
             case .undefined:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.clear, hideIndicator: true)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "", hideAV: true, indicatorColor: UIColor.clear, hideIndicator: true)
                 }
             case .awaitingLocalJoin:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.cyan, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "", hideAV: true, indicatorColor: UIColor.cyan, hideIndicator: false)
                 }
             case .connected:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: false, indicatorColor: UIColor.green, hideIndicator: true)
-                    self.leaveCallButton.isSelected = false
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Connected!", hideAV: false, indicatorColor: UIColor.green, hideIndicator: true)
                 }
             case .peerLeft:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.gray, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Participant left", hideAV: true, indicatorColor: UIColor.gray, hideIndicator: false)
                 }
             case .leftPeer:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.lightGray, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Left participant", hideAV: true, indicatorColor: UIColor.lightGray, hideIndicator: false)
                 }
             case .discarded:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.clear, hideIndicator: true)
-                    self.removePeerFromView(peerId: pcc.peerId)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "", hideAV: true, indicatorColor: UIColor.clear, hideIndicator: true)
                 }
             case .disconnected:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.darkGray, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Disconnected", hideAV: true, indicatorColor: UIColor.darkGray, hideIndicator: false)
                 }
             case .failed:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.red, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Connection failed", hideAV: true, indicatorColor: UIColor.red, hideIndicator: false)
                 }
             case .sendingAcceptOffer:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.yellow, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Accepting invitation", hideAV: true, indicatorColor: UIColor.yellow, hideIndicator: false)
                 }
             case .sentAcceptOffer:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.blue, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Accepted invitation", hideAV: true, indicatorColor: UIColor.blue, hideIndicator: false)
                 }
             case .sendingOffer:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.orange, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Sending invitation", hideAV: true, indicatorColor: UIColor.orange, hideIndicator: false)
                 }
             case .readyToReceiveAcceptOffer:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.brown, hideIndicator: true)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Awaiting response", hideAV: true, indicatorColor: UIColor.brown, hideIndicator: true)
                 }
             case .receivedAcceptOffer:
                 do {
-                    self.updatePeerAVElements(peerId: pcc.peerId, hideAV: true, indicatorColor: UIColor.yellow, hideIndicator: false)
+                    self.updatePeerAVElements(peerId: pcc.peerId, message: "Response received", hideAV: true, indicatorColor: UIColor.yellow, hideIndicator: false)
                 }
             }
         }
+        
+        // Clean up the video track if its going away
+        if newState.isTerminal {
+            if let avView = self.peerUIElements[pcc.peerId]?.avView,
+                pcc.remoteVideoTrack != nil {
+                pcc.remoteVideoTrack!.remove(avView)
+            }
+            self.peerUIElements[pcc.peerId] = nil
+        }
+        
         // Check to see if this is the last peer
-        if let call = self.call {
+        if self.call != nil {
             var allAlone = true
-            for peer in call.peerConnectionClients.values {
+            for peer in self.call!.peerConnectionClients.values {
                 if !peer.state.isTerminal {
                     allAlone = false
                     break
                 }
             }
             if allAlone {
-                self.leaveCallButton.isSelected = true
+                // tear down the call
+                self.call!.leaveCall()
             }
         }
     }
@@ -623,31 +691,23 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         switch newState {
         case .undefined:
-            do {
-                // TODO
-            }
+            do { /* TODO */ }
         case .ringing:
-            do {
-                // TODO
-            }
+            do { /* TODO */ }
         case .vibrating:
-            do {
-                // TODO
-            }
+            do { /* TODO */ }
         case .rejected:
-            do {
-                // TODO
-            }
+            do { /* TODO */ }
         case .joined:
             do {
                 self.updateUIForCallPolicy()
             }
         case .leaving:
-            do {
-                // TODO:  Add UI cues here
-            }
+            do { /* TODO */ }
         case .left:
             do {
+                self.call = nil
+                self.dismissIfPossible(shouldDelay: true)
             }
         }
     }
@@ -664,11 +724,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
-        guard self.uiReady else {
-            Logger.info("\(self.logTag) Call UI not ready.  Bailing.")
-            return
-        }
-        
         if captureSession != nil {
             self.localAVView.captureSession = captureSession
             self.localAVView.isHidden = false
@@ -691,41 +746,41 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return self.secondaryPeerIds.count
+        return self.secondaryUserIds.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PeerViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PeerViewCell
         
         
-        let peerId = self.secondaryPeerIds[indexPath.item]
+        let userId = self.secondaryUserIds[indexPath.item]
         
-        if let peer = self.call?.peerConnectionClients[peerId] {
-            if let avatarImage = FLContactsManager.shared.avatarImageRecipientId(peer.userId) {
+        if let peerId = self.userPeerCollection[userId] {
+            if let avatarImage = FLContactsManager.shared.avatarImageRecipientId(userId) {
                 cell.avatarImageView.image = avatarImage
             } else {
                 cell.avatarImageView.image = UIImage(named: "actionsheet_contact")
             }
+            
+            if self.call?.peerConnectionClients[peerId]?.remoteVideoTrack != nil {
+                self.call?.peerConnectionClients[peerId]?.remoteVideoTrack?.add(cell.avView)
+                cell.avView.isHidden = false
+            }
+            
+            // TODO: put a fine black line border
+            cell.layer.borderWidth = 0.25
+            cell.layer.borderColor = UIColor.black.cgColor
+            
+            cell.statusIndicatorView.layer.cornerRadius = cell.statusIndicatorView.frame.size.width/2
+            
+            let peerUI = PeerUIElements()
+            peerUI.avView = cell.avView
+            peerUI.avatarView = cell.avatarImageView
+            peerUI.statusIndicator = cell.statusIndicatorView
+            peerUI.statusView = cell.statusIndicatorView
+            
+            self.peerUIElements[peerId] = peerUI
         }
-        
-        if self.call?.peerConnectionClients[peerId]?.remoteVideoTrack != nil {
-            self.call?.peerConnectionClients[peerId]?.remoteVideoTrack?.add(cell.avView)
-            cell.avView.isHidden = false
-        }
-        
-        // TODO: put a fine black line border
-        cell.layer.borderWidth = 0.25
-        cell.layer.borderColor = UIColor.black.cgColor
-        
-        cell.statusIndicatorView.layer.cornerRadius = cell.statusIndicatorView.frame.size.width/2
-        
-        let peerUI = PeerUI()
-        peerUI.avView = cell.avView
-        peerUI.avatarView = cell.avatarImageView
-        peerUI.statusIndicatorView = cell.statusIndicatorView
-        
-        self.peerUIElements[peerId] = peerUI
-        
         return cell
     }
     
@@ -773,8 +828,10 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
 }
 
 
-class PeerUI {
+class PeerUIElements {
     var avView: RemoteVideoView?
     var avatarView: UIImageView?
-    var statusIndicatorView: UIView?
+    var statusIndicator: UIView?
+    var statusView: UIView?
+    var statusLabel: UILabel?
 }

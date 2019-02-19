@@ -610,23 +610,46 @@
                                                     <constraint firstAttribute="width" constant="80" id="Kdj-CT-hsU"/>
                                                 </constraints>
                                             </view>
-                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
-                                                <rect key="frame" x="12" y="120" width="14" height="14"/>
+                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kzJ-c8-Dji" userLabel="Indicator Container">
+                                                <rect key="frame" x="127.5" y="462" width="120" height="17"/>
+                                                <subviews>
+                                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
+                                                        <rect key="frame" x="0.0" y="0.0" width="17" height="17"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="m2h-f9-fWm" secondAttribute="height" multiplier="1:1" id="qNt-ZW-bcJ"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MzO-GR-jNg">
+                                                        <rect key="frame" x="29" y="0.0" width="91" height="17"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" secondItem="m2h-f9-fWm" secondAttribute="height" multiplier="1:1" id="0bW-dt-0yS"/>
-                                                    <constraint firstAttribute="width" constant="14" id="KHn-wW-e10"/>
+                                                    <constraint firstAttribute="bottom" secondItem="MzO-GR-jNg" secondAttribute="bottom" id="3z4-oB-jv5"/>
+                                                    <constraint firstItem="m2h-f9-fWm" firstAttribute="leading" secondItem="kzJ-c8-Dji" secondAttribute="leading" id="67a-M1-vOO"/>
+                                                    <constraint firstAttribute="width" constant="120" id="6Rw-TH-y96"/>
+                                                    <constraint firstAttribute="height" constant="17" id="CBI-N5-I3a"/>
+                                                    <constraint firstAttribute="trailing" secondItem="MzO-GR-jNg" secondAttribute="trailing" id="Hkt-Wg-mP8"/>
+                                                    <constraint firstItem="MzO-GR-jNg" firstAttribute="leading" secondItem="m2h-f9-fWm" secondAttribute="trailing" constant="12" id="SWw-jR-cpC"/>
+                                                    <constraint firstItem="MzO-GR-jNg" firstAttribute="top" secondItem="kzJ-c8-Dji" secondAttribute="top" id="fFb-dF-ykp"/>
+                                                    <constraint firstItem="m2h-f9-fWm" firstAttribute="top" secondItem="kzJ-c8-Dji" secondAttribute="top" id="mVG-Ce-h69"/>
+                                                    <constraint firstAttribute="bottom" secondItem="m2h-f9-fWm" secondAttribute="bottom" id="opK-uI-JPD"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
-                                            <constraint firstItem="m2h-f9-fWm" firstAttribute="leading" secondItem="oYr-aF-2qo" secondAttribute="leading" constant="12" id="3h8-cx-Ajy"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
+                                            <constraint firstItem="kzJ-c8-Dji" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="DiX-8v-X3Q"/>
+                                            <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="kzJ-c8-Dji" secondAttribute="bottom" constant="8" id="LGl-En-fH4"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
-                                            <constraint firstItem="m2h-f9-fWm" firstAttribute="top" secondItem="oYr-aF-2qo" secondAttribute="top" constant="120" id="b5J-te-eeK"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="DG6-Oy-9VV" secondAttribute="trailing" constant="8" id="ekb-9v-hbQ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
                                             <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
@@ -798,30 +821,13 @@
                                         <color key="textColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RbJ-2Q-cDV">
-                                        <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="RbJ-2Q-cDV" secondAttribute="height" multiplier="1:1" id="GlE-X5-EAF"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="✕">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="didTapExitButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="Uhr-fg-0Wf"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.75" alpha="0.25" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="SRo-1p-mnh" secondAttribute="trailing" id="9DZ-DB-aoo"/>
-                                    <constraint firstItem="RbJ-2Q-cDV" firstAttribute="leading" secondItem="IXc-It-DKf" secondAttribute="leading" id="C4N-Nm-Xv5"/>
                                     <constraint firstItem="SRo-1p-mnh" firstAttribute="leading" secondItem="IXc-It-DKf" secondAttribute="leading" id="Eg9-Ks-82y"/>
-                                    <constraint firstAttribute="bottom" secondItem="RbJ-2Q-cDV" secondAttribute="bottom" id="GAn-Zn-SKq"/>
                                     <constraint firstAttribute="bottom" secondItem="SRo-1p-mnh" secondAttribute="bottom" id="Oiy-l9-kBw"/>
                                     <constraint firstAttribute="height" constant="40" id="f0k-PG-mvp"/>
-                                    <constraint firstItem="RbJ-2Q-cDV" firstAttribute="top" secondItem="IXc-It-DKf" secondAttribute="top" id="ghs-Yo-ZYi"/>
                                 </constraints>
                             </view>
                             <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fIA-Fr-YdV" userLabel="AV View" customClass="RTCCameraPreviewView">
@@ -857,7 +863,9 @@
                         <outlet property="localAVView" destination="fIA-Fr-YdV" id="aVq-fq-MFJ"/>
                         <outlet property="mainPeerAVView" destination="r63-pw-tiD" id="GGH-nA-jCb"/>
                         <outlet property="mainPeerAvatarView" destination="gOX-xr-nqU" id="On8-Nb-JYM"/>
+                        <outlet property="mainPeerStatusContainer" destination="kzJ-c8-Dji" id="Hmw-LY-v3C"/>
                         <outlet property="mainPeerStatusIndicator" destination="m2h-f9-fWm" id="3dY-ZF-Sry"/>
+                        <outlet property="mainPeerStatusLabel" destination="MzO-GR-jNg" id="p0W-zl-uka"/>
                         <outlet property="muteButton" destination="GtN-JB-ZxO" id="11a-da-rcO"/>
                         <outlet property="stackContainerView" destination="bcZ-rg-G4N" id="Bsv-mn-woa"/>
                         <outlet property="videoToggleButton" destination="uUf-7R-4b2" id="L9r-Z2-IUa"/>
@@ -865,13 +873,13 @@
                 </viewController>
                 <tapGestureRecognizer numberOfTapsRequired="2" id="nDu-NG-Lef" userLabel="Main Peer Tap Gesture Recognizer">
                     <connections>
-                        <action selector="didDoubleTapMainPeerView:" destination="WPy-fR-KZT" id="fzY-6g-zqI"/>
+                        <action selector="didDoubleTapMainPeerView:" destination="WPy-fR-KZT" id="Oln-pi-hoK"/>
                     </connections>
                 </tapGestureRecognizer>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bly-WK-2CS" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="4HJ-KB-3U9" userLabel="Main Long Press Gesture Recognizer">
                     <connections>
-                        <action selector="didLongPressMainPeerView:" destination="WPy-fR-KZT" id="HR2-mC-f0z"/>
+                        <action selector="didLongPressMainPeerView:" destination="WPy-fR-KZT" id="HOB-Sb-zNu"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
