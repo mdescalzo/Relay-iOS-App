@@ -17,8 +17,66 @@ public class ConferenceCallEvents {
         Logger.info("\n\(self.events.last!.toStr)\n")
     }
     
-    // summarize most recent call
-    static func callSummary() {
+    static var all: String {
+        var result = ""
+        for event in events {
+            result += event.toStr + "\n"
+        }
+        return result
+    }
+    
+    static var lastCallEvents: [CCEContext] {
+        let targetId = events.last!.callId
+        let startAt = events.lastIndex(where: {cce in
+            switch cce.event { case .CallInit(let callId): return callId == targetId default: return false }
+        })
+        return Array(events.dropFirst(startAt!))
+    }
+    
+    static var lastCall: String {
+        var result = ""
+        for event in self.lastCallEvents {
+            result += event.toStr + "\n"
+        }
+        return result
+    }
+    
+    static var connectSpeeds: String {
+        let events = self.lastCallEvents
+        if events.count == 0 { return "(no call available)" }
+        
+        let users = Array(Set(events.filter({ e in e.userId != nil }).map({ e in e.userId! })))
+        let usersData = users.map { (u: String) -> (String, [CCEContext]) in (u, events.filter { e in return e.userId == u }) }
+        
+        var report = "CALL \(events[0].callId) CONNECT SPEEDS\n"
+        for (u, es) in usersData {
+            report += "> user \(u):\n"
+            var starts = [String:(String, Date)]()
+            for e in es {
+                switch e.event {
+                case .PeerStateChange(_, let peerId, _, _, .sentAcceptOffer):
+                    starts[peerId] = ("sent accept-offer to connect", e.timestamp)
+                case .PeerStateChange(_, let peerId, _, _, .receivedAcceptOffer):
+                    starts[peerId] = ("received accept-offer to connect", e.timestamp)
+                default: ()
+                }
+            }
+            for e in es {
+                if case .PeerStateChange(_, let peerId, _, _, .connected) = e.event {
+                    if starts[peerId] != nil {
+                        let (dir, ts) = starts[peerId]!
+                        report += "  > peer \(peerId): \(e.timestamp.msFrom(ts)) (\(dir))\n"
+                        starts.removeValue(forKey: peerId)
+                    } else {
+                        report += "  > peer \(peerId): never set up to connect!?\n"
+                    }
+                }
+            }
+            for (k, _) in starts {
+                report += "  > peer \(k): never finished connecting\n"
+            }
+        }
+        return report
     }
 }
 
@@ -114,6 +172,10 @@ extension Date {
         let ms = abs(round((self.timeIntervalSince(ConferenceCallEvents.epoch) * 1000)))
         return "\(ms.formattedWithCommas)ms"
     }
+    func msFrom(_ t: Date) -> String {
+        let ms = abs(round((self.timeIntervalSince(t) * 1000)))
+        return "\(ms.formattedWithCommas)ms"
+    }
 }
 
 extension CCEContext {
@@ -138,6 +200,34 @@ extension CCEContext {
             return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) call \(callId) thread \(thread)"
         case .SentLocalIce(let callId, let peerId, _, let count):
             return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) call \(callId) thread \(thread)"
+        }
+    }
+    
+    var callId: String {
+        switch self.event {
+        case .CallInit(let callId): return callId
+        case .CallDeinit(let callId): return callId
+        case .CallStateChange(let callId, _, _): return callId
+        case .PeerInit(let callId, _, _): return callId
+        case .PeerDeinit(let callId, _, _): return callId
+        case .PeerStateChange(let callId, _, _, _, _): return callId
+        case .ReceivedRemoteIce(let callId, _, _, _): return callId
+        case .GeneratedLocalIce(let callId, _, _): return callId
+        case .SentLocalIce(let callId, _, _, _): return callId
+        }
+    }
+    
+    var userId: String? {
+        switch self.event {
+        case .CallInit(_): return nil
+        case .CallDeinit(_): return nil
+        case .CallStateChange(_, _, _): return nil
+        case .PeerInit(_, _, let uid): return uid
+        case .PeerDeinit(_, _, let uid): return uid
+        case .PeerStateChange(_, _, let uid, _, _): return uid
+        case .ReceivedRemoteIce(_, _, let uid, _): return uid
+        case .GeneratedLocalIce(_, _, let uid): return uid
+        case .SentLocalIce(_, _, let uid, _): return uid
         }
     }
 }
