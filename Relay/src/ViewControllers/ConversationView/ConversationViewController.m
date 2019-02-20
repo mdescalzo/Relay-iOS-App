@@ -1871,7 +1871,7 @@ typedef enum : NSUInteger {
         return;
     }
 
-    NSString *displayName = [self.contactsManager displayNameForRecipientId:self.thread.otherParticipantId];
+    NSString *displayName = self.thread.displayName;
 
     UIAlertController *alertController = [UIAlertController
         alertControllerWithTitle:[CallStrings callBackAlertTitle]
