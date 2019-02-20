@@ -610,10 +610,10 @@
                                                     <constraint firstAttribute="width" constant="80" id="Kdj-CT-hsU"/>
                                                 </constraints>
                                             </view>
-                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kzJ-c8-Dji" userLabel="Indicator Container">
-                                                <rect key="frame" x="127.5" y="462" width="120" height="17"/>
+                                            <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kzJ-c8-Dji" userLabel="Indicator Container">
+                                                <rect key="frame" x="117.5" y="462" width="140" height="17"/>
                                                 <subviews>
-                                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
+                                                    <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
                                                         <rect key="frame" x="0.0" y="0.0" width="17" height="17"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
@@ -621,7 +621,7 @@
                                                         </constraints>
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MzO-GR-jNg">
-                                                        <rect key="frame" x="29" y="0.0" width="91" height="17"/>
+                                                        <rect key="frame" x="29" y="0.0" width="111" height="17"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -632,7 +632,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="MzO-GR-jNg" secondAttribute="bottom" id="3z4-oB-jv5"/>
                                                     <constraint firstItem="m2h-f9-fWm" firstAttribute="leading" secondItem="kzJ-c8-Dji" secondAttribute="leading" id="67a-M1-vOO"/>
-                                                    <constraint firstAttribute="width" constant="120" id="6Rw-TH-y96"/>
+                                                    <constraint firstAttribute="width" constant="140" id="6Rw-TH-y96"/>
                                                     <constraint firstAttribute="height" constant="17" id="CBI-N5-I3a"/>
                                                     <constraint firstAttribute="trailing" secondItem="MzO-GR-jNg" secondAttribute="trailing" id="Hkt-Wg-mP8"/>
                                                     <constraint firstItem="MzO-GR-jNg" firstAttribute="leading" secondItem="m2h-f9-fWm" secondAttribute="trailing" constant="12" id="SWw-jR-cpC"/>
