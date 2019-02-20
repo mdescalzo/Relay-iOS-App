@@ -165,6 +165,8 @@ class CallAVPolicy {
     
     deinit {
         ConferenceCallEvents.add(.CallDeinit(callId: self.callId))
+        Logger.info("\n\nLAST CALL:\n\(ConferenceCallEvents.lastCall)\n\n")
+        Logger.info("\n\n\(ConferenceCallEvents.connectSpeeds)\n\n")
     }
     
     func cleanupBeforeDestruction() {
