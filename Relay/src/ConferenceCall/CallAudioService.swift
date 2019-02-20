@@ -95,7 +95,7 @@ protocol CallAudioServiceDelegate: class {
     
     private(set) var isSpeakerphoneEnabled: Bool = false {
         didSet {
-            self.delegate?.callAudioService(self, didUpdateIsSpeakerphoneEnabled: isSpeakerphoneEnabled)
+            self.delegate?.callAudioService(self, didUpdateIsSpeakerphoneEnabled: self.isSpeakerphoneEnabled)
         }
     }
     private var vibrateTimer: Timer?
@@ -166,7 +166,6 @@ protocol CallAudioServiceDelegate: class {
         
         audioSession.configureRTCAudio()
         NotificationCenter.default.addObserver(forName: .AVAudioSessionRouteChange, object: avAudioSession, queue: nil) { _ in
-            assert(!Thread.isMainThread)
             self.updateIsSpeakerphoneEnabled()
         }
     }
@@ -208,9 +207,7 @@ protocol CallAudioServiceDelegate: class {
         let value = self.avAudioSession.currentRoute.outputs.contains { (portDescription: AVAudioSessionPortDescription) -> Bool in
             return portDescription.portName == AVAudioSessionPortBuiltInSpeaker
         }
-        DispatchQueue.main.async {
-            self.isSpeakerphoneEnabled = value
-        }
+        self.isSpeakerphoneEnabled = value
     }
 
     private func ensureProperAudioSession(call: ConferenceCall?) {
@@ -270,53 +267,33 @@ protocol CallAudioServiceDelegate: class {
     }
     
     private func setAudioSession(category: String,
-                                 mode: String? = nil,
+                                 mode: String,
                                  options: AVAudioSessionCategoryOptions = AVAudioSessionCategoryOptions(rawValue: 0)) {
         AssertIsOnMainThread()
         
         var audioSessionChanged = false
         do {
-            if #available(iOS 10.0, *), let mode = mode {
-                let oldCategory = avAudioSession.category
-                let oldMode = avAudioSession.mode
-                let oldOptions = avAudioSession.categoryOptions
-                
-                guard oldCategory != category || oldMode != mode || oldOptions != options else {
-                    return
-                }
-                
-                audioSessionChanged = true
-                
-                if oldCategory != category {
-                    Logger.debug("audio session changed category: \(oldCategory) -> \(category) ")
-                }
-                if oldMode != mode {
-                    Logger.debug("audio session changed mode: \(oldMode) -> \(mode) ")
-                }
-                if oldOptions != options {
-                    Logger.debug("audio session changed options: \(oldOptions) -> \(options) ")
-                }
-                try avAudioSession.setCategory(category, mode: mode, options: options)
-                
-            } else {
-                let oldCategory = avAudioSession.category
-                let oldOptions = avAudioSession.categoryOptions
-                
-                guard avAudioSession.category != category || avAudioSession.categoryOptions != options else {
-                    return
-                }
-                
-                audioSessionChanged = true
-                
-                if oldCategory != category {
-                    Logger.debug("audio session changed category: \(oldCategory) -> \(category) ")
-                }
-                if oldOptions != options {
-                    Logger.debug("audio session changed options: \(oldOptions) -> \(options) ")
-                }
-                try avAudioSession.setCategory(category, with: options)
-                
+            let oldCategory = avAudioSession.category
+            let oldMode = avAudioSession.mode
+            let oldOptions = avAudioSession.categoryOptions
+            
+            guard oldCategory != category || oldMode != mode || oldOptions != options else {
+                return
             }
+            
+            audioSessionChanged = true
+            
+            if oldCategory != category {
+                Logger.debug("audio session changed category: \(oldCategory) -> \(category) ")
+            }
+            if oldMode != mode {
+                Logger.debug("audio session changed mode: \(oldMode) -> \(mode) ")
+            }
+            if oldOptions != options {
+                Logger.debug("audio session changed options: \(oldOptions) -> \(options) ")
+            }
+            
+            try avAudioSession.setCategory(category, mode: mode, options: options)
         } catch {
             let message = "failed to set category: \(category) mode: \(String(describing: mode)), options: \(options) with error: \(error)"
             owsFailDebug(message)
@@ -341,9 +318,6 @@ protocol CallAudioServiceDelegate: class {
     
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
         if oldState != newState {
-            self.stopPlayingAnySounds()
-            self.ensureProperAudioSession(call: call)
-
             switch newState {
             case .undefined:
                 do { /* TODO */ }
@@ -359,10 +333,10 @@ protocol CallAudioServiceDelegate: class {
                 do { /* TODO */ }
             case .left:
                 do {
-                    self.isSpeakerphoneEnabled = false
-                    self.setAudioSession(category: AVAudioSessionCategorySoloAmbient)
+                    self.stopPlayingAnySounds()
                 }
             }
+            self.ensureProperAudioSession(call: call)
         }
     }
     
@@ -375,18 +349,6 @@ protocol CallAudioServiceDelegate: class {
     }
     
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
-        // CallAudioService don't care (probably)
-    }
-    
-    func peerConnectionDidConnect(peerId: String) {
-        // CallAudioService don't care (probably)
-    }
-    
-    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
-        // CallAudioService don't care (probably)
-    }
-    
-    func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String) {
         // CallAudioService don't care (probably)
     }
 }
