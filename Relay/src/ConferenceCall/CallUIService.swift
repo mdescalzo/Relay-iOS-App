@@ -532,8 +532,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(TAG) Received \(#function) CXEndCallAction")
         
         if let call = ConferenceCallService.shared.conferenceCall {
-            call.removeDelegate(self)
-            call.removeDelegate(self.audioService)
             self.currentCallUUID = nil
             if call.state == .ringing || call.state == .vibrating {
                 call.rejectCall()
@@ -542,7 +540,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             }
         }
         action.fulfill(withDateEnded: Date())
-        self.currentCallUUID = nil
     }
     
     public func provider(_ provider: CXProvider, perform action: CXSetHeldCallAction) {
