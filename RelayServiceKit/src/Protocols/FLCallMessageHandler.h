@@ -11,11 +11,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol FLCallMessageHandler <NSObject>
 
+-(void)receivedJoinWithThread:(TSThread *)thread
+                     senderId:(NSString *)senderId
+               senderDeviceId:(UInt32)senderDeviceId
+                 originatorId:(NSString *)originatorId
+                       callId:(NSString *)callId;
+
 -(void)receivedOfferWithThread:(TSThread *)thread
-                        callId:(NSString *)callId
                       senderId:(NSString *)senderId
+                senderDeviceId:(UInt32)senderDeviceId
+                        callId:(NSString *)callId
                         peerId:(NSString *)peerId
-                  originatorId:(NSString *)originatorId
             sessionDescription:(NSString *)sessionDescription;
 
 -(void)receivedAcceptOfferWithThread:(TSThread *)thread
@@ -24,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
                   sessionDescription:(NSString *)sessionDescription;
 
 -(void)receivedSelfAcceptOfferWithThread:(TSThread *)thread
-                              callId:(NSString *)callId
-                            deviceId:(UInt32)deviceId;
+                                  callId:(NSString *)callId
+                                deviceId:(UInt32)deviceId;
 
 -(void)receivedIceCandidatesWithThread:(TSThread *)thread
                                 callId:(NSString *)callId
@@ -33,8 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
                          iceCandidates:(NSArray *)iceCandidates;
 
 -(void)receivedLeaveWithThread:(TSThread *)thread
-                        callId:(NSString *)callId
-                      senderId:(NSString *)senderId;
+                      senderId:(NSString *)senderId
+                senderDeviceId:(UInt32)senderDeviceId
+                        callId:(NSString *)callId;
 
 @end
 

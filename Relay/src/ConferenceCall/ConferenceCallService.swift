@@ -19,7 +19,6 @@ protocol ConferenceCallServiceDelegate: class {
 let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteToggle: true, startVideoMuted: false, allowVideoMuteToggle: true)
 
 @objc public class ConferenceCallService: NSObject, FLCallMessageHandler, ConferenceCallDelegate {
-    
     static let rtcFactory = RTCPeerConnectionFactory()
     @objc static let shared = ConferenceCallService()
     
@@ -29,13 +28,17 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
 
     var conferenceCall: ConferenceCall?  // this can be a collection in the future, indexed by callId
     
-    public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
+    public func receivedJoin(with thread: TSThread, senderId: String, senderDeviceId: UInt32, originatorId: String, callId: String) {
+        // todo
+    }
+    
+    public func receivedOffer(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String, peerId: String, sessionDescription: String) {
         if conferenceCall != nil && conferenceCall?.callId != callId {
             Logger.debug("Ignoring call-offer from/for a different call since we already have one running")
             return
         }
         if conferenceCall == nil {
-            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy, direction: .incoming)
+            conferenceCall = ConferenceCall(thread: thread, callId: callId, originatorId: "todo: fix this!", delegate: self, policy: defaultCallAVPolicy, direction: .incoming)
             notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
             conferenceCall!.state = .ringing
         }
@@ -67,7 +70,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         conferenceCall?.handleRemoteIceCandidates(peerId: peerId, iceCandidates: iceCandidates)
     }
     
-    public func receivedLeave(with thread: TSThread, callId: String, senderId: String) {
+    public func receivedLeave(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
             Logger.debug("Ignoring leave from/for an unknown call")
             return

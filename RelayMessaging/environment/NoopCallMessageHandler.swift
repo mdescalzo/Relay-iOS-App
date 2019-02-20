@@ -6,23 +6,28 @@ import RelayServiceKit
 
 @objc
 public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
-    public func receivedSelfAcceptOffer(with thread: TSThread, callId: String, deviceId: UInt32) {
+
+    public func receivedJoin(with thread: TSThread, senderId: String, senderDeviceId: UInt32, originatorId: String, callId: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
-    public func receivedOffer(with thread: TSThread, callId: String, senderId: String, peerId: String, originatorId: String, sessionDescription: String) {
+    public func receivedOffer(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String, peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     
     public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
-    
+
+    public func receivedSelfAcceptOffer(with thread: TSThread, callId: String, deviceId: UInt32) {
+        owsFailDebug("\(self.logTag) in \(#function).")
+    }
+
     public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
-    
-    public func receivedLeave(with thread: TSThread, callId: String, senderId peerId: String) {
+
+    public func receivedLeave(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
     

@@ -33,6 +33,8 @@ class ControlMessageManager : NSObject
             self.handleThreadDelete(message: message, transaction: transaction)
         case FLControlMessageThreadSnoozeKey:
             self.handleThreadSnooze(message: message, transaction: transaction)
+        case FLControlMessageCallJoinKey:
+            self.handleCallJoin(message: message, transaction: transaction)
         case FLControlMessageCallOfferKey:
             self.handleCallOffer(message: message, transaction: transaction)
         case FLControlMessageCallAcceptOfferKey:
@@ -113,6 +115,50 @@ class ControlMessageManager : NSObject
         }
     }
     
+    static private func handleCallJoin(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
+    {
+        guard #available(iOS 10.0, *) else {
+            Logger.info("\(self.tag): Ignoring callJoin control message due to iOS version.")
+            return
+        }
+        
+        let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
+        let age = Date().timeIntervalSince(sendTime)
+        if age > ConferenceCallStaleOfferTimeout {
+            Logger.info("\(self.tag): Ignoring stale callJoin control message (>\(ConferenceCallStaleOfferTimeout) seconds old).")
+            return
+        }
+        
+        let forstaPayload = message.forstaPayload as NSDictionary
+        
+        let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary
+        
+        guard dataBlob != nil else {
+            Logger.info("Received callJoin message with no data object.")
+            return
+        }
+        
+        guard let callId = dataBlob?.object(forKey: "callId") as? String,
+            let members = dataBlob?.object(forKey: "members") as? NSArray,
+            let originator = dataBlob?.object(forKey: "originator") as? String else {
+                Logger.debug("Received callJoin message missing required objects.")
+                return
+        }
+        
+        let thread = message.thread
+        thread.update(withPayload: forstaPayload as! [AnyHashable : Any])
+        thread.participantIds = members as! [String]
+        thread.save(with: transaction)
+        
+        DispatchMainThreadSafe {
+            TextSecureKitEnv.shared().callMessageHandler.receivedJoin(with: thread,
+                                                                      senderId: message.authorId,
+                                                                      senderDeviceId: message.sourceDeviceId,
+                                                                      originatorId: originator,
+                                                                      callId: callId)
+        }
+    }
+    
     static private func handleCallOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard #available(iOS 10.0, *) else {
@@ -138,7 +184,6 @@ class ControlMessageManager : NSObject
         
         guard let callId = dataBlob?.object(forKey: "callId") as? String,
             let members = dataBlob?.object(forKey: "members") as? NSArray,
-            let originator = dataBlob?.object(forKey: "originator") as? String,
             let peerId = dataBlob?.object(forKey: "peerId") as? String,
             let offer = dataBlob?.object(forKey: "offer") as? NSDictionary else {
             Logger.debug("Received callOffer message missing required objects.")
@@ -159,10 +204,10 @@ class ControlMessageManager : NSObject
         
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: thread,
-                                                                       callId: callId,
                                                                        senderId: message.authorId,
+                                                                       senderDeviceId: message.sourceDeviceId,
+                                                                       callId: callId,
                                                                        peerId: peerId,
-                                                                       originatorId: originator,
                                                                        sessionDescription: sdpString!)
         }
     }
@@ -232,7 +277,10 @@ class ControlMessageManager : NSObject
         }
         
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread, callId: callId, senderId: senderId)
+            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread,
+                                                                       senderId: senderId,
+                                                                       senderDeviceId: message.sourceDeviceId,
+                                                                       callId: callId)
         }
     }
     
