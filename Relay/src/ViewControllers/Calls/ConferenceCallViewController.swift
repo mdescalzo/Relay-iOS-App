@@ -205,14 +205,17 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     // MARK: - Helpers
     private func updatePeerUIElement(_ peerId: String, animated: Bool) {
+        Logger.info("\(self.logTag) called \(#function)")
         guard let peerClient = self.call?.peerConnectionClients[peerId] else {
             // Invalid Peer for this call, remove it
+            Logger.debug("\(self.logTag) removing invalid peer.")
             self.removePeerFromView(peerId)
             return
         }
         
         guard let uiElements = self.peerUIElements[peerId] else {
             // No peer element references available to update
+            Logger.debug("\(self.logTag) No UI elements found for peer.")
             return
         }
         
@@ -298,17 +301,19 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             uiElements.statusLabel?.text = message
         }
         
-        if animated {
-            UIView.animate(withDuration: 0.25, animations: {
-                messagingBlock()
-            }) { (complete) in
-                UIView.animate(withDuration: 0.25) {
-                    visibilityBlock()
+        DispatchMainThreadSafe {
+            if animated {
+                UIView.animate(withDuration: 0.25, animations: {
+                    messagingBlock()
+                }) { (complete) in
+                    UIView.animate(withDuration: 0.25) {
+                        visibilityBlock()
+                    }
                 }
+            } else {
+                messagingBlock()
+                visibilityBlock()
             }
-        } else {
-            messagingBlock()
-            visibilityBlock()
         }
     }
     
@@ -412,7 +417,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             }
         }, completion: { complete in
             self.updatePeerUIElement(peerId, animated: true)
-            self.peerUIElements[peerId] = nil
+            if peerId != self.mainPeerId {
+                self.peerUIElements[peerId] = nil
+            }
         })
     }
     
@@ -428,7 +435,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             }
             self.mainPeerId = nil
             self.peerUIElements[peerId] = nil
-    
+            
             // get a new main peer
             if let peer = self.call?.peerConnectionClients.values.first {
                 self.setPeerIdAsMain(peer.peerId)
@@ -632,10 +639,12 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     // MARK: - ConferenceCall delegate methods
     func audioSourceDidChange(call: ConferenceCall, audioSource: AudioSource?) {
+        Logger.info("\(self.logTag) called \(#function)")
         // TODO: update UI as appropriate
     }
     
     func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+        Logger.info("\(self.logTag) called \(#function): oldState=\(oldState) newState=\(newState)")
         
         guard pcc.callId == self.call?.callId else {
             Logger.debug("\(self.logTag): Dropping peer connect state change for obsolete call.")
@@ -660,7 +669,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         // Clean up the video track if its going away
         if newState.isTerminal {
-                self.removePeerFromView(pcc.peerId)
+            self.removePeerFromView(pcc.peerId)
         }
         
         // Check to see if this is the last peer
@@ -680,6 +689,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
+        Logger.info("\(self.logTag) called \(#function)")
         
         guard self.call?.callId == call.callId else {
             Logger.debug("\(self.logTag) dropping call state change mismatched callId.")
@@ -714,6 +724,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
+        Logger.info("\(self.logTag) called \(#function)")
         guard let peerConnection = self.call?.peerConnectionClients[peerId] else {
             Logger.debug("\(self.logTag): received video track update for unknown peerId: \(peerId)")
             return
@@ -725,6 +736,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
+        Logger.info("\(self.logTag) called \(#function)")
         if captureSession != nil {
             self.localAVView.captureSession = captureSession
             self.localAVView.isHidden = false
@@ -738,7 +750,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
 
 extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionViewDataSource, PeerViewsLayoutDelegate
 {
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
