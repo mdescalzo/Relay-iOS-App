@@ -12,4 +12,12 @@ class PeerViewCell: UICollectionViewCell {
     @IBOutlet weak var avView: RemoteVideoView!
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var statusIndicatorView: UIView!
+    
+    override func prepareForReuse() {
+        avView.isHidden = true
+        statusIndicatorView.isHidden = true
+        avatarImageView.image = nil
+        
+        super.prepareForReuse()
+    }
 }
