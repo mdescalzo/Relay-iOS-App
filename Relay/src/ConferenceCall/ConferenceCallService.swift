@@ -148,7 +148,11 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         ConferenceCallEvents.add(.PeerStateChange(callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, oldState: oldState, newState: newState))
     }
     
-    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
+    func peerConnectionDidUpdateRemoteVideoTrack(peerId: String, remoteVideoTrack: RTCVideoTrack) {
+        // don't care
+    }
+    
+    func peerConnectionDidUpdateRemoteAudioTrack(peerId: String, remoteAudioTrack: RTCAudioTrack) {
         // don't care
     }
     

@@ -723,25 +723,32 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
     }
     
-    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
+    func peerConnectionDidUpdateRemoteVideoTrack(peerId: String, remoteVideoTrack: RTCVideoTrack) {
         Logger.info("\(self.logTag) called \(#function)")
-        guard let peerConnection = self.call?.peerConnectionClients[peerId] else {
+        guard self.call?.peerConnectionClients[peerId] != nil else {
             Logger.debug("\(self.logTag): received video track update for unknown peerId: \(peerId)")
             return
         }
         if let avView = self.peerUIElements[peerId]?.avView {
-            peerConnection.remoteVideoTrack?.add(avView)
-            (avView as UIView).isHidden = false
+            remoteVideoTrack.add(avView)
+            self.updatePeerUIElement(peerId, animated: true)
         }
+    }
+    
+    func peerConnectionDidUpdateRemoteAudioTrack(peerId: String, remoteAudioTrack: RTCAudioTrack) {
+        Logger.info("\(self.logTag) called \(#function)")
+        // Let the CallAudioService handle this
     }
     
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
         Logger.info("\(self.logTag) called \(#function)")
-        if captureSession != nil {
-            self.localAVView.captureSession = captureSession
-            self.localAVView.isHidden = false
-        } else {
-            self.localAVView.isHidden = true
+        DispatchMainThreadSafe {
+            if captureSession != nil {
+                self.localAVView.captureSession = captureSession
+                self.localAVView.isHidden = false
+            } else {
+                self.localAVView.isHidden = true
+            }
         }
     }
 }

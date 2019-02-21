@@ -23,7 +23,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         return FLContactsManager.shared
     }()
     internal let audioService: CallAudioService
-    lazy var callService = ConferenceCallService.shared
+    let callService = ConferenceCallService.shared
     private let callController: CXCallController
     private let provider: CXProvider
     
@@ -88,7 +88,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         }
 
         // make sure we don't terminate audio session during call
-//        OWSAudioSession.shared.startAudioActivity(call.audioActivity)
+        OWSAudioSession.shared.startAudioActivity(call.audioActivity)
         
         let callName = call.thread.displayName()
         
@@ -102,7 +102,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         } else {
             update.localizedCallerName = NSLocalizedString("CALLKIT_ANONYMOUS_CONTACT_NAME", comment: "The generic name used for calls if CallKit privacy is enabled")
         }
-        update.hasVideo = (call.localVideoTrack != nil) ? true : false
+        update.hasVideo = true // (call.localVideoTrack != nil) ? true : false
         disableUnsupportedFeatures(callUpdate: update)
         
         weak var weakSelf = self
@@ -401,9 +401,10 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         call.addDelegate(delegate: self)
         call.addDelegate(delegate: self.audioService)
         
-        if call.direction == .incoming {
-            self.reportIncomingCall(call)
-        } else {
+//        if call.direction == .incoming {
+//            self.reportIncomingCall(call)
+//        } else {
+        if call.direction == .outgoing {
             self.currentCallUUID = call.callUUID
             self.showCall(call)
         }
@@ -431,6 +432,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         case .rejected:
             do {
                 OWSAudioSession.shared.endAudioActivity(call.audioActivity)
+                self.submitEndCallAction(callUUID: self.currentCallUUID!)
             }
         case .joined:
             do {
@@ -451,20 +453,19 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     }
     
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
-        Logger.info("\(self.TAG) \(#function)")
-        // TODO: Implement
+        // CallUIService don't care (for now)
     }
     
     func peerConnectionDidConnect(peerId: String) {
-        Logger.info("\(self.TAG) \(#function)")
-    // TODO: Implement
-        
+        // CallUIService don't care (for now)
     }
     
-    public func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
-        Logger.info("\(self.TAG) \(#function)")
-    // TODO: Implement
-        
+    func peerConnectionDidUpdateRemoteVideoTrack(peerId: String, remoteVideoTrack: RTCVideoTrack) {
+        // CallUIService don't care (for now)
+    }
+    
+    func peerConnectionDidUpdateRemoteAudioTrack(peerId: String, remoteAudioTrack: RTCAudioTrack) {
+        // CallUIService don't care (for now)
     }
 
     // MARK: - CXProviderDelegate
@@ -518,19 +519,16 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
                 action.fail()
                 return
         }
-        
-        if let call = ConferenceCallService.shared.conferenceCall {
-            self.showCall(call)
-            action.fulfill(withDateConnected: Date())
-        } else {
-            action.fail()
-        }
+        action.fulfill(withDateConnected: Date())
+        self.showCall(ConferenceCallService.shared.conferenceCall!)
     }
     
     public func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         AssertIsOnMainThread(file: #function)
         Logger.info("\(TAG) Received \(#function) CXEndCallAction")
-        
+ 
+        action.fulfill(withDateEnded: Date())
+
         if let call = ConferenceCallService.shared.conferenceCall {
             self.currentCallUUID = nil
             if call.state == .ringing || call.state == .vibrating {
@@ -539,7 +537,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
                 call.leaveCall()
             }
         }
-        action.fulfill(withDateEnded: Date())
     }
     
     public func provider(_ provider: CXProvider, perform action: CXSetHeldCallAction) {
@@ -588,21 +585,20 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     
     public func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
         AssertIsOnMainThread(file: #function)
-        
-        Logger.debug("\(TAG) Received \(#function)")
+        Logger.debug("XXX \(TAG) Received \(#function)")
         
         if self.callService.conferenceCall != nil {
+            OWSAudioSession.shared.isRTCAudioEnabled = true
             OWSAudioSession.shared.startAudioActivity(self.callService.conferenceCall!.audioActivity)
         }
-        OWSAudioSession.shared.isRTCAudioEnabled = true
     }
     
     public func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
         AssertIsOnMainThread(file: #function)
         
-        Logger.debug("\(TAG) Received \(#function)")
-        OWSAudioSession.shared.isRTCAudioEnabled = false
+        Logger.debug("XXX \(TAG) Received \(#function)")
         if self.callService.conferenceCall != nil {
+            OWSAudioSession.shared.isRTCAudioEnabled = false
             OWSAudioSession.shared.endAudioActivity(self.callService.conferenceCall!.audioActivity)
         }
     }

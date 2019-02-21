@@ -2962,15 +2962,15 @@
 		DBEB8B9021FF7B86005D4FE2 /* ConferenceCall */ = {
 			isa = PBXGroup;
 			children = (
-				DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */,
 				DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */,
-				DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */,
-				DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */,
-				DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */,
-				DBC97B5C221773650011588E /* ConferenceCallEvents.swift */,
-				45E2E91E1E13EE3500457AA0 /* OWSCallNotificationsAdaptee.h */,
 				451A13B01E13DED2000A50FD /* CallNotificationsAdapter.swift */,
 				45794E851E00620000066731 /* CallUIService.swift */,
+				DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */,
+				DBC97B5C221773650011588E /* ConferenceCallEvents.swift */,
+				DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */,
+				45E2E91E1E13EE3500457AA0 /* OWSCallNotificationsAdaptee.h */,
+				DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */,
+				DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */,
 			);
 			path = ConferenceCall;
 			sourceTree = "<group>";

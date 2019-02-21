@@ -53,6 +53,7 @@ protocol PeerConnectionClientDelegate: class {
     func stateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
     func owningCall() -> ConferenceCall
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack)
+    func updatedRemoteAudioTrack(strongPcc: PeerConnectionClient, remoteAudioTrack: RTCAudioTrack)
     func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?)
 }
 
@@ -197,6 +198,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     // causing deadlock in its destructor.  Therefore we take great care
     // with this property.
     var remoteVideoTrack: RTCVideoTrack?
+    var remoteAudioTrack: RTCAudioTrack?
 
     private let proxy = PeerConnectionProxy()
     // Note that we're deliberately leaking proxy instances using this
@@ -759,15 +761,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     /** Called when media is received on a new stream from remote peer. */
     public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didAdd stream: RTCMediaStream) {
         let proxyCopy = self.proxy
-        let completion: (RTCVideoTrack) -> Void = { (remoteVideoTrack) in
-            AssertIsOnMainThread(file: #function)
-            guard let strongSelf = proxyCopy.get() else { return }
-            guard let strongDelegate = strongSelf.delegate else { return }
-
-            // TODO: Consider checking for termination here.
-
-            strongDelegate.updatedRemoteVideoTrack(strongPcc: strongSelf, remoteVideoTrack: remoteVideoTrack)
-        }
 
         ConferenceCallService.shared.rtcQueue.async {
             guard let strongSelf = proxyCopy.get() else { return }
@@ -784,13 +777,14 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             Logger.info("GEP: didAdd video tracks: \(stream.videoTracks.count)")
             Logger.info("GEP: didAdd audio tracks: \(stream.audioTracks.count)")
             
-            if stream.videoTracks.count > 0 {
-                let remoteVideoTrack = stream.videoTracks[0]
+            if let remoteAudioTrack = stream.audioTracks.first {
+                strongSelf.remoteAudioTrack = remoteAudioTrack
+                self.delegate?.updatedRemoteAudioTrack(strongPcc: strongSelf, remoteAudioTrack: remoteAudioTrack)
+            }
+            
+            if let remoteVideoTrack = stream.videoTracks.first {
                 strongSelf.remoteVideoTrack = remoteVideoTrack
-
-                DispatchQueue.main.async {
-                    completion(remoteVideoTrack)
-                }
+                self.delegate?.updatedRemoteVideoTrack(strongPcc: strongSelf, remoteVideoTrack: remoteVideoTrack)
             } else {
                 Logger.debug("\(strongSelf.logTag) didAdd stream:\(stream) didn't have any video tracks")
             }
