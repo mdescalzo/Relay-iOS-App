@@ -256,6 +256,8 @@ protocol CallAudioServiceDelegate: class {
                             options: options)
         }
         
+        audioSession.isRTCAudioEnabled = (call.state == .joined)
+        
         do {
             // It's important to set preferred input *after* ensuring properAudioSession
             // because some sources are only valid for certain category/option combinations.
@@ -325,25 +327,6 @@ protocol CallAudioServiceDelegate: class {
         if oldState != newState {
             self.stopPlayingAnySounds()
             self.ensureProperAudioSession(call: call)
-
-            switch newState {
-            case .undefined:
-                do { /* TODO */ }
-            case .ringing:
-                do { /* TODO */ }
-            case .vibrating:
-                do { /* TODO */ }
-            case .rejected:
-                do { /* TODO */ }
-            case .joined:
-                do {
-                }
-            case .leaving:
-                do { /* TODO */ }
-            case .left:
-                do {
-                }
-            }
         }
     }
     
