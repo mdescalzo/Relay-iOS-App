@@ -225,6 +225,18 @@ NS_ASSUME_NONNULL_BEGIN
     return [TSRequest requestWithUrl:[NSURL URLWithString:path] method:@"PUT" parameters:parameters];
 }
 
++ (TSRequest *)submitMessageRequestWithRecipient:(NSString *)recipientId
+                               recipientDeviceId:(NSNumber *)recipientDeviceId
+                                         message:(NSDictionary *)message
+
+{
+    OWSAssert(recipientId.length > 0);
+
+    NSString *path = [textSecureMessagesAPI stringByAppendingFormat:@"%@/%@", recipientId, recipientDeviceId];
+
+    return [TSRequest requestWithUrl:[NSURL URLWithString:path] method:@"PUT" parameters:message];
+}
+
 + (TSRequest *)registerSignedPrekeyRequestWithSignedPreKeyRecord:(SignedPreKeyRecord *)signedPreKey
 {
     OWSAssert(signedPreKey);

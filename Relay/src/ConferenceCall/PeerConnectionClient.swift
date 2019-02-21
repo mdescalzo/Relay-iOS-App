@@ -400,7 +400,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 
                 let offerControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallOfferKey, moreData: allTheData)
                 
-                return messageSender.sendPromise(message: offerControlMessage, recipientIds: [self.userId])
+                return messageSender.sendPromise(message: offerControlMessage, recipientId: self.userId, recipientDeviceId: 6)
             }
         }.then { () -> Promise<Void> in
             Logger.info("GEP: have sent callOffer message for \(self.peerId)")

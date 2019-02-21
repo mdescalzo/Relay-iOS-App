@@ -824,7 +824,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
     
     NSArray<NSDictionary *> *deviceMessages;
     @try {
-        deviceMessages = [self deviceMessages:message recipient:recipient];
+        deviceMessages = [self deviceMessages:message recipient:recipient onlyDeviceId:nil];
     } @catch (NSException *exception) {
         deviceMessages = @[];
         if ([exception.name isEqualToString:UntrustedIdentityKeyException]) {
@@ -1299,12 +1299,12 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                        }];
 }
 
-- (NSArray<NSDictionary *> *)deviceMessages:(TSOutgoingMessage *)message recipient:(RelayRecipient *)recipient
+- (NSArray<NSDictionary *> *)deviceMessages:(TSOutgoingMessage *)message recipient:(RelayRecipient *)recipient onlyDeviceId:(nullable NSNumber *)onlyDeviceId
 {
     OWSAssert(message);
     OWSAssert(recipient);
     
-    NSMutableArray *messagesArray = [NSMutableArray arrayWithCapacity:recipient.devices.count];
+    NSMutableArray *messagesArray = [NSMutableArray arrayWithCapacity:(onlyDeviceId != nil ? 1 : recipient.devices.count)];
     
     NSData *plainText = [message buildPlainTextData:recipient];
     DDLogDebug(@"%@ built message: %@ plainTextData.length: %lu",
@@ -1313,6 +1313,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                (unsigned long)plainText.length);
     
     for (NSNumber *deviceNumber in recipient.devices) {
+        if (onlyDeviceId != nil && deviceNumber.longValue != onlyDeviceId.longValue) { continue; }
         @try {
             __block NSDictionary *messageDict;
             __block NSException *encryptionException;
@@ -1522,7 +1523,22 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
 }
 
 -(void)sendSpecialMessage:(TSOutgoingMessage *)message
-             recipientId:(NSString *)recipientId
+              recipientId:(NSString *)recipientId
+                 attempts:(int)remainingAttempts
+                  success:(void (^)(void))successHandler
+                  failure:(void (^)(NSError *error))failureHandler
+{
+    [self sendSpecialMessage:message
+                 recipientId:recipientId
+                onlyDeviceId:nil
+                    attempts:remainingAttempts
+                     success:successHandler
+                     failure:failureHandler];
+}
+
+-(void)sendSpecialMessage:(TSOutgoingMessage *)message
+              recipientId:(NSString *)recipientId
+             onlyDeviceId:(nullable NSNumber *)onlyDeviceId
                  attempts:(int)remainingAttempts
                   success:(void (^)(void))successHandler
                   failure:(void (^)(NSError *error))failureHandler
@@ -1539,19 +1555,25 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         recipient = [RelayRecipient getOrBuildUnsavedRecipientForRecipientId:recipientId transaction:transaction];
     }];
     
-    NSOrderedSet *devicesIds = nil;
-    if (recipient.devices.count > 0) {
-        devicesIds = recipient.devices;
-    } else {
-        devicesIds = [NSOrderedSet orderedSetWithObject:[NSNumber numberWithInt:1]];
-    }
-    
     @try {
-        NSArray *messagesArray = [self deviceMessages:message recipient:recipient];
+        NSArray *messagesArray = [self deviceMessages:message recipient:recipient onlyDeviceId:onlyDeviceId];
         
-        TSRequest *request = [OWSRequestFactory submitMessageRequestWithRecipient:recipient.uniqueId
-                                                                         messages:messagesArray
-                                                                        timeStamp:message.timestamp];
+        if (onlyDeviceId != nil && messagesArray.count == 0) {
+            DDLogDebug(@"%@ Current addresses don't have the specified device# %@.", self.logTag, onlyDeviceId);
+        }
+
+        TSRequest *request = nil;
+        if (onlyDeviceId != nil && messagesArray.count == 1) {
+            NSMutableDictionary *msg = [messagesArray[0] mutableCopy];
+            [msg setObject:@(message.timestamp) forKey:@"timestamp"];
+            request = [OWSRequestFactory submitMessageRequestWithRecipient:recipient.uniqueId
+                                                         recipientDeviceId:onlyDeviceId
+                                                                   message:msg];
+        } else {
+            request = [OWSRequestFactory submitMessageRequestWithRecipient:recipient.uniqueId
+                                                                  messages:messagesArray
+                                                                 timeStamp:message.timestamp];
+        }
         [self.networkManager makeRequest:request
                                  success:^(NSURLSessionDataTask *task, id responseObject) {
                                      DDLogDebug(@"Special send successful.");
@@ -1573,6 +1595,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                                          dispatch_async([OWSDispatch sendingQueue], ^{
                                              [self sendSpecialMessage:message
                                                           recipientId:recipient.uniqueId
+                                                         onlyDeviceId:onlyDeviceId
                                                              attempts:remainingAttempts
                                                               success:successHandler
                                                               failure:failureHandler];

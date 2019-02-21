@@ -87,6 +87,13 @@ NS_SWIFT_NAME(MessageSender)
                   success:(void (^)(void))successHandler
                   failure:(void (^)(NSError *error))failureHandler;
 
+// Special sender for control messages only.
+-(void)sendSpecialMessage:(TSOutgoingMessage *)message
+              recipientId:(NSString *)recipientId
+             onlyDeviceId:(nullable NSNumber *)onlyDeviceId
+                 attempts:(int)remainingAttempts
+                  success:(void (^)(void))successHandler
+                  failure:(void (^)(NSError *error))failureHandler;
 @end
 
 NS_ASSUME_NONNULL_END
