@@ -8,6 +8,7 @@
 #import "OWSIncomingSentMessageTranscript.h"
 #import "OWSPrimaryStorage+SessionStore.h"
 #import "OWSReadReceiptManager.h"
+#import "OWSDevice.h"
 #import "TSAttachmentPointer.h"
 #import "TSInfoMessage.h"
 #import "TSNetworkManager.h"
@@ -104,7 +105,8 @@ NS_ASSUME_NONNULL_BEGIN
         
         IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:transcript.thread
                                                                                       timestamp:transcript.timestamp
-                                                                                         author:[TSAccountManager localUID]
+                                                                                         author:TSAccountManager.localUID
+                                                                                         device:OWSDeviceManager.sharedManager.currentDeviceId
                                                                                         payload:jsonPayload
                                                                                     attachments:transcript.attachmentPointerProtos];
         [ControlMessageManager processIncomingControlMessageWithMessage:controlMessage transaction:transaction];

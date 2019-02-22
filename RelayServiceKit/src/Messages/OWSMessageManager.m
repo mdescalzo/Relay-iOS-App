@@ -835,6 +835,7 @@ NS_ASSUME_NONNULL_BEGIN
             IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:thread
                                                                                           timestamp:envelope.timestamp
                                                                                              author:envelope.source
+                                                                                             device:envelope.sourceDevice
                                                                                             payload:jsonPayload
                                                                                         attachments:dataMessage.attachments];
             [ControlMessageManager processIncomingControlMessageWithMessage:controlMessage transaction:transaction];

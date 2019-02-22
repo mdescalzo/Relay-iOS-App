@@ -37,7 +37,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         let originatorId = TSAccountManager.localUID()!
         self.conferenceCall = ConferenceCall(thread: thread, callId: newCallId, originatorId: originatorId, delegate: self, policy: defaultCallAVPolicy, direction: .outgoing)
         notifyDelegates({ delegate in delegate.createdConferenceCall(call: conferenceCall!) })
-        self.conferenceCall!.acceptCall() // moves state to .joined and invites all the participants
+        self.conferenceCall!.joinCall()
         return self.conferenceCall!
     }
     
@@ -160,7 +160,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     }
     
     func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
-        ConferenceCallEvents.add(.PeerStateChange(callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, oldState: oldState, newState: newState))
+        ConferenceCallEvents.add(.PeerStateChange(callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, deviceId: pcc.deviceId, oldState: oldState, newState: newState))
     }
     
     func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {

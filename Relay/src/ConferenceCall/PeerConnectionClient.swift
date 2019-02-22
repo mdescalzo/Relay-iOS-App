@@ -212,7 +212,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     init(delegate: PeerConnectionClientDelegate, userId: String, deviceId: UInt32, peerId: String, callId: String) {
         AssertIsOnMainThread(file: #function)
-        ConferenceCallEvents.add(.PeerInit(callId: callId, peerId: peerId, userId: userId))
+        ConferenceCallEvents.add(.PeerInit(callId: callId, peerId: peerId, userId: userId, deviceId: deviceId))
 
         self.delegate = delegate
         self.callId = callId
@@ -231,7 +231,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
     
     deinit {
-        ConferenceCallEvents.add(.PeerDeinit(callId: self.callId, peerId: self.peerId, userId: self.userId))
+        ConferenceCallEvents.add(.PeerDeinit(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId))
     }
     
     
@@ -642,7 +642,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
     
     public func addRemoteIceCandidates(_ iceCandidates: [Any]) {
-        ConferenceCallEvents.add(.ReceivedRemoteIce(callId: self.callId, peerId: self.peerId, userId: self.userId, count: iceCandidates.count))
+        ConferenceCallEvents.add(.ReceivedRemoteIce(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId, count: iceCandidates.count))
         for candidate in iceCandidates {
             if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
                 if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
@@ -835,7 +835,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     /** New ice candidate has been found. */
     public func peerConnection(_ peerConnectionParam: RTCPeerConnection, didGenerate candidate: RTCIceCandidate) {
-        ConferenceCallEvents.add(.GeneratedLocalIce(callId: self.callId, peerId: self.peerId, userId: self.userId))
+        ConferenceCallEvents.add(.GeneratedLocalIce(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId))
         let proxyCopy = self.proxy
         let completion: (RTCIceCandidate) -> Void = { (candidate) in
             self.pendingIceCandidates.insert(candidate)
@@ -964,8 +964,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             
             let iceControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallICECandidatesKey, moreData: allTheData)
             return messageSender.sendPromise(message: iceControlMessage, recipientId: self.userId, recipientDeviceId: self.deviceId)
-        }.done {
-            ConferenceCallEvents.add(.SentLocalIce(callId: self.callId, peerId: self.peerId, userId: self.userId, count: iceToSendSet.count))
+        }.done {_ in
+            ConferenceCallEvents.add(.SentLocalIce(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId, count: iceToSendSet.count))
         }.catch { error in
             Logger.error("\(self.logTag) in \(#function) waitUntilReadyToSendIceUpdates failed with error: \(error)")
         }.retainUntilComplete()

@@ -11,16 +11,17 @@ import Foundation
 public class ConferenceCallEvents {
     static var events = [CCEContext]()
     static var epoch = Date()
+    static var level = CCERenderLevel.full
     
     static func add(_ event: ConferenceCallEvent) {
         self.events.append(CCEContext(Date(), Thread.current.threadName, event))
-        Logger.info("\n\(self.events.last!.toStr)\n")
+        Logger.info("\n\(self.events.last!.render(self.level))")
     }
     
     static var all: String {
         var result = ""
         for event in events {
-            result += event.toStr + "\n"
+            result += event.render(.brief)
         }
         return result
     }
@@ -36,7 +37,7 @@ public class ConferenceCallEvents {
     static var lastCall: String {
         var result = ""
         for event in self.lastCallEvents {
-            result += event.toStr + "\n"
+            result += event.render(.brief)
         }
         return result
     }
@@ -45,8 +46,8 @@ public class ConferenceCallEvents {
         let events = self.lastCallEvents
         if events.count == 0 { return "(no call available)" }
         
-        let users = Array(Set(events.filter({ e in e.userId != nil }).map({ e in e.userId! })))
-        let usersData = users.map { (u: String) -> (String, [CCEContext]) in (u, events.filter { e in return e.userId == u }) }
+        let users = Array(Set(events.filter({ e in e.userSelector != nil }).map({ e in e.userSelector! })))
+        let usersData = users.map { (u: String) -> (String, [CCEContext]) in (u, events.filter { e in return e.userSelector == u }) }
         
         var report = "CALL \(events[0].callId) CONNECT SPEEDS\n"
         for (u, es) in usersData {
@@ -54,15 +55,16 @@ public class ConferenceCallEvents {
             var starts = [String:(String, Date)]()
             for e in es {
                 switch e.event {
-                case .PeerStateChange(_, let peerId, _, _, .sentAcceptOffer):
+                case .PeerStateChange(_, let peerId, _, _, _, .sentAcceptOffer):
                     starts[peerId] = ("sent accept-offer to connect", e.timestamp)
-                case .PeerStateChange(_, let peerId, _, _, .receivedAcceptOffer):
+                case .PeerStateChange(_, let peerId, _, _, _, .receivedAcceptOffer):
                     starts[peerId] = ("received accept-offer to connect", e.timestamp)
                 default: ()
                 }
             }
             for e in es {
-                if case .PeerStateChange(_, let peerId, _, _, .connected) = e.event {
+                // if case .PeerStateChange(_, let peerId, _, _, .connected) = e.event {
+                if case .PeerStateChange(_, let peerId, _, _, _, .connected) = e.event {
                     if starts[peerId] != nil {
                         let (dir, ts) = starts[peerId]!
                         report += "  > peer \(peerId): \(e.timestamp.msFrom(ts)) (\(dir))\n"
@@ -99,6 +101,12 @@ enum ConferenceCallEvent {
     case CallDeinit(
         callId: String
     )
+    case SentCallJoin(
+        callId: String
+    )
+    case SentCallLeave(
+        callId: String
+    )
     case CallStateChange(
         callId: String,
         oldState: ConferenceCallState,
@@ -107,17 +115,20 @@ enum ConferenceCallEvent {
     case PeerInit(
         callId: String,
         peerId: String,
-        userId: String
+        userId: String,
+        deviceId: UInt32
     )
     case PeerDeinit(
         callId: String,
         peerId: String,
-        userId: String
+        userId: String,
+        deviceId: UInt32
     )
     case PeerStateChange(
         callId: String,
         peerId: String,
         userId: String,
+        deviceId: UInt32,
         oldState: PeerConnectionClientState,
         newState: PeerConnectionClientState
     )
@@ -125,17 +136,20 @@ enum ConferenceCallEvent {
         callId: String,
         peerId: String,
         userId: String,
+        deviceId: UInt32,
         count: Int
     )
     case GeneratedLocalIce(
         callId: String,
         peerId: String,
-        userId: String
+        userId: String,
+        deviceId: UInt32
     )
     case SentLocalIce(
         callId: String,
         peerId: String,
         userId: String,
+        deviceId: UInt32,
         count: Int
     )
 }
@@ -178,56 +192,101 @@ extension Date {
     }
 }
 
+enum CCERenderLevel {
+    case full, brief
+}
+
 extension CCEContext {
-    var toStr: String {
+    func render(_ level: CCERenderLevel) -> String {
         let prefix = "CCE "
         switch self.event {
         case .CallInit(let callId):
-            return "\(prefix)\(timestamp.msFromEpoch) call init: \(callId) thread \(thread)"
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) call init: \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) call init: \(callId)\n"
+            }
         case .CallDeinit(let callId):
-            return "\(prefix)\(timestamp.msFromEpoch) call DEinit: \(callId) thread \(thread)"
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) call deinit: \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) call deinit: \(callId)\n"
+            }
+        case .SentCallJoin(let callId):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) sent call join: \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) sent call join: \(callId)\n"
+            }
+        case .SentCallLeave(let callId):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) sent call leave: \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) sent call leave: \(callId)\n"
+            }
         case .CallStateChange(let callId, let oldState, let newState):
-            return "\(prefix)\(timestamp.msFromEpoch) call state: \(oldState)->\(newState) \(callId) thread \(thread)"
-        case .PeerInit(let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) thread \(thread)"
-        case .PeerDeinit(let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) peer DEinit: \(peerId) call \(callId) thread \(thread)"
-        case .PeerStateChange(let callId, let peerId, let userId, let oldState, let newState):
-            return "\(prefix)\(timestamp.msFromEpoch) peer state: \(oldState)->\(newState) peer \(peerId) user \(userId) call \(callId) thread \(thread)"
-        case .ReceivedRemoteIce(let callId, let peerId, _, let count):
-            return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) call \(callId) thread \(thread)"
-        case .GeneratedLocalIce(let callId, let peerId, _):
-            return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) call \(callId) thread \(thread)"
-        case .SentLocalIce(let callId, let peerId, _, let count):
-            return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) call \(callId) thread \(thread)"
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) call \(oldState)->\(newState) \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) call \(oldState)->\(newState) \(callId)\n"
+            }
+        case .PeerInit(let callId, let peerId, let userId, let deviceId):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) user@device \(userId)@\(deviceId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) user@device \(userId)@\(deviceId)\n"
+            }
+        case .PeerDeinit(let callId, let peerId, let userId, let deviceId):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId) user@device \(userId)@\(deviceId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) peer deinit: \(peerId)\n"
+            }
+        case .PeerStateChange(let callId, let peerId, let userId, let deviceId, let oldState, let newState):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer \(oldState)->\(newState) \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) peer \(oldState)->\(newState) \(peerId)\n"
+            }
+        case .ReceivedRemoteIce(let callId, let peerId, let userId, let deviceId, let count):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) received \(count) remote ice from peer \(peerId)\n"
+            }
+        case .GeneratedLocalIce(let callId, let peerId, let userId, let deviceId):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .brief: return ""
+            }
+        case .SentLocalIce(let callId, let peerId, let userId, let deviceId, let count):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) sent \(count) local ice to peer \(peerId)\n"
+            }
         }
     }
-    
+
     var callId: String {
         switch self.event {
         case .CallInit(let callId): return callId
         case .CallDeinit(let callId): return callId
+        case .SentCallJoin(let callId): return callId
+        case .SentCallLeave(let callId): return callId
         case .CallStateChange(let callId, _, _): return callId
-        case .PeerInit(let callId, _, _): return callId
-        case .PeerDeinit(let callId, _, _): return callId
-        case .PeerStateChange(let callId, _, _, _, _): return callId
-        case .ReceivedRemoteIce(let callId, _, _, _): return callId
-        case .GeneratedLocalIce(let callId, _, _): return callId
-        case .SentLocalIce(let callId, _, _, _): return callId
+        case .PeerInit(let callId, _, _, _): return callId
+        case .PeerDeinit(let callId, _, _, _): return callId
+        case .PeerStateChange(let callId, _, _, _, _, _): return callId
+        case .ReceivedRemoteIce(let callId, _, _, _, _): return callId
+        case .GeneratedLocalIce(let callId, _, _, _): return callId
+        case .SentLocalIce(let callId, _, _, _, _): return callId
         }
     }
     
-    var userId: String? {
+    var userSelector: String? {
         switch self.event {
         case .CallInit(_): return nil
         case .CallDeinit(_): return nil
+        case .SentCallJoin(_): return nil
+        case .SentCallLeave(_): return nil
         case .CallStateChange(_, _, _): return nil
-        case .PeerInit(_, _, let uid): return uid
-        case .PeerDeinit(_, _, let uid): return uid
-        case .PeerStateChange(_, _, let uid, _, _): return uid
-        case .ReceivedRemoteIce(_, _, let uid, _): return uid
-        case .GeneratedLocalIce(_, _, let uid): return uid
-        case .SentLocalIce(_, _, let uid, _): return uid
+        case .PeerInit(_, _, let userId, let deviceId): return "\(userId)@\(deviceId)"
+        case .PeerDeinit(_, _, let userId, let deviceId): return "\(userId)@\(deviceId)"
+        case .PeerStateChange(_, _, let userId, let deviceId, _, _): return "\(userId)@\(deviceId)"
+        case .ReceivedRemoteIce(_, _, let userId, let deviceId, _): return "\(userId)@\(deviceId)"
+        case .GeneratedLocalIce(_, _, let userId, let deviceId): return "\(userId)@\(deviceId)"
+        case .SentLocalIce(_, _, let userId, let deviceId, _): return "\(userId)@\(deviceId)"
         }
     }
 }

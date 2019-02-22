@@ -274,15 +274,30 @@ class CallAVPolicy {
             pcc.handleCallLeave()
         }
     }
-    
-    func acceptCall() {
-        self.state = .joined
-        self.sendQueuedOffers()
-    }
-    
+
     func rejectCall() {
         self.state = .rejected
         self.leaveCall()
+    }
+    
+    func joinCall() {
+        guard let messageSender = Environment.current()?.messageSender else {
+            Logger.info("can't get messageSender")
+            return
+        }
+        
+        self.state = .joined
+        let members = self.thread.participantIds
+        let allTheData = [
+            "originator" : self.originatorId,
+            "callId" : self.callId,
+            "members" : members
+            ] as NSMutableDictionary
+        let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallJoinKey, moreData: allTheData)
+        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
+            ConferenceCallEvents.add(.SentCallJoin(callId: self.callId))
+            self.sendQueuedOffers()
+        }).retainUntilComplete()
     }
     
     func leaveCall() {
@@ -302,7 +317,10 @@ class CallAVPolicy {
         let allTheData = [ "callId" : self.callId ] as NSMutableDictionary
         
         let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
-        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in self.state = .left }).retainUntilComplete()
+        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
+            ConferenceCallEvents.add(.SentCallLeave(callId: self.callId))
+            self.state = .left
+        }).retainUntilComplete()
     }
     
     // MARK: - Class Helpers

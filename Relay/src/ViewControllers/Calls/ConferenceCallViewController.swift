@@ -131,7 +131,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         super.viewDidAppear(animated)
         
         if self.call?.state == .ringing || self.call?.state == .vibrating {
-            self.call?.acceptCall()
+            self.call?.joinCall()
         }
     }
     
@@ -570,8 +570,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
         
         if sender.isSelected {
-            // restart the call
-            // self.call!.joinCall()
+            self.call!.joinCall()
         } else {
             // end the call
             Logger.info("\(self.logTag) called \(#function)")

@@ -150,10 +150,13 @@ class ControlMessageManager : NSObject
         thread.participantIds = members as! [String]
         thread.save(with: transaction)
         
+        let userId = message.authorId
+        let deviceId = message.sourceDeviceId
+
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedJoin(with: thread,
-                                                                      senderId: message.authorId,
-                                                                      senderDeviceId: message.sourceDeviceId,
+                                                                      senderId: userId,
+                                                                      senderDeviceId: deviceId,
                                                                       originatorId: originator,
                                                                       callId: callId)
         }
