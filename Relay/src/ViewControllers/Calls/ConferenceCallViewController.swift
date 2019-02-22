@@ -673,7 +673,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             }
             if allAlone {
                 // tear down the call
-                self.call!.leaveCall()
+                // self.call!.leaveCall()
             }
         }
     }
