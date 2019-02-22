@@ -18,7 +18,7 @@ public enum PeerConnectionClientState: String {
     case sendingAcceptOffer
     case sentAcceptOffer
     case sendingOffer
-    case readyToReceiveAcceptOffer
+    case awaitingAcceptOffer
     case receivedAcceptOffer
     case connected
     case peerLeft       // the peer sent us a callLeave
@@ -175,6 +175,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     
     let callId: String
     let userId: String
+    let deviceId: UInt32
     var peerId: String
     
     var state: PeerConnectionClientState {
@@ -183,12 +184,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         }
     }
 
-    // Delegate is notified of key events in the call lifecycle.
-    //
-    // This property should only be accessed on the main thread.
     private weak var delegate: PeerConnectionClientDelegate?
 
-    // Connection
     private var peerConnection: RTCPeerConnection?
     
     var audioSender: RTCRtpSender?
@@ -204,26 +201,27 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     // is tiny (a single property), so it's better to leak and be safe.
     private static var expiredProxies = [PeerConnectionProxy]()
     
-    // promises and their resolvers for controlling ordering of async actions
-    let readyToAnswerPromise: Promise<Void>
-    let readyToAnswerResolver: Resolver<Void>
+    // promises and their resolvers for controlling ordering and timing of actions
+    let readyToSendOfferPromise: Promise<Void>
+    let readyToSendOfferResolver: Resolver<Void>
     let readyToSendIceCandidatesPromise: Promise<Void>
     let readyToSendIceCandidatesResolver: Resolver<Void>
     let peerConnectedPromise: Promise<Void>
     let peerConnectedResolver: Resolver<Void>
 
 
-    init(delegate: PeerConnectionClientDelegate, userId: String, peerId: String, callId: String) {
+    init(delegate: PeerConnectionClientDelegate, userId: String, deviceId: UInt32, peerId: String, callId: String) {
         AssertIsOnMainThread(file: #function)
         ConferenceCallEvents.add(.PeerInit(callId: callId, peerId: peerId, userId: userId))
 
         self.delegate = delegate
         self.callId = callId
         self.userId = userId
+        self.deviceId = deviceId
         self.peerId = peerId
         self.state = .undefined
 
-        (self.readyToAnswerPromise, self.readyToAnswerResolver) = Promise<Void>.pending()
+        (self.readyToSendOfferPromise, self.readyToSendOfferResolver) = Promise<Void>.pending()
         (self.readyToSendIceCandidatesPromise, self.readyToSendIceCandidatesResolver) = Promise<Void>.pending()
         (self.peerConnectedPromise, self.peerConnectedResolver) = Promise<Void>.pending()
 
@@ -243,19 +241,14 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return
         }
         
-        self.state = .awaitingLocalJoin
+        self.state = .sendingAcceptOffer
         firstly {
-            self.readyToAnswerPromise
-        }.then { _ -> Promise<Void> in
-            self.state = .sendingAcceptOffer
-            return cc.setUpLocalAV()
+            cc.setUpLocalAV()
         }.then { _ -> Promise<HardenedRTCSessionDescription> in
-            Logger.info("GEP: have local AV for \(self.peerId)")
             self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
                                                                                   constraints: cc.connectionConstraints!,
                                                                                   delegate: self.proxy)
-        
-            
+
             let videoSender = self.peerConnection!.sender(withKind: kVideoTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
             videoSender.track = cc.localVideoTrack
             self.videoSender = videoSender
@@ -269,11 +262,9 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             
             return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
         }.then { hardenedSessionDesc -> Promise<Void> in
-            return self.sendCallAcceptOffer(negotiatedSessionDescription: hardenedSessionDesc)
+            self.sendCallAcceptOffer(negotiatedSessionDescription: hardenedSessionDesc)
         }.then { () -> Promise<Void> in
-            Logger.debug("\(self.logTag) successfully sent callAcceptOffer for peer: \(self.peerId)")
             self.state = .sentAcceptOffer
-            
             self.readyToSendIceCandidatesResolver.fulfill(())
             
             let timeout: Promise<Void> = after(seconds: connectingTimeoutSeconds).done {
@@ -283,7 +274,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             
             return race(self.peerConnectedPromise, timeout)
         }.done {
-            Logger.debug("peer \(self.peerId) connected")
             self.state = .connected
         }.recover { error in
             if let callError = error as? CallError {
@@ -293,18 +283,16 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 self.handleFailedConnection(error: externalError)
             }
         }.ensure {
-            Logger.debug("\(self.logTag) ending background task awaiting inbound call connection")
+            Logger.debug("\(self.logTag) ended background task awaiting inbound call connection")
         }.retainUntilComplete()
     }
 
 
     private func sendCallAcceptOffer(negotiatedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> {
         guard let call = self.delegate?.owningCall() else {
-            Logger.info("can't get owning call")
             return Promise(error: CallError.other(description: "can't get owning call"))
         }
         guard let messageSender = Environment.current()?.messageSender else {
-            Logger.info("can't get messageSender")
             return Promise(error: CallError.other(description: "can't get messageSender"))
         }
         let members = call.thread.participantIds
@@ -320,49 +308,35 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                            ] as NSMutableDictionary
         
         let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
-        return messageSender.sendPromise(message: message, recipientIds: [self.userId])
+        return messageSender.sendPromise(message: message, recipientId: self.userId, recipientDeviceId: self.deviceId)
     }
 
     func handleCallLeave() {
-        Logger.info("peer \(self.peerId) sent us a callLeave")
         self.state = .peerLeft
     }
     
-    func sendCallLeave() -> Promise<Void> {
-        guard let call = self.delegate?.owningCall() else {
-            Logger.info("can't get owning call")
-            return Promise(error: CallError.other(description: "can't get owning call"))
-        }
-        guard let messageSender = Environment.current()?.messageSender else {
-            Logger.info("can't get messageSender")
-            return Promise(error: CallError.other(description: "can't get messageSender"))
-        }
-        let members = call.thread.participantIds
-        let originator = call.originatorId
-
-        let allTheData = [ "callId" : self.callId,
-                           "members" : members,
-                           "originator" : originator,
-                           "peerId" : self.peerId,
-                           ] as NSMutableDictionary
-        
-        let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
-        return messageSender.sendPromise(message: message, recipientIds: [self.userId]).done({ _ in self.state = .leftPeer })
+    func leaveCall() {
+        self.state = .leftPeer
     }
     
-    
-    func sendOffer() {
-        Logger.info("GEP: for \(self.peerId)")
+    func queueOffer() {
         guard let cc = self.delegate?.owningCall() else {
-            Logger.error("sendOffer owning call isn't available")
+            Logger.error("queueOffer owning call isn't available")
             return
         }
         
-        self.state = .sendingOffer
+        if (cc.state == .joined) {
+            self.readyToSendOfferResolver.fulfill(())
+        } else {
+            self.state = .awaitingLocalJoin
+        }
+        
         firstly {
-            return cc.setUpLocalAV()
+            cc.setUpLocalAV()
+        }.then {
+            self.readyToSendOfferPromise
         }.then { (Void) -> Promise<HardenedRTCSessionDescription> in
-            Logger.info("GEP: have local AV for \(self.peerId)")
+            self.state = .sendingOffer
             self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
                                                                                   constraints: cc.connectionConstraints!,
                                                                                   delegate: self.proxy)
@@ -377,17 +351,13 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
             return self.createSessionDescriptionOffer()
         }.then { (sessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
-            Logger.info("GEP: have sessionDescription for \(self.peerId)")
             return firstly {
                 self.setLocalSessionDescription(sessionDescription)
             }.then { _ -> Promise<Void> in
-                Logger.info("GEP: have setLocalSessionDescription for \(self.peerId)")
                 guard let call = self.delegate?.owningCall() else {
-                    Logger.info("can't get owning call")
                     return Promise(error: CallError.other(description: "can't get owning call"))
                 }
                 guard let messageSender = Environment.current()?.messageSender else {
-                    Logger.info("can't get messageSender")
                     return Promise(error: CallError.other(description: "can't get messageSender"))
                 }
                 let allTheData = [ "callId" : self.callId,
@@ -399,12 +369,10 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                                    ] as NSMutableDictionary
                 
                 let offerControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallOfferKey, moreData: allTheData)
-                
-                return messageSender.sendPromise(message: offerControlMessage, recipientId: self.userId, recipientDeviceId: 6)
+                return messageSender.sendPromise(message: offerControlMessage, recipientId: self.userId, recipientDeviceId: self.deviceId)
             }
         }.then { () -> Promise<Void> in
-            Logger.info("GEP: have sent callOffer message for \(self.peerId)")
-            self.state = .readyToReceiveAcceptOffer
+            self.state = .awaitingAcceptOffer
             self.readyToSendIceCandidatesResolver.fulfill(())
             
             // Don't let the outgoing call ring forever. We don't support inbound ringing forever anyway.
@@ -418,10 +386,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             return race(timeout, self.peerConnectedPromise)
         }.done {
             self.state = .connected
-            Logger.info("GEP: call connected for \(self.peerId)")
-            Logger.info("callOffer connected for peer \(self.peerId)")
         }.recover { error in
-            Logger.info("GEP: error for \(self.peerId): \(error)")
             Logger.error("\(self.logTag) call offer for peer \(self.peerId) failed with error: \(error)")
             if let callError = error as? CallError {
                 self.handleFailedConnection(error: callError)
@@ -433,18 +398,13 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
     
     func handleAcceptOffer(sessionDescription: String) {
-        Logger.info("\nGEP: handleAcceptOffer for \(self.peerId)\n")
-        AssertIsOnMainThread(file: #function)
-        
+        self.state = .receivedAcceptOffer
         let sessionDescription = RTCSessionDescription(type: .answer, sdp: sessionDescription)
         firstly {
             self.setRemoteSessionDescription(sessionDescription)
         }.done {
-            Logger.info("GEP: set remote session description for \(self.peerId)")
-            Logger.debug("\(self.logTag) successfully set remote description")
-            self.state = .receivedAcceptOffer
+            // Logger.debug("\(self.logTag) successfully set remote description")
         }.catch { error in
-            Logger.info("GEP: set remote session description failed for \(self.peerId): \(error)")
             Logger.error("\(self.logTag) setting remote session description for peer \(self.peerId) failed with error: \(error)")
             if let callError = error as? CallError {
                 self.handleFailedConnection(error: callError)
@@ -456,10 +416,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
 
     private func handleFailedConnection(error: CallError) {
-        AssertIsOnMainThread(file: #function)
-        self.state = .failed
-
         Logger.error("\(self.logTag) connection failed with error: \(error)")
+        self.state = .failed
     }
 
     // MARK: - Session negotiation
@@ -682,8 +640,23 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         }
         return promise
     }
+    
+    public func addRemoteIceCandidates(_ iceCandidates: [Any]) {
+        ConferenceCallEvents.add(.ReceivedRemoteIce(callId: self.callId, peerId: self.peerId, userId: self.userId, count: iceCandidates.count))
+        for candidate in iceCandidates {
+            if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
+                if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
+                    let sdpMid: String = candidateDictiontary["sdpMid"] as? String,
+                    let sdp: String = candidateDictiontary["candidate"] as? String {
+                    self.addRemoteIceCandidate(RTCIceCandidate(sdp: sdp, sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid))
+                } else {
+                    Logger.debug("dropping bad ice candidate for peer \(peerId)")
+                }
+            }
+        }
+    }
 
-    public func addRemoteIceCandidate(_ candidate: RTCIceCandidate) {
+    private func addRemoteIceCandidate(_ candidate: RTCIceCandidate) {
         let proxyCopy = self.proxy
         ConferenceCallService.shared.rtcQueue.async {
             guard let strongSelf = proxyCopy.get() else { return }
@@ -959,11 +932,9 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         // intuitive message ordering for other clients.
         self.readyToSendIceCandidatesPromise.then { _ -> Promise<Void> in
             guard let call = self.delegate?.owningCall() else {
-                Logger.debug("could not send ice candidates without owning call")
                 return Promise(error: CallError.other(description: "can't get owning call"))
             }
             guard let messageSender = Environment.current()?.messageSender else {
-                Logger.info("can't get messageSender")
                 return Promise(error: CallError.other(description: "can't get messageSender"))
             }
             
@@ -982,7 +953,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             }
             
             guard payloadCandidates.count > 0 else {
-                Logger.debug("Attempt to build ice candidate message with no ice candidates.")
                 return Promise(error: CallError.other(description: "can't send zero ice candidates"))
             }
             
@@ -993,8 +963,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 ] as NSMutableDictionary
             
             let iceControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallICECandidatesKey, moreData: allTheData)
-            Logger.info("\(self.logTag) in \(#function) sending ICE Candidate to peer \(self.peerId).")
-            return messageSender.sendPromise(message: iceControlMessage, recipientIds: [self.userId])
+            return messageSender.sendPromise(message: iceControlMessage, recipientId: self.userId, recipientDeviceId: self.deviceId)
         }.done {
             ConferenceCallEvents.add(.SentLocalIce(callId: self.callId, peerId: self.peerId, userId: self.userId, count: iceToSendSet.count))
         }.catch { error in

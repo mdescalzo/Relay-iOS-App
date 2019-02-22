@@ -253,7 +253,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     message = "Sending invitation"
                     color = UIColor.orange
                 }
-            case .readyToReceiveAcceptOffer:
+            case .awaitingAcceptOffer:
                 do {
                     message = "Awaiting response"
                     color = UIColor.brown
@@ -571,7 +571,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         if sender.isSelected {
             // restart the call
-            self.call!.inviteMissingParticipants()
+            // self.call!.joinCall()
         } else {
             // end the call
             Logger.info("\(self.logTag) called \(#function)")

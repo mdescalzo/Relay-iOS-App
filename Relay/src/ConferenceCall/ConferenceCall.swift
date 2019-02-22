@@ -94,10 +94,6 @@ class CallAVPolicy {
     
     var state: ConferenceCallState {
         didSet {
-            AssertIsOnMainThread(file: #function)
-            Logger.debug("\(TAG) state changed: \(oldValue) -> \(self.state) for call: \(self.callId)")
-            
-            // Update joinedDate
             if case .joined = self.state {
                 // if it's the first time we've connected (not a reconnect)
                 if joinedDate == nil {
@@ -110,14 +106,13 @@ class CallAVPolicy {
             notifyDelegates({ delegate in delegate.stateDidChange(call: self, oldState: oldValue, newState: self.state) })
 
             if self.state == .joined && (oldValue == .ringing || oldValue == .vibrating) {
-                answerPendingOffers()
+                self.sendQueuedOffers()
             }
         }
     }
     
-    var muted: Bool = false {
+    var muted: Bool {
         didSet {
-            // iterate over the peerconnects, toggling the audio
             for peer in self.peerConnectionClients.values {
                 peer.audioSender?.track?.isEnabled = !self.muted
             }
@@ -146,6 +141,7 @@ class CallAVPolicy {
         self.originatorId = originatorId
         self.direction = direction
         self.state = .undefined
+        self.muted = policy.startAudioMuted
         self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
 
         super.init()
@@ -170,7 +166,6 @@ class CallAVPolicy {
     }
     
     func cleanupBeforeDestruction() {
-        // any needed careful teardown before the call object is destroyed
         self.removeAllDelegates()
 
         // audioTrack is a strong property because we need access to it to mute/unmute, but I was seeing it
@@ -184,7 +179,21 @@ class CallAVPolicy {
         videoCaptureController = nil
     }
     
-    // make sure all of the local audio/video local peer connection config is in place
+    func sendQueuedOffers() {
+        for pcc in self.peerConnectionClients.values {
+            pcc.readyToSendOfferResolver.fulfill(())
+        }
+    }
+    
+    private func cleanCallerPCCs(userId: String, deviceId: UInt32) {
+        for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
+            guard let pcc = self.peerConnectionClients[peerId] else {
+                continue;
+            }
+            pcc.state = .discarded // will cause teardown and free
+        }
+    }
+
     func setUpLocalAV() -> Promise<Void> {
         if self.configuration != nil {
             return Promise<Void>.value(())
@@ -213,42 +222,26 @@ class CallAVPolicy {
         }
     }
     
-    func answerPendingOffers() {
-        for (_, pcc) in self.peerConnectionClients {
-            pcc.readyToAnswerResolver.fulfill(())
-        }
+    func handleJoin(userId: String, deviceId: UInt32) {
+        cleanCallerPCCs(userId: userId, deviceId: deviceId)
+
+        let newPeerId = NSUUID().uuidString.lowercased()
+        let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: newPeerId, callId: self.callId)
+        self.peerConnectionClients[newPeerId] = newPcc
+
+        newPcc.queueOffer()
     }
     
-    public func handleOffer(senderId: String, peerId: String, sessionDescription: String) {
-        // skip it if we've already received this one
-        if self.peerConnectionClients[peerId] != nil {
-            Logger.debug("\(TAG) ignoring redundant offer for an existing peerId!: \(peerId)")
-            return
-        }
-        
-        // throw away any existing connections from this user
-        for pId in (self.peerConnectionClients.filter { $0.value.userId == senderId }).keys {
-            guard let pcc = self.peerConnectionClients[pId] else {
-                continue;
-            }
-            Logger.info("GEP: throwing away existing peer \(pId) for user \(self.peerConnectionClients[pId]!.userId)")
-            pcc.state = .discarded
-        }
+    public func handleOffer(userId: String, deviceId: UInt32, peerId: String, sessionDescription: String) {
+        cleanCallerPCCs(userId: userId, deviceId: deviceId)
 
         // now get this new peer connection underway
-        let newPcc = PeerConnectionClient(delegate: self, userId: senderId, peerId: peerId, callId: self.callId)
+        let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: peerId, callId: self.callId)
         self.peerConnectionClients[peerId] = newPcc
         newPcc.handleOffer(sessionDescription: sessionDescription)
-        if (self.state == .joined) {
-            newPcc.readyToAnswerResolver.fulfill(())
-        }
-        
-        // and also kick off peer connections to other parties in the thread (if not already underway)
-        self.inviteMissingParticipants()
     }
     
     public func handleAcceptOffer(peerId: String, sessionDescription: String) {
-        // drop it if there's no such peer
         guard let pcc = self.peerConnectionClients[peerId] else {
             Logger.debug("\(TAG) ignoring AcceptOffer for nonexistent peer: \(peerId)")
             return
@@ -264,48 +257,27 @@ class CallAVPolicy {
         }
     }
     
-    func inviteMissingParticipants() {
-        for userId in self.thread.participantIds {
-            if (userId == TSAccountManager.localUID()! || self.peerConnectionClients.contains { $0.value.userId == userId }) {
+    func handleRemoteIceCandidates(userId: String, deviceId: UInt32, iceCandidates: [Any]) {
+        for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
+            guard let pcc = self.peerConnectionClients[peerId] else {
                 continue;
             }
-            let newPeerId = NSUUID().uuidString.lowercased()
-            let pcc = PeerConnectionClient(delegate: self, userId: userId, peerId: newPeerId, callId: self.callId)
-            self.peerConnectionClients[newPeerId] = pcc
-            pcc.sendOffer()
+            pcc.addRemoteIceCandidates(iceCandidates)
         }
     }
     
-    func handleRemoteIceCandidates(peerId: String, iceCandidates: [Any]) {
-        guard let pcc = self.peerConnectionClients[peerId] else {
-            Logger.debug("\(TAG) ignoring ice candidates for nonexistent peer \(peerId)")
-            return
-        }
-        ConferenceCallEvents.add(.ReceivedRemoteIce(callId: pcc.callId, peerId: pcc.peerId, userId: pcc.userId, count: iceCandidates.count))
-        for candidate in iceCandidates {
-            if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
-                if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
-                    let sdpMid: String = candidateDictiontary["sdpMid"] as? String,
-                    let sdp: String = candidateDictiontary["candidate"] as? String {
-                    pcc.addRemoteIceCandidate(RTCIceCandidate(sdp: sdp, sdpMLineIndex: sdpMLineIndex, sdpMid: sdpMid))
-                } else {
-                    Logger.debug("\(TAG) dropping bad ice candidate for peer \(peerId)")
-                }
+    func handleLeave(userId: String, deviceId: UInt32) {
+        for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
+            guard let pcc = self.peerConnectionClients[peerId] else {
+                continue;
             }
+            pcc.handleCallLeave()
         }
-    }
-    
-    func handlePeerLeave(peerId: String) {
-        guard let pcc = self.peerConnectionClients[peerId] else {
-            Logger.debug("\(TAG) ignoring leave for nonexistent peer \(peerId)")
-            return
-        }
-        pcc.handleCallLeave()
     }
     
     func acceptCall() {
         self.state = .joined
-        self.inviteMissingParticipants()
+        self.sendQueuedOffers()
     }
     
     func rejectCall() {
@@ -314,18 +286,25 @@ class CallAVPolicy {
     }
     
     func leaveCall() {
-        self.state = .leaving
-        var all: [Promise<Void>] = []
-        
-        for (_, pcc) in self.peerConnectionClients {
-            all.append(pcc.sendCallLeave())
+        guard let messageSender = Environment.current()?.messageSender else {
+            Logger.info("can't get messageSender")
+            return
         }
         
-        when(fulfilled: all).ensure {
-            self.state = .left
-        }.retainUntilComplete()
-    }
+        self.state = .leaving
+        
+        for pcc in self.peerConnectionClients.values {
+            pcc.leaveCall()
+        }
 
+        let members = self.thread.participantIds
+        
+        let allTheData = [ "callId" : self.callId ] as NSMutableDictionary
+        
+        let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
+        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in self.state = .left }).retainUntilComplete()
+    }
+    
     // MARK: - Class Helpers
     private func updateCallRecordType() {
         AssertIsOnMainThread(file: #function)

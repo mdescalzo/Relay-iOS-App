@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 #define textSecureHTTPTimeOut 10
 
-#define ConferenceCallStaleOfferTimeout 30.0
+#define ConferenceCallStaleJoinTimeout 30.0
 
 //#define CONVERSATION_COLORS_ENABLED
 

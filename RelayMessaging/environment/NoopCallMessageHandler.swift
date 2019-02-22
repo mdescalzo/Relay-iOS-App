@@ -6,7 +6,6 @@ import RelayServiceKit
 
 @objc
 public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
-
     public func receivedJoin(with thread: TSThread, senderId: String, senderDeviceId: UInt32, originatorId: String, callId: String) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
@@ -23,7 +22,7 @@ public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
 
-    public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {
+    public func receivedIceCandidates(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String, iceCandidates: [Any]) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
 

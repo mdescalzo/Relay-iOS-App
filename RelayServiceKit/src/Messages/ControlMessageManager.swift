@@ -107,10 +107,10 @@ class ControlMessageManager : NSObject
             
             DispatchMainThreadSafe {
                 TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: message.thread,
+                                                                                   senderId: message.authorId,
+                                                                                   senderDeviceId: message.sourceDeviceId,
                                                                                    callId: callId,
-                                                                                   peerId: peerId,
                                                                                    iceCandidates: iceCandidates);
-            
             }
         }
     }
@@ -124,8 +124,8 @@ class ControlMessageManager : NSObject
         
         let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
         let age = Date().timeIntervalSince(sendTime)
-        if age > ConferenceCallStaleOfferTimeout {
-            Logger.info("\(self.tag): Ignoring stale callJoin control message (>\(ConferenceCallStaleOfferTimeout) seconds old).")
+        if age > ConferenceCallStaleJoinTimeout {
+            Logger.info("\(self.tag): Ignoring stale callJoin control message (>\(ConferenceCallStaleJoinTimeout) seconds old).")
             return
         }
         
@@ -166,13 +166,6 @@ class ControlMessageManager : NSObject
             return
         }
         
-        let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
-        let age = Date().timeIntervalSince(sendTime)
-        if age > ConferenceCallStaleOfferTimeout {
-            Logger.info("\(self.tag): Ignoring stale callOffer control message (>\(ConferenceCallStaleOfferTimeout) seconds old).")
-            return
-        }
-
         let forstaPayload = message.forstaPayload as NSDictionary
         
         let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary
@@ -183,7 +176,6 @@ class ControlMessageManager : NSObject
         }
         
         guard let callId = dataBlob?.object(forKey: "callId") as? String,
-            let members = dataBlob?.object(forKey: "members") as? NSArray,
             let peerId = dataBlob?.object(forKey: "peerId") as? String,
             let offer = dataBlob?.object(forKey: "offer") as? NSDictionary else {
             Logger.debug("Received callOffer message missing required objects.")
@@ -197,13 +189,8 @@ class ControlMessageManager : NSObject
             return
         }
         
-        let thread = message.thread
-        thread.update(withPayload: forstaPayload as! [AnyHashable : Any])
-        thread.participantIds = members as! [String]
-        thread.save(with: transaction)
-        
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: thread,
+            TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: message.thread,
                                                                        senderId: message.authorId,
                                                                        senderDeviceId: message.sourceDeviceId,
                                                                        callId: callId,

@@ -42,11 +42,11 @@ public extension MessageSender {
     /**
      * Wrap message sending in a Promise for easier callback chaining.
      */
-    public func sendPromise(message: OutgoingControlMessage, recipientId: String, recipientDeviceId: NSNumber) -> Promise<Void> {
+    public func sendPromise(message: OutgoingControlMessage, recipientId: String, recipientDeviceId: UInt32) -> Promise<Void> {
         let promise: Promise<Void> = Promise { resolver in
             self.sendSpecialMessage(message,
                                     recipientId: recipientId,
-                                    onlyDeviceId: recipientDeviceId,
+                                    onlyDeviceId: NSNumber(value: recipientDeviceId),
                                     attempts: 3,
                                     success: { resolver.fulfill() },
                                     failure: { (error) in resolver.reject(error) })
