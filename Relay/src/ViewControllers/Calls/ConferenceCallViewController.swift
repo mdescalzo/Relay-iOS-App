@@ -86,7 +86,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             if self.call?.originatorId == peer.userId {
                 self.setPeerIdAsMain(peer.peerId)
             } else {
-                self.addSecondaryPeerId(peer.peerId)
+                self.addSecondaryPeerId(peer.peerId, index: 0)
             }
         }
         if self.mainPeerId == nil {
@@ -400,16 +400,23 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         self.updatePeerUIElement(peerId, animated: true)
     }
     
-    private func addSecondaryPeerId(_ peerId: String) {
+    private func addSecondaryPeerId(_ peerId: String, index: Int) {
         guard !self.secondaryPeerIds.contains(peerId) else {
             // Peer is already there. Don't add it twice
             return
         }
+        var usefulIndex: Int
+        if index > self.secondaryPeerIds.count {
+            usefulIndex = self.secondaryPeerIds.count
+        } else if index < 0 {
+            usefulIndex = 0
+        } else {
+            usefulIndex = index
+        }
         
         self.collectionView.performBatchUpdates({
-            let index = self.secondaryPeerIds.count
-            self.secondaryPeerIds.insert(peerId, at: index)
-            self.collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
+            self.secondaryPeerIds.insert(peerId, at: usefulIndex)
+            self.collectionView.insertItems(at: [IndexPath(item: usefulIndex, section: 0)])
         }, completion: { complete in
             self.updatePeerViewHeight()
             self.updatePeerUIElement(peerId, animated: true)
@@ -542,12 +549,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             
             // Swap this peer for the main Peer
             let thisPeerId = self.secondaryPeerIds[selectedIndexPath.item]
-            self.removeSecondaryPeerId(thisPeerId)
-            if self.mainPeerId != nil {
-                self.addSecondaryPeerId(self.mainPeerId!)
-            }
-            self.setPeerIdAsMain(thisPeerId)
-        }
+            self.pinPeerView(peerId: thisPeerId)
+          }
     }
     
     @objc func didLongPressCollectionView(gesture: UITapGestureRecognizer) {
@@ -648,15 +651,68 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using [segue destinationViewController].
-     // Pass the selected object to the new view controller.
-     }
-     */
+    // MARK: - Peer settings
+    private func toggleSilence(peerId: String) {
+        guard let uiElements = self.peerUIElements[peerId] else {
+            Logger.debug("No UI elements exist for peer: \(peerId)")
+            return
+        }
+        
+        guard let pcc = self.call?.peerConnectionClients[peerId] else {
+            Logger.debug("No peer connection exists for peer: \(peerId)")
+            return
+        }
+        
+        guard let audioTrack = pcc.remoteAudioTrack else {
+            Logger.debug("No audio track for peer: \(peerId)")
+            uiElements.isSilenced = true
+            return
+        }
+        
+        audioTrack.isEnabled =  !audioTrack.isEnabled
+        uiElements.isSilenced = !uiElements.isSilenced
+        self.updatePeerUIElement(peerId, animated: true)
+    }
+
+    private func toggleVideo(peerId: String) {
+        guard let uiElements = self.peerUIElements[peerId] else {
+            Logger.debug("No UI elements exist for peer: \(peerId)")
+            return
+        }
+        
+        guard let pcc = self.call?.peerConnectionClients[peerId] else {
+            Logger.debug("No peer connection exists for peer: \(peerId)")
+            return
+        }
+        
+        guard let videoTrack = pcc.remoteVideoTrack else {
+            Logger.debug("No audio track for peer: \(peerId)")
+            uiElements.isVideoEnabled = true
+            return
+        }
+        
+        videoTrack.isEnabled =  !videoTrack.isEnabled
+        uiElements.isVideoEnabled = !uiElements.isVideoEnabled
+        self.updatePeerUIElement(peerId, animated: true)
+    }
+    
+    private func pinPeerView(peerId: String) {
+        guard let oldIndex = self.secondaryPeerIds.firstIndex(of: peerId) else {
+            Logger.debug("Peer not found in secondary peers: \(peerId)")
+            return
+        }
+        
+        self.removeSecondaryPeerId(peerId)
+        if self.mainPeerId != nil {
+            self.addSecondaryPeerId(self.mainPeerId!, index: oldIndex)
+        }
+        self.setPeerIdAsMain(peerId)
+    }
+    
+    private func presentConnectionOptions(peerId: String) {
+
+    }
+
     
     // MARK: - Call Service Delegate methods
     func createdConferenceCall(call: ConferenceCall) {
@@ -687,7 +743,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 // Check to see if we already have a view collection for this peer
                 if self.peerUIElements[pcc.peerId] == nil {
                     // We don't have this one, build it
-                    self.addSecondaryPeerId(pcc.peerId)
+                    self.addSecondaryPeerId(pcc.peerId, index: 0)
                 }
             }
         }
@@ -876,6 +932,8 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
 
 
 class PeerUIElements {
+    var isSilenced = false
+    var isVideoEnabled = true
     var avView: RemoteVideoView?
     var avatarView: UIImageView?
     var statusIndicator: UIView?
