@@ -432,7 +432,10 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         case .rejected:
             do {
                 OWSAudioSession.shared.endAudioActivity(call.audioActivity)
-                self.submitEndCallAction(callUUID: self.currentCallUUID!)
+                if self.currentCallUUID != nil {
+                    self.submitEndCallAction(callUUID: self.currentCallUUID!)
+                    self.currentCallUUID = nil
+                }
             }
         case .joined:
             do {

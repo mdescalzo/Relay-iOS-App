@@ -13,7 +13,10 @@ class PeerViewCell: UICollectionViewCell {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var statusIndicatorView: UIView!
     
+    weak var rtcVideoTrack: RTCVideoTrack?
+    
     override func prepareForReuse() {
+        rtcVideoTrack?.remove(avView)
         avView.isHidden = true
         statusIndicatorView.isHidden = true
         avatarImageView.image = nil

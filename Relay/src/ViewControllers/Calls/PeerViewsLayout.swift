@@ -10,7 +10,7 @@ import UIKit
 import CoreGraphics
 
 protocol PeerViewsLayoutDelegate: class {
-//    func peerViewDiameter() -> CGFloat
+    func containerViewSize() -> CGSize
 }
 
 class PeerViewsLayout: UICollectionViewLayout {
@@ -25,8 +25,12 @@ class PeerViewsLayout: UICollectionViewLayout {
         get {
             guard collectionView != nil else { return CGSize() }
             
-            let height = self.collectionView!.frame.size.height
-            let width = CGFloat(self.collectionView!.numberOfItems(inSection: 0)) * height
+            let height = self.delegate.containerViewSize().height
+            var width = CGFloat(self.collectionView!.numberOfItems(inSection: 0)) * height
+            
+            if width < self.delegate.containerViewSize().width {
+                width = self.delegate.containerViewSize().width
+            }
             
             return CGSize(width: width, height: height)
         }
@@ -42,16 +46,26 @@ class PeerViewsLayout: UICollectionViewLayout {
 
         self.attrCache.removeAll()
         
+        // Find initial x - we want to center totals less than 4
+        let height = self.collectionViewContentSize.height - (2*margin)
+        let width = height
+
+        var initialX: CGFloat
+        if totalItems < 4 {
+            let center = self.delegate.containerViewSize().width/2
+            let offset = CGFloat(totalItems)/2 * (height+margin)
+            initialX = center - offset
+        } else {
+            initialX = margin
+        }
         // Loop over all objects in collectionView
         for cellIndex in 0 ..< totalItems {
 
             let indexPath = IndexPath(item: cellIndex, section: 0)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
 
-            let height = self.collectionViewContentSize.height
-            let width = height
-            let x: CGFloat = (CGFloat(cellIndex) * height)
-            let y: CGFloat = 0.0
+            let x: CGFloat = initialX + (CGFloat(cellIndex) * (height+margin))
+            let y: CGFloat = margin
 
             let frame = CGRect(x: x, y: y, width: width, height: height)
             

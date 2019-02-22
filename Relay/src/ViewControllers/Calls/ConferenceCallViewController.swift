@@ -15,18 +15,15 @@ private let reuseIdentifier = "peerCell"
 class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate, CallAudioServiceDelegate {
     
     var mainPeerId: String?
-    
     var secondaryPeerIds = [String]()
-    
     var peerUIElements = [ String : PeerUIElements ]()
     var hasDismissed = false
     
-    lazy var callKitService = {
-        return CallUIService.shared
-    }()
+    let callKitService = CallUIService.shared
     
     @IBOutlet var stackContainerView: UIStackView!
     
+    @IBOutlet weak var mainPeerContainer: UIView!
     @IBOutlet weak var mainPeerAVView: RemoteVideoView!
     @IBOutlet weak var mainPeerAvatarView: UIImageView!
     @IBOutlet weak var mainPeerStatusIndicator: UIView!
@@ -60,6 +57,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         super.loadView()
         self.mainPeerStatusIndicator.layer.cornerRadius = self.mainPeerStatusIndicator.frame.size.width/2
         self.callKitService.audioService.delegate = self
+        
+        // Peer view setup
+        if let layout = self.collectionView?.collectionViewLayout as? PeerViewsLayout {
+            layout.delegate = self
+        }
     }
     
     override func viewDidLoad() {
@@ -77,7 +79,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.dismissImmediately(completion: nil)
             return
         }
-        
+        self.updatePeerViewHeight()
+
         // Collect Peers and connect to UI elements
         for peer in (self.call?.peerConnectionClients.values)! {
             if self.call?.originatorId == peer.userId {
@@ -91,13 +94,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 self.setPeerIdAsMain(peer.peerId)
                 self.removeSecondaryPeerId(peer.peerId)
             }
-        }
-        
-        self.updatePeerViewHeight()
-        
-        // Peer view setup
-        if let layout = self.collectionView?.collectionViewLayout as? PeerViewsLayout {
-            layout.delegate = self
         }
         
         // Gesture handlers
@@ -133,6 +129,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         if self.call?.state == .ringing || self.call?.state == .vibrating {
             self.call?.acceptCall()
         }
+        
+        self.updatePeerViewHeight()
     }
     
     // MARK: - Audio Source
@@ -203,6 +201,29 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         self.allAudioSources.formUnion(availableInputs)
     }
     
+    // MARK: - Full Screen
+    var isMainFullScreen: Bool = false
+    var originalMainPeerFrame = CGRect()
+    private func toggleFullScreen() {
+        var newMainFrame: CGRect
+        if isMainFullScreen {
+            newMainFrame = originalMainPeerFrame
+        } else {
+            originalMainPeerFrame = self.mainPeerContainer.frame
+            newMainFrame = UIScreen.main.nativeBounds
+        }
+        DispatchMainThreadSafe {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.mainPeerContainer.frame = newMainFrame
+                self.controlsContainerView.isHidden = !self.controlsContainerView.isHidden
+                self.collectionView.isHidden = !self.collectionView.isHidden
+            }, completion: { _ in
+                self.updatePeerViewHeight()
+            })
+        }
+        isMainFullScreen = !isMainFullScreen
+    }
+
     // MARK: - Helpers
     private func updatePeerUIElement(_ peerId: String, animated: Bool) {
         Logger.info("\(self.logTag) called \(#function)")
@@ -390,6 +411,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.secondaryPeerIds.insert(peerId, at: index)
             self.collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
         }, completion: { complete in
+            self.updatePeerViewHeight()
             self.updatePeerUIElement(peerId, animated: true)
         })
     }
@@ -416,6 +438,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 self.collectionView.deleteItems(at: [IndexPath(item: index, section: 0)])
             }
         }, completion: { complete in
+            self.updatePeerViewHeight()
             self.updatePeerUIElement(peerId, animated: true)
             if peerId != self.mainPeerId {
                 self.peerUIElements[peerId] = nil
@@ -466,22 +489,23 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         var newValue: CGFloat
         
-        if self.secondaryPeerIds.count > 0 {
+        if self.secondaryPeerIds.count > 0 && !self.collectionView.isHidden {
             newValue = UIScreen.main.bounds.width/4
         } else {
             newValue = 0
         }
         
         if oldValue != newValue {
-            UIView.animate(withDuration: 0.1) {
-                self.collectionViewHeightConstraint.constant = newValue
+            DispatchMainThreadSafe {
+                UIView.animate(withDuration: 0.1) {
+                    self.collectionViewHeightConstraint.constant = newValue
+                    self.collectionView.reloadData()
+                }
             }
         }
     }
     
     internal func dismissIfPossible(shouldDelay: Bool, completion: (() -> Void)? = nil) {
-        // callUIAdapter!.audioService.delegate = nil
-        
         if hasDismissed {
             // Don't dismiss twice.
             return
@@ -596,7 +620,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .changed:
             do { /* Do nothin' */ }
         case .ended:
-            do { /* Do things here */ }
+            do {
+                self.toggleFullScreen()
+            }
         case .cancelled:
             do { /* Do nothin' */ }
         case .failed:
@@ -781,15 +807,15 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
                 cell.avatarImageView.image = UIImage(named: "actionsheet_contact")
             }
             
-            if self.call?.peerConnectionClients[peerId]?.remoteVideoTrack != nil {
-                self.call?.peerConnectionClients[peerId]?.remoteVideoTrack?.add(cell.avView)
+            if let rtcVideoTrack = self.call?.peerConnectionClients[peerId]?.remoteVideoTrack {
+                cell.rtcVideoTrack = rtcVideoTrack
+                rtcVideoTrack.add(cell.avView)
             }
             cell.avView.isHidden = (peer.state == .connected ? false : true)
             
-            
-            // TODO: put a fine line border
-            cell.layer.borderWidth = 0.25
-            cell.layer.borderColor = UIColor.gray.cgColor
+//            // TODO: put a fine line border
+//            cell.layer.borderWidth = 0.25
+//            cell.layer.borderColor = UIColor.gray.cgColor
             
             cell.statusIndicatorView.layer.cornerRadius = cell.statusIndicatorView.frame.size.width/2
             
@@ -843,8 +869,8 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
      */
     
     // MARK: Layout delegate method(s)
-    func peerViewDiameter() -> CGFloat {
-        return 100
+    func containerViewSize() -> CGSize {
+        return CGSize(width: self.view.frame.size.width, height: self.collectionViewHeightConstraint.constant)
     }
 }
 

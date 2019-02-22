@@ -611,17 +611,17 @@
                                                 </constraints>
                                             </view>
                                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kzJ-c8-Dji" userLabel="Indicator Container">
-                                                <rect key="frame" x="117.5" y="462" width="140" height="17"/>
+                                                <rect key="frame" x="0.0" y="462" width="375" height="17"/>
                                                 <subviews>
                                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
-                                                        <rect key="frame" x="0.0" y="0.0" width="17" height="17"/>
+                                                        <rect key="frame" x="8" y="0.0" width="17" height="17"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="m2h-f9-fWm" secondAttribute="height" multiplier="1:1" id="qNt-ZW-bcJ"/>
                                                         </constraints>
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MzO-GR-jNg">
-                                                        <rect key="frame" x="29" y="0.0" width="111" height="17"/>
+                                                        <rect key="frame" x="37" y="0.0" width="338" height="17"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -631,8 +631,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="MzO-GR-jNg" secondAttribute="bottom" id="3z4-oB-jv5"/>
-                                                    <constraint firstItem="m2h-f9-fWm" firstAttribute="leading" secondItem="kzJ-c8-Dji" secondAttribute="leading" id="67a-M1-vOO"/>
-                                                    <constraint firstAttribute="width" constant="140" id="6Rw-TH-y96"/>
+                                                    <constraint firstItem="m2h-f9-fWm" firstAttribute="leading" secondItem="kzJ-c8-Dji" secondAttribute="leadingMargin" id="67a-M1-vOO"/>
                                                     <constraint firstAttribute="height" constant="17" id="CBI-N5-I3a"/>
                                                     <constraint firstAttribute="trailing" secondItem="MzO-GR-jNg" secondAttribute="trailing" id="Hkt-Wg-mP8"/>
                                                     <constraint firstItem="MzO-GR-jNg" firstAttribute="leading" secondItem="m2h-f9-fWm" secondAttribute="trailing" constant="12" id="SWw-jR-cpC"/>
@@ -647,10 +646,11 @@
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
-                                            <constraint firstItem="kzJ-c8-Dji" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="DiX-8v-X3Q"/>
+                                            <constraint firstItem="kzJ-c8-Dji" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="FrS-TT-pa4"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="kzJ-c8-Dji" secondAttribute="bottom" constant="8" id="LGl-En-fH4"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="DG6-Oy-9VV" secondAttribute="trailing" constant="8" id="ekb-9v-hbQ"/>
+                                            <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="kzJ-c8-Dji" secondAttribute="trailing" id="iZ3-23-cMn"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
                                             <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="gOX-xr-nqU" secondAttribute="trailing" constant="50" id="pjr-IV-Dna"/>
@@ -666,7 +666,7 @@
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0UN-wO-Fbp" userLabel="Scrolling Peers Container">
                                         <rect key="frame" x="0.0" y="487" width="375" height="80"/>
                                         <subviews>
-                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ohx-1r-onH">
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ohx-1r-onH">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewLayout key="collectionViewLayout" id="TMF-t0-32A" customClass="PeerViewsLayout" customModule="Forsta" customModuleProvider="target"/>
@@ -804,6 +804,7 @@
                                     <constraint firstItem="r7e-68-tUo" firstAttribute="leading" secondItem="gyJ-OR-Eqr" secondAttribute="leading" id="Mzp-rw-QAf"/>
                                     <constraint firstItem="r7e-68-tUo" firstAttribute="trailing" secondItem="gyJ-OR-Eqr" secondAttribute="trailing" id="Vn0-aR-mSj"/>
                                     <constraint firstItem="0UN-wO-Fbp" firstAttribute="trailing" secondItem="gyJ-OR-Eqr" secondAttribute="trailing" id="Wle-Tg-cwF"/>
+                                    <constraint firstItem="r7e-68-tUo" firstAttribute="bottom" secondItem="gyJ-OR-Eqr" secondAttribute="bottom" id="cSe-G3-aBk"/>
                                     <constraint firstItem="0UN-wO-Fbp" firstAttribute="top" secondItem="oYr-aF-2qo" secondAttribute="bottom" id="jno-6e-isY"/>
                                     <constraint firstItem="oYr-aF-2qo" firstAttribute="leading" secondItem="gyJ-OR-Eqr" secondAttribute="leading" id="mAz-lW-7TX"/>
                                 </constraints>
@@ -863,6 +864,7 @@
                         <outlet property="localAVView" destination="fIA-Fr-YdV" id="aVq-fq-MFJ"/>
                         <outlet property="mainPeerAVView" destination="r63-pw-tiD" id="GGH-nA-jCb"/>
                         <outlet property="mainPeerAvatarView" destination="gOX-xr-nqU" id="On8-Nb-JYM"/>
+                        <outlet property="mainPeerContainer" destination="oYr-aF-2qo" id="jdV-st-xsG"/>
                         <outlet property="mainPeerStatusContainer" destination="kzJ-c8-Dji" id="Hmw-LY-v3C"/>
                         <outlet property="mainPeerStatusIndicator" destination="m2h-f9-fWm" id="3dY-ZF-Sry"/>
                         <outlet property="mainPeerStatusLabel" destination="MzO-GR-jNg" id="p0W-zl-uka"/>
