@@ -120,7 +120,7 @@ class CallAVPolicy {
         }
     }
     
-    var muted: Bool = false {
+    var muted: Bool {
         didSet {
             // iterate over the peerconnects, toggling the audio
             for peer in self.peerConnectionClients.values {
@@ -152,6 +152,7 @@ class CallAVPolicy {
         self.direction = direction
         self.state = .undefined
         self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
+        self.muted = policy.startAudioMuted
 
         super.init()
         if delegate != nil { self.addDelegate(delegate: delegate!) }
