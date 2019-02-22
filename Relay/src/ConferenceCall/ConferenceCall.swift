@@ -75,10 +75,10 @@ class CallAVPolicy {
 
     let direction: ConferenceCallDirection
     
-    let thread: TSThread;
-    let callId: String;
+    let thread: TSThread
+    let callId: String
     lazy var callUUID = UUID(uuidString: self.callId)
-    let originatorId: String;
+    let originatorId: String
     
     var delegates = [Weak<ConferenceCallDelegate>]()
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
@@ -185,15 +185,16 @@ class CallAVPolicy {
         }
     }
     
-    private func cleanCallerPCCs(userId: String, deviceId: UInt32) {
+    func locatePCC(_ userId: String, _ deviceId: UInt32) -> PeerConnectionClient? {
         for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
             guard let pcc = self.peerConnectionClients[peerId] else {
-                continue;
+                continue
             }
-            pcc.state = .discarded // will cause teardown and free
+            return pcc
         }
+        return nil
     }
-
+    
     func setUpLocalAV() -> Promise<Void> {
         if self.configuration != nil {
             return Promise<Void>.value(())
@@ -223,7 +224,8 @@ class CallAVPolicy {
     }
     
     func handleJoin(userId: String, deviceId: UInt32) {
-        cleanCallerPCCs(userId: userId, deviceId: deviceId)
+        let pcc = locatePCC(userId, deviceId)
+        pcc?.state = .discarded
 
         let newPeerId = NSUUID().uuidString.lowercased()
         let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: newPeerId, callId: self.callId)
@@ -233,12 +235,17 @@ class CallAVPolicy {
     }
     
     public func handleOffer(userId: String, deviceId: UInt32, peerId: String, sessionDescription: String) {
-        cleanCallerPCCs(userId: userId, deviceId: deviceId)
+        guard let pcc = locatePCC(userId, deviceId) else {
+            Logger.debug("\(TAG) ignoring Offer for nonexistent participant: \(userId)@\(deviceId)")
+            return
+        }
+        pcc.state = .discarded
 
-        // now get this new peer connection underway
         let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: peerId, callId: self.callId)
         self.peerConnectionClients[peerId] = newPcc
         newPcc.handleOffer(sessionDescription: sessionDescription)
+        
+        return
     }
     
     public func handleAcceptOffer(peerId: String, sessionDescription: String) {
@@ -258,21 +265,13 @@ class CallAVPolicy {
     }
     
     func handleRemoteIceCandidates(userId: String, deviceId: UInt32, iceCandidates: [Any]) {
-        for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
-            guard let pcc = self.peerConnectionClients[peerId] else {
-                continue;
-            }
-            pcc.addRemoteIceCandidates(iceCandidates)
-        }
+        let pcc = locatePCC(userId, deviceId)
+        pcc?.addRemoteIceCandidates(iceCandidates)
     }
     
     func handleLeave(userId: String, deviceId: UInt32) {
-        for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
-            guard let pcc = self.peerConnectionClients[peerId] else {
-                continue;
-            }
-            pcc.handleCallLeave()
-        }
+        let pcc = locatePCC(userId, deviceId)
+        pcc?.state = .peerLeft
     }
 
     func rejectCall() {
@@ -309,7 +308,7 @@ class CallAVPolicy {
         self.state = .leaving
         
         for pcc in self.peerConnectionClients.values {
-            pcc.leaveCall()
+            pcc.state = .leftPeer
         }
 
         let members = self.thread.participantIds
@@ -377,7 +376,7 @@ class CallAVPolicy {
     }
     
     func owningCall() -> ConferenceCall {
-        return self;
+        return self
     }
     
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack) {

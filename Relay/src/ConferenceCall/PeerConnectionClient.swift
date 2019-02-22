@@ -311,14 +311,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         return messageSender.sendPromise(message: message, recipientId: self.userId, recipientDeviceId: self.deviceId)
     }
 
-    func handleCallLeave() {
-        self.state = .peerLeft
-    }
-    
-    func leaveCall() {
-        self.state = .leftPeer
-    }
-    
     func queueOffer() {
         guard let cc = self.delegate?.owningCall() else {
             Logger.error("queueOffer owning call isn't available")
