@@ -23,6 +23,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     @IBOutlet var stackContainerView: UIStackView!
     
+    @IBOutlet weak var mainVideoIndicator: UIImageView!
+    @IBOutlet weak var mainSilenceIndicator: UIImageView!
     @IBOutlet weak var mainPeerContainer: UIView!
     @IBOutlet weak var mainPeerAVView: RemoteVideoView!
     @IBOutlet weak var mainPeerAvatarView: UIImageView!
@@ -241,7 +243,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
         
         let visibilityBlock: () -> Void = {
-            uiElements.avView?.isHidden = (peerClient.state == .connected ? false : true)
+            uiElements.silenceIndicator?.isHidden = !uiElements.isSilenced
+            uiElements.videoIndicator?.isHidden = uiElements.isVideoEnabled
+            uiElements.avView?.isHidden = ((peerClient.state == .connected && uiElements.isVideoEnabled) ? false : true)
             uiElements.statusLabel?.isHidden = (peerClient.state == .connected ? true : false )
             uiElements.statusIndicator?.isHidden = (peerClient.state == .connected ? true : false )
         }
@@ -373,6 +377,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         mainUserUI.statusLabel = self.mainPeerStatusLabel
         mainUserUI.avatarView = self.mainPeerAvatarView
         mainUserUI.avView = self.mainPeerAVView
+        mainUserUI.silenceIndicator = self.mainSilenceIndicator
+        mainUserUI.videoIndicator = self.mainVideoIndicator
         self.peerUIElements[peerId] = mainUserUI
         
         
@@ -919,6 +925,8 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
             peerUI.avatarView = cell.avatarImageView
             peerUI.statusIndicator = cell.statusIndicatorView
             peerUI.statusView = cell.statusIndicatorView
+            peerUI.silenceIndicator = cell.silenceIndicator
+            peerUI.videoIndicator = cell.videoIndicator
             
             self.peerUIElements[peerId] = peerUI
         }
@@ -972,7 +980,9 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
 
 class PeerUIElements {
     var isSilenced = false
+    var silenceIndicator: UIImageView?
     var isVideoEnabled = true
+    var videoIndicator: UIImageView?
     var avView: RemoteVideoView?
     var avatarView: UIImageView?
     var statusIndicator: UIView?

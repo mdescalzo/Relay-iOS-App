@@ -640,18 +640,36 @@
                                                     <constraint firstAttribute="bottom" secondItem="m2h-f9-fWm" secondAttribute="bottom" id="opK-uI-JPD"/>
                                                 </constraints>
                                             </view>
+                                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-video-unselected" translatesAutoresizingMaskIntoConstraints="NO" id="glc-1A-mux">
+                                                <rect key="frame" x="327" y="414" width="32" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="glc-1A-mux" secondAttribute="height" multiplier="1:1" id="SbD-PI-nI7"/>
+                                                    <constraint firstAttribute="width" constant="32" id="rHD-RV-9gk"/>
+                                                </constraints>
+                                            </imageView>
+                                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-mute-selected" translatesAutoresizingMaskIntoConstraints="NO" id="FoJ-iG-3jA">
+                                                <rect key="frame" x="327" y="374" width="32" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="FoJ-iG-3jA" secondAttribute="height" multiplier="1:1" id="AMi-dO-nQ9"/>
+                                                    <constraint firstAttribute="width" constant="32" id="BSn-LN-OUv"/>
+                                                </constraints>
+                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
+                                            <constraint firstItem="kzJ-c8-Dji" firstAttribute="top" secondItem="FoJ-iG-3jA" secondAttribute="bottom" constant="56" id="2s9-59-PHk"/>
+                                            <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="FoJ-iG-3jA" secondAttribute="trailing" constant="16" id="7pQ-2b-Th7"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
                                             <constraint firstItem="kzJ-c8-Dji" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="FrS-TT-pa4"/>
+                                            <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="glc-1A-mux" secondAttribute="trailing" constant="16" id="Kyl-eP-znN"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="kzJ-c8-Dji" secondAttribute="bottom" constant="8" id="LGl-En-fH4"/>
                                             <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="DG6-Oy-9VV" secondAttribute="trailing" constant="8" id="ekb-9v-hbQ"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="kzJ-c8-Dji" secondAttribute="trailing" id="iZ3-23-cMn"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
+                                            <constraint firstItem="kzJ-c8-Dji" firstAttribute="top" secondItem="glc-1A-mux" secondAttribute="bottom" constant="16" id="oB3-AI-Iu4"/>
                                             <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
                                             <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="gOX-xr-nqU" secondAttribute="trailing" constant="50" id="pjr-IV-Dna"/>
                                             <constraint firstItem="r63-pw-tiD" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" id="yag-wN-0wD"/>
@@ -694,25 +712,45 @@
                                                                         <constraint firstAttribute="width" constant="10" id="ay3-em-JWd"/>
                                                                     </constraints>
                                                                 </view>
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-mute-selected" translatesAutoresizingMaskIntoConstraints="NO" id="9B1-Pq-4Bb">
+                                                                    <rect key="frame" x="3" y="3" width="18" height="18"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="18" id="CJL-C6-lLw"/>
+                                                                        <constraint firstAttribute="width" secondItem="9B1-Pq-4Bb" secondAttribute="height" multiplier="1:1" id="cKp-TC-kt6"/>
+                                                                    </constraints>
+                                                                </imageView>
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-video-unselected" translatesAutoresizingMaskIntoConstraints="NO" id="oTW-Hj-YlO">
+                                                                    <rect key="frame" x="3" y="29" width="18" height="18"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" secondItem="oTW-Hj-YlO" secondAttribute="height" multiplier="1:1" id="ABU-ar-MNZ"/>
+                                                                        <constraint firstAttribute="width" constant="18" id="iT6-in-xbz"/>
+                                                                    </constraints>
+                                                                </imageView>
                                                             </subviews>
                                                         </view>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
+                                                            <constraint firstItem="9B1-Pq-4Bb" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" constant="3" id="A5s-4U-5ia"/>
+                                                            <constraint firstItem="9B1-Pq-4Bb" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" constant="3" id="IuK-PU-oq8"/>
                                                             <constraint firstAttribute="trailing" secondItem="ePH-9p-Irg" secondAttribute="trailing" id="L5U-tG-zRL"/>
                                                             <constraint firstItem="ePH-9p-Irg" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" id="Lik-Dw-lf4"/>
                                                             <constraint firstAttribute="bottom" secondItem="ePH-9p-Irg" secondAttribute="bottom" id="Pw8-Zj-3nf"/>
                                                             <constraint firstAttribute="trailing" secondItem="6Z2-55-MBL" secondAttribute="trailing" id="STC-5n-P51"/>
                                                             <constraint firstItem="6Z2-55-MBL" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" id="TLH-VJ-fsC"/>
+                                                            <constraint firstAttribute="bottom" secondItem="oTW-Hj-YlO" secondAttribute="bottom" constant="3" id="fek-7I-9D4"/>
                                                             <constraint firstItem="ePH-9p-Irg" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" id="kcs-3A-xs5"/>
                                                             <constraint firstAttribute="bottom" secondItem="6Z2-55-MBL" secondAttribute="bottom" id="mcd-hm-tAF"/>
                                                             <constraint firstItem="htH-qg-uxZ" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" constant="3" id="pev-Ms-cp3"/>
                                                             <constraint firstItem="6Z2-55-MBL" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" id="sBE-Bb-MO1"/>
                                                             <constraint firstAttribute="trailing" secondItem="htH-qg-uxZ" secondAttribute="trailing" constant="3" id="vTl-dX-mZ8"/>
+                                                            <constraint firstItem="oTW-Hj-YlO" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" constant="3" id="w2d-77-R9r"/>
                                                         </constraints>
                                                         <connections>
                                                             <outlet property="avView" destination="6Z2-55-MBL" id="c62-BX-tJg"/>
                                                             <outlet property="avatarImageView" destination="ePH-9p-Irg" id="04u-4b-Cdw"/>
+                                                            <outlet property="silenceIndicator" destination="9B1-Pq-4Bb" id="q0u-Gw-3kc"/>
                                                             <outlet property="statusIndicatorView" destination="htH-qg-uxZ" id="TxB-MK-xUA"/>
+                                                            <outlet property="videoIndicator" destination="oTW-Hj-YlO" id="w79-uW-DV9"/>
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
@@ -868,6 +906,8 @@
                         <outlet property="mainPeerStatusContainer" destination="kzJ-c8-Dji" id="Hmw-LY-v3C"/>
                         <outlet property="mainPeerStatusIndicator" destination="m2h-f9-fWm" id="3dY-ZF-Sry"/>
                         <outlet property="mainPeerStatusLabel" destination="MzO-GR-jNg" id="p0W-zl-uka"/>
+                        <outlet property="mainSilenceIndicator" destination="FoJ-iG-3jA" id="dzM-j1-sAb"/>
+                        <outlet property="mainVideoIndicator" destination="glc-1A-mux" id="B5N-jM-LJP"/>
                         <outlet property="muteButton" destination="GtN-JB-ZxO" id="11a-da-rcO"/>
                         <outlet property="stackContainerView" destination="bcZ-rg-G4N" id="Bsv-mn-woa"/>
                         <outlet property="videoToggleButton" destination="uUf-7R-4b2" id="L9r-Z2-IUa"/>
@@ -901,5 +941,7 @@
         <image name="contact_default_feed.png" width="242" height="242"/>
         <image name="hangup-active-wide" width="200" height="200"/>
         <image name="ic_devices_ios" width="180" height="119.5"/>
+        <image name="video-mute-selected" width="79.919998168945312" height="79.919998168945312"/>
+        <image name="video-video-unselected" width="79.919998168945312" height="79.919998168945312"/>
     </resources>
 </document>

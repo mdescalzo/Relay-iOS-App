@@ -2357,6 +2357,7 @@
 		450DF2061E0DD28D003D14BE /* UserInterface */ = {
 			isa = PBXGroup;
 			children = (
+				45CD81A41DBFF8CF004C9430 /* Storyboards */,
 				450DF2071E0DD29E003D14BE /* Notifications */,
 				4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */,
 				34FD936E1E3BD43A00109093 /* OWSAnyTouchGestureRecognizer.h */,
@@ -2534,7 +2535,6 @@
 				457F3AC01D14A0F700C51351 /* Models */,
 				76EB041D18170B33006006FC /* network */,
 				45B201741DAECBFD00C461E0 /* Relay-Bridging-Header.h */,
-				45CD81A41DBFF8CF004C9430 /* Storyboards */,
 				450DF2061E0DD28D003D14BE /* UserInterface */,
 				76EB04C818170B33006006FC /* util */,
 			);

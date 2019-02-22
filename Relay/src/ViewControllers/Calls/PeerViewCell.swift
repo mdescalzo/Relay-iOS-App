@@ -12,6 +12,8 @@ class PeerViewCell: UICollectionViewCell {
     @IBOutlet weak var avView: RemoteVideoView!
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var statusIndicatorView: UIView!
+    @IBOutlet weak var silenceIndicator: UIImageView!
+    @IBOutlet weak var videoIndicator: UIImageView!
     
     weak var rtcVideoTrack: RTCVideoTrack?
     
