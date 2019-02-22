@@ -544,20 +544,21 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     @objc func didDoubleTapCollectionView(gesture: UITapGestureRecognizer) {
-        let pointInCollectionView = gesture.location(in: self.collectionView)
-        if let selectedIndexPath = self.collectionView.indexPathForItem(at: pointInCollectionView) {
-            
-            // Swap this peer for the main Peer
-            let thisPeerId = self.secondaryPeerIds[selectedIndexPath.item]
-            self.pinPeerView(peerId: thisPeerId)
-          }
+//        let pointInCollectionView = gesture.location(in: self.collectionView)
+//        if let selectedIndexPath = self.collectionView.indexPathForItem(at: pointInCollectionView) {
+//
+//            // Swap this peer for the main Peer
+//            let thisPeerId = self.secondaryPeerIds[selectedIndexPath.item]
+//            self.pinPeerView(peerId: thisPeerId)
+//          }
     }
     
     @objc func didLongPressCollectionView(gesture: UITapGestureRecognizer) {
         let pointInCollectionView = gesture.location(in: self.collectionView)
         if let selectedIndexPath = self.collectionView.indexPathForItem(at: pointInCollectionView) {
-            let selectedCell = self.collectionView.cellForItem(at: selectedIndexPath) as! PeerViewCell
-            selectedCell.avView.isHidden = !selectedCell.avView.isHidden
+//            let selectedCell = self.collectionView.cellForItem(at: selectedIndexPath) as! PeerViewCell
+            let peerId = self.secondaryPeerIds[selectedIndexPath.item]
+            self.presentConnectionOptions(peerId: peerId)
         }
     }
     
@@ -639,7 +640,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .possible:
             do { /* Do nothin' */ }
         case .began:
-            do { /* Do things here */ }
+            do {
+                if let peerId = self.mainPeerId {
+                    self.presentConnectionOptions(peerId: peerId)
+                }
+            }
         case .changed:
             do { /* Do nothin' */ }
         case .ended:
@@ -710,7 +715,41 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     private func presentConnectionOptions(peerId: String) {
+        guard let pcc = self.call?.peerConnectionClients[peerId] else {
+            Logger.debug("No peer connection exists for peer: \(peerId)")
+            return
+        }
+        
+//        guard let uiElements = self.peerUIElements[peerId] else {
+//            Logger.debug("Missing peer ui elements for peer: \(peerId)")
+//            return
+//        }
 
+        let userName = FLContactsManager.shared.displayName(forRecipientId: pcc.userId)
+        
+        let alertController = UIAlertController(title: userName, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(OWSAlerts.cancelAction)
+        
+        let silenceTitle = NSLocalizedString("Toggle Silence", comment: "")
+        let toggleSilenceAction = UIAlertAction(title: silenceTitle, style: .default) { (action) in
+            self.toggleSilence(peerId: peerId)
+        }
+        alertController.addAction(toggleSilenceAction)
+        
+        let videoTitle = NSLocalizedString("Toggle Video", comment: "")
+        let toggleVideoAction = UIAlertAction(title: videoTitle, style: .default) { (action) in
+            self.toggleVideo(peerId: peerId)
+        }
+        alertController.addAction(toggleVideoAction)
+        if peerId != self.mainPeerId {
+            let pinAction = UIAlertAction(title: NSLocalizedString("PIN_ACTION", comment: ""), style: .default) { (action) in
+                self.pinPeerView(peerId: peerId)
+            }
+            alertController.addAction(pinAction)
+        }
+        DispatchMainThreadSafe {
+            self.present(alertController, animated: true)
+        }
     }
 
     
