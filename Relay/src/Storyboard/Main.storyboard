@@ -779,7 +779,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="GtN-JB-ZxO" firstAttribute="leading" secondItem="r7e-68-tUo" secondAttribute="leading" constant="8" id="2dd-fs-pk1"/>
                                             <constraint firstAttribute="height" constant="100" id="35a-tO-4de"/>
@@ -840,7 +840,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="fIA-Fr-YdV" firstAttribute="top" secondItem="IXc-It-DKf" secondAttribute="bottom" constant="12" id="7wp-8c-141"/>
                             <constraint firstAttribute="trailing" secondItem="IXc-It-DKf" secondAttribute="trailing" id="aal-58-vTl"/>
