@@ -589,17 +589,17 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oYr-aF-2qo" userLabel="Main View Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="487"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="507"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar" translatesAutoresizingMaskIntoConstraints="NO" id="gOX-xr-nqU" userLabel="Main Avatar View">
-                                                <rect key="frame" x="50" y="106" width="275" height="275"/>
+                                                <rect key="frame" x="50" y="116" width="275" height="275"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="gOX-xr-nqU" secondAttribute="height" multiplier="1:1" id="6DX-Wl-GNA"/>
                                                 </constraints>
                                             </imageView>
                                             <view hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r63-pw-tiD" userLabel="Main AV View" customClass="RemoteVideoView">
-                                                <rect key="frame" x="0.0" y="20" width="375" height="467"/>
+                                                <rect key="frame" x="0.0" y="20" width="375" height="487"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DG6-Oy-9VV" userLabel="Local View Container">
@@ -611,7 +611,7 @@
                                                 </constraints>
                                             </view>
                                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kzJ-c8-Dji" userLabel="Indicator Container">
-                                                <rect key="frame" x="0.0" y="462" width="375" height="17"/>
+                                                <rect key="frame" x="0.0" y="482" width="375" height="17"/>
                                                 <subviews>
                                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m2h-f9-fWm" userLabel="statusIndicatorView">
                                                         <rect key="frame" x="8" y="0.0" width="17" height="17"/>
@@ -641,14 +641,14 @@
                                                 </constraints>
                                             </view>
                                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-video-unselected" translatesAutoresizingMaskIntoConstraints="NO" id="glc-1A-mux">
-                                                <rect key="frame" x="327" y="414" width="32" height="32"/>
+                                                <rect key="frame" x="327" y="434" width="32" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="glc-1A-mux" secondAttribute="height" multiplier="1:1" id="SbD-PI-nI7"/>
                                                     <constraint firstAttribute="width" constant="32" id="rHD-RV-9gk"/>
                                                 </constraints>
                                             </imageView>
                                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-mute-selected" translatesAutoresizingMaskIntoConstraints="NO" id="FoJ-iG-3jA">
-                                                <rect key="frame" x="327" y="374" width="32" height="32"/>
+                                                <rect key="frame" x="327" y="394" width="32" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="FoJ-iG-3jA" secondAttribute="height" multiplier="1:1" id="AMi-dO-nQ9"/>
                                                     <constraint firstAttribute="width" constant="32" id="BSn-LN-OUv"/>
@@ -682,7 +682,7 @@
                                         </connections>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0UN-wO-Fbp" userLabel="Scrolling Peers Container">
-                                        <rect key="frame" x="0.0" y="487" width="375" height="80"/>
+                                        <rect key="frame" x="0.0" y="507" width="375" height="80"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ohx-1r-onH">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
@@ -690,22 +690,22 @@
                                                 <collectionViewLayout key="collectionViewLayout" id="TMF-t0-32A" customClass="PeerViewsLayout" customModule="Forsta" customModuleProvider="target"/>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="peerCell" id="Ffe-py-nUD" customClass="PeerViewCell" customModule="Forsta" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="81"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="80" height="81"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ePH-9p-Irg" userLabel="avatarView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="81"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </imageView>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Z2-55-MBL" userLabel="avView" customClass="RemoteVideoView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="81"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </view>
                                                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htH-qg-uxZ" userLabel="statusIndicatorView">
-                                                                    <rect key="frame" x="37" y="3" width="10" height="10"/>
+                                                                    <rect key="frame" x="67" y="3" width="10" height="10"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" secondItem="htH-qg-uxZ" secondAttribute="height" multiplier="1:1" id="9l6-8C-lna"/>
@@ -720,7 +720,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-video-unselected" translatesAutoresizingMaskIntoConstraints="NO" id="oTW-Hj-YlO">
-                                                                    <rect key="frame" x="3" y="29" width="18" height="18"/>
+                                                                    <rect key="frame" x="3" y="60" width="18" height="18"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" secondItem="oTW-Hj-YlO" secondAttribute="height" multiplier="1:1" id="ABU-ar-MNZ"/>
                                                                         <constraint firstAttribute="width" constant="18" id="iT6-in-xbz"/>
@@ -745,6 +745,12 @@
                                                             <constraint firstAttribute="trailing" secondItem="htH-qg-uxZ" secondAttribute="trailing" constant="3" id="vTl-dX-mZ8"/>
                                                             <constraint firstItem="oTW-Hj-YlO" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" constant="3" id="w2d-77-R9r"/>
                                                         </constraints>
+                                                        <size key="customSize" width="80" height="81"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <integer key="value" value="8"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <outlet property="avView" destination="6Z2-55-MBL" id="c62-BX-tJg"/>
                                                             <outlet property="avatarImageView" destination="ePH-9p-Irg" id="04u-4b-Cdw"/>
@@ -770,10 +776,10 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r7e-68-tUo">
-                                        <rect key="frame" x="0.0" y="567" width="375" height="100"/>
+                                        <rect key="frame" x="0.0" y="587" width="375" height="80"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtN-JB-ZxO" userLabel="Mute Button">
-                                                <rect key="frame" x="8" y="10" width="80" height="80"/>
+                                                <rect key="frame" x="16" y="25" width="30.5" height="30.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="height" multiplier="1:1" id="p9p-CD-Qf2"/>
                                                 </constraints>
@@ -784,7 +790,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUf-7R-4b2" userLabel="Video Button">
-                                                <rect key="frame" x="96" y="10" width="79.5" height="80"/>
+                                                <rect key="frame" x="62.5" y="25" width="30.5" height="30.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="uUf-7R-4b2" secondAttribute="height" multiplier="1:1" id="LLn-Jd-rgx"/>
                                                 </constraints>
@@ -795,7 +801,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MpS-8p-2NL" userLabel="End Call Button">
-                                                <rect key="frame" x="287.5" y="10" width="79.5" height="80"/>
+                                                <rect key="frame" x="163.5" y="16" width="48" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="MpS-8p-2NL" secondAttribute="height" multiplier="1:1" id="ddv-JF-fX5"/>
                                                 </constraints>
@@ -806,7 +812,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-8s-tr5" userLabel="Speaker Button">
-                                                <rect key="frame" x="183.5" y="10" width="80" height="80"/>
+                                                <rect key="frame" x="109" y="25" width="30.5" height="30.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="J5U-8s-tr5" secondAttribute="height" multiplier="1:1" id="agV-Ac-v3h"/>
                                                 </constraints>
@@ -816,22 +822,36 @@
                                                     <action selector="didTapAudioButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="9Re-am-Nij"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KSX-g7-fZd">
+                                                <rect key="frame" x="311" y="16" width="48" height="48"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="KSX-g7-fZd" secondAttribute="height" multiplier="1:1" id="bBD-62-5v3"/>
+                                                </constraints>
+                                                <state key="normal" image="group-avatar-white"/>
+                                                <connections>
+                                                    <action selector="didTapPeopleButton:" destination="WPy-fR-KZT" eventType="touchUpInside" id="XvR-h5-TF9"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="GtN-JB-ZxO" firstAttribute="leading" secondItem="r7e-68-tUo" secondAttribute="leading" constant="8" id="2dd-fs-pk1"/>
-                                            <constraint firstAttribute="height" constant="100" id="35a-tO-4de"/>
-                                            <constraint firstAttribute="trailing" secondItem="MpS-8p-2NL" secondAttribute="trailing" constant="8" id="4HX-E6-gUc"/>
+                                            <constraint firstItem="GtN-JB-ZxO" firstAttribute="leading" secondItem="r7e-68-tUo" secondAttribute="leading" constant="16" id="2dd-fs-pk1"/>
+                                            <constraint firstAttribute="height" constant="80" id="35a-tO-4de"/>
                                             <constraint firstItem="J5U-8s-tr5" firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="width" id="Aqu-JR-a0V"/>
                                             <constraint firstItem="uUf-7R-4b2" firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="width" id="ErQ-eB-ckN"/>
-                                            <constraint firstItem="J5U-8s-tr5" firstAttribute="leading" secondItem="uUf-7R-4b2" secondAttribute="trailing" constant="8" id="QFd-t9-iWv"/>
+                                            <constraint firstItem="MpS-8p-2NL" firstAttribute="centerX" secondItem="r7e-68-tUo" secondAttribute="centerX" id="FWa-LN-xyc"/>
+                                            <constraint firstAttribute="bottom" secondItem="MpS-8p-2NL" secondAttribute="bottom" constant="16" id="Fjp-wt-GTd"/>
+                                            <constraint firstItem="J5U-8s-tr5" firstAttribute="leading" secondItem="uUf-7R-4b2" secondAttribute="trailing" constant="16" id="QFd-t9-iWv"/>
                                             <constraint firstItem="MpS-8p-2NL" firstAttribute="leading" secondItem="J5U-8s-tr5" secondAttribute="trailing" constant="24" id="RI8-OX-3XB"/>
+                                            <constraint firstItem="KSX-g7-fZd" firstAttribute="top" secondItem="r7e-68-tUo" secondAttribute="top" constant="16" id="Wxn-dp-31M"/>
                                             <constraint firstItem="J5U-8s-tr5" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="bvA-TW-o1A"/>
+                                            <constraint firstAttribute="bottom" secondItem="KSX-g7-fZd" secondAttribute="bottom" constant="16" id="c4x-wo-Ob9"/>
                                             <constraint firstItem="uUf-7R-4b2" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="cHG-pX-qyZ"/>
-                                            <constraint firstItem="uUf-7R-4b2" firstAttribute="leading" secondItem="GtN-JB-ZxO" secondAttribute="trailing" constant="8" id="dSW-u3-uUI"/>
+                                            <constraint firstItem="uUf-7R-4b2" firstAttribute="leading" secondItem="GtN-JB-ZxO" secondAttribute="trailing" constant="16" id="dSW-u3-uUI"/>
                                             <constraint firstItem="GtN-JB-ZxO" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="fse-Pr-3Ob"/>
+                                            <constraint firstItem="MpS-8p-2NL" firstAttribute="top" secondItem="r7e-68-tUo" secondAttribute="top" constant="16" id="jvc-4S-0z3"/>
                                             <constraint firstItem="MpS-8p-2NL" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="kzc-gd-0q3"/>
-                                            <constraint firstItem="MpS-8p-2NL" firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="width" id="sX9-Gi-Knz"/>
+                                            <constraint firstAttribute="trailing" secondItem="KSX-g7-fZd" secondAttribute="trailing" constant="16" id="xna-e1-U1H"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -894,6 +914,7 @@
                     <connections>
                         <outlet property="audioOutButton" destination="J5U-8s-tr5" id="yIv-h0-ZO3"/>
                         <outlet property="collectionView" destination="Ohx-1r-onH" id="2kx-DL-ib0"/>
+                        <outlet property="collectionViewContainer" destination="0UN-wO-Fbp" id="Wn8-wm-APu"/>
                         <outlet property="collectionViewHeightConstraint" destination="c5B-8L-EBm" id="hht-lk-3sn"/>
                         <outlet property="controlsContainerView" destination="r7e-68-tUo" id="Dhz-BY-BYr"/>
                         <outlet property="infoContainerView" destination="IXc-It-DKf" id="lXX-sj-fgf"/>
@@ -939,6 +960,7 @@
         <image name="call-active-wide" width="200" height="200"/>
         <image name="check" width="36" height="36"/>
         <image name="contact_default_feed.png" width="242" height="242"/>
+        <image name="group-avatar-white" width="53" height="53"/>
         <image name="hangup-active-wide" width="200" height="200"/>
         <image name="ic_devices_ios" width="180" height="119.5"/>
         <image name="video-mute-selected" width="79.919998168945312" height="79.919998168945312"/>

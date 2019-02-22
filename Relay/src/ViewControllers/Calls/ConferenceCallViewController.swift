@@ -35,6 +35,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     @IBOutlet weak var infoContainerView: UIView!
     @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var collectionViewContainer: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var controlsContainerView: UIView!
@@ -540,6 +541,33 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     // MARK: - Action handlers
+    @IBAction func didTapPeopleButton(_ sender: UIButton) {
+        var newFrame: CGRect
+        var newAlpha: CGFloat
+        let newVisibilty = !self.collectionViewContainer.isHidden
+        var newY: CGFloat
+        
+        if self.collectionViewContainer.isHidden {
+            newY = self.collectionViewContainer.frame.origin.y - self.collectionViewContainer.frame.size.height
+            newAlpha = 1.0
+        } else {
+            newAlpha = 0.0
+            newY = self.collectionViewContainer.frame.origin.y + self.collectionViewContainer.frame.size.height
+        }
+        
+        newFrame = CGRect(x: self.collectionViewContainer.frame.origin.x,
+                          y: newY,
+                          width: self.collectionViewContainer.frame.size.width,
+                          height: self.collectionViewContainer.frame.size.height)
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            self.collectionViewContainer.frame = newFrame
+            self.collectionViewContainer.alpha = newAlpha
+        }) { _ in
+            self.collectionViewContainer.isHidden = newVisibilty
+       }
+    }
+    
     @IBAction func didTapExitButton(_ sender: UIButton) {
         // TODO: Validate ending call if one is active
         if self.call != nil {
