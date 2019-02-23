@@ -95,7 +95,7 @@ protocol CallAudioServiceDelegate: class {
     
     private(set) var isSpeakerphoneEnabled: Bool = false {
         didSet {
-            self.delegate?.callAudioService(self, didUpdateIsSpeakerphoneEnabled: isSpeakerphoneEnabled)
+            self.delegate?.callAudioService(self, didUpdateIsSpeakerphoneEnabled: self.isSpeakerphoneEnabled)
         }
     }
     private var vibrateTimer: Timer?
@@ -129,7 +129,7 @@ protocol CallAudioServiceDelegate: class {
     private let pulseDuration = 0.2
     
     lazy var audioSession: OWSAudioSession = OWSAudioSession.shared
-    lazy var avAudioSession: AVAudioSession = AVAudioSession.sharedInstance()
+    let avAudioSession = AVAudioSession.sharedInstance()
 
     // MARK: Playing Sounds
     var currentPlayer: OWSAudioPlayer?
@@ -166,7 +166,6 @@ protocol CallAudioServiceDelegate: class {
         
         audioSession.configureRTCAudio()
         NotificationCenter.default.addObserver(forName: .AVAudioSessionRouteChange, object: avAudioSession, queue: nil) { _ in
-            assert(!Thread.isMainThread)
             self.updateIsSpeakerphoneEnabled()
         }
     }
@@ -208,19 +207,21 @@ protocol CallAudioServiceDelegate: class {
         let value = self.avAudioSession.currentRoute.outputs.contains { (portDescription: AVAudioSessionPortDescription) -> Bool in
             return portDescription.portName == AVAudioSessionPortBuiltInSpeaker
         }
-        DispatchQueue.main.async {
-            self.isSpeakerphoneEnabled = value
-        }
+        self.isSpeakerphoneEnabled = value
     }
 
     private func ensureProperAudioSession(call: ConferenceCall?) {
         AssertIsOnMainThread()
         
-        guard let call = call, call.state != .left else {
-            // Revert to default audio
-            setAudioSession(category: AVAudioSessionCategorySoloAmbient,
-                            mode: AVAudioSessionModeDefault)
-            return
+        guard let call = call,
+            call.state != .left,
+            call.state != .leaving
+            else {
+                // Revert to default audio
+                self.stopPlayingAnySounds()
+                setAudioSession(category: AVAudioSessionCategorySoloAmbient,
+                                mode: AVAudioSessionModeDefault)
+                return
         }
         
         // Disallow bluetooth while (and only while) the user has explicitly chosen the built in receiver.
@@ -231,7 +232,7 @@ protocol CallAudioServiceDelegate: class {
         // Presumably something else (in WebRTC?) is touching our shared AudioSession. - mjk
         let options: AVAudioSessionCategoryOptions = call.audioSource?.isBuiltInEarPiece == true ? [] : [.allowBluetooth]
         
-        if call.state == .ringing || call.state == .vibrating {
+        if call.state == .ringing {
             // SoloAmbient plays through speaker, but respects silent switch
             setAudioSession(category: AVAudioSessionCategorySoloAmbient,
                             mode: AVAudioSessionModeDefault)
@@ -255,6 +256,8 @@ protocol CallAudioServiceDelegate: class {
                             options: options)
         }
         
+        audioSession.isRTCAudioEnabled = (call.state == .joined)
+        
         do {
             // It's important to set preferred input *after* ensuring properAudioSession
             // because some sources are only valid for certain category/option combinations.
@@ -270,53 +273,33 @@ protocol CallAudioServiceDelegate: class {
     }
     
     private func setAudioSession(category: String,
-                                 mode: String? = nil,
+                                 mode: String,
                                  options: AVAudioSessionCategoryOptions = AVAudioSessionCategoryOptions(rawValue: 0)) {
         AssertIsOnMainThread()
         
         var audioSessionChanged = false
         do {
-            if #available(iOS 10.0, *), let mode = mode {
-                let oldCategory = avAudioSession.category
-                let oldMode = avAudioSession.mode
-                let oldOptions = avAudioSession.categoryOptions
-                
-                guard oldCategory != category || oldMode != mode || oldOptions != options else {
-                    return
-                }
-                
-                audioSessionChanged = true
-                
-                if oldCategory != category {
-                    Logger.debug("audio session changed category: \(oldCategory) -> \(category) ")
-                }
-                if oldMode != mode {
-                    Logger.debug("audio session changed mode: \(oldMode) -> \(mode) ")
-                }
-                if oldOptions != options {
-                    Logger.debug("audio session changed options: \(oldOptions) -> \(options) ")
-                }
-                try avAudioSession.setCategory(category, mode: mode, options: options)
-                
-            } else {
-                let oldCategory = avAudioSession.category
-                let oldOptions = avAudioSession.categoryOptions
-                
-                guard avAudioSession.category != category || avAudioSession.categoryOptions != options else {
-                    return
-                }
-                
-                audioSessionChanged = true
-                
-                if oldCategory != category {
-                    Logger.debug("audio session changed category: \(oldCategory) -> \(category) ")
-                }
-                if oldOptions != options {
-                    Logger.debug("audio session changed options: \(oldOptions) -> \(options) ")
-                }
-                try avAudioSession.setCategory(category, with: options)
-                
+            let oldCategory = avAudioSession.category
+            let oldMode = avAudioSession.mode
+            let oldOptions = avAudioSession.categoryOptions
+            
+            guard oldCategory != category || oldMode != mode || oldOptions != options else {
+                return
             }
+            
+            audioSessionChanged = true
+            
+            if oldCategory != category {
+                Logger.debug("audio session changed category: \(oldCategory) -> \(category) ")
+            }
+            if oldMode != mode {
+                Logger.debug("audio session changed mode: \(oldMode) -> \(mode) ")
+            }
+            if oldOptions != options {
+                Logger.debug("audio session changed options: \(oldOptions) -> \(options) ")
+            }
+            
+            try avAudioSession.setCategory(category, mode: mode, options: options)
         } catch {
             let message = "failed to set category: \(category) mode: \(String(describing: mode)), options: \(options) with error: \(error)"
             owsFailDebug(message)
@@ -340,53 +323,31 @@ protocol CallAudioServiceDelegate: class {
     }
     
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
+        Logger.info("\(self.logTag) called \(#function)")
         if oldState != newState {
             self.stopPlayingAnySounds()
             self.ensureProperAudioSession(call: call)
-
-            switch newState {
-            case .undefined:
-                do { /* TODO */ }
-            case .ringing:
-                do { /* TODO */ }
-            case .vibrating:
-                do { /* TODO */ }
-            case .rejected:
-                do { /* TODO */ }
-            case .joined:
-                do { /* TODO */ }
-            case .leaving:
-                do { /* TODO */ }
-            case .left:
-                do {
-                    self.isSpeakerphoneEnabled = false
-                    self.setAudioSession(category: AVAudioSessionCategorySoloAmbient)
-                }
+        }
+    }
+    
+    func peerConnectionDidUpdateRemoteVideoTrack(peerId: String, remoteVideoTrack: RTCVideoTrack) {
+        // CallAudioService don't care (probably)
+    }
+    
+    func peerConnectionDidUpdateRemoteAudioTrack(peerId: String, remoteAudioTrack: RTCAudioTrack) {
+        Logger.info("\(self.logTag) called \(#function)")
+    }
+    
+    func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
+        Logger.info("\(self.logTag) called \(#function)")
+        if oldState != newState {
+            if newState.isTerminal {
+                pcc.remoteAudioTrack?.isEnabled = false
             }
         }
     }
     
-    func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState) {
-        // CallAudioService don't care (probably)
-    }
-    
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
-        // CallAudioService don't care (probably)
-    }
-    
-    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String) {
-        // CallAudioService don't care (probably)
-    }
-    
-    func peerConnectionDidConnect(peerId: String) {
-        // CallAudioService don't care (probably)
-    }
-    
-    func stateDidChange(call: ConferenceCall, state: ConferenceCallState) {
-        // CallAudioService don't care (probably)
-    }
-    
-    func peerConnectionsNeedAttention(call: ConferenceCall, peerId: String) {
         // CallAudioService don't care (probably)
     }
 }

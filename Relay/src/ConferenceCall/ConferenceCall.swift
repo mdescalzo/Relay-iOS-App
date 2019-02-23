@@ -46,9 +46,14 @@ enum ConferenceCallState {
 protocol ConferenceCallDelegate: class {
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState)
     func peerConnectionStateDidChange(pcc: PeerConnectionClient, oldState: PeerConnectionClientState, newState: PeerConnectionClientState)
-    func peerConnectiongDidUpdateRemoteVideoTrack(peerId: String)
+    func peerConnectionDidUpdateRemoteVideoTrack(peerId: String, remoteVideoTrack: RTCVideoTrack)
+    func peerConnectionDidUpdateRemoteAudioTrack(peerId: String, remoteAudioTrack: RTCAudioTrack)
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?)
     func audioSourceDidChange(call: ConferenceCall, audioSource: AudioSource?)
+}
+
+extension ConferenceCallDelegate {
+    
 }
 
 class CallAVPolicy {
@@ -143,6 +148,7 @@ class CallAVPolicy {
         self.state = .undefined
         self.muted = policy.startAudioMuted
         self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
+        self.muted = policy.startAudioMuted
 
         super.init()
         if delegate != nil { self.addDelegate(delegate: delegate!) }
@@ -381,7 +387,12 @@ class CallAVPolicy {
     
     func updatedRemoteVideoTrack(strongPcc: PeerConnectionClient, remoteVideoTrack: RTCVideoTrack) {
         Logger.debug("updated remote video track for peer \(strongPcc.peerId)")
-        notifyDelegates({ delegate in delegate.peerConnectiongDidUpdateRemoteVideoTrack(peerId: strongPcc.peerId)})
+        notifyDelegates({ delegate in delegate.peerConnectionDidUpdateRemoteVideoTrack(peerId: strongPcc.peerId, remoteVideoTrack: remoteVideoTrack)})
+    }
+    
+    func updatedRemoteAudioTrack(strongPcc: PeerConnectionClient, remoteAudioTrack: RTCAudioTrack) {
+        Logger.debug("updated remote audio track for peer \(strongPcc.peerId)")
+        notifyDelegates({ delegate in delegate.peerConnectionDidUpdateRemoteAudioTrack(peerId: strongPcc.peerId, remoteAudioTrack: remoteAudioTrack)})
     }
     
     func updatedLocalVideoCaptureSession(strongPcc: PeerConnectionClient, captureSession: AVCaptureSession?) {
