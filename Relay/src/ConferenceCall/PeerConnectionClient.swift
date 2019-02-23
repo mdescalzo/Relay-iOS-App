@@ -302,7 +302,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         let answer = [ "type" : "answer",
                        "sdp" : negotiatedSessionDescription.sdp ]
         
-        let allTheData = [ "answer" : answer,
+        let allTheData = [ "version": ConferenceCallProtocolLevel,
+                           "answer" : answer,
                            "callId" : self.callId,
                            "members" : members,
                            "originator" : originator,
@@ -354,7 +355,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 guard let messageSender = Environment.current()?.messageSender else {
                     return Promise(error: CallError.other(description: "can't get messageSender"))
                 }
-                let allTheData = [ "callId" : self.callId,
+                let allTheData = [ "version": ConferenceCallProtocolLevel,
+                                   "callId" : self.callId,
                                    "members" : call.thread.participantIds,
                                    "originator" : call.originatorId,
                                    "peerId" : self.peerId,
@@ -942,7 +944,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 return Promise(error: CallError.other(description: "can't send zero ice candidates"))
             }
             
-            let allTheData = [ "callId": self.callId ,
+            let allTheData = [ "version": ConferenceCallProtocolLevel,
+                               "callId": self.callId ,
                                "peerId": self.peerId,
                                "originator" : call.originatorId,
                                "icecandidates" : payloadCandidates

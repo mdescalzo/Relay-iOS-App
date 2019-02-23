@@ -83,80 +83,61 @@ class ControlMessageManager : NSObject
         }
     }
 
-    
     static private func handleCallICECandidates(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.info("Received callICECandidates message: \(message.forstaPayload)")
-        
-        if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
-            
-            guard let callId: String = dataBlob.object(forKey: "callId") as? String else {
-                Logger.debug("Received callICECandidates message with no callId.")
+        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let version = dataBlob.object(forKey: "version") as? Int64,
+            let callId = dataBlob.object(forKey: "callId") as? String,
+            let _ = dataBlob.object(forKey: "peerId") as? String,
+            let iceCandidates: [NSDictionary] = dataBlob.object(forKey: "icecandidates") as? [NSDictionary],
+            version == ConferenceCallProtocolLevel else {
+                Logger.debug("Received callICECandidates missing requirements.")
                 return
-            }
-            
-            guard let peerId: String = dataBlob.object(forKey: "peerId") as? String else {
-                Logger.debug("Received callICECandidates message with no peerId.")
-                return
-            }
+        }
 
-            guard let iceCandidates: [NSDictionary] = dataBlob.object(forKey: "icecandidates") as? [NSDictionary] else {
-                Logger.debug("Received callICECandidates message with no candidates.")
-                return
-            }
-            
-            DispatchMainThreadSafe {
-                TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: message.thread,
-                                                                                   senderId: message.authorId,
-                                                                                   senderDeviceId: message.sourceDeviceId,
-                                                                                   callId: callId,
-                                                                                   iceCandidates: iceCandidates);
-            }
+        DispatchMainThreadSafe {
+            TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: message.thread,
+                                                                               senderId: message.authorId,
+                                                                               senderDeviceId: message.sourceDeviceId,
+                                                                               callId: callId,
+                                                                               iceCandidates: iceCandidates);
         }
     }
     
     static private func handleCallJoin(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard #available(iOS 10.0, *) else {
-            Logger.info("\(self.tag): Ignoring callJoin control message due to iOS version.")
+            Logger.debug("\(self.tag): Ignoring callJoin due to iOS version.")
             return
         }
         
         let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
         let age = Date().timeIntervalSince(sendTime)
         if age > ConferenceCallStaleJoinTimeout {
-            Logger.info("\(self.tag): Ignoring stale callJoin control message (>\(ConferenceCallStaleJoinTimeout) seconds old).")
+            Logger.info("\(self.tag): Ignoring stale callJoin message (>\(ConferenceCallStaleJoinTimeout) seconds old).")
             return
         }
-        
+
         let forstaPayload = message.forstaPayload as NSDictionary
-        
-        let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary
-        
-        guard dataBlob != nil else {
-            Logger.info("Received callJoin message with no data object.")
-            return
-        }
-        
-        guard let callId = dataBlob?.object(forKey: "callId") as? String,
-            let members = dataBlob?.object(forKey: "members") as? NSArray,
-            let originator = dataBlob?.object(forKey: "originator") as? String else {
-                Logger.debug("Received callJoin message missing required objects.")
+        guard let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary,
+            let version = dataBlob.object(forKey: "version") as? Int64,
+            let callId = dataBlob.object(forKey: "callId") as? String,
+            let members = dataBlob.object(forKey: "members") as? NSArray,
+            let originator = dataBlob.object(forKey: "originator") as? String,
+            version == ConferenceCallProtocolLevel else {
+                Logger.debug("Received callJoin missing requirements.")
                 return
         }
-        
+
         let thread = message.thread
         thread.update(withPayload: forstaPayload as! [AnyHashable : Any])
         thread.participantIds = members as! [String]
         thread.save(with: transaction)
         
-        let userId = message.authorId
-        let deviceId = message.sourceDeviceId
-
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedJoin(with: thread,
-                                                                      senderId: userId,
-                                                                      senderDeviceId: deviceId,
+                                                                      senderId: message.authorId,
+                                                                      senderDeviceId: message.sourceDeviceId,
                                                                       originatorId: originator,
                                                                       callId: callId)
         }
@@ -164,32 +145,15 @@ class ControlMessageManager : NSObject
     
     static private func handleCallOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        guard #available(iOS 10.0, *) else {
-            Logger.info("\(self.tag): Ignoring callOffer control message due to iOS version.")
-            return
-        }
-        
-        let forstaPayload = message.forstaPayload as NSDictionary
-        
-        let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary
-
-        guard dataBlob != nil else {
-            Logger.info("Received callOffer message with no data object.")
-            return
-        }
-        
-        guard let callId = dataBlob?.object(forKey: "callId") as? String,
-            let peerId = dataBlob?.object(forKey: "peerId") as? String,
-            let offer = dataBlob?.object(forKey: "offer") as? NSDictionary else {
-            Logger.debug("Received callOffer message missing required objects.")
-            return
-        }
-        
-        let sdpString = offer.object(forKey: "sdp") as? String
-        
-        guard sdpString != nil else {
-            Logger.debug("sdb string missing from callOffer.")
-            return
+        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let version = dataBlob.object(forKey: "version") as? Int64,
+            let callId = dataBlob.object(forKey: "callId") as? String,
+            let peerId = dataBlob.object(forKey: "peerId") as? String,
+            let offer = dataBlob.object(forKey: "offer") as? Dictionary<String, String>,
+            let sdp = offer["sdp"],
+            version == ConferenceCallProtocolLevel else {
+                Logger.debug("Received callOffer missing requirements.")
+                return
         }
         
         DispatchMainThreadSafe {
@@ -198,45 +162,26 @@ class ControlMessageManager : NSObject
                                                                        senderDeviceId: message.sourceDeviceId,
                                                                        callId: callId,
                                                                        peerId: peerId,
-                                                                       sessionDescription: sdpString!)
+                                                                       sessionDescription: sdp)
         }
     }
     
     static private func handleCallAcceptOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.debug("Received callAcceptOffer message: \(message.forstaPayload)")
-        
-        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
-            Logger.debug("Received callAcceptOffer message with no data object.")
-            return
+        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let version = dataBlob.object(forKey: "version") as? Int64,
+            let callId = dataBlob.object(forKey: "callId") as? String,
+            let peerId = dataBlob.object(forKey: "peerId") as? String,
+            let answer = dataBlob.object(forKey: "answer") as? Dictionary<String, String>,
+            let sdp = answer["sdp"],
+            version == ConferenceCallProtocolLevel else {
+                Logger.debug("Received callAcceptOffer message missing requirements.")
+                return
         }
 
-        guard let callId = dataBlob.object(forKey: "callId") as? String else {
-            Logger.debug("Received callAcceptOffer message without callId.")
-            return
-        }
-
-        guard let peerId = dataBlob.object(forKey: "peerId") as? String else {
-            Logger.debug("Received callAcceptOffer message without peerId.")
-            return
-        }
-        
-        guard let answer = dataBlob["answer"] as? Dictionary<String, String>  else {
-            Logger.debug("Received callAcceptOffer message without answer object.")
-            return
-        }
-        
-        guard let sdp = answer["sdp"] else {
-            Logger.debug("Received callAcceptOffer message without session description.")
-            return
-        }
-        
-        // If the callAccept came from self, another device picked up.  Stop local processing.
         guard message.authorId != TSAccountManager.localUID() else {
-            Logger.info("Another device of self has answered a call")
-            let deviceId = message.sourceDeviceId
             DispatchMainThreadSafe {
-                TextSecureKitEnv.shared().callMessageHandler.receivedSelfAcceptOffer(with: message.thread, callId: callId, deviceId: deviceId)
+                TextSecureKitEnv.shared().callMessageHandler.receivedSelfAcceptOffer(with: message.thread, callId: callId, deviceId: message.sourceDeviceId)
             }
             return
         }
@@ -249,26 +194,17 @@ class ControlMessageManager : NSObject
     
     static private func handleCallLeave(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.debug("Received callLeave message: \(message.forstaPayload)")
-
-        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
-            Logger.info("Received callLeave message with no data object.")
-            return
+        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let version = dataBlob.object(forKey: "version") as? Int64,
+            let callId = dataBlob.object(forKey: "callId") as? String,
+            version == ConferenceCallProtocolLevel else {
+                Logger.debug("Received callOffer missing requirements.")
+                return
         }
 
-        guard let callId = dataBlob.object(forKey: "callId") as? String else {
-            Logger.info("Received callLeave message without callId.")
-            return
-        }
-        
-        guard let senderId = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as? String else {
-            Logger.debug("Received callLeave message with no senderId.")
-            return
-        }
-        
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread,
-                                                                       senderId: senderId,
+                                                                       senderId: message.authorId,
                                                                        senderDeviceId: message.sourceDeviceId,
                                                                        callId: callId)
         }

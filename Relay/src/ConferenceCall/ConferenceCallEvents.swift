@@ -212,13 +212,13 @@ extension CCEContext {
             }
         case .SentCallJoin(let callId):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) sent call join: \(callId) thread \(thread)\n"
-            case .brief: return "\(timestamp.msFromEpoch) sent call join: \(callId)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) call join sent: \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) call join sent: \(callId)\n"
             }
         case .SentCallLeave(let callId):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) sent call leave: \(callId) thread \(thread)\n"
-            case .brief: return "\(timestamp.msFromEpoch) sent call leave: \(callId)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) call leave sent: \(callId) thread \(thread)\n"
+            case .brief: return "\(timestamp.msFromEpoch) call leave sent: \(callId)\n"
             }
         case .CallStateChange(let callId, let oldState, let newState):
             switch level {
