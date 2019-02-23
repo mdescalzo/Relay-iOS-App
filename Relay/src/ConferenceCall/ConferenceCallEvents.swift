@@ -11,7 +11,7 @@ import Foundation
 public class ConferenceCallEvents {
     static var events = [CCEContext]()
     static var epoch = Date()
-    static var level = CCERenderLevel.full
+    static var level = CCERenderLevel.long
     
     static func add(_ event: ConferenceCallEvent) {
         self.events.append(CCEContext(Date(), Thread.current.threadName, event))
@@ -107,6 +107,16 @@ enum ConferenceCallEvent {
     case SentCallLeave(
         callId: String
     )
+    case ReceivedCallJoin(
+        callId: String,
+        userId: String,
+        deviceId: UInt32
+    )
+    case ReceivedCallLeave(
+        callId: String,
+        userId: String,
+        deviceId: UInt32
+    )
     case CallStateChange(
         callId: String,
         oldState: ConferenceCallState,
@@ -193,7 +203,7 @@ extension Date {
 }
 
 enum CCERenderLevel {
-    case full, brief
+    case full, long, brief
 }
 
 extension CCEContext {
@@ -203,56 +213,79 @@ extension CCEContext {
         case .CallInit(let callId):
             switch level {
             case .full: return "\(prefix)\(timestamp.msFromEpoch) call init: \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) call init: \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) call init: \(callId)\n"
             }
         case .CallDeinit(let callId):
             switch level {
             case .full: return "\(prefix)\(timestamp.msFromEpoch) call deinit: \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) call deinit: \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) call deinit: \(callId)\n"
             }
         case .SentCallJoin(let callId):
             switch level {
             case .full: return "\(prefix)\(timestamp.msFromEpoch) call join sent: \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) call join sent: \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) call join sent: \(callId)\n"
             }
         case .SentCallLeave(let callId):
             switch level {
             case .full: return "\(prefix)\(timestamp.msFromEpoch) call leave sent: \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) call leave sent: \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) call leave sent: \(callId)\n"
+            }
+        case .ReceivedCallJoin(let callId, let userId, let deviceId):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) call join received: \(callId) user.device \(userId).\(deviceId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) call join received: \(callId) user.device \(userId).\(deviceId)\n"
+            case .brief: return "\(timestamp.msFromEpoch) call join received: \(callId) user.device \(userId).\(deviceId)\n"
+            }
+        case .ReceivedCallLeave(let callId, let userId, let deviceId):
+            switch level {
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) call leave received: \(callId) user.device \(userId).\(deviceId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) call leave received: \(callId) user.device \(userId).\(deviceId)\n"
+            case .brief: return "\(timestamp.msFromEpoch) call leave received: \(callId) user.device \(userId).\(deviceId)\n"
             }
         case .CallStateChange(let callId, let oldState, let newState):
             switch level {
             case .full: return "\(prefix)\(timestamp.msFromEpoch) call \(oldState)->\(newState) \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) call \(oldState)->\(newState) \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) call \(oldState)->\(newState) \(callId)\n"
             }
         case .PeerInit(let callId, let peerId, let userId, let deviceId):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) user@device \(userId)@\(deviceId) thread \(thread)\n"
-            case .brief: return "\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) user@device \(userId)@\(deviceId)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) user.device \(userId).\(deviceId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) user.device \(userId).\(deviceId)\n"
+            case .brief: return "\(timestamp.msFromEpoch) peer init: \(peerId) call \(callId) user.device \(userId).\(deviceId)\n"
             }
         case .PeerDeinit(let callId, let peerId, let userId, let deviceId):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId) user@device \(userId)@\(deviceId) thread \(thread)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId) user.device \(userId).\(deviceId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) peer deinit: \(peerId) call \(callId) user.device \(userId).\(deviceId)\n"
             case .brief: return "\(timestamp.msFromEpoch) peer deinit: \(peerId)\n"
             }
         case .PeerStateChange(let callId, let peerId, let userId, let deviceId, let oldState, let newState):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer \(oldState)->\(newState) \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) peer \(oldState)->\(newState) \(peerId) user.device \(userId).\(deviceId) call \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) peer \(oldState)->\(newState) \(peerId) user.device \(userId).\(deviceId) call \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) peer \(oldState)->\(newState) \(peerId)\n"
             }
         case .ReceivedRemoteIce(let callId, let peerId, let userId, let deviceId, let count):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) user.device \(userId).\(deviceId) call \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) user.device \(userId).\(deviceId) call \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) received \(count) remote ice from peer \(peerId)\n"
             }
         case .GeneratedLocalIce(let callId, let peerId, let userId, let deviceId):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) user.device \(userId).\(deviceId) call \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) buffered 1 local ice: peer \(peerId) user.device \(userId).\(deviceId) call \(callId)\n"
             case .brief: return ""
             }
         case .SentLocalIce(let callId, let peerId, let userId, let deviceId, let count):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) user@device \(userId)@\(deviceId) call \(callId) thread \(thread)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) user.device \(userId).\(deviceId) call \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) sent \(count) local ice: peer \(peerId) user.device \(userId).\(deviceId) call \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) sent \(count) local ice to peer \(peerId)\n"
             }
         }
@@ -264,6 +297,8 @@ extension CCEContext {
         case .CallDeinit(let callId): return callId
         case .SentCallJoin(let callId): return callId
         case .SentCallLeave(let callId): return callId
+        case .ReceivedCallJoin(let callId, _, _): return callId
+        case .ReceivedCallLeave(let callId, _, _): return callId
         case .CallStateChange(let callId, _, _): return callId
         case .PeerInit(let callId, _, _, _): return callId
         case .PeerDeinit(let callId, _, _, _): return callId
@@ -280,13 +315,15 @@ extension CCEContext {
         case .CallDeinit(_): return nil
         case .SentCallJoin(_): return nil
         case .SentCallLeave(_): return nil
+        case .ReceivedCallJoin(_, let userId, let deviceId): return "\(userId).\(deviceId)"
+        case .ReceivedCallLeave(_, let userId, let deviceId): return "\(userId).\(deviceId)"
         case .CallStateChange(_, _, _): return nil
-        case .PeerInit(_, _, let userId, let deviceId): return "\(userId)@\(deviceId)"
-        case .PeerDeinit(_, _, let userId, let deviceId): return "\(userId)@\(deviceId)"
-        case .PeerStateChange(_, _, let userId, let deviceId, _, _): return "\(userId)@\(deviceId)"
-        case .ReceivedRemoteIce(_, _, let userId, let deviceId, _): return "\(userId)@\(deviceId)"
-        case .GeneratedLocalIce(_, _, let userId, let deviceId): return "\(userId)@\(deviceId)"
-        case .SentLocalIce(_, _, let userId, let deviceId, _): return "\(userId)@\(deviceId)"
+        case .PeerInit(_, _, let userId, let deviceId): return "\(userId).\(deviceId)"
+        case .PeerDeinit(_, _, let userId, let deviceId): return "\(userId).\(deviceId)"
+        case .PeerStateChange(_, _, let userId, let deviceId, _, _): return "\(userId).\(deviceId)"
+        case .ReceivedRemoteIce(_, _, let userId, let deviceId, _): return "\(userId).\(deviceId)"
+        case .GeneratedLocalIce(_, _, let userId, let deviceId): return "\(userId).\(deviceId)"
+        case .SentLocalIce(_, _, let userId, let deviceId, _): return "\(userId).\(deviceId)"
         }
     }
 }

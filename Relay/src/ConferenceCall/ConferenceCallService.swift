@@ -79,11 +79,13 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     // MARK: - FLCallMessageHandler implementation
     
     public func receivedJoin(with thread: TSThread, senderId: String, senderDeviceId: UInt32, originatorId: String, callId: String) {
+        ConferenceCallEvents.add(.ReceivedCallJoin(callId: callId, userId: senderId, deviceId: senderDeviceId))
+        
         if conferenceCall != nil && conferenceCall?.callId != callId {
             Logger.debug("Ignoring call-offer for a different call than the one we already have running")
             return
         }
-        
+
         if conferenceCall == nil {
             self.conferenceCall = ConferenceCall(thread: thread,
                                                  callId: callId,
@@ -136,6 +138,8 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
     }
     
     public func receivedLeave(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String) {
+        ConferenceCallEvents.add(.ReceivedCallLeave(callId: callId, userId: senderId, deviceId: senderDeviceId))
+        
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
             Logger.debug("Ignoring leave from/for an unknown call")
             return

@@ -241,11 +241,8 @@ class CallAVPolicy {
     }
     
     public func handleOffer(userId: String, deviceId: UInt32, peerId: String, sessionDescription: String) {
-        guard let pcc = locatePCC(userId, deviceId) else {
-            Logger.debug("\(TAG) ignoring Offer for nonexistent participant: \(userId)@\(deviceId)")
-            return
-        }
-        pcc.state = .discarded
+        let pcc = locatePCC(userId, deviceId)
+        pcc?.state = .discarded
 
         let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: peerId, callId: self.callId)
         self.peerConnectionClients[peerId] = newPcc
@@ -291,7 +288,6 @@ class CallAVPolicy {
             return
         }
         
-        self.state = .joined
         let members = self.thread.participantIds
         let allTheData = [
             "version": ConferenceCallProtocolLevel,
@@ -302,7 +298,7 @@ class CallAVPolicy {
         let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallJoinKey, moreData: allTheData)
         messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
             ConferenceCallEvents.add(.SentCallJoin(callId: self.callId))
-            self.sendQueuedOffers()
+            self.state = .joined // will send queued offers
         }).retainUntilComplete()
     }
     
