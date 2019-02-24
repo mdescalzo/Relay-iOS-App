@@ -262,11 +262,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     message = ""
                     color = UIColor.clear
                 }
-            case .awaitingLocalJoin:
-                do {
-                    message = ""
-                    color = UIColor.cyan
-                }
             case .sendingAcceptOffer:
                 do {
                     message = "Accepting invitation"
@@ -307,7 +302,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     message = "Left call"
                     color = UIColor.gray
                 }
-            case .discarded:
+            case .replaced:
                 do {
                     message = ""
                     color = UIColor.clear

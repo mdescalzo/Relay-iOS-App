@@ -52,10 +52,6 @@ protocol ConferenceCallDelegate: class {
     func audioSourceDidChange(call: ConferenceCall, audioSource: AudioSource?)
 }
 
-extension ConferenceCallDelegate {
-    
-}
-
 class CallAVPolicy {
     let startAudioMuted: Bool
     let allowAudioMuteToggle: Bool
@@ -109,10 +105,6 @@ class CallAVPolicy {
             updateCallRecordType()
             
             notifyDelegates({ delegate in delegate.stateDidChange(call: self, oldState: oldValue, newState: self.state) })
-
-            if self.state == .joined && (oldValue == .ringing || oldValue == .vibrating) {
-                self.sendQueuedOffers()
-            }
         }
     }
     
@@ -185,12 +177,6 @@ class CallAVPolicy {
         videoCaptureController = nil
     }
     
-    func sendQueuedOffers() {
-        for pcc in self.peerConnectionClients.values {
-            pcc.readyToSendOfferResolver.fulfill(())
-        }
-    }
-    
     func locatePCC(_ userId: String, _ deviceId: UInt32) -> PeerConnectionClient? {
         for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
             guard let pcc = self.peerConnectionClients[peerId] else {
@@ -231,18 +217,20 @@ class CallAVPolicy {
     
     func handleJoin(userId: String, deviceId: UInt32) {
         let pcc = locatePCC(userId, deviceId)
-        pcc?.state = .discarded
+        pcc?.state = .replaced
 
-        let newPeerId = NSUUID().uuidString.lowercased()
-        let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: newPeerId, callId: self.callId)
-        self.peerConnectionClients[newPeerId] = newPcc
-
-        newPcc.queueOffer()
+        if self.state == .joined {
+            let newPeerId = NSUUID().uuidString.lowercased()
+            let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: newPeerId, callId: self.callId)
+            self.peerConnectionClients[newPeerId] = newPcc
+            
+            newPcc.sendOffer()
+        }
     }
     
     public func handleOffer(userId: String, deviceId: UInt32, peerId: String, sessionDescription: String) {
         let pcc = locatePCC(userId, deviceId)
-        pcc?.state = .discarded
+        pcc?.state = .replaced
 
         let newPcc = PeerConnectionClient(delegate: self, userId: userId, deviceId: deviceId, peerId: peerId, callId: self.callId)
         self.peerConnectionClients[peerId] = newPcc

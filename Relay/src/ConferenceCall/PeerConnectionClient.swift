@@ -14,7 +14,6 @@ import RelayMessaging
 
 public enum PeerConnectionClientState: String {
     case undefined
-    case awaitingLocalJoin
     case sendingAcceptOffer
     case sentAcceptOffer
     case sendingOffer
@@ -23,14 +22,14 @@ public enum PeerConnectionClientState: String {
     case connected
     case peerLeft       // the peer sent us a callLeave
     case leftPeer       // we sent the peer a callLeave
-    case discarded      // owning call is just throwing it away
+    case replaced       // throwing this peer away to build another for the same user&device
     case disconnected   // ice disconnected
     case failed         // ice failed
 }
 extension PeerConnectionClientState {
     var isTerminal: Bool {
         switch self {
-        case .peerLeft, .leftPeer, .discarded, .disconnected, .failed: return true
+        case .peerLeft, .leftPeer, .replaced, .disconnected, .failed: return true
         default: return false
         }
     }
@@ -204,8 +203,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     private static var expiredProxies = [PeerConnectionProxy]()
     
     // promises and their resolvers for controlling ordering and timing of actions
-    let readyToSendOfferPromise: Promise<Void>
-    let readyToSendOfferResolver: Resolver<Void>
     let readyToSendIceCandidatesPromise: Promise<Void>
     let readyToSendIceCandidatesResolver: Resolver<Void>
     let peerConnectedPromise: Promise<Void>
@@ -223,7 +220,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         self.peerId = peerId
         self.state = .undefined
 
-        (self.readyToSendOfferPromise, self.readyToSendOfferResolver) = Promise<Void>.pending()
         (self.readyToSendIceCandidatesPromise, self.readyToSendIceCandidatesResolver) = Promise<Void>.pending()
         (self.peerConnectedPromise, self.peerConnectedResolver) = Promise<Void>.pending()
 
@@ -314,24 +310,16 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         return messageSender.sendPromise(message: message, recipientId: self.userId, recipientDeviceId: self.deviceId)
     }
 
-    func queueOffer() {
+    func sendOffer() {
         guard let cc = self.delegate?.owningCall() else {
             Logger.error("queueOffer owning call isn't available")
             return
         }
         
-        if (cc.state == .joined) {
-            self.readyToSendOfferResolver.fulfill(())
-        } else {
-            self.state = .awaitingLocalJoin
-        }
-        
+        self.state = .sendingOffer
         firstly {
             cc.setUpLocalAV()
-        }.then {
-            self.readyToSendOfferPromise
         }.then { (Void) -> Promise<HardenedRTCSessionDescription> in
-            self.state = .sendingOffer
             self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
                                                                                   constraints: cc.connectionConstraints!,
                                                                                   delegate: self.proxy)
