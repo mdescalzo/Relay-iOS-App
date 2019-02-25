@@ -792,7 +792,7 @@
                                 <rect key="frame" x="0.0" y="567" width="375" height="80"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtN-JB-ZxO" userLabel="Mute Button">
-                                        <rect key="frame" x="16" y="25" width="30.5" height="30.5"/>
+                                        <rect key="frame" x="12" y="21" width="38" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="height" multiplier="1:1" id="p9p-CD-Qf2"/>
                                         </constraints>
@@ -803,7 +803,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUf-7R-4b2" userLabel="Video Button">
-                                        <rect key="frame" x="62.5" y="25" width="30.5" height="30.5"/>
+                                        <rect key="frame" x="60" y="21" width="37.5" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="uUf-7R-4b2" secondAttribute="height" multiplier="1:1" id="LLn-Jd-rgx"/>
                                         </constraints>
@@ -825,7 +825,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5U-8s-tr5" userLabel="Speaker Button">
-                                        <rect key="frame" x="109" y="25" width="30.5" height="30.5"/>
+                                        <rect key="frame" x="107.5" y="21" width="38" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="J5U-8s-tr5" secondAttribute="height" multiplier="1:1" id="agV-Ac-v3h"/>
                                         </constraints>
@@ -848,19 +848,19 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="GtN-JB-ZxO" firstAttribute="leading" secondItem="r7e-68-tUo" secondAttribute="leading" constant="16" id="2dd-fs-pk1"/>
+                                    <constraint firstItem="GtN-JB-ZxO" firstAttribute="leading" secondItem="r7e-68-tUo" secondAttribute="leading" constant="12" id="2dd-fs-pk1"/>
                                     <constraint firstAttribute="height" constant="80" id="35a-tO-4de"/>
                                     <constraint firstItem="J5U-8s-tr5" firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="width" id="Aqu-JR-a0V"/>
                                     <constraint firstItem="uUf-7R-4b2" firstAttribute="width" secondItem="GtN-JB-ZxO" secondAttribute="width" id="ErQ-eB-ckN"/>
                                     <constraint firstItem="MpS-8p-2NL" firstAttribute="centerX" secondItem="r7e-68-tUo" secondAttribute="centerX" id="FWa-LN-xyc"/>
                                     <constraint firstAttribute="bottom" secondItem="MpS-8p-2NL" secondAttribute="bottom" constant="16" id="Fjp-wt-GTd"/>
-                                    <constraint firstItem="J5U-8s-tr5" firstAttribute="leading" secondItem="uUf-7R-4b2" secondAttribute="trailing" constant="16" id="QFd-t9-iWv"/>
-                                    <constraint firstItem="MpS-8p-2NL" firstAttribute="leading" secondItem="J5U-8s-tr5" secondAttribute="trailing" constant="24" id="RI8-OX-3XB"/>
+                                    <constraint firstItem="J5U-8s-tr5" firstAttribute="leading" secondItem="uUf-7R-4b2" secondAttribute="trailing" constant="10" id="QFd-t9-iWv"/>
+                                    <constraint firstItem="MpS-8p-2NL" firstAttribute="leading" secondItem="J5U-8s-tr5" secondAttribute="trailing" constant="18" id="RI8-OX-3XB"/>
                                     <constraint firstItem="KSX-g7-fZd" firstAttribute="top" secondItem="r7e-68-tUo" secondAttribute="top" constant="16" id="Wxn-dp-31M"/>
                                     <constraint firstItem="J5U-8s-tr5" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="bvA-TW-o1A"/>
                                     <constraint firstAttribute="bottom" secondItem="KSX-g7-fZd" secondAttribute="bottom" constant="16" id="c4x-wo-Ob9"/>
                                     <constraint firstItem="uUf-7R-4b2" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="cHG-pX-qyZ"/>
-                                    <constraint firstItem="uUf-7R-4b2" firstAttribute="leading" secondItem="GtN-JB-ZxO" secondAttribute="trailing" constant="16" id="dSW-u3-uUI"/>
+                                    <constraint firstItem="uUf-7R-4b2" firstAttribute="leading" secondItem="GtN-JB-ZxO" secondAttribute="trailing" constant="10" id="dSW-u3-uUI"/>
                                     <constraint firstItem="GtN-JB-ZxO" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="fse-Pr-3Ob"/>
                                     <constraint firstItem="MpS-8p-2NL" firstAttribute="top" secondItem="r7e-68-tUo" secondAttribute="top" constant="16" id="jvc-4S-0z3"/>
                                     <constraint firstItem="MpS-8p-2NL" firstAttribute="centerY" secondItem="r7e-68-tUo" secondAttribute="centerY" id="kzc-gd-0q3"/>
