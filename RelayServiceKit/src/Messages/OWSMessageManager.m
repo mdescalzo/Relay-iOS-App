@@ -555,8 +555,20 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     if (syncMessage.hasSent) {
+        NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody: syncMessage.sent.message.body];
+        if (jsonPayload == nil) {
+            OWSFailDebug(@"sync message with no body");
+            return;
+        }
+        NSString *threadId = [jsonPayload objectForKey:@"threadId"];
+        if (threadId == nil) {
+            OWSFailDebug(@"sync message body had no threadId");
+            return;
+        }
         OWSIncomingSentMessageTranscript *transcript =
         [[OWSIncomingSentMessageTranscript alloc] initWithProto:syncMessage.sent
+                                                   sourceDevice:envelope.sourceDevice
+                                                       threadId:threadId
                                                     transaction:transaction];
         
         OWSRecordTranscriptJob *recordJob =

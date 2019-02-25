@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OWSIncomingSentMessageTranscript : NSObject
 
 - (instancetype)initWithProto:(OWSSignalServiceProtosSyncMessageSent *)sentProto
+                 sourceDevice:(UInt32)sourceDevice
+                     threadId:(NSString *)threadId
                   transaction:(YapDatabaseReadWriteTransaction *)transaction;
 
 @property (nonatomic, readonly) OWSSignalServiceProtosDataMessage *dataMessage;
@@ -26,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint64_t timestamp;
 @property (nonatomic, readonly) uint64_t expirationStartedAt;
 @property (nonatomic, readonly) uint32_t expirationDuration;
+@property (nonatomic, readonly) uint32_t sourceDevice;
 @property (nonatomic, readonly) BOOL isGroupUpdate;
 @property (nonatomic, readonly) BOOL isExpirationTimerUpdate;
 @property (nonatomic, readonly) BOOL isEndSessionMessage;

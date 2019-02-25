@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     NSString *threadId = [jsonPayload objectForKey:@"threadId"];
     if (threadId.length == 0 || ![[threadId lowercaseString] isEqualToString:transcript.thread.uniqueId]) {
-        DDLogDebug(@"Received sync message contained no invalid thread data.");
+        DDLogDebug(@"Received sync message contained no and/or invalid thread data.");
         return;
     }
     
@@ -106,7 +106,7 @@ NS_ASSUME_NONNULL_BEGIN
         IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:transcript.thread
                                                                                       timestamp:transcript.timestamp
                                                                                          author:TSAccountManager.localUID
-                                                                                         device:OWSDeviceManager.sharedManager.currentDeviceId
+                                                                                         device:transcript.sourceDevice
                                                                                         payload:jsonPayload
                                                                                     attachments:transcript.attachmentPointerProtos];
         [ControlMessageManager processIncomingControlMessageWithMessage:controlMessage transaction:transaction];

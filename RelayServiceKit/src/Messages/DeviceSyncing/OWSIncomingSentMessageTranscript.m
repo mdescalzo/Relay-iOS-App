@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation OWSIncomingSentMessageTranscript
 
 - (instancetype)initWithProto:(OWSSignalServiceProtosSyncMessageSent *)sentProto
+                 sourceDevice:(UInt32)sourceDevice
+                     threadId:(NSString *)threadId
                   transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
     self = [super init];
@@ -24,24 +26,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     _dataMessage = sentProto.message;
+    _sourceDevice = sourceDevice;
     _recipientId = sentProto.destination;
     _timestamp = sentProto.timestamp;
     _expirationStartedAt = sentProto.expirationStartTimestamp;
     _expirationDuration = sentProto.message.expireTimer;
     _body = _dataMessage.body;
-//    _groupId = _dataMessage.group.id;
-//    _isGroupUpdate = _dataMessage.hasGroup && (_dataMessage.group.type == OWSSignalServiceProtosGroupContextTypeUpdate);
+    _thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
     _isExpirationTimerUpdate = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsExpirationTimerUpdate) != 0;
     _isEndSessionMessage = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsEndSession) != 0;
-
-//    if (self.dataMessage.hasGroup) {
-//        _thread = [TSGroupThread getOrCreateThreadWithGroupId:_dataMessage.group.id transaction:transaction];
-//    } else {
-        _thread = [TSThread getOrCreateThreadWithId:_recipientId transaction:transaction];
-//    }
-
-//    _quotedMessage = [TSQuotedMessage quotedMessageForDataMessage:_dataMessage thread:_thread transaction:transaction];
-//    _contact = [OWSContacts contactForDataMessage:_dataMessage transaction:transaction];
 
     return self;
 }
