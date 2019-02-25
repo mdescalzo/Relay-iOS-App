@@ -51,7 +51,7 @@ public class ConferenceCallEvents {
         
         var report = "CALL \(events[0].callId) CONNECT SPEEDS\n"
         for (u, es) in usersData {
-            report += "> user \(u):\n"
+            report += "> user \(u)\n"
             var starts = [String:(String, Date)]()
             for e in es {
                 switch e.event {
