@@ -1300,7 +1300,7 @@ typedef enum : NSUInteger {
         imageEdgeInsets.bottom = round(kBarButtonSize - (image.size.height + imageEdgeInsets.top));
         callButton.imageEdgeInsets = imageEdgeInsets;
         callButton.accessibilityLabel = NSLocalizedString(@"CALL_LABEL", "Accessibility label for placing call button");
-        [callButton addTarget:self action:@selector(startAudioCall) forControlEvents:UIControlEventTouchUpInside];
+        [callButton addTarget:self action:@selector(handleCallTap:) forControlEvents:UIControlEventTouchUpInside];
         callButton.frame = CGRectMake(0,
             0,
             round(image.size.width + imageEdgeInsets.left + imageEdgeInsets.right),

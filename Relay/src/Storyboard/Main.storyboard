@@ -696,16 +696,29 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ePH-9p-Irg" userLabel="avatarView">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ePH-9p-Irg" userLabel="avatarView">
                                                             <rect key="frame" x="8" y="17" width="64" height="64"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" secondItem="ePH-9p-Irg" secondAttribute="height" multiplier="1:1" id="bb6-eN-NCF"/>
                                                             </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                    <integer key="value" value="8"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </imageView>
-                                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Z2-55-MBL" userLabel="avView" customClass="RemoteVideoView">
-                                                            <rect key="frame" x="0.0" y="0.0" width="80" height="81"/>
+                                                        <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Z2-55-MBL" userLabel="avView" customClass="RemoteVideoView">
+                                                            <rect key="frame" x="8" y="17" width="64" height="64"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="6Z2-55-MBL" secondAttribute="height" multiplier="1:1" id="sIe-aH-BYX"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                    <integer key="value" value="8"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htH-qg-uxZ" userLabel="statusIndicatorView">
                                                             <rect key="frame" x="67" y="17" width="10" height="10"/>
@@ -715,7 +728,7 @@
                                                                 <constraint firstAttribute="width" constant="10" id="ay3-em-JWd"/>
                                                             </constraints>
                                                         </view>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="video-mute-selected" translatesAutoresizingMaskIntoConstraints="NO" id="9B1-Pq-4Bb">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-mute-selected" translatesAutoresizingMaskIntoConstraints="NO" id="9B1-Pq-4Bb">
                                                             <rect key="frame" x="3" y="20" width="18" height="18"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="18" id="CJL-C6-lLw"/>
@@ -736,25 +749,20 @@
                                                     <constraint firstItem="9B1-Pq-4Bb" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" constant="3" id="1hj-Kt-y5P"/>
                                                     <constraint firstAttribute="trailing" secondItem="NVg-tx-CT5" secondAttribute="trailing" id="CIO-aM-hJH"/>
                                                     <constraint firstItem="NVg-tx-CT5" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" id="JDG-Lx-PgT"/>
+                                                    <constraint firstAttribute="bottom" secondItem="6Z2-55-MBL" secondAttribute="bottom" id="KUT-yT-vNo"/>
                                                     <constraint firstItem="NVg-tx-CT5" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" id="Nvz-jN-8Xn"/>
-                                                    <constraint firstAttribute="trailing" secondItem="6Z2-55-MBL" secondAttribute="trailing" id="STC-5n-P51"/>
-                                                    <constraint firstItem="6Z2-55-MBL" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" id="TLH-VJ-fsC"/>
                                                     <constraint firstItem="ePH-9p-Irg" firstAttribute="centerX" secondItem="Ffe-py-nUD" secondAttribute="centerX" id="Tpb-0s-PiH"/>
                                                     <constraint firstAttribute="bottom" secondItem="ePH-9p-Irg" secondAttribute="bottom" id="Vbm-Pw-NyJ"/>
+                                                    <constraint firstItem="9B1-Pq-4Bb" firstAttribute="top" secondItem="ePH-9p-Irg" secondAttribute="top" constant="3" id="YPZ-6E-v6w"/>
+                                                    <constraint firstItem="6Z2-55-MBL" firstAttribute="top" secondItem="NVg-tx-CT5" secondAttribute="bottom" id="fRe-5f-EaC"/>
                                                     <constraint firstAttribute="bottom" secondItem="oTW-Hj-YlO" secondAttribute="bottom" constant="3" id="fek-7I-9D4"/>
+                                                    <constraint firstItem="6Z2-55-MBL" firstAttribute="centerX" secondItem="Ffe-py-nUD" secondAttribute="centerX" id="hsb-zg-XCN"/>
                                                     <constraint firstItem="ePH-9p-Irg" firstAttribute="top" secondItem="NVg-tx-CT5" secondAttribute="bottom" id="lPX-Oi-8Z9"/>
-                                                    <constraint firstAttribute="bottom" secondItem="6Z2-55-MBL" secondAttribute="bottom" id="mcd-hm-tAF"/>
                                                     <constraint firstItem="htH-qg-uxZ" firstAttribute="top" secondItem="NVg-tx-CT5" secondAttribute="bottom" id="pev-Ms-cp3"/>
-                                                    <constraint firstItem="6Z2-55-MBL" firstAttribute="top" secondItem="Ffe-py-nUD" secondAttribute="top" id="sBE-Bb-MO1"/>
                                                     <constraint firstAttribute="trailing" secondItem="htH-qg-uxZ" secondAttribute="trailing" constant="3" id="vTl-dX-mZ8"/>
                                                     <constraint firstItem="oTW-Hj-YlO" firstAttribute="leading" secondItem="Ffe-py-nUD" secondAttribute="leading" constant="3" id="w2d-77-R9r"/>
                                                 </constraints>
                                                 <size key="customSize" width="80" height="81"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="8"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="avView" destination="6Z2-55-MBL" id="c62-BX-tJg"/>
                                                     <outlet property="avatarImageView" destination="ePH-9p-Irg" id="04u-4b-Cdw"/>
