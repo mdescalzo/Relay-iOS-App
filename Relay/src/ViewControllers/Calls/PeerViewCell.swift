@@ -9,6 +9,7 @@
 import UIKit
 
 class PeerViewCell: UICollectionViewCell {
+    @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var avView: RemoteVideoView!
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var statusIndicatorView: UIView!
@@ -22,6 +23,9 @@ class PeerViewCell: UICollectionViewCell {
         avView.isHidden = true
         statusIndicatorView.isHidden = true
         avatarImageView.image = nil
+        usernameLabel.text = ""
+        silenceIndicator.isHidden = true
+        videoIndicator.isHidden = true
         
         super.prepareForReuse()
     }

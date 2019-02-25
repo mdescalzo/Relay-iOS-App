@@ -44,6 +44,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var videoToggleButton: UIButton!
     @IBOutlet weak var audioOutButton: UIButton!
     @IBOutlet weak var leaveCallButton: UIButton!
+    @IBOutlet weak var peopleButton: UIButton!
     
     lazy var allAudioSources = Set(self.callKitService.audioService.availableInputs)
     
@@ -92,7 +93,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.xPhoneSpacerConstraint.constant = 0.0
         }
         
-        self.updatePeerViewHeight()
+        self.updateSecondaryPeerViews()
 
         // Collect Peers and connect to UI elements
         for peer in (self.call?.peerConnectionClients.values)! {
@@ -143,7 +144,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.call?.acceptCall()
         }
         
-        self.updatePeerViewHeight()
+        self.updateSecondaryPeerViews()
     }
     
     // MARK: - Audio Source
@@ -217,24 +218,36 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     // MARK: - Full Screen
     var isMainFullScreen: Bool = false
     var originalMainPeerFrame = CGRect()
+    var originalControlFrame = CGRect()
+    
     private func toggleFullScreen() {
-        var newMainFrame: CGRect
-        if isMainFullScreen {
-            newMainFrame = originalMainPeerFrame
-        } else {
-            originalMainPeerFrame = self.mainPeerContainer.frame
-            newMainFrame = UIScreen.main.nativeBounds
-        }
-        DispatchMainThreadSafe {
-            UIView.animate(withDuration: 0.25, animations: {
-                self.mainPeerContainer.frame = newMainFrame
-                self.controlsContainerView.isHidden = !self.controlsContainerView.isHidden
-                self.collectionView.isHidden = !self.collectionView.isHidden
-            }, completion: { _ in
-                self.updatePeerViewHeight()
-            })
-        }
-        isMainFullScreen = !isMainFullScreen
+        return
+        // FIXME: 'dis broke
+//        var newMainFrame: CGRect
+//        var newControlFrame: CGRect
+//        if isMainFullScreen {
+//            newControlFrame = originalControlFrame
+//            newMainFrame = originalMainPeerFrame
+//        } else {
+//            originalMainPeerFrame = self.mainPeerContainer.frame
+//            originalControlFrame = self.controlsContainerView.frame
+//            newMainFrame = UIScreen.main.nativeBounds
+//            newControlFrame = CGRect(x: UIScreen.main.nativeBounds.origin.x,
+//                                     y: UIScreen.main.nativeBounds.origin.y,
+//                                     width: self.controlsContainerView.frame.size.width,
+//                                     height: self.controlsContainerView.frame.size.height)
+//        }
+//        DispatchMainThreadSafe {
+//            UIView.animate(withDuration: 0.5, animations: {
+//                self.mainPeerContainer.frame = newMainFrame
+//                self.controlsContainerView.frame = newControlFrame
+//                self.controlsContainerView.isHidden = !self.controlsContainerView.isHidden
+//                self.collectionView.isHidden = !self.collectionView.isHidden
+//                self.updateSecondaryPeerViews()
+//            }, completion: { _ in
+//            })
+//        }
+//        isMainFullScreen = !isMainFullScreen
     }
 
     // MARK: - Helpers
@@ -435,7 +448,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.secondaryPeerIds.insert(peerId, at: usefulIndex)
             self.collectionView.insertItems(at: [IndexPath(item: usefulIndex, section: 0)])
         }, completion: { complete in
-            self.updatePeerViewHeight()
+            self.updateSecondaryPeerViews()
             self.updatePeerUIElement(peerId, animated: true)
         })
     }
@@ -462,7 +475,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 self.collectionView.deleteItems(at: [IndexPath(item: index, section: 0)])
             }
         }, completion: { complete in
-            self.updatePeerViewHeight()
+            self.updateSecondaryPeerViews()
             self.updatePeerUIElement(peerId, animated: true)
             if peerId != self.mainPeerId {
                 self.peerUIElements[peerId] = nil
@@ -508,21 +521,24 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     
-    private func updatePeerViewHeight() {
-        let oldValue = self.collectionViewHeightConstraint.constant
-        
-        var newValue: CGFloat
+    private func updateSecondaryPeerViews() {
+        let oldHeight = self.collectionViewHeightConstraint.constant
+        var hidePeople: Bool
+        var newHeight: CGFloat
         
         if self.secondaryPeerIds.count > 0 && !self.collectionView.isHidden {
-            newValue = UIScreen.main.bounds.width/4
+            newHeight = UIScreen.main.bounds.width/4
+            hidePeople = false
         } else {
-            newValue = 0
+            newHeight = 0
+            hidePeople = true
         }
         
-        if oldValue != newValue {
+        if oldHeight != newHeight {
             DispatchMainThreadSafe {
                 UIView.animate(withDuration: 0.1) {
-                    self.collectionViewHeightConstraint.constant = newValue
+                    self.peopleButton.isHidden = hidePeople
+                    self.collectionViewHeightConstraint.constant = newHeight
                     self.collectionView.reloadData()
                 }
             }
@@ -558,7 +574,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         var newY: CGFloat
         
         if self.collectionViewContainer.isHidden {
-            newY = self.controlsContainerView.frame.origin.y -0 self.collectionViewContainer.frame.size.height
+            newY = self.controlsContainerView.frame.origin.y - self.collectionViewContainer.frame.size.height
             newAlpha = 1.0
         } else {
             newAlpha = 0.0
@@ -949,6 +965,8 @@ extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionV
             } else {
                 cell.avatarImageView.image = UIImage(named: "actionsheet_contact")
             }
+            
+            cell.usernameLabel.text = FLContactsManager.shared.displayName(forRecipientId: peer.userId)
             
             if let rtcVideoTrack = self.call?.peerConnectionClients[peerId]?.remoteVideoTrack {
                 cell.rtcVideoTrack = rtcVideoTrack
