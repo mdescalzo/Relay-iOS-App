@@ -616,13 +616,13 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     @objc func didDoubleTapCollectionView(gesture: UITapGestureRecognizer) {
-//        let pointInCollectionView = gesture.location(in: self.collectionView)
-//        if let selectedIndexPath = self.collectionView.indexPathForItem(at: pointInCollectionView) {
-//
-//            // Swap this peer for the main Peer
-//            let thisPeerId = self.secondaryPeerIds[selectedIndexPath.item]
-//            self.pinPeerView(peerId: thisPeerId)
-//          }
+        let pointInCollectionView = gesture.location(in: self.collectionView)
+        if let selectedIndexPath = self.collectionView.indexPathForItem(at: pointInCollectionView) {
+            
+            // Swap this peer for the main Peer
+            let thisPeerId = self.secondaryPeerIds[selectedIndexPath.item]
+            self.pinPeerView(peerId: thisPeerId)
+        }
     }
     
     @objc func didLongPressCollectionView(gesture: UITapGestureRecognizer) {
