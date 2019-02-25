@@ -37,6 +37,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var collectionViewContainer: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var xPhoneSpacerConstraint: NSLayoutConstraint!
     @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var controlsContainerView: UIView!
     @IBOutlet weak var muteButton: UIButton!
@@ -82,6 +83,15 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             self.dismissImmediately(completion: nil)
             return
         }
+        
+        self.collectionView.backgroundColor = UIColor(white: 0.75, alpha: 0.25)
+        
+        if UIDevice.current.hasIPhoneXNotch {
+            self.xPhoneSpacerConstraint.constant = 25.0
+        } else {
+            self.xPhoneSpacerConstraint.constant = 0.0
+        }
+        
         self.updatePeerViewHeight()
 
         // Collect Peers and connect to UI elements
@@ -548,11 +558,11 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         var newY: CGFloat
         
         if self.collectionViewContainer.isHidden {
-            newY = self.collectionViewContainer.frame.origin.y - self.collectionViewContainer.frame.size.height
+            newY = self.controlsContainerView.frame.origin.y -0 self.collectionViewContainer.frame.size.height
             newAlpha = 1.0
         } else {
             newAlpha = 0.0
-            newY = self.collectionViewContainer.frame.origin.y + self.collectionViewContainer.frame.size.height
+            newY = self.controlsContainerView.frame.origin.y
         }
         
         newFrame = CGRect(x: self.collectionViewContainer.frame.origin.x,
@@ -560,7 +570,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                           width: self.collectionViewContainer.frame.size.width,
                           height: self.collectionViewContainer.frame.size.height)
         
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.collectionViewContainer.frame = newFrame
             self.collectionViewContainer.alpha = newAlpha
         }) { _ in
@@ -912,6 +922,10 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
 
 extension ConferenceCallViewController : UICollectionViewDelegate, UICollectionViewDataSource, PeerViewsLayoutDelegate
 {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        Logger.info("\(self.logTag) called \(#function)")
+    }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
