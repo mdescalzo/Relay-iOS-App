@@ -143,6 +143,12 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
         
         self.updateSecondaryPeerViews()
+        DeviceSleepManager.sharedInstance.addBlock(blockObject: self)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        DeviceSleepManager.sharedInstance.removeBlock(blockObject: self)
+        super.viewDidDisappear(animated)
     }
     
     // MARK: - Audio Source
