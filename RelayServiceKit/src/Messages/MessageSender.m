@@ -463,8 +463,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         
         if ([thread.participantIds containsObject:[TSAccountManager localUID]] && thread.participantIds.count == 1)
         {
-            // Send to self.
-            OWSAssert(message.recipientIds.count == 1);
             [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
                 for (NSString *recipientId in message.sendingRecipientIds) {
                     [message updateWithReadRecipientId:recipientId
