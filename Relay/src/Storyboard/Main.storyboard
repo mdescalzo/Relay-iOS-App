@@ -870,7 +870,7 @@
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IXc-It-DKf">
                                 <rect key="frame" x="0.0" y="20" width="375" height="40"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SRo-1p-mnh">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SRo-1p-mnh">
                                         <rect key="frame" x="0.0" y="19" width="375" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="kZU-9e-sl3"/>
@@ -888,6 +888,18 @@
                                     <constraint firstAttribute="height" constant="40" id="f0k-PG-mvp"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSz-3V-nan" userLabel="Flip Camera Button">
+                                <rect key="frame" x="327" y="24" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="PSz-3V-nan" secondAttribute="height" multiplier="1:1" id="uCP-we-dKm"/>
+                                </constraints>
+                                <state key="normal" image="cameraflip-200">
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapFlipCamera:" destination="WPy-fR-KZT" eventType="touchUpInside" id="Qq3-BF-tLr"/>
+                                </connections>
+                            </button>
                             <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fIA-Fr-YdV" userLabel="Local AV View" customClass="RTCCameraPreviewView">
                                 <rect key="frame" x="283" y="72" width="80" height="80"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -899,10 +911,13 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="PSz-3V-nan" secondAttribute="trailing" constant="16" id="01L-w2-15w"/>
                             <constraint firstItem="kzJ-c8-Dji" firstAttribute="leading" secondItem="X1H-78-tht" secondAttribute="leading" id="0OA-qF-WD7"/>
                             <constraint firstItem="fIA-Fr-YdV" firstAttribute="top" secondItem="IXc-It-DKf" secondAttribute="bottom" constant="12" id="7wp-8c-141"/>
+                            <constraint firstItem="IXc-It-DKf" firstAttribute="bottom" secondItem="PSz-3V-nan" secondAttribute="bottom" constant="4" id="9kM-h4-4Q8"/>
                             <constraint firstItem="glc-1A-mux" firstAttribute="top" secondItem="FoJ-iG-3jA" secondAttribute="bottom" constant="16" id="BbM-Af-890"/>
                             <constraint firstItem="0UN-wO-Fbp" firstAttribute="leading" secondItem="X1H-78-tht" secondAttribute="leading" id="GhN-fw-bFQ"/>
+                            <constraint firstItem="PSz-3V-nan" firstAttribute="top" secondItem="IXc-It-DKf" secondAttribute="top" constant="4" id="HE4-lo-CW0"/>
                             <constraint firstAttribute="trailing" secondItem="FoJ-iG-3jA" secondAttribute="trailing" constant="16" id="IK7-Q2-SHS"/>
                             <constraint firstItem="r7e-68-tUo" firstAttribute="top" secondItem="oYr-aF-2qo" secondAttribute="bottom" id="SXU-0Q-ahv"/>
                             <constraint firstAttribute="trailing" secondItem="kzJ-c8-Dji" secondAttribute="trailing" id="TUw-5l-dnP"/>
@@ -925,6 +940,7 @@
                     </view>
                     <connections>
                         <outlet property="audioOutButton" destination="J5U-8s-tr5" id="yIv-h0-ZO3"/>
+                        <outlet property="cameraFlipButton" destination="PSz-3V-nan" id="izg-H7-BJv"/>
                         <outlet property="collectionView" destination="Ohx-1r-onH" id="2kx-DL-ib0"/>
                         <outlet property="collectionViewContainer" destination="0UN-wO-Fbp" id="Wn8-wm-APu"/>
                         <outlet property="collectionViewHeightConstraint" destination="8zk-WD-cJB" id="aSW-XW-nvs"/>
@@ -971,6 +987,7 @@
         <image name="audio-call-video-inactive" width="79.919998168945312" height="79.919998168945312"/>
         <image name="avatar" width="16" height="16"/>
         <image name="call-active-wide" width="200" height="200"/>
+        <image name="cameraflip-200" width="200" height="200"/>
         <image name="check" width="36" height="36"/>
         <image name="contact_default_feed.png" width="242" height="242"/>
         <image name="group-avatar-white" width="53" height="53"/>

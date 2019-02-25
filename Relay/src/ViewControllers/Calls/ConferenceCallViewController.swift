@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 //import PromiseKit
 
 private let reuseIdentifier = "peerCell"
@@ -21,8 +20,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     
     let callKitService = CallUIService.shared
     
-    @IBOutlet var stackContainerView: UIStackView!
-    
+    @IBOutlet weak var cameraFlipButton: UIButton!
     @IBOutlet weak var mainVideoIndicator: UIImageView!
     @IBOutlet weak var mainSilenceIndicator: UIImageView!
     @IBOutlet weak var mainPeerContainer: UIView!
@@ -567,6 +565,14 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     // MARK: - Action handlers
+    var isUsingFrontCamera = true
+    @IBAction func didTapFlipCamera(_ button: UIButton) {
+        if let call = self.call {
+            isUsingFrontCamera = !isUsingFrontCamera
+            call.setCameraSource(isUsingFrontCamera: isUsingFrontCamera)
+        }
+    }
+    
     @IBAction func didTapPeopleButton(_ sender: UIButton) {
         var newFrame: CGRect
         var newAlpha: CGFloat
@@ -638,6 +644,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBAction func didTapVideoToggleButton(_ sender: UIButton) {
         Logger.info("\(self.logTag) called \(#function)")
         self.videoToggleButton.isSelected = !self.videoToggleButton.isSelected
+        self.cameraFlipButton.isHidden = !self.videoToggleButton.isSelected
         
         self.call?.setLocalVideoEnabled(enabled: self.videoToggleButton.isSelected)
     }
@@ -924,12 +931,15 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     func didUpdateLocalVideoTrack(captureSession: AVCaptureSession?) {
         Logger.info("\(self.logTag) called \(#function)")
         DispatchMainThreadSafe {
-            if captureSession != nil {
-                self.localAVView.captureSession = captureSession
-                self.localAVView.isHidden = false
-            } else {
-                self.localAVView.isHidden = true
-            }
+            UIView.animate(withDuration: 0.5, animations: {
+                if captureSession != nil {
+                    self.localAVView.captureSession = captureSession
+                    self.localAVView.isHidden = false
+                } else {
+                    self.localAVView.isHidden = true
+                    self.cameraFlipButton.isHidden = true
+                }
+            })
         }
     }
 }
