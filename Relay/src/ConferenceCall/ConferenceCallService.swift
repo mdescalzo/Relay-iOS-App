@@ -27,6 +27,8 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
 
     var conferenceCall: ConferenceCall?
     
+    // MARK: - Major Class Actions
+    
     @objc func startCall(thread: TSThread) -> ConferenceCall? {
         if self.conferenceCall != nil {
             Logger.debug("Rejected request to create a second ConferenceCall (for now)")
@@ -49,7 +51,8 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         self.conferenceCall?.leaveCall()
     }
     
-    // MARK: - internal helpers
+    // MARK: - Internal Helpers
+    
     private static func getIceServers() -> Promise<[RTCIceServer]> {
         AssertIsOnMainThread(file: #function)
         
@@ -82,11 +85,13 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         ConferenceCallEvents.add(.ReceivedCallJoin(callId: callId, userId: senderId, deviceId: senderDeviceId))
         
         if conferenceCall != nil && conferenceCall?.callId != callId {
-            Logger.debug("Ignoring call-offer for a different call than the one we already have running")
+            Logger.debug("Ignoring call-join for a different call than the one we already have running")
             return
         }
 
-        if conferenceCall == nil {
+        let myId = TSAccountManager.localUID()!
+
+        if conferenceCall == nil && senderId != myId && originatorId != myId {
             self.conferenceCall = ConferenceCall(thread: thread,
                                                  callId: callId,
                                                  originatorId: originatorId,
@@ -97,7 +102,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
             conferenceCall!.state = .ringing
         }
         
-        self.conferenceCall!.handleJoin(userId: senderId, deviceId: senderDeviceId)
+        self.conferenceCall?.handleJoin(userId: senderId, deviceId: senderDeviceId)
     }
     
     public func receivedOffer(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String, peerId: String, sessionDescription: String) {
@@ -114,7 +119,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
 
     public func receivedAcceptOffer(with thread: TSThread, callId: String, peerId: String, sessionDescription: String) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
-            Logger.debug("Ignoring accept-offer from/for an unknown call")
+            Logger.debug("Ignoring accept-call-offer from/for an unknown call")
             return
         }
         conferenceCall!.handleAcceptOffer(peerId: peerId, sessionDescription: sessionDescription)
@@ -132,7 +137,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         ConferenceCallEvents.add(.ReceivedCallLeave(callId: callId, userId: senderId, deviceId: senderDeviceId))
         
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
-            Logger.debug("Ignoring leave from/for an unknown call")
+            Logger.debug("Ignoring call-leave from/for an unknown call")
             return
         }
         

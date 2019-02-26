@@ -163,19 +163,57 @@ class CallAVPolicy {
         Logger.info("\n\n\(ConferenceCallEvents.connectSpeeds)\n\n")
     }
     
-    func cleanupBeforeDestruction() {
-        self.removeAllDelegates()
-
-        // audioTrack is a strong property because we need access to it to mute/unmute, but I was seeing it
-        // become nil when it was only a weak property. So we retain it and manually nil the reference here, because
-        // we are likely to crash if we retain any peer connection properties when the peerconnection is released
+    // MARK: - Major Actions on Conference Calls
+    
+    func joinCall() {
+        guard let messageSender = Environment.current()?.messageSender else {
+            Logger.info("can't get messageSender")
+            return
+        }
         
-        localVideoTrack?.isEnabled = false
-
-        audioTrack = nil
-        localVideoTrack = nil
-        videoCaptureController = nil
+        let members = self.thread.participantIds
+        let allTheData = [
+            "version": ConferenceCallProtocolLevel,
+            "originator" : self.originatorId,
+            "callId" : self.callId,
+            "members" : members
+            ] as NSMutableDictionary
+        let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallJoinKey, moreData: allTheData)
+        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
+            ConferenceCallEvents.add(.SentCallJoin(callId: self.callId))
+            self.state = .joined // will send queued offers
+        }).retainUntilComplete()
     }
+    
+    func rejectCall() {
+        self.state = .rejected
+        self.leaveCall()
+    }
+
+    func leaveCall() {
+        guard let messageSender = Environment.current()?.messageSender else {
+            Logger.info("can't get messageSender")
+            return
+        }
+        
+        self.state = .leaving
+        
+        for pcc in self.peerConnectionClients.values {
+            pcc.state = .leftPeer
+        }
+        
+        let members = self.thread.participantIds
+        
+        let allTheData = [ "version": ConferenceCallProtocolLevel, "callId" : self.callId ] as NSMutableDictionary
+        
+        let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
+        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
+            ConferenceCallEvents.add(.SentCallLeave(callId: self.callId))
+            self.state = .left
+        }).retainUntilComplete()
+    }
+    
+    // MARK: - Class Helpers
     
     func locatePCC(_ userId: String, _ deviceId: UInt32) -> PeerConnectionClient? {
         for peerId in (self.peerConnectionClients.filter { $0.value.userId == userId && $0.value.deviceId == deviceId }).keys {
@@ -215,7 +253,46 @@ class CallAVPolicy {
         }
     }
     
+    private func updateCallRecordType() {
+        AssertIsOnMainThread(file: #function)
+        
+        guard let callRecord = self.callRecord else { return }
+        
+        if state == .joined &&
+            callRecord.callType == RPRecentCallTypeOutgoingIncomplete {
+            callRecord.updateCallType(RPRecentCallTypeOutgoing)
+        }
+        if state == .joined &&
+            callRecord.callType == RPRecentCallTypeIncomingIncomplete {
+            callRecord.updateCallType(RPRecentCallTypeIncoming)
+        }
+    }
+
+    func cleanupBeforeDestruction() {
+        self.removeAllDelegates()
+        
+        // audioTrack is a strong property because we need access to it to mute/unmute, but I was seeing it
+        // become nil when it was only a weak property. So we retain it and manually nil the reference here, because
+        // we are likely to crash if we retain any peer connection properties when the peerconnection is released
+        
+        localVideoTrack?.isEnabled = false
+        
+        audioTrack = nil
+        localVideoTrack = nil
+        videoCaptureController = nil
+    }
+
+    // MARK: - Handle Incoming Control Messages
+
     func handleJoin(userId: String, deviceId: UInt32) {
+        let myId = TSAccountManager.localUID()!
+        
+        if self.state == .ringing && userId == myId {
+            self.leaveCall()
+            return
+            // TODO: or maybe just do "self.state = .vibrating" and carry on..
+        }
+        
         let pcc = locatePCC(userId, deviceId)
         pcc?.state = .replaced
 
@@ -228,6 +305,17 @@ class CallAVPolicy {
         }
     }
     
+    func handleLeave(userId: String, deviceId: UInt32) {
+        let myId = TSAccountManager.localUID()!
+
+        if userId == myId && self.state == .ringing {
+            self.state = .vibrating
+        }
+        
+        let pcc = locatePCC(userId, deviceId)
+        pcc?.state = .peerLeft
+    }
+
     public func handleOffer(userId: String, deviceId: UInt32, peerId: String, sessionDescription: String) {
         let pcc = locatePCC(userId, deviceId)
         pcc?.state = .replaced
@@ -253,74 +341,7 @@ class CallAVPolicy {
         pcc?.addRemoteIceCandidates(iceCandidates)
     }
     
-    func handleLeave(userId: String, deviceId: UInt32) {
-        let pcc = locatePCC(userId, deviceId)
-        pcc?.state = .peerLeft
-    }
-
-    func rejectCall() {
-        self.state = .rejected
-        self.leaveCall()
-    }
-    
-    func joinCall() {
-        guard let messageSender = Environment.current()?.messageSender else {
-            Logger.info("can't get messageSender")
-            return
-        }
-        
-        let members = self.thread.participantIds
-        let allTheData = [
-            "version": ConferenceCallProtocolLevel,
-            "originator" : self.originatorId,
-            "callId" : self.callId,
-            "members" : members
-            ] as NSMutableDictionary
-        let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallJoinKey, moreData: allTheData)
-        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
-            ConferenceCallEvents.add(.SentCallJoin(callId: self.callId))
-            self.state = .joined // will send queued offers
-        }).retainUntilComplete()
-    }
-    
-    func leaveCall() {
-        guard let messageSender = Environment.current()?.messageSender else {
-            Logger.info("can't get messageSender")
-            return
-        }
-        
-        self.state = .leaving
-        
-        for pcc in self.peerConnectionClients.values {
-            pcc.state = .leftPeer
-        }
-
-        let members = self.thread.participantIds
-        
-        let allTheData = [ "version": ConferenceCallProtocolLevel, "callId" : self.callId ] as NSMutableDictionary
-        
-        let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
-        messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
-            ConferenceCallEvents.add(.SentCallLeave(callId: self.callId))
-            self.state = .left
-        }).retainUntilComplete()
-    }
-    
-    // MARK: - Class Helpers
-    private func updateCallRecordType() {
-        AssertIsOnMainThread(file: #function)
-        
-        guard let callRecord = self.callRecord else { return }
-        
-        if state == .joined &&
-            callRecord.callType == RPRecentCallTypeOutgoingIncomplete {
-            callRecord.updateCallType(RPRecentCallTypeOutgoing)
-        }
-        if state == .joined &&
-            callRecord.callType == RPRecentCallTypeIncomingIncomplete {
-            callRecord.updateCallType(RPRecentCallTypeIncoming)
-        }
-    }
+    // MARK: - Delegate Management
     
     func addDelegate(delegate: ConferenceCallDelegate) {
         AssertIsOnMainThread(file: #function)
