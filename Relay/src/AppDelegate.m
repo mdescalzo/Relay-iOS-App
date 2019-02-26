@@ -1132,11 +1132,6 @@ static NSTimeInterval launchStartedAt;
 
     if ([TSAccountManager isRegistered]) {
         DDLogInfo(@"%@ localUID: %@", [TSAccountManager localUID], self.logTag);
-
-        [[OWSPrimaryStorage sharedManager].newDatabaseConnection
-            readWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
-                [ExperienceUpgradeFinder.sharedManager markAllAsSeenWithTransaction:transaction];
-            }];
         // Start running the disappearing messages job in case the newly registered user
         // enables this feature
         [[OWSDisappearingMessagesJob sharedJob] startIfNecessary];
