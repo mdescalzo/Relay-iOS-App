@@ -82,7 +82,7 @@ class CallAVPolicy {
     
     let thread: TSThread;
     let callId: String;
-    let localUUID = UUID()  // For device use with CallKit
+    var localUUID = UUID()  // For local device use with CallKit
     let originatorId: String;
     
     var delegates = [Weak<ConferenceCallDelegate>]()
