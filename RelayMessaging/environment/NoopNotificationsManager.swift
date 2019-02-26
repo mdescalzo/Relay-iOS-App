@@ -6,6 +6,9 @@ import RelayServiceKit
 
 @objc
 public class NoopNotificationsManager: NSObject, NotificationsProtocol {
+    public func clearAllNotifications() {
+        owsFailDebug("\(self.logTag) in \(#function).")
+    }
 
     public func notifyUser(for incomingMessage: TSIncomingMessage, in thread: TSThread, contactsManager: ContactsManagerProtocol, transaction: YapDatabaseReadTransaction) {
         owsFailDebug("\(self.logTag) in \(#function).")

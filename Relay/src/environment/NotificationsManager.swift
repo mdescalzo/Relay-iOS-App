@@ -12,6 +12,7 @@ import YapDatabase
 import RelayMessaging
 
 
+@objc
 class NotificationsManager: NSObject, NotificationsProtocol, OWSCallNotificationsAdaptee {
     
     private var currentNotifications = [String : UILocalNotification]()
@@ -303,11 +304,13 @@ class NotificationsManager: NSObject, NotificationsProtocol, OWSCallNotification
     
     // MARK: - Utility
     
-    func clearAllNotifications() {
+    @objc
+    public func clearAllNotifications() {
         self.currentNotifications.removeAll()
     }
     
-    class func presentDebugNotification() {
+    @objc
+    public class func presentDebugNotification() {
         let notification = UILocalNotification()
         notification.category = Signal_Full_New_Message_Category;
         notification.soundName = OWSSounds.filename(for: .defaultiOSIncomingRingtone)

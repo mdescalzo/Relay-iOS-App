@@ -18,7 +18,6 @@
 #import "HomeViewController.h"
 #import "MediaDetailViewController.h"
 #import "NotificationSettingsViewController.h"
-#import "NotificationsManager.h"
 #import "OWSAddToContactViewController.h"
 #import "OWSAnyTouchGestureRecognizer.h"
 #import "OWSAudioPlayer.h"
@@ -51,7 +50,6 @@
 #import <RelayMessaging/NSString+OWS.h>
 #import <RelayMessaging/OWSAudioPlayer.h>
 #import <RelayMessaging/OWSContactAvatarBuilder.h>
-//#import <RelayMessaging/OWSContactsManager.h>
 #import <RelayMessaging/OWSFormat.h>
 #import <RelayMessaging/OWSPreferences.h>
 #import <RelayMessaging/OWSProfileManager.h>
