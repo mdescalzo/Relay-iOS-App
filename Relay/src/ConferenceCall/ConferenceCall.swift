@@ -36,9 +36,8 @@ enum ConferenceCallDirection {
 enum ConferenceCallState {
     case undefined          // (briefly) at creation
     case ringing            // after receiving offer
-    case vibrating          // after some other device of mine has accepted that offer
-    case rejected           // after ringing or vibrating
-    case joined             // after ringing or vibrating (or having initiated a call)
+    case rejected           // after ringing
+    case joined             // after ringing or having initiated a call
     case leaving            // after joined
     case left               // after leaving or after last peer has left
 }
@@ -196,7 +195,9 @@ class CallAVPolicy {
             return
         }
         
-        self.state = .leaving
+        if self.state != .rejected && self.state != .ringing {
+            self.state = .leaving
+        }
         
         for pcc in self.peerConnectionClients.values {
             pcc.state = .leftPeer
@@ -288,9 +289,8 @@ class CallAVPolicy {
         let myId = TSAccountManager.localUID()!
         
         if self.state == .ringing && userId == myId {
-            self.leaveCall()
+            self.rejectCall() // another device of mine has answered this call so I'll shut up by rejecting it locally
             return
-            // TODO: or maybe just do "self.state = .vibrating" and carry on..
         }
         
         let pcc = locatePCC(userId, deviceId)
@@ -309,7 +309,7 @@ class CallAVPolicy {
         let myId = TSAccountManager.localUID()!
 
         if userId == myId && self.state == .ringing {
-            self.state = .vibrating
+            self.rejectCall() // another device of mine has rejected this call so I'll reject it too
         }
         
         let pcc = locatePCC(userId, deviceId)
@@ -374,7 +374,6 @@ class CallAVPolicy {
         notifyDelegates({ delegate in delegate.peerConnectionStateDidChange(pcc: pcc, oldState: oldState, newState: newState) })
         
         if newState.isTerminal {
-            Logger.debug("GEP: blowing away terminal peer \(pcc.peerId) in call \(pcc.callId)")
             self.peerConnectionClients.removeValue(forKey: pcc.peerId)
             pcc.cleanupBeforeDestruction()
         }

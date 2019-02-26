@@ -138,7 +138,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if self.call?.state == .ringing || self.call?.state == .vibrating {
+        if self.call?.state == .ringing {
             self.call?.joinCall()
         }
         
@@ -892,8 +892,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .undefined:
             do { /* TODO */ }
         case .ringing:
-            do { /* TODO */ }
-        case .vibrating:
             do { /* TODO */ }
         case .rejected:
             do { /* TODO */ }

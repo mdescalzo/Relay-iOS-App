@@ -153,7 +153,7 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
 
     func stateDidChange(call: ConferenceCall, oldState: ConferenceCallState, newState: ConferenceCallState) {
         ConferenceCallEvents.add(.CallStateChange(callId: call.callId, oldState: oldState, newState: newState))
-        if oldState == .leaving && newState == .left && self.conferenceCall == call {
+        if newState == .left && self.conferenceCall == call {
             self.conferenceCall!.cleanupBeforeDestruction()
             self.conferenceCall = nil
         }
