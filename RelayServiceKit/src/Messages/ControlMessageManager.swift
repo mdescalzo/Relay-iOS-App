@@ -179,13 +179,6 @@ class ControlMessageManager : NSObject
                 return
         }
 
-        guard message.authorId != TSAccountManager.localUID() else {
-            DispatchMainThreadSafe {
-                TextSecureKitEnv.shared().callMessageHandler.receivedSelfAcceptOffer(with: message.thread, callId: callId, deviceId: message.sourceDeviceId)
-            }
-            return
-        }
-        
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(with: message.thread, callId: callId, peerId: peerId, sessionDescription: sdp)
         }

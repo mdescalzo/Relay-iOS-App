@@ -480,15 +480,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             // Sync message send
             NSString *recipientContactId = [TSAccountManager localUID];
             
-            // Make sure we aren't sending callOffer sync messages.
-            if ([message isKindOfClass:[OutgoingControlMessage class]]) {
-                OutgoingControlMessage *cMessage = (OutgoingControlMessage *)message;
-                if ([cMessage.controlMessageType isEqualToString:FLControlMessageCallOfferKey]) {
-                    DDLogInfo(@"%@ skipping callOffer send to self", self.logTag);
-                    return;
-                }
-            }
-            
             // If we block a user, don't send 1:1 messages to them. The UI
             // should prevent this from occurring, but in some edge cases
             // you might, for example, have a pending outgoing message when

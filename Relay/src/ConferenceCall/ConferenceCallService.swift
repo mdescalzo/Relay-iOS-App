@@ -120,15 +120,6 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         conferenceCall!.handleAcceptOffer(peerId: peerId, sessionDescription: sessionDescription)
     }
 
-    public func receivedSelfAcceptOffer(with thread: TSThread, callId: String, deviceId: UInt32) {
-        if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
-            Logger.debug("Ignoring self-accept-offer from/for an unknown call")
-            return
-        }
-        conferenceCall!.handleSelfAcceptOffer(deviceId: deviceId)
-    }
-    
-    
     public func receivedIceCandidates(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String, iceCandidates: [Any]) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
             Logger.debug("Ignoring ice candidates from/for an unknown call")

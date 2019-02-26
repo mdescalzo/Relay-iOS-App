@@ -248,13 +248,6 @@ class CallAVPolicy {
         pcc.handleAcceptOffer(sessionDescription: sessionDescription)
     }
     
-    public func handleSelfAcceptOffer(deviceId: UInt32) {
-        Logger.info("GEP: handling accept-offer from self, device id \(deviceId)")
-        if self.state == .ringing {
-            self.state = .vibrating
-        }
-    }
-    
     func handleRemoteIceCandidates(userId: String, deviceId: UInt32, iceCandidates: [Any]) {
         let pcc = locatePCC(userId, deviceId)
         pcc?.addRemoteIceCandidates(iceCandidates)

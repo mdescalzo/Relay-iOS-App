@@ -29,10 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
                               peerId:(NSString *)peerId
                   sessionDescription:(NSString *)sessionDescription;
 
--(void)receivedSelfAcceptOfferWithThread:(TSThread *)thread
-                                  callId:(NSString *)callId
-                                deviceId:(UInt32)deviceId;
-
 -(void)receivedIceCandidatesWithThread:(TSThread *)thread
                               senderId:(NSString *)senderId
                         senderDeviceId:(UInt32)senderDeviceId

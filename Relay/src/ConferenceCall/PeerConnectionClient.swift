@@ -259,8 +259,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
             
             return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
-        }.then { hardenedSessionDesc -> Promise<Void> in
-            self.sendCallAcceptOffer(negotiatedSessionDescription: hardenedSessionDesc)
+        }.then { hardenedSessionDescription -> Promise<Void> in
+            self.sendCallAcceptOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
         }.then { () -> Promise<Void> in
             self.state = .sentAcceptOffer
             self.readyToSendIceCandidatesResolver.fulfill(())
@@ -286,24 +286,21 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
 
 
-    private func sendCallAcceptOffer(negotiatedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> {
+    private func sendCallAcceptOfferMessage(hardenedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> {
         guard let call = self.delegate?.owningCall() else {
             return Promise(error: CallError.other(description: "can't get owning call"))
         }
         guard let messageSender = Environment.current()?.messageSender else {
             return Promise(error: CallError.other(description: "can't get messageSender"))
         }
-        let members = call.thread.participantIds
-        let originator = call.originatorId
-        let answer = [ "type" : "answer",
-                       "sdp" : negotiatedSessionDescription.sdp ]
-        
+
         let allTheData = [ "version": ConferenceCallProtocolLevel,
-                           "answer" : answer,
+                           "members" : call.thread.participantIds,
+                           "originator" : call.originatorId,
                            "callId" : self.callId,
-                           "members" : members,
-                           "originator" : originator,
                            "peerId" : self.peerId,
+                           "answer" : [ "type" : "answer",
+                                        "sdp" : hardenedSessionDescription.sdp ],
                            ] as NSMutableDictionary
         
         let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
@@ -333,28 +330,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             self.audioSender = audioSender
 
             return self.createSessionDescriptionOffer()
-        }.then { (sessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
-            return firstly {
-                self.setLocalSessionDescription(sessionDescription)
-            }.then { _ -> Promise<Void> in
-                guard let call = self.delegate?.owningCall() else {
-                    return Promise(error: CallError.other(description: "can't get owning call"))
-                }
-                guard let messageSender = Environment.current()?.messageSender else {
-                    return Promise(error: CallError.other(description: "can't get messageSender"))
-                }
-                let allTheData = [ "version": ConferenceCallProtocolLevel,
-                                   "callId" : self.callId,
-                                   "members" : call.thread.participantIds,
-                                   "originator" : call.originatorId,
-                                   "peerId" : self.peerId,
-                                   "offer" : [ "type" : "offer",
-                                               "sdp" : sessionDescription.sdp ],
-                                   ] as NSMutableDictionary
-                
-                let offerControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallOfferKey, moreData: allTheData)
-                return messageSender.sendPromise(message: offerControlMessage, recipientId: self.userId, recipientDeviceId: self.deviceId)
-            }
+        }.then { (hardenedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
+            self.sendCallOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
         }.then { () -> Promise<Void> in
             self.state = .awaitingAcceptOffer
             self.readyToSendIceCandidatesResolver.fulfill(())
@@ -380,6 +357,31 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             }
         }.retainUntilComplete()
     }
+    
+    private func sendCallOfferMessage(hardenedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> {
+        return firstly {
+            self.setLocalSessionDescription(hardenedSessionDescription)
+            }.then { _ -> Promise<Void> in
+                guard let call = self.delegate?.owningCall() else {
+                    return Promise(error: CallError.other(description: "can't get owning call"))
+                }
+                guard let messageSender = Environment.current()?.messageSender else {
+                    return Promise(error: CallError.other(description: "can't get messageSender"))
+                }
+                let allTheData = [ "version": ConferenceCallProtocolLevel,
+                                   "members" : call.thread.participantIds,
+                                   "originator" : call.originatorId,
+                                   "callId" : self.callId,
+                                   "peerId" : self.peerId,
+                                   "offer" : [ "type" : "offer",
+                                               "sdp" : hardenedSessionDescription.sdp ],
+                                   ] as NSMutableDictionary
+                
+                let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallOfferKey, moreData: allTheData)
+                return messageSender.sendPromise(message: message, recipientId: self.userId, recipientDeviceId: self.deviceId)
+        }
+    }
+
     
     func handleAcceptOffer(sessionDescription: String) {
         self.state = .receivedAcceptOffer
