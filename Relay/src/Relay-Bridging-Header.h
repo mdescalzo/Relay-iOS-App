@@ -100,7 +100,6 @@
 #import <RelayServiceKit/OWSRecipientIdentity.h>
 #import <RelayServiceKit/OWSRequestFactory.h>
 #import <RelayServiceKit/OWSSignalService.h>
-//#import <RelayServiceKit/OWSSyncContactsMessage.h>
 #import <RelayServiceKit/PhoneNumber.h>
 #import <RelayServiceKit/SignalAccount.h>
 #import <RelayServiceKit/TSAccountManager.h>
@@ -116,6 +115,8 @@
 #import <RelayServiceKit/TSPreKeyManager.h>
 #import <RelayServiceKit/TSSocketManager.h>
 #import <RelayServiceKit/TSThread.h>
+#import <RelayServiceKit/TSInteraction.h>
+#import <RelayServiceKit/TSMessage.h>
 #import <RelayServiceKit/UIImage+OWS.h>
 #import <RelayServiceKit/UIImage+OWS.h>
 #import <WebRTC/RTCAudioSession.h>

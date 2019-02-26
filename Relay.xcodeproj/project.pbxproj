@@ -97,7 +97,6 @@
 		346129951FD1E30000532771 /* OWSDatabaseMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129931FD1E30000532771 /* OWSDatabaseMigration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		346129961FD1E30000532771 /* OWSDatabaseMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129941FD1E30000532771 /* OWSDatabaseMigration.m */; };
 		346129991FD1E4DA00532771 /* SignalApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129971FD1E4D900532771 /* SignalApp.m */; };
-		3461299C1FD1EA9E00532771 /* NotificationsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3461299B1FD1EA9E00532771 /* NotificationsManager.m */; };
 		346129A91FD1F0E000532771 /* OWSFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129A81FD1F0DF00532771 /* OWSFormat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		346129AB1FD1F0EE00532771 /* OWSFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129AA1FD1F0EE00532771 /* OWSFormat.m */; };
 		346129AD1FD1F34E00532771 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346129AC1FD1F34E00532771 /* ImageCache.swift */; };
@@ -554,7 +553,6 @@
 		7D2CD5E0214C3C9C004E957A /* AboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC893204DAC8C007AEB0F /* AboutTableViewController.m */; };
 		7D2CD5E1214C3C9C004E957A /* DebugUIStress.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2A1F74C12700D7438D /* DebugUIStress.m */; };
 		7D2CD5E2214C3C9C004E957A /* UpdateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89C204DAC8D007AEB0F /* UpdateGroupViewController.m */; };
-		7D2CD5E4214C3C9C004E957A /* NotificationsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3461299B1FD1EA9E00532771 /* NotificationsManager.m */; };
 		7D2CD5E5214C3C9C004E957A /* TextFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4521C3BF1F59F3BA00B4C582 /* TextFieldHelper.swift */; };
 		7D2CD5E6214C3C9C004E957A /* DebugUIMessagesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCDB206939B100CB1A14 /* DebugUIMessagesAction.m */; };
 		7D2CD5E7214C3C9C004E957A /* PrivacySettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC87E204DAC8C007AEB0F /* PrivacySettingsTableViewController.m */; };
@@ -738,6 +736,8 @@
 		7D92E4D2220E0A1600542694 /* PeerViewsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */; };
 		7D92E4D3220E0A1600542694 /* PeerViewsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */; };
 		7DCA3B3E21BB00F700733FF2 /* ThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCA3B3D21BB00F600733FF2 /* ThreadManager.swift */; };
+		7DCC43D02225A0900097EE0E /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */; };
+		7DCC43D12225A0900097EE0E /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */; };
 		7DD5A72D211B7B1100965478 /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72C211B7B1000965478 /* HttpRequest.m */; };
 		7DD5A730211B7C7100965478 /* HttpRequestOrResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72F211B7C7100965478 /* HttpRequestOrResponse.m */; };
 		7DD5A733211B7CA500965478 /* HttpResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A732211B7CA500965478 /* HttpResponse.m */; };
@@ -1101,8 +1101,6 @@
 		346129941FD1E30000532771 /* OWSDatabaseMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSDatabaseMigration.m; sourceTree = "<group>"; };
 		346129971FD1E4D900532771 /* SignalApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalApp.m; sourceTree = "<group>"; };
 		346129981FD1E4DA00532771 /* SignalApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalApp.h; sourceTree = "<group>"; };
-		3461299A1FD1EA9E00532771 /* NotificationsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsManager.h; sourceTree = "<group>"; };
-		3461299B1FD1EA9E00532771 /* NotificationsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsManager.m; sourceTree = "<group>"; };
 		346129A81FD1F0DF00532771 /* OWSFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSFormat.h; sourceTree = "<group>"; };
 		346129AA1FD1F0EE00532771 /* OWSFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSFormat.m; sourceTree = "<group>"; };
 		346129AC1FD1F34E00532771 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -1520,6 +1518,7 @@
 		7D95D84B215C5E99000E783D /* RelayDev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RelayDev-Info.plist"; sourceTree = "<group>"; };
 		7D9DCFCA21B5D7AE00120954 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		7DCA3B3D21BB00F600733FF2 /* ThreadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadManager.swift; sourceTree = "<group>"; };
+		7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManager.swift; sourceTree = "<group>"; };
 		7DD5A72B211B7B1000965478 /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
 		7DD5A72C211B7B1000965478 /* HttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRequest.m; sourceTree = "<group>"; };
 		7DD5A72E211B7C7000965478 /* HttpRequestOrResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequestOrResponse.h; sourceTree = "<group>"; };
@@ -2545,8 +2544,7 @@
 			isa = PBXGroup;
 			children = (
 				4505C2BD1E648E6E00CEBF41 /* ExperienceUpgrades */,
-				3461299A1FD1EA9E00532771 /* NotificationsManager.h */,
-				3461299B1FD1EA9E00532771 /* NotificationsManager.m */,
+				7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */,
 				4539B5851F79348F007141FF /* PushRegistrationManager.swift */,
 				346129981FD1E4DA00532771 /* SignalApp.h */,
 				346129971FD1E4D900532771 /* SignalApp.m */,
@@ -4275,6 +4273,7 @@
 				7D2CD5B8214C3C9C004E957A /* OWSMessageTextView.m in Sources */,
 				7D2CD5B9214C3C9C004E957A /* ConversationCollectionView.m in Sources */,
 				7D2CD5BB214C3C9C004E957A /* PinEntryView.m in Sources */,
+				7DCC43D12225A0900097EE0E /* NotificationsManager.swift in Sources */,
 				7D2CD5BC214C3C9C004E957A /* BlockListViewController.m in Sources */,
 				7D2CD5BD214C3C9C004E957A /* DirectoryCell.swift in Sources */,
 				7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */,
@@ -4305,7 +4304,6 @@
 				7D2CD5E0214C3C9C004E957A /* AboutTableViewController.m in Sources */,
 				7D2CD5E1214C3C9C004E957A /* DebugUIStress.m in Sources */,
 				7D2CD5E2214C3C9C004E957A /* UpdateGroupViewController.m in Sources */,
-				7D2CD5E4214C3C9C004E957A /* NotificationsManager.m in Sources */,
 				7D2CD5E5214C3C9C004E957A /* TextFieldHelper.swift in Sources */,
 				7D2CD5E6214C3C9C004E957A /* DebugUIMessagesAction.m in Sources */,
 				7D2CD5E7214C3C9C004E957A /* PrivacySettingsTableViewController.m in Sources */,
@@ -4481,6 +4479,7 @@
 				34DBF003206BD5A500025978 /* OWSMessageTextView.m in Sources */,
 				34D1F0B41F86D31D0066283D /* ConversationCollectionView.m in Sources */,
 				45D308AD2049A439000189E4 /* PinEntryView.m in Sources */,
+				7DCC43D02225A0900097EE0E /* NotificationsManager.swift in Sources */,
 				340FC8B1204DAC8D007AEB0F /* BlockListViewController.m in Sources */,
 				7D705DA7214827EF00488180 /* DirectoryCell.swift in Sources */,
 				45B5360E206DD8BB00D61655 /* UIResponder+OWS.swift in Sources */,
@@ -4511,7 +4510,6 @@
 				340FC8B5204DAC8D007AEB0F /* AboutTableViewController.m in Sources */,
 				34BECE2B1F74C12700D7438D /* DebugUIStress.m in Sources */,
 				340FC8B9204DAC8D007AEB0F /* UpdateGroupViewController.m in Sources */,
-				3461299C1FD1EA9E00532771 /* NotificationsManager.m in Sources */,
 				4521C3C01F59F3BA00B4C582 /* TextFieldHelper.swift in Sources */,
 				34D2CCDF206939B400CB1A14 /* DebugUIMessagesAction.m in Sources */,
 				340FC8AC204DAC8D007AEB0F /* PrivacySettingsTableViewController.m in Sources */,
