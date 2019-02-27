@@ -36,7 +36,7 @@ class NotificationsManager: NSObject, NotificationsProtocol, OWSCallNotification
         // it must be escaped.
         // see https://developer.apple.com/documentation/uikit/uilocalnotification/1616646-alertbody
         // for more details.
-        let messageText = DisplayableText.filterNotificationText(rawMessageText)
+        let messageText = DisplayableText.filterNotificationText(rawMessageText) ?? ""
 
         DispatchMainThreadSafe {
             guard !thread.isMuted else {
@@ -44,9 +44,9 @@ class NotificationsManager: NSObject, NotificationsProtocol, OWSCallNotification
             }
             
             let shouldPlaySound = self.shouldPlaySoundForNotification()
-            let senderName = contactsManager.displayName(forRecipientId: incomingMessage.authorId)
+            let senderName = contactsManager.displayName(forRecipientId: incomingMessage.authorId) ?? ""
             
-            if UIApplication.shared.applicationState != .active && messageText != nil {
+            if UIApplication.shared.applicationState != .active && messageText.count > 0 {
                 let notification = UILocalNotification()
                 if shouldPlaySound {
                     let sound = OWSSounds.notificationSound(for: thread)
@@ -70,17 +70,17 @@ class NotificationsManager: NSObject, NotificationsProtocol, OWSCallNotification
                         if senderName == thread.displayName() {
                             notification.alertBody = "\(senderName): \(messageText)"
                         } else {
-                            notification.alertBody = String(format: NSLocalizedString("APN_MESSAGE_IN_GROUP_DETAILED", comment: ""), senderName!, thread.displayName(), messageText!)
+                            notification.alertBody = String(format: NSLocalizedString("APN_MESSAGE_IN_GROUP_DETAILED", comment: ""), senderName, thread.displayName(), messageText)
                         }
                     }
                 case .nameNoPreview?:
                     do {
                         notification.userInfo = [ Signal_Thread_UserInfo_Key : thread.uniqueId ]
-                        notification.alertBody = String(format: NSLocalizedString("APN_MESSAGE_FROM", comment: ""), senderName!)
+                        notification.alertBody = String(format: NSLocalizedString("APN_MESSAGE_FROM", comment: ""), senderName)
                     }
                 default:
                     do {
-                        Logger.warn("unknown notification preview type: \(self.notificationPreviewType)")
+                        Logger.warn("unknown notification preview type: \(String(describing: self.notificationPreviewType))")
                         notification.alertBody = NSLocalizedString("APN_Message", comment: "")
                     }
                 }
@@ -249,7 +249,7 @@ class NotificationsManager: NSObject, NotificationsProtocol, OWSCallNotification
             Signal_Thread_UserInfo_Key: thread.uniqueId
         ]
         if shouldPlaySoundForNotification() {
-            var sound: OWSSound = OWSSounds.notificationSound(for: thread)
+            let sound: OWSSound = OWSSounds.notificationSound(for: thread)
             notification.soundName = OWSSounds.filename(for: sound)
         }
         
@@ -283,7 +283,7 @@ class NotificationsManager: NSObject, NotificationsProtocol, OWSCallNotification
             Signal_Thread_UserInfo_Key: thread.uniqueId
         ]
         if shouldPlaySoundForNotification() {
-            var sound: OWSSound = OWSSounds.notificationSound(for: thread)
+            let sound: OWSSound = OWSSounds.notificationSound(for: thread)
             notification.soundName = OWSSounds.filename(for: sound)
         }
         
