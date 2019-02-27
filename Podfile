@@ -23,14 +23,14 @@ def shared_pods
     pod 'PureLayout', :inhibit_warnings => true
     pod 'Reachability', :inhibit_warnings => true
     pod 'YYImage', :inhibit_warnings => true
-#    pod 'GoogleWebRTC', '= 1.1.24907', :inhibit_warnings => true
     pod 'GoogleWebRTC', '~> 1.1', :inhibit_warnings => true
     pod 'UIImageView+Extension',       '~> 0.2', :inhibit_warnings => true
     pod 'NSAttributedString-DDHTML',   git: 'git@github.com:ForstaLabs/NSAttributedString-DDHTML.git', branch: 'master', :inhibit_warnings => true
-    pod 'ZXingObjC', '~> 3.5', :inhibit_warnings => true
+#    pod 'ZXingObjC', '~> 3.5', :inhibit_warnings => true
     pod 'URLEmbeddedView', :inhibit_warnings => true
     pod 'Fabric', '~> 1.0', :inhibit_warnings => true
     pod 'Crashlytics', '~> 3.0', :inhibit_warnings => true
+    pod 'MnemonicKit', '~> 1.0'
 end
 
 target 'RelayDev' do

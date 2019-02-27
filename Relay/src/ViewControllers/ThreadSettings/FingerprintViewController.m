@@ -3,7 +3,6 @@
 //
 
 #import "FingerprintViewController.h"
-#import "FingerprintViewScanController.h"
 #import "OWSBezierPathView.h"
 #import "Relay-Swift.h"
 #import "UIFont+OWS.h"

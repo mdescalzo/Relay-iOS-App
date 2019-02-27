@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 int const OWSLinkedDevicesTableViewControllerSectionExistingDevices = 0;
-int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
+//int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
 
 @implementation OWSLinkedDevicesTableViewController
 
@@ -276,8 +276,8 @@ int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
     switch (section) {
         case OWSLinkedDevicesTableViewControllerSectionExistingDevices:
             return (NSInteger)[self.deviceMappings numberOfItemsInSection:(NSUInteger)section];
-        case OWSLinkedDevicesTableViewControllerSectionAddDevice:
-            return 1;
+//        case OWSLinkedDevicesTableViewControllerSectionAddDevice:
+//            return 1;
         default:
             DDLogError(@"Unknown section: %ld", (long)section);
             return 0;
@@ -288,27 +288,27 @@ int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
 {
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 
-    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionAddDevice) {
-        [self ows_askForCameraPermissions:^(BOOL granted) {
-            if (!granted) {
-                return;
-            }
-            [self performSegueWithIdentifier:@"LinkDeviceSegue" sender:self];
-        }];
-    }
+//    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionAddDevice) {
+//        [self ows_askForCameraPermissions:^(BOOL granted) {
+//            if (!granted) {
+//                return;
+//            }
+//            [self performSegueWithIdentifier:@"LinkDeviceSegue" sender:self];
+//        }];
+//    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionAddDevice) {
-        UITableViewCell *addNewDeviceCell =
-            [tableView dequeueReusableCellWithIdentifier:@"AddNewDevice" forIndexPath:indexPath];
-        addNewDeviceCell.textLabel.text
-            = NSLocalizedString(@"LINK_NEW_DEVICE_TITLE", @"Navigation title when scanning QR code to add new device.");
-        addNewDeviceCell.detailTextLabel.text
-            = NSLocalizedString(@"LINK_NEW_DEVICE_SUBTITLE", @"Subheading for 'Link New Device' navigation");
-        return addNewDeviceCell;
-    } else if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionExistingDevices) {
+//    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionAddDevice) {
+//        UITableViewCell *addNewDeviceCell =
+//            [tableView dequeueReusableCellWithIdentifier:@"AddNewDevice" forIndexPath:indexPath];
+//        addNewDeviceCell.textLabel.text
+//            = NSLocalizedString(@"LINK_NEW_DEVICE_TITLE", @"Navigation title when scanning QR code to add new device.");
+//        addNewDeviceCell.detailTextLabel.text
+//            = NSLocalizedString(@"LINK_NEW_DEVICE_SUBTITLE", @"Subheading for 'Link New Device' navigation");
+//        return addNewDeviceCell;
+    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionExistingDevices) {
         OWSDeviceTableViewCell *cell =
             [tableView dequeueReusableCellWithIdentifier:@"ExistingDevice" forIndexPath:indexPath];
         OWSDevice *device = [self deviceForRowAtIndexPath:indexPath];
