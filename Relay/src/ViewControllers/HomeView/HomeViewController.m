@@ -268,11 +268,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         [FLContactsManager.shared refreshCCSMRecipients];
     });
     
-    // TODO: Remove this.
-    if (self.homeViewMode == HomeViewMode_Inbox) {
-        [SignalApp.sharedApp setHomeViewController:self];
-    }
-
     UIStackView *reminderStackView = [UIStackView new];
     _reminderStackView = reminderStackView;
     reminderStackView.axis = UILayoutConstraintAxisVertical;
