@@ -81,6 +81,7 @@ class CallAVPolicy {
     let originatorId: String
     
     var delegates = [Weak<ConferenceCallDelegate>]()
+    var joiners = Set<String>() // indexed by userId.deviceId
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
 
     var callRecord: TSCall? {
@@ -288,8 +289,11 @@ class CallAVPolicy {
     func handleJoin(userId: String, deviceId: UInt32) {
         let myId = TSAccountManager.localUID()!
         
+        self.joiners.insert("\(userId).\(deviceId)")
+        
         if self.state == .ringing && userId == myId {
-            self.rejectCall() // another device of mine has answered this call so I'll shut up by rejecting it locally
+            // another device of mine has joined this ringing call, so I'll shut up here by rejecting it locally
+            self.rejectCall()
             return
         }
         
@@ -306,10 +310,19 @@ class CallAVPolicy {
     }
     
     func handleLeave(userId: String, deviceId: UInt32) {
+        self.joiners.remove("\(userId).\(deviceId)")
+        
+        if self.state == .ringing && self.joiners.isEmpty {
+            // everyone who was in on the call has withdrawn before I answered, so shut down
+            self.rejectCall()
+            return
+        }
+        
         let myId = TSAccountManager.localUID()!
-
-        if userId == myId && self.state == .ringing {
-            self.rejectCall() // another device of mine has rejected this call so I'll reject it too
+        if self.state == .ringing && userId == myId {
+            // another device of mine has rejected this call so I'll reject it too
+            self.rejectCall()
+            return
         }
         
         let pcc = locatePCC(userId, deviceId)
