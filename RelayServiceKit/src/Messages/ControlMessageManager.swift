@@ -50,7 +50,7 @@ class ControlMessageManager : NSObject
     
     static private func handleMessageReadMark(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.info("Received readMark message: \(message.forstaPayload)")
+        Logger.info("Received readMark message.")
         
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.debug("Received readMark message with no data blob.")
@@ -84,7 +84,7 @@ class ControlMessageManager : NSObject
     
     static private func handleCallICECandidates(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.info("Received callICECandidates message: \(message.forstaPayload)")
+        Logger.info("Received callICECandidates message.")
         
         if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
             
@@ -153,9 +153,8 @@ class ControlMessageManager : NSObject
         }
         
         let thread = message.thread
-        thread.update(withPayload: forstaPayload as! [AnyHashable : Any])
-        thread.participantIds = members as! [String]
-        thread.save(with: transaction)
+        thread.update(withPayload: forstaPayload as! [AnyHashable : Any], transaction: transaction)
+        thread.updateParticipants(members as! [Any], transaction: transaction)
         
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: thread,
@@ -169,7 +168,7 @@ class ControlMessageManager : NSObject
     
     static private func handleCallAcceptOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.debug("Received callAcceptOffer message: \(message.forstaPayload)")
+        Logger.debug("Received callAcceptOffer message.")
         
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.debug("Received callAcceptOffer message with no data object.")
@@ -214,7 +213,7 @@ class ControlMessageManager : NSObject
     
     static private func handleCallLeave(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.debug("Received callLeave message: \(message.forstaPayload)")
+        Logger.debug("Received callLeave message.")
 
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.info("Received callLeave message with no data object.")
@@ -249,7 +248,11 @@ class ControlMessageManager : NSObject
                 // Handle thread name change
                 if let threadTitle = threadUpdates.object(forKey: FLThreadTitleKey) as? String {
                     if thread.title != threadTitle {
-                        thread.title = threadTitle
+                        
+                        thread.applyChange(toSelfAndLatestCopy: transaction) { (object) in
+                            let aThread = object as! TSThread
+                            aThread.title = threadTitle
+                        }
                         
                         var customMessage: String? = nil
                         var infoMessage: TSInfoMessage? = nil
@@ -268,9 +271,7 @@ class ControlMessageManager : NSObject
                                                              in: thread,
                                                              infoMessageType: TSInfoMessageType.typeConversationUpdate)
                         }
-                        
                         infoMessage?.save(with: transaction)
-                        thread.save(with: transaction)
                     }
                 }
                 
@@ -303,9 +304,7 @@ class ControlMessageManager : NSObject
                                                                   transaction: transaction,
                                                                   success: { (attachmentStream) in
                                                                     OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
-                                                                        thread.image = attachmentStream.image()
-                                                                        thread.save(with: transaction)
-                                                                        attachmentStream.remove(with: transaction)
+                                                                        thread.updateImage(with: attachmentStream, transaction: transaction)
                                                                         let formatString = NSLocalizedString("THREAD_IMAGE_CHANGED_MESSAGE", comment: "")
                                                                         var messageString: String? = nil
                                                                         if sender?.uniqueId == TSAccountManager.localUID() {

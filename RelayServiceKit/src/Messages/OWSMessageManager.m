@@ -530,7 +530,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                  DDLogDebug(@"%@ successfully fetched attachment: %@ for message: %@",
                                                             self.logTag,
                                                             attachmentStream,
-                                                            createdMessage);
+                                                            createdMessage.plainTextBody);
                                              }
                                              failure:^(NSError *error) {
                                                  DDLogError(
@@ -1035,9 +1035,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     // getOrCreate a thread and an incomingMessage
     TSThread *thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
-    
-    [thread updateWithPayload:jsonPayload];
-    [thread saveWithTransaction:transaction];
+    [thread updateWithPayload:jsonPayload transaction:transaction];
     
     // Check to see if we already have this message
     

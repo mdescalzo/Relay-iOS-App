@@ -113,8 +113,7 @@ NS_ASSUME_NONNULL_BEGIN
     } else if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"content"]) {
         
         transcript.thread.universalExpression = [[jsonPayload objectForKey:@"distribution"] objectForKey:@"expression"];
-        [transcript.thread updateWithPayload:jsonPayload];
-        [transcript.thread saveWithTransaction:transaction];
+        [transcript.thread updateWithPayload:jsonPayload transaction:transaction];
         
         OWSAttachmentsProcessor *attachmentsProcessor =
         [[OWSAttachmentsProcessor alloc] initWithAttachmentProtos:transcript.attachmentPointerProtos
