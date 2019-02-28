@@ -246,6 +246,10 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
                                                                                   constraints: cc.connectionConstraints!,
                                                                                   delegate: self.proxy)
+            
+            if self.peerConnection == nil {
+                throw CallError.other(description: "couldn't acquire peerconnection from rtc factory")
+            }
 
             let videoSender = self.peerConnection!.sender(withKind: kVideoTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
             videoSender.track = cc.localVideoTrack
@@ -319,6 +323,10 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             self.peerConnection = ConferenceCallService.rtcFactory.peerConnection(with: cc.configuration!,
                                                                                   constraints: cc.connectionConstraints!,
                                                                                   delegate: self.proxy)
+            
+            if self.peerConnection == nil {
+                throw CallError.other(description: "couldn't acquire peerconnection from rtc factory")
+            }
             
             let videoSender = self.peerConnection!.sender(withKind: kVideoTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
             videoSender.track = cc.localVideoTrack
