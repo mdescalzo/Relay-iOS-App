@@ -77,7 +77,7 @@ class CallAVPolicy {
     
     let thread: TSThread
     let callId: String
-    lazy var callUUID = UUID(uuidString: self.callId)
+    var localUUID = UUID()  // For local device use with CallKit
     let originatorId: String
     
     var delegates = [Weak<ConferenceCallDelegate>]()

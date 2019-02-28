@@ -4,7 +4,6 @@
 
 #import "PushManager.h"
 #import "AppDelegate.h"
-#import "NotificationsManager.h"
 #import "Relay-Swift.h"
 #import "SignalApp.h"
 #import "ThreadUtil.h"

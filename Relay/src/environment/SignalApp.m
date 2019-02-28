@@ -66,36 +66,36 @@ NS_ASSUME_NONNULL_BEGIN
     @synchronized(self)
     {
         if (!_conferenceCallService) {
-            _conferenceCallService = [ConferenceCallService new];
+            _conferenceCallService = ConferenceCallService.shared;
         }
     }
 
     return _conferenceCallService;
 }
 
-- (CallUIAdapter *)callUIAdapter
-{
-    return nil;
-}
-
-- (OutboundCallInitiator *)outboundCallInitiator
-{
-    /*
-    @synchronized(self)
-    {
-        if (!_outboundCallInitiator) {
-            OWSAssert(Environment.current.contactsManager);
-            OWSAssert(Environment.current.contactsUpdater);
-            _outboundCallInitiator =
-                [[OutboundCallInitiator alloc] initWithContactsManager:Environment.current.contactsManager
-                                                       contactsUpdater:Environment.current.contactsUpdater];
-        }
-    }
-
-    return _outboundCallInitiator;
-    */
-    return nil;
-}
+//- (CallUIAdapter *)callUIAdapter
+//{
+//    return nil;
+//}
+//
+//- (OutboundCallInitiator *)outboundCallInitiator
+//{
+//    /*
+//    @synchronized(self)
+//    {
+//        if (!_outboundCallInitiator) {
+//            OWSAssert(Environment.current.contactsManager);
+//            OWSAssert(Environment.current.contactsUpdater);
+//            _outboundCallInitiator =
+//                [[OutboundCallInitiator alloc] initWithContactsManager:Environment.current.contactsManager
+//                                                       contactsUpdater:Environment.current.contactsUpdater];
+//        }
+//    }
+//
+//    return _outboundCallInitiator;
+//    */
+//    return nil;
+//}
 
 - (OWSMessageFetcherJob *)messageFetcherJob
 {

@@ -18,7 +18,6 @@
 #import "HomeViewController.h"
 #import "MediaDetailViewController.h"
 #import "NotificationSettingsViewController.h"
-#import "NotificationsManager.h"
 #import "OWSAddToContactViewController.h"
 #import "OWSAnyTouchGestureRecognizer.h"
 #import "OWSAudioPlayer.h"
@@ -51,7 +50,6 @@
 #import <RelayMessaging/NSString+OWS.h>
 #import <RelayMessaging/OWSAudioPlayer.h>
 #import <RelayMessaging/OWSContactAvatarBuilder.h>
-//#import <RelayMessaging/OWSContactsManager.h>
 #import <RelayMessaging/OWSFormat.h>
 #import <RelayMessaging/OWSPreferences.h>
 #import <RelayMessaging/OWSProfileManager.h>
@@ -100,7 +98,6 @@
 #import <RelayServiceKit/OWSRecipientIdentity.h>
 #import <RelayServiceKit/OWSRequestFactory.h>
 #import <RelayServiceKit/OWSSignalService.h>
-//#import <RelayServiceKit/OWSSyncContactsMessage.h>
 #import <RelayServiceKit/PhoneNumber.h>
 #import <RelayServiceKit/SignalAccount.h>
 #import <RelayServiceKit/TSAccountManager.h>
@@ -116,6 +113,8 @@
 #import <RelayServiceKit/TSPreKeyManager.h>
 #import <RelayServiceKit/TSSocketManager.h>
 #import <RelayServiceKit/TSThread.h>
+#import <RelayServiceKit/TSInteraction.h>
+#import <RelayServiceKit/TSMessage.h>
 #import <RelayServiceKit/UIImage+OWS.h>
 #import <RelayServiceKit/UIImage+OWS.h>
 #import <WebRTC/RTCAudioSession.h>

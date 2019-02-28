@@ -19,15 +19,15 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     @objc static let shared = CallUIService()
     
     let TAG = "[CallUIAdapter]"
-    lazy var contactsManager: FLContactsManager = {
-        return FLContactsManager.shared
-    }()
+    lazy var contactsManager = FLContactsManager.shared
+    lazy var notificationsManager = SignalApp.shared().notificationsManager
     internal let audioService: CallAudioService
     let callService = ConferenceCallService.shared
     private let callController: CXCallController
     private let provider: CXProvider
     
     var currentCallUUID: UUID?
+    var currentThreadId: String?
     var showNamesOnCallScreen: Bool
     var useSystemCallLog: Bool
 
@@ -82,11 +82,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
 
-        guard let callUUID = call.callUUID else {
-            Logger.error("\(self.TAG) received call object with malformed id: \(call.callId)")
-            return
-        }
-
         // make sure we don't terminate audio session during call
         OWSAudioSession.shared.startAudioActivity(call.audioActivity)
         
@@ -102,12 +97,12 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         } else {
             update.localizedCallerName = NSLocalizedString("CALLKIT_ANONYMOUS_CONTACT_NAME", comment: "The generic name used for calls if CallKit privacy is enabled")
         }
-        update.hasVideo = true // (call.localVideoTrack != nil) ? true : false
+        update.hasVideo = !call.policy.startVideoMuted
         disableUnsupportedFeatures(callUpdate: update)
         
         weak var weakSelf = self
-         // Report the incoming call to the system
-        self.provider.reportNewIncomingCall(with: callUUID, update: update) { error in
+        // Report the incoming call to the system
+        self.provider.reportNewIncomingCall(with: call.localUUID, update: update) { error in
             /*
              Only add incoming call to the app's list of calls if the call was allowed (i.e. there was no error)
              since calls may be "denied" for various legitimate reasons. See CXErrorCodeIncomingCallError.
@@ -116,7 +111,8 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
                 // TODO: notify failed call
                 Logger.error("\(self.TAG) failed to report new incoming call")
             } else {
-                weakSelf?.currentCallUUID = callUUID
+                weakSelf?.currentCallUUID = call.localUUID
+                weakSelf?.currentThreadId = call.thread.uniqueId
             }
         }
     }
@@ -126,56 +122,25 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         AssertIsOnMainThread(file: #function)
         
         let callName = call.thread.displayName()
-        // TODO:  Fix this?
-        // self.notificationsAdapter.presentMissedCall(call, callName: callName)
+        self.notificationsManager.presentMissedCall(call, callerName: callName)
     }
     
     @objc public func startOutgoingCall(thread: TSThread) {
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
-
-        guard let callUUID = UUID(uuidString: thread.uniqueId) else {
-            Logger.error("\(self.logTag) received thread with malformed id.")
-            return
-        }
         
         guard self.currentCallUUID == nil else {
             Logger.debug("\(self.logTag) Attempted to start a call when call already in progress.")
             return
         }
-        
+        self.currentThreadId = thread.uniqueId
         let callName = thread.displayName()
         let handle = CXHandle(type: .generic, value: callName)
-        let startCallAction = CXStartCallAction(call: callUUID, handle: handle)
+        let startCallAction = CXStartCallAction(call: UUID(), handle: handle)
         let transaction = CXTransaction()
         transaction.addAction(startCallAction)
         requestTransaction(transaction)
     }
-    
-    // TODO:  Eliminate this method?
-//    internal func startOutgoingCall(_ call: ConferenceCall) {
-//        Logger.info("\(self.logTag) called \(#function)")
-//        AssertIsOnMainThread(file: #function)
-//
-//        guard self.currentCallUUID == nil else {
-//            Logger.debug("\(self.logTag) Attempted to start a call when call already in progress.")
-//            return
-//        }
-//
-//        guard call.callUUID != nil else {
-//            Logger.debug("\(self.logTag) Attempted to start call with malformed callId.")
-//            return
-//        }
-//
-//        self.currentCallUUID = call.callUUID
-//
-//        let callName = call.thread.displayName()
-//        let handle = CXHandle(type: .generic, value: callName)
-//        let startCallAction = CXStartCallAction(call: call.callUUID!, handle: handle)
-//        let transaction = CXTransaction()
-//        transaction.addAction(startCallAction)
-//        requestTransaction(transaction)
-//    }
     
     @objc public func answerCall(localId: UUID) {
         Logger.info("\(self.logTag) called \(#function)")
@@ -201,24 +166,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         
     }
     
-//    internal func didTerminateCall(_ call: ConferenceCall) {
-//        Logger.info("\(self.logTag) called \(#function)")
-//        AssertIsOnMainThread(file: #function)
-//
-//        guard self.currentCallUUID == call.callUUID else {
-//            Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
-//            return
-//        }
-//
-//        self.submitEndCallAction(call: call)
-//    }
-    
-//    @objc public func startAndShowOutgoingCall(recipientId: String, hasLocalVideo: Bool) {
-//        Logger.info("\(self.logTag) called \(#function)")
-//        AssertIsOnMainThread(file: #function)
-//
-//    }
-    
     internal func recipientAcceptedCall(_ call: ConferenceCall) {
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
@@ -229,13 +176,14 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
         
-        guard self.currentCallUUID == call.callUUID else {
-            Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
-            return
+        guard self.currentCallUUID == call.localUUID,
+            self.currentThreadId == call.thread.uniqueId else {
+                Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
+                return
         }
         
         OWSAudioSession.shared.endAudioActivity(call.audioActivity)
-        self.submitEndCallAction(callUUID: call.callUUID!)
+        self.submitEndCallAction(callUUID: call.localUUID)
     }
     
     internal func remoteBusy(_ call: ConferenceCall) {
@@ -248,15 +196,8 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
         
-        
-//        guard self.currentCallUUID == call!.callUUID else {
-//            Logger.debug("\(self.logTag): Ignoring obsolete call: \(call!.callId)")
-//            return
-//        }
-        
-        //
         if call != nil {
-            self.submitEndCallAction(callUUID: call!.callUUID!)
+            self.submitEndCallAction(callUUID: call!.localUUID)
         } else if self.currentCallUUID != nil {
             self.submitEndCallAction(callUUID: self.currentCallUUID!)
         }
@@ -265,21 +206,23 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     internal func failCall(_ call: ConferenceCall, error: CallError) {
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
-
-        guard self.currentCallUUID == call.callUUID else {
-            Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
-            return
+        
+        guard self.currentCallUUID == call.localUUID,
+            self.currentThreadId == call.thread.uniqueId else {
+                Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
+                return
         }
-        self.submitEndCallAction(callUUID: call.callUUID!)
+        self.submitEndCallAction(callUUID: call.localUUID)
     }
     
     internal func showCall(_ call: ConferenceCall) {
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
         
-        guard self.currentCallUUID == call.callUUID else {
-            Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
-            return
+        guard self.currentCallUUID == call.localUUID,
+            self.currentThreadId == call.thread.uniqueId else {
+                Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
+                return
         }
 
         let callViewController = UIStoryboard(name: "Main",
@@ -293,9 +236,10 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(self.logTag) called \(#function)")
         AssertIsOnMainThread(file: #function)
         
-        guard self.currentCallUUID == call.callUUID else {
-            Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
-            return
+        guard self.currentCallUUID == call.localUUID,
+            self.currentThreadId == call.thread.uniqueId else {
+                Logger.debug("\(self.logTag): Ignoring obsolete call: \(call.callId)")
+                return
         }
 
         guard let callUUID = UUID(uuidString: call.callId) else {
@@ -382,11 +326,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     }
 
     private func submitEndCallAction(callUUID: UUID) {
-//        guard let callUUID = UUID(uuidString: call.callId) else {
-//            Logger.debug("\(self.logTag) received call with malformed callId: \(call.callId)")
-//            return
-//        }
-        
         let endCallAction = CXEndCallAction(call: callUUID)
         let transaction = CXTransaction()
         transaction.addAction(endCallAction)
@@ -405,7 +344,8 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
 //            self.reportIncomingCall(call)
 //        } else {
         if call.direction == .outgoing {
-            self.currentCallUUID = call.callUUID
+            self.currentCallUUID = call.localUUID
+            self.currentThreadId = call.thread.uniqueId
             self.showCall(call)
         }
     }
@@ -430,10 +370,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         case .rejected:
             do {
                 OWSAudioSession.shared.endAudioActivity(call.audioActivity)
-                if self.currentCallUUID != nil {
-                    self.submitEndCallAction(callUUID: self.currentCallUUID!)
-                    self.currentCallUUID = nil
-                }
+                self.submitEndCallAction(callUUID: call.localUUID)
             }
         case .joined:
             do {
@@ -445,10 +382,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         case .left:
             do {
                 OWSAudioSession.shared.endAudioActivity(call.audioActivity)
-                if self.currentCallUUID != nil {
-                    self.submitEndCallAction(callUUID: self.currentCallUUID!)
-                    self.currentCallUUID = nil
-                }
+                self.submitEndCallAction(callUUID: call.localUUID)
             }
         }
     }
@@ -475,7 +409,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(self.TAG) \(#function)")
         if let call = self.callService.conferenceCall {
             self.callService.endCall(call)
-            self.submitEndCallAction(callUUID: call.callUUID!)
+            self.submitEndCallAction(callUUID: call.localUUID)
             self.currentCallUUID = nil
         }
         if self.currentCallUUID != nil {
@@ -489,16 +423,21 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
     public func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
         Logger.info("\(TAG) in \(#function) CXStartCallAction")
         AssertIsOnMainThread(file: #function)
-
-        let threadId = action.callUUID.uuidString.lowercased()
-        guard let thread = TSThread.fetch(uniqueId: threadId) else {
-            Logger.debug("\(self.logTag): Attempted to start call with bad threadId: \(threadId)")
+        
+        guard self.currentThreadId != nil else {
+            Logger.debug("\(self.logTag): Attempted to start call with nil threadId")
+            action.fail()
+            return
+        }
+        guard let thread = TSThread.fetch(uniqueId: self.currentThreadId!) else {
+            Logger.debug("\(self.logTag): Attempted to start call with bad threadId: \(self.currentThreadId!)")
             action.fail()
             return
         }
         self.provider.reportOutgoingCall(with: action.callUUID, startedConnectingAt: Date())
-        if let _ = self.callService.startCall(thread: thread) {
-            action.fulfill(withDateStarted: Date())
+        if let call = self.callService.startCall(thread: thread) {
+            call.localUUID = action.callUUID
+            action.fulfill()
         } else {
             action.fail()
         }
@@ -515,12 +454,12 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         }
         
         guard currentCallUUID == action.callUUID,
-            currentCallUUID == ConferenceCallService.shared.conferenceCall?.callUUID else {
+            currentCallUUID == ConferenceCallService.shared.conferenceCall?.localUUID else {
                 Logger.debug("\(TAG) Ignoring action for obsolete call.")
                 action.fail()
                 return
         }
-        action.fulfill(withDateConnected: Date())
+        action.fulfill()
         self.showCall(ConferenceCallService.shared.conferenceCall!)
     }
     
@@ -529,7 +468,14 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.info("\(TAG) Received \(#function) CXEndCallAction")
  
         action.fulfill(withDateEnded: Date())
-
+        
+        // FIXME: This should be wrapped in if, but I've seen inappropriate mismatches leading
+        //    to CallKit gettinig wedged
+//        if self.currentCallUUID == action.callUUID {
+        self.currentCallUUID = nil
+        self.currentThreadId = nil
+//        }
+        
         if let call = ConferenceCallService.shared.conferenceCall {
             self.currentCallUUID = nil
             if call.state == .ringing {
@@ -578,7 +524,7 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
         Logger.debug("\(TAG) Timed out \(#function) while performing \(action)")
         
         if let call = callService.conferenceCall {
-        self.provider.reportCall(with: UUID(uuidString: call.callId)!, endedAt: Date(), reason: CXCallEndedReason.unanswered)
+            self.provider.reportCall(with: UUID(uuidString: call.callId)!, endedAt: Date(), reason: CXCallEndedReason.unanswered)
             self.failCall(call, error: .timeout(description: "Call \(call.callId) timed out"))
         }
         action.fulfill()

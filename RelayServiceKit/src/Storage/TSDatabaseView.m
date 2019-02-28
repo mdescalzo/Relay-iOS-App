@@ -190,7 +190,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
-        if ([object isKindOfClass:[TSOutgoingMessage class]]) {
+        if ([object isKindOfClass:[TSOutgoingMessage class]] && [[TSOutgoingMessage collection] isEqualToString:collection]) {
             return ((TSOutgoingMessage *)object).uniqueThreadId;
         }
         return nil;
@@ -198,7 +198,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
     [self registerMessageDatabaseViewWithName:TSThreadOutgoingMessageDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
-                                      version:@"2"
+                                      version:@"3"
                                       storage:storage];
 }
 
@@ -206,16 +206,29 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 {
     YapDatabaseView *threadView = [storage registeredExtension:TSThreadDatabaseViewExtensionName];
     if (threadView) {
-        OWSFail(@"Registered database view twice: %@", TSThreadDatabaseViewExtensionName);
+        DDLogDebug(@"Registered database view twice: %@", TSThreadDatabaseViewExtensionName);
         return;
     }
 
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
         if (![object isKindOfClass:[TSThread class]]) {
-            OWSFailDebug(@"%@ Unexpected entity %@ in collection: %@", self.logTag, [object class], collection);
+            DDLogError(@"%@: Unexpected entity %@ in collection: %@", self.logTag, [object class], collection);
             return nil;
         }
+        //  Validate we have a meaningful/correct collection.  This should be unnecessary, but
+        //    we've seen odd corner cases where collection key were coming up empty.
+        if (![[TSThread collection] isEqualToString:collection]) {
+            DDLogError(@"%@: Entity %@ with invalid collection: %@", self.logTag, object, collection);
+            return nil;
+        }
+        
+        // Validate we have a good uuid key
+        if ([[NSUUID alloc] initWithUUIDString:key] == nil) {
+            DDLogError(@"%@: Entity %@ with invalid key: %@", self.logTag, object, key);
+            return nil;
+        }
+
         TSThread *thread = (TSThread *)object;
 
         if (thread.archivalDate) {
@@ -243,7 +256,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         [[YapWhitelistBlacklist alloc] initWithWhitelist:[NSSet setWithObject:[TSThread collection]]];
 
     YapDatabaseView *databaseView =
-        [[YapDatabaseAutoView alloc] initWithGrouping:viewGrouping sorting:viewSorting versionTag:@"3" options:options];
+        [[YapDatabaseAutoView alloc] initWithGrouping:viewGrouping sorting:viewSorting versionTag:@"4" options:options];
 
     [storage asyncRegisterExtension:databaseView withName:TSThreadDatabaseViewExtensionName];
 }

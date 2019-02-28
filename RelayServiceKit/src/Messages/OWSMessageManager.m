@@ -823,7 +823,6 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(dataMessage);
     OWSAssert(transaction);
     
-    uint64_t timestamp = envelope.timestamp;
     NSString *body = dataMessage.body;
     
     //  Catch incoming messages and process the new way.
@@ -837,9 +836,6 @@ NS_ASSUME_NONNULL_BEGIN
     
     // Process per messageType
     if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"control"]) {
-        NSString *controlMessageType = [dataBlob objectForKey:@"control"];
-        DDLogInfo(@"Control message received: %@", controlMessageType);
-        
         NSString *threadId = [jsonPayload objectForKey:@"threadId"];
         if (threadId.length > 0) {
             TSThread *thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
@@ -863,11 +859,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                   attachmentIds:attachmentIds
                                                     transaction:transaction];
         } else {
-            DDLogDebug(@"Unhandled thread type: %@", [jsonPayload objectForKey:@"threadType"]);
+            DDLogDebug(@"%@ Unhandled thread type: %@", self.logTag, [jsonPayload objectForKey:@"threadType"]);
             return nil;
         }
     } else {
-        DDLogDebug(@"Unhandled message type: %@", [jsonPayload objectForKey:@"messageType"]);
+        DDLogDebug(@"%@ Unhandled message type: %@", self.logTag, [jsonPayload objectForKey:@"messageType"]);
         return nil;
     }
     

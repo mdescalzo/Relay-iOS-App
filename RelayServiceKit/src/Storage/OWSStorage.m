@@ -443,6 +443,11 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
     // would kill the app/share extension as soon as it is backgrounded.
     options.cipherUnencryptedHeaderLength = kSqliteHeaderLength;
 
+    // If we want to migrate to the new cipher defaults in SQLCipher4+ we'll need to do a one time
+    // migration. See the `PRAGMA cipher_migrate` documentation for details.
+    // https://www.zetetic.net/sqlcipher/sqlcipher-api/#cipher_migrate
+    options.legacyCipherCompatibilityVersion = 3;
+    
     // If any of these asserts fails, we need to verify and update
     // OWSDatabaseConverter which assumes the values of these options.
     OWSAssert(options.cipherDefaultkdfIterNumber == 0);
@@ -562,8 +567,8 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
         return databaseViewCopy;
     } else if ([extension isKindOfClass:[YapDatabaseSecondaryIndex class]]) {
         YapDatabaseSecondaryIndex *secondaryIndex = (YapDatabaseSecondaryIndex *)extension;
-        OWSAssert(secondaryIndex->setup);
-        OWSAssert(secondaryIndex->handler);
+        OWSAssertDebug(secondaryIndex->setup);
+        OWSAssertDebug(secondaryIndex->handler);
         YapDatabaseSecondaryIndex *secondaryIndexCopy = [[YapDatabaseSecondaryIndex alloc]
             initWithSetup:secondaryIndex->setup
                   handler:secondaryIndex->handler
