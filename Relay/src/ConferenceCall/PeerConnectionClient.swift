@@ -295,7 +295,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
         }
 
         let allTheData = [ "version": ConferenceCallProtocolLevel,
-                           "members" : call.thread.participantIds,
                            "originator" : call.originatorId,
                            "callId" : self.callId,
                            "peerId" : self.peerId,
@@ -369,7 +368,6 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                     return Promise(error: CallError.other(description: "can't get messageSender"))
                 }
                 let allTheData = [ "version": ConferenceCallProtocolLevel,
-                                   "members" : call.thread.participantIds,
                                    "originator" : call.originatorId,
                                    "callId" : self.callId,
                                    "peerId" : self.peerId,
