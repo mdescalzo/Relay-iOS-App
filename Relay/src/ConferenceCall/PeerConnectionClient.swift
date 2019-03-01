@@ -29,7 +29,7 @@ public enum PeerConnectionClientState: String {
 extension PeerConnectionClientState {
     var isTerminal: Bool {
         switch self {
-        case .peerLeft, .leftPeer, .replaced, .disconnected, .failed: return true
+        case .peerLeft, .leftPeer, .replaced: return true
         default: return false
         }
     }
