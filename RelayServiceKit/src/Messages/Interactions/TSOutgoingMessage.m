@@ -146,41 +146,15 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
 
     NSMutableDictionary<NSString *, TSOutgoingMessageRecipientState *> *recipientStateMap = [NSMutableDictionary new];
     // Our default recipient list is the current thread members.
-    __block NSArray<NSString *> *recipientIds = @[];
-    // To avoid deadlock while migrating these records, we use a dedicated
-    // migration connection.  For legacy records (created more than ~9 months
-    // before the migration), we need to infer the recipient list for this
-    // message from the current thread membership.  This inference isn't
-    // always accurate, so not using the same connection for both reads is
-    // acceptable.
-    [TSOutgoingMessage.dbMigrationConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        TSThread *thread = [self threadWithTransaction:transaction];
-        NSMutableArray *participants = thread.participantIds.mutableCopy;
-        [participants removeObject:TSAccountManager.localUID];
-        recipientIds = [NSArray arrayWithArray:participants];
-    }];
-
-    NSNumber *_Nullable wasDelivered = [coder decodeObjectForKey:@"wasDelivered"];
-    _legacyWasDelivered = wasDelivered && wasDelivered.boolValue;
-    BOOL wasDeliveredToContact = NO;
-    if (sentRecipients) {
-        recipientIds = sentRecipients;
-    }
-
-    NSString *_Nullable singleGroupRecipient = [coder decodeObjectForKey:@"singleGroupRecipient"];
-    if (singleGroupRecipient) {
-        OWSFail(@"%@ unexpected single group recipient message.", self.logTag);
-        // If this is a "single group recipient message", treat it as such.
-        recipientIds = @[
-            singleGroupRecipient,
-        ];
-    }
+    NSMutableArray *participants = self.thread.participantIds.mutableCopy;
+    [participants removeObject:TSAccountManager.localUID];
+    NSArray<NSString *> *recipientIds = [NSArray arrayWithArray:participants];
 
     for (NSString *recipientId in recipientIds) {
         TSOutgoingMessageRecipientState *recipientState = [TSOutgoingMessageRecipientState new];
 
-        NSNumber *_Nullable readTimestamp = recipientReadMap[recipientId];
-        NSNumber *_Nullable deliveryTimestamp = recipientDeliveryMap[recipientId];
+        NSNumber *_Nullable readTimestamp = [recipientReadMap valueForKey:recipientId];
+        NSNumber *_Nullable deliveryTimestamp = [recipientDeliveryMap valueForKey:recipientId];
         if (readTimestamp) {
             // If we have a read timestamp for this recipient, mark it as read.
             recipientState.state = OWSOutgoingMessageRecipientStateSent;

@@ -1669,16 +1669,17 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     __block TSThread *thread = [self threadForIndexPath:indexPath];
     
     if (thread) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            if (thread.pinPosition) {
-                thread.pinPosition = nil;
-            } else {
-                thread.pinPosition = [NSNumber numberWithInteger:[self.tableView numberOfRowsInSection:HomeViewControllerSectionPinned] + 1];
-            }
-            [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                [thread saveWithTransaction:transaction];
+        __block NSNumber *newPosition;
+        if (thread.pinPosition) {
+            newPosition = nil;
+        } else {
+            newPosition = [NSNumber numberWithInteger:[self.tableView numberOfRowsInSection:HomeViewControllerSectionPinned] + 1];
+        }
+        [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+            [thread applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *theThread) {
+                theThread.pinPosition = newPosition;
             }];
-        });
+        }];
     }
 }
 

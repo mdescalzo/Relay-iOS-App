@@ -94,7 +94,7 @@ extern NSString *const TSThread_NotificationKey_UniqueId;
  *  @param lastMessage Latest Interaction to take into consideration.
  *  @param transaction Database transaction.
  */
-- (void)updateWithLastMessage:(TSInteraction *)lastMessage transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
+- (void)updateWithLastMessage:(nonnull TSInteraction *)lastMessage transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 #pragma mark Archival
 
@@ -192,16 +192,40 @@ extern NSString *const TSThread_NotificationKey_UniqueId;
          transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 /**
- *  Update avatar/image wiht attachment stream
+ *  Update avatar/image with attachment stream
  */
--(void)updateImageWithAttachmentStream:(NSString *)attachmentStream;
+-(void)updateImageWithAttachmentStream:(nonnull TSAttachmentStream *)attachmentStream
+                           transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
--(void)updateWithPayload:(nonnull NSDictionary *)payload;
+/**
+ *  Update avatar/image with image
+ */
+-(void)updateImage:(nonnull UIImage *)image
+       transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
+
+/**
+ *  Update thread with contents of payload
+ */
+-(void)updateWithPayload:(nonnull NSDictionary *)payload
+             transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
+
+/**
+ *  Replaces participantIds with new batch
+ */
+-(void)updateParticipants:(nonnull NSArray *)participants
+              transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
+
+/**
+ *  Update thread title
+ */
+-(void)updateTitle:(nonnull NSString *)newTitle
+              transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 /**
  * thread containing participant id
  */
-+(NSArray<TSThread *> *)threadsContainingParticipant:(NSString *)participantId transaction:transaction;
++(NSArray<TSThread *> *)threadsContainingParticipant:(nonnull NSString *)participantId
+                                         transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 /**
  * returns some string representation of the thread suitable for display.

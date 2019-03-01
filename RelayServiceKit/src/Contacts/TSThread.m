@@ -21,6 +21,7 @@
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 #import "TextSecureKitEnv.h"
 #import "ContactsManagerProtocol.h"
+#import "NSNotificationCenter+OWS.h"
 
 @import YapDatabase;
 @import SignalCoreKit;
@@ -355,22 +356,21 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     return YES;
 }
 
-- (void)updateWithLastMessage:(TSInteraction *)lastMessage transaction:(YapDatabaseReadWriteTransaction *)transaction {
-    OWSAssert(lastMessage);
-    OWSAssert(transaction);
-    
+- (void)updateWithLastMessage:(nonnull TSInteraction *)lastMessage
+                  transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
     if (![self.class shouldInteractionAppearInInbox:lastMessage]) {
         return;
     }
     
-    self.hasEverHadMessage = YES;
-    
-    NSDate *lastMessageDate = [lastMessage dateForSorting];
-    if (!_lastMessageDate || [lastMessageDate timeIntervalSinceDate:self.lastMessageDate] > 0) {
-        _lastMessageDate = lastMessageDate;
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        thread.hasEverHadMessage = YES;
         
-        [self saveWithTransaction:transaction];
-    }
+        NSDate *lastMessageDate = [lastMessage dateForSorting];
+        if (!thread.lastMessageDate || [lastMessageDate timeIntervalSinceDate:thread.lastMessageDate] > 0) {
+            thread.lastMessageDate = lastMessageDate;
+        }
+    }];
 }
 
 #pragma mark Disappearing Messages
@@ -406,14 +406,16 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 - (void)archiveThreadWithTransaction:(YapDatabaseReadWriteTransaction *)transaction referenceDate:(NSDate *)date {
     [self markAllAsReadWithTransaction:transaction];
-    _archivalDate = date;
     
-    [self saveWithTransaction:transaction];
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        thread.archivalDate = date;
+    }];
 }
 
 - (void)unarchiveThreadWithTransaction:(YapDatabaseReadWriteTransaction *)transaction {
-    _archivalDate = nil;
-    [self saveWithTransaction:transaction];
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        thread.archivalDate = nil;
+    }];
 }
 
 #pragma mark Drafts
@@ -428,9 +430,9 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 }
 
 - (void)setDraft:(NSString *)draftString transaction:(YapDatabaseReadWriteTransaction *)transaction {
-    TSThread *thread    = [TSThread fetchObjectWithUniqueID:self.uniqueId transaction:transaction];
-    thread.messageDraft = draftString;
-    [thread saveWithTransaction:transaction];
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        thread.messageDraft = draftString;
+    }];
 }
 
 #pragma mark - Muted
@@ -445,10 +447,9 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 - (void)updateWithMutedUntilDate:(NSDate *)mutedUntilDate transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    [self applyChangeToSelfAndLatestCopy:transaction
-                             changeBlock:^(TSThread *thread) {
-                                 [thread setMutedUntilDate:mutedUntilDate];
-                             }];
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        [thread setMutedUntilDate:mutedUntilDate];
+    }];
 }
 
 #pragma mark - Conversation Color
@@ -506,14 +507,13 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
          transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
 {
     if (leavingMemberIds.count > 0) {
-        NSMutableArray *tmpArray = self.participantIds.mutableCopy;
-        for (NSString *uid in leavingMemberIds) {
-            [tmpArray removeObject:uid];
-        }
-        
-        self.participantIds = [NSArray arrayWithArray:tmpArray];
-
-        [self saveWithTransaction:transaction];
+        [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+            NSMutableArray *tmpArray = thread.participantIds.mutableCopy;
+            for (NSString *uid in leavingMemberIds) {
+                [tmpArray removeObject:uid];
+            }
+            thread.participantIds = [NSArray arrayWithArray:tmpArray];
+        }];
     }
 }
 
@@ -564,61 +564,83 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     return thread;
 }
 
--(void)updateWithPayload:(NSDictionary *)payload
+-(void)updateWithPayload:(nonnull NSDictionary *)payload
+             transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
 {
     NSString *threadId = [payload objectForKey:FLThreadIDKey];
     if (threadId.length == 0 || ![threadId.lowercaseString isEqualToString:self.uniqueId]) {
         DDLogDebug(@"%@ - Attempted to update thread with invalid payload.", self.logTag);
         return;
     }
-    NSString *threadExpression = [(NSDictionary *)[payload objectForKey:FLDistributionKey] objectForKey:FLExpressionKey];
-    NSString *threadType = [payload objectForKey:FLThreadTypeKey];
-    NSString *threadTitle = [payload objectForKey:FLThreadTitleKey];
-    self.title = ((threadTitle.length > 0) ? threadTitle : @"" );
-    self.type = ((threadType.length > 0) ? threadType : nil );
     
-    if (![threadExpression isEqualToString:self.universalExpression] ||
-        self.participantIds.count == 0 ||
-        self.prettyExpression.length == 0) {
-        self.universalExpression = threadExpression;
-        [NSNotificationCenter.defaultCenter postNotificationName:TSThreadExpressionChangedNotification
-                                                          object:self];
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        NSString *threadExpression = [(NSDictionary *)[payload objectForKey:FLDistributionKey] objectForKey:FLExpressionKey];
+        NSString *threadType = [payload objectForKey:FLThreadTypeKey];
+        NSString *threadTitle = [payload objectForKey:FLThreadTitleKey];
+        thread.title = ((threadTitle.length > 0) ? threadTitle : @"" );
+        thread.type = ((threadType.length > 0) ? threadType : nil );
+        
+        if (![threadExpression isEqualToString:self.universalExpression] ||
+            thread.participantIds.count == 0 ||
+            thread.prettyExpression.length == 0) {
+            thread.universalExpression = threadExpression;
+            [NSNotificationCenter.defaultCenter postNotificationNameAsync:TSThreadExpressionChangedNotification object:self];
+        }
+    }];
+}
+
+-(void)updateParticipants:(nonnull NSArray *)participants
+              transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    if ([participants isEqualToArray:self.participantIds]) {
+        //  Duplication, bail...
+        return;
     }
-}
-
--(void)validate
-{
-    [self updateWithExpression:self.universalExpression];
-}
-
--(void)updateWithExpression:(NSString *)expression
-{
-    [CCSMCommManager asyncTagLookupWithString:expression
-                                      success:^(NSDictionary * _Nonnull lookupDict) {
-                                          if (lookupDict) {
-                                              self.participantIds = [lookupDict objectForKey:@"userids"];
-                                              self.prettyExpression = [lookupDict objectForKey:@"pretty"];
-                                              self.universalExpression = [lookupDict objectForKey:@"universal"];
-                                              if ([lookupDict objectForKey:@"monitorids"]) {
-                                                  self.monitorIds = [NSCountedSet setWithArray:[lookupDict objectForKey:@"monitorids"]];
-                                              }
-                                          }
-                                          [self save];
-                                          
-                                      } failure:^(NSError * _Nonnull error) {
-                                          DDLogDebug(@"%@: TagMath query for expression failed.  Error: %@", self.logTag, error.localizedDescription);
-                                          [self save];
-                                      }];
-}
-
-- (void)updateImageWithAttachmentStream:(TSAttachmentStream *)attachmentStream
-{
-    [self setImage:[attachmentStream image]];
-    [self save];
     
-    // Avatars are stored directly in the database, so there's no need
-    // to keep the attachment around after assigning the image.
-    [attachmentStream remove];
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        thread.participantIds = [participants copy];
+    }];
+}
+
+-(void)updateTitle:(nonnull NSString *)newTitle
+       transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    if ([newTitle isEqualToString:self.title]) {
+        //  Duplication, bail...
+        return;
+    }
+    
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        thread.title = [newTitle copy];
+    }];
+}
+
+-(void)updateImageWithAttachmentStream:(nonnull TSAttachmentStream *)attachmentStream
+                           transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    if ([self.image isEqual:[attachmentStream image]]) {
+        return;
+    }
+    
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        [thread setImage:[attachmentStream image]];
+        
+        // Avatars are stored directly in the database, so there's no need
+        // to keep the attachment around after assigning the image.
+        [attachmentStream removeWithTransaction:transaction];
+    }];
+}
+
+-(void)updateImage:(nonnull UIImage *)image
+       transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    if ([self.image isEqual:image]) {
+        return;
+    }
+    [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
+        [thread setImage:image];
+    }];
+
 }
 
 // MARK: - Accessors
@@ -654,7 +676,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 -(NSArray<NSString *>*)participantIds
 {
     if (_participantIds == nil) {
-        _participantIds = [NSArray new];
+        _participantIds = [NSArray array];
     }
     return _participantIds;
 }
@@ -678,17 +700,19 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 -(NSString *)displayName
 {
+    NSString *returnString;
     if (self.title.length > 0) {
-        return self.title;
+        returnString = self.title;
     } else if (self.participantIds.count == 1 && [self.participantIds.lastObject isEqualToString:TSAccountManager.localUID]) {
-        return NSLocalizedString(@"ME_STRING", @"");
+        returnString = NSLocalizedString(@"ME_STRING", @"");
     } else if (self.isOneOnOne) {
-        return [TextSecureKitEnv.sharedEnv.contactsManager displayNameForRecipientId:self.otherParticipantId];
+        returnString = [TextSecureKitEnv.sharedEnv.contactsManager displayNameForRecipientId:self.otherParticipantId];
     } else if (self.prettyExpression.length > 0) {
-        return self.prettyExpression;
+        returnString = self.prettyExpression;
     } else {
-        return NSLocalizedString(@"New conversation", @"");
+        returnString = NSLocalizedString(@"New conversation", @"");
     }
+    return [returnString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
 @end
