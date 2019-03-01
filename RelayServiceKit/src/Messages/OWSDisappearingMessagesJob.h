@@ -53,11 +53,11 @@ NS_ASSUME_NONNULL_BEGIN
  *    YES when being added to a group which already has DM enabled, otherwise NO
  */
 - (void)becomeConsistentWithDisappearingDuration:(uint32_t)duration
-                                          thread:(TSThread *)thread
+                                          thread:(nonnull TSThread *)thread
                            appearBeforeTimestamp:(uint64_t)timestampForSorting
                       createdByRemoteContactName:(nullable NSString *)remoteContactName
                           createdInExistingGroup:(BOOL)createdInExistingGroup
-                                     transaction:(YapDatabaseReadWriteTransaction *)transaction;
+                                     transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 // Clean up any messages that expired since last launch immediately
 // and continue cleaning in the background.
