@@ -214,15 +214,13 @@ void AssertIsOnDisappearingMessagesQueue()
 }
 
 - (void)becomeConsistentWithDisappearingDuration:(uint32_t)duration
-                                          thread:(TSThread *)thread
+                                          thread:(nonnull TSThread *)thread
                            appearBeforeTimestamp:(uint64_t)timestampForSorting
                       createdByRemoteContactName:(nullable NSString *)remoteContactName
                           createdInExistingGroup:(BOOL)createdInExistingGroup
-                                     transaction:(YapDatabaseReadWriteTransaction *)transaction
+                                     transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
     OWSAssert(timestampForSorting > 0);
-    OWSAssert(transaction);
 
     __block OWSBackgroundTask *_Nullable backgroundTask = [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];
     
