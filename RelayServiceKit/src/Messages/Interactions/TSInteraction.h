@@ -28,7 +28,7 @@ NSString *NSStringFromOWSInteractionType(OWSInteractionType value);
 
 @interface TSInteraction : TSYapDatabaseObject
 
-- (instancetype)initInteractionWithTimestamp:(uint64_t)timestamp inThread:(TSThread *)thread;
+- (instancetype)initInteractionWithTimestamp:(uint64_t)timestamp inThread:(nonnull TSThread *)thread;
 
 @property (nonatomic, readonly) NSString *uniqueThreadId;
 @property (nonatomic, readonly) TSThread *thread;
