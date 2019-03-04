@@ -214,7 +214,6 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(thread);
     OWSAssert(dbConnection);
     OWSAssert(contactsManager);
-    OWSAssert(blockingManager);
     OWSAssert(maxRangeSize > 0);
 
     NSString *localNumber = [TSAccountManager localUID];
@@ -281,7 +280,7 @@ NS_ASSUME_NONNULL_BEGIN
                               OWSAssert(errorMessage.errorType == TSErrorMessageNonBlockingIdentityChange);
                               [nonBlockingSafetyNumberChanges addObject:errorMessage];
                           } else {
-                              OWSFail(@"Unexpected dynamic interaction type: %@", [object class]);
+                              OWSFailDebug(@"Unexpected dynamic interaction type: %@", [object class]);
                           }
                       }];
 
@@ -526,7 +525,7 @@ NS_ASSUME_NONNULL_BEGIN
                   usingBlock:^(
                       NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop) {
                       if (![object isKindOfClass:[TSInteraction class]]) {
-                          OWSFail(@"Expected a TSInteraction: %@", [object class]);
+                          OWSFailDebug(@"Expected a TSInteraction: %@", [object class]);
                           return;
                       }
 
@@ -582,7 +581,7 @@ NS_ASSUME_NONNULL_BEGIN
 
             NSData *_Nullable newIdentityKey = safetyNumberChange.newIdentityKey;
             if (newIdentityKey == nil) {
-                OWSFail(@"Safety number change was missing it's new identity key.");
+                OWSFailDebug(@"Safety number change was missing it's new identity key.");
                 continue;
             }
 
@@ -626,16 +625,16 @@ NS_ASSUME_NONNULL_BEGIN
     if (!success) {
         // This might happen if the focus message has disappeared
         // before this view could appear.
-        OWSFail(@"%@ failed to find focus message index.", self.logTag);
+        OWSFailDebug(@"%@ failed to find focus message index.", self.logTag);
         return nil;
     }
     if (![group isEqualToString:thread.uniqueId]) {
-        OWSFail(@"%@ focus message has invalid group.", self.logTag);
+        OWSFailDebug(@"%@ focus message has invalid group.", self.logTag);
         return nil;
     }
     NSUInteger count = [databaseView numberOfItemsInGroup:thread.uniqueId];
     if (index >= count) {
-        OWSFail(@"%@ focus message has invalid index.", self.logTag);
+        OWSFailDebug(@"%@ focus message has invalid index.", self.logTag);
         return nil;
     }
     NSUInteger position = (count - index) - 1;
@@ -645,31 +644,32 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)shouldShowGroupProfileBannerInThread:(TSThread *)thread blockingManager:(OWSBlockingManager *)blockingManager
 {
     OWSAssert(thread);
-    OWSAssert(blockingManager);
 
+    // Unused in Forsta world
+    return NO;
+    
 //    if (!thread.isGroupThread) {
 //        return NO;
 //    }
-    
-    if ([OWSProfileManager.sharedManager isThreadInProfileWhitelist:thread]) {
-        return NO;
-    }
-    if (![OWSProfileManager.sharedManager hasLocalProfile]) {
-        return NO;
-    }
-    BOOL hasUnwhitelistedMember = NO;
-    NSArray<NSString *> *blockedPhoneNumbers = [blockingManager blockedPhoneNumbers];
-    for (NSString *recipientId in thread.participantIds) {
-        if (![blockedPhoneNumbers containsObject:recipientId]
-            && ![OWSProfileManager.sharedManager isUserInProfileWhitelist:recipientId]) {
-            hasUnwhitelistedMember = YES;
-            break;
-        }
-    }
-    if (!hasUnwhitelistedMember) {
-        return NO;
-    }
-    return YES;
+//    if ([OWSProfileManager.sharedManager isThreadInProfileWhitelist:thread]) {
+//        return NO;
+//    }
+//    if (![OWSProfileManager.sharedManager hasLocalProfile]) {
+//        return NO;
+//    }
+//    BOOL hasUnwhitelistedMember = NO;
+//    NSArray<NSString *> *blockedPhoneNumbers = [blockingManager blockedPhoneNumbers];
+//    for (NSString *recipientId in thread.participantIds) {
+//        if (![blockedPhoneNumbers containsObject:recipientId]
+//            && ![OWSProfileManager.sharedManager isUserInProfileWhitelist:recipientId]) {
+//            hasUnwhitelistedMember = YES;
+//            break;
+//        }
+//    }
+//    if (!hasUnwhitelistedMember) {
+//        return NO;
+//    }
+//    return YES;
 }
 
 + (BOOL)addThreadToProfileWhitelistIfEmptyContactThread:(TSThread *)thread
@@ -752,7 +752,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSString *localUID = [TSAccountManager localUID];
     if (localUID.length < 1) {
-        OWSFail(@"%@ missing long number.", self.logTag);
+        OWSFail(@"%@ missing local number.", self.logTag);
         return nil;
     }
 
