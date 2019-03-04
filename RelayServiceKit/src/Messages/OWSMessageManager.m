@@ -562,19 +562,6 @@ NS_ASSUME_NONNULL_BEGIN
         OWSRecordTranscriptJob *recordJob =
         [[OWSRecordTranscriptJob alloc] initWithIncomingSentMessageTranscript:transcript];
         
-        OWSSignalServiceProtosDataMessage *dataMessage = syncMessage.sent.message;
-        OWSAssert(dataMessage);
-        NSString *destination = syncMessage.sent.destination;
-        if (dataMessage && destination.length > 0 && dataMessage.hasProfileKey) {
-//            // If we observe a linked device sending our profile key to another
-//            // user, we can infer that that user belongs in our profile whitelist.
-//            if (dataMessage.hasGroup) {
-//                [self.profileManager addGroupIdToProfileWhitelist:dataMessage.group.id];
-//            } else {
-                [self.profileManager addUserToProfileWhitelist:destination];
-//            }
-        }
-        
         [recordJob runWithAttachmentHandler:^(TSAttachmentStream *attachmentStream) {
             DDLogDebug(@"%@ successfully fetched transcript attachment: %@", self.logTag, attachmentStream);
         }
