@@ -74,13 +74,18 @@ NS_ASSUME_NONNULL_BEGIN
     DDLogDebug(@"%@ Recording transcript: %@", self.logTag, transcript);
     
     __block NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:transcript.body];
+    __block TSThread *thread = [TSThread getOrCreateThreadWithBody:transcript.body transaction:transaction];
+    if (thread == nil) {
+        OWSFailDebug(@"%@: Received sync message contained invalid thread data.", self.logTag);
+        return;
+    }
 
     if (transcript.isEndSessionMessage) {
         NSString *recipientId = [[jsonPayload objectForKey:@"sender"] objectForKey:@"userId"];
         DDLogInfo(@"%@ EndSession was sent to recipient: %@.", self.logTag, recipientId);
         [self.primaryStorage deleteAllSessionsForContact:recipientId protocolContext:transaction];
         [[[TSInfoMessage alloc] initWithTimestamp:transcript.timestamp
-                                         inThread:transcript.thread
+                                         inThread:thread
                                   infoMessageType:TSInfoMessageTypeSessionDidEnd] saveWithTransaction:transaction];
         
         // Don't continue processing lest we print a bubble for the session reset.
@@ -92,18 +97,12 @@ NS_ASSUME_NONNULL_BEGIN
         DDLogDebug(@"Received sync message contained no data object.");
         return;
     }
-    
-    NSString *threadId = [jsonPayload objectForKey:@"threadId"];
-    if (threadId.length == 0 || ![[threadId lowercaseString] isEqualToString:transcript.thread.uniqueId]) {
-        DDLogDebug(@"Received sync message contained no and/or invalid thread data.");
-        return;
-    }
-    
+
     if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"control"]) {
         NSString *controlMessageType = [dataBlob objectForKey:@"control"];
         DDLogInfo(@"Control sync message received: %@", controlMessageType);
         
-        IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:transcript.thread
+        IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:thread
                                                                                       timestamp:transcript.timestamp
                                                                                          author:TSAccountManager.localUID
                                                                                          device:transcript.sourceDevice
@@ -114,9 +113,6 @@ NS_ASSUME_NONNULL_BEGIN
         
     } else if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"content"]) {
         
-        transcript.thread.universalExpression = [[jsonPayload objectForKey:@"distribution"] objectForKey:@"expression"];
-        [transcript.thread updateWithPayload:jsonPayload transaction:transaction];
-        
         OWSAttachmentsProcessor *attachmentsProcessor =
         [[OWSAttachmentsProcessor alloc] initWithAttachmentProtos:transcript.attachmentPointerProtos
                                                    networkManager:self.networkManager
@@ -126,7 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
         // TODO: Build initializer that takes the jsonPayload as an argument
         TSOutgoingMessage *outgoingMessage =
         [[TSOutgoingMessage alloc] initOutgoingMessageWithTimestamp:transcript.timestamp
-                                                           inThread:transcript.thread
+                                                           inThread:thread
                                                         messageBody:transcript.body
                                                       attachmentIds:[attachmentsProcessor.attachmentIds mutableCopy]
                                                    expiresInSeconds:transcript.expirationDuration

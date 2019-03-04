@@ -248,9 +248,8 @@ class ControlMessageManager : NSObject
                         
                         thread.universalExpression = expression
                         
-                        NotificationCenter.default.post(name: NSNotification.Name.TSThreadExpressionChanged,
-                                                        object: thread,
-                                                        userInfo: nil)
+                        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name.TSThreadExpressionChanged,
+                                                                             object: thread)
                     }
                 }
                 

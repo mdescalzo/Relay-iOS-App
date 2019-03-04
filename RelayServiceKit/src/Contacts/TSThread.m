@@ -97,10 +97,39 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 +(instancetype)getOrCreateThreadWithId:(NSString *)threadId transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    TSThread *thread = [self fetchObjectWithUniqueID:threadId transaction:transaction];
+    TSThread *thread = [TSThread fetchObjectWithUniqueID:threadId transaction:transaction];
     if (thread == nil) {
-        thread = [[self alloc] initWithUniqueId:threadId];
+        thread = [[TSThread alloc] initWithUniqueId:threadId];
+        [thread saveWithTransaction:transaction];
     }
+    return thread;
+}
+
++(nullable instancetype)getOrCreateThreadWithBody:(nonnull NSString *)bodyString
+                             transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    //  get the threadId from the payload
+    NSDictionary *payloadDict = [FLCCSMJSONService payloadDictionaryFromMessageBody:bodyString];
+    if (payloadDict == nil) {
+        DDLogError(@"%@: unable to parse payload.", self.logTag);
+        return nil;
+    }
+    NSString *threadId = [payloadDict objectForKey:FLThreadIDKey];
+    if (threadId == nil) {
+        DDLogError(@"%@: unable to extract threadId from payload.", self.logTag);
+        return nil;
+    }
+    TSThread *thread = [TSThread fetchObjectWithUniqueID:threadId transaction:transaction];
+    if (thread == nil) {
+        thread = [[TSThread alloc] initWithUniqueId:threadId];
+        if (thread == nil) {
+            OWSFailDebug(@"%@: unable to initialize new thread.", self.logTag);
+            return nil;
+        }
+        [thread saveWithTransaction:transaction];
+    }
+    [thread updateWithPayload:payloadDict transaction:transaction];
+    
     return thread;
 }
 

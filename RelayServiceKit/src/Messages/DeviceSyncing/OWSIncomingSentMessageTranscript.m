@@ -27,14 +27,13 @@ NS_ASSUME_NONNULL_BEGIN
 
     _dataMessage = sentProto.message;
     _sourceDevice = sourceDevice;
-    _recipientId = sentProto.destination;
     _timestamp = sentProto.timestamp;
     _expirationStartedAt = sentProto.expirationStartTimestamp;
     _expirationDuration = sentProto.message.expireTimer;
     _body = _dataMessage.body;
-    _thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
     _isExpirationTimerUpdate = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsExpirationTimerUpdate) != 0;
     _isEndSessionMessage = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsEndSession) != 0;
+    _thread = [TSThread getOrCreateThreadWithBody:sentProto.message.body transaction:transaction];
 
     return self;
 }

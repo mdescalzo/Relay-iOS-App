@@ -210,6 +210,12 @@ extern NSString *const TSThread_NotificationKey_UniqueId;
              transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 /**
+ *  Get or create thread with contents of payload
+ */
++(nullable instancetype)getOrCreateThreadWithBody:(nonnull NSString *)bodyString
+                     transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
+
+/**
  *  Replaces participantIds with new batch
  */
 -(void)updateParticipants:(nonnull NSArray *)participants
