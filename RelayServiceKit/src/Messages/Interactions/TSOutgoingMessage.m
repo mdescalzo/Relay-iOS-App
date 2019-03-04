@@ -271,13 +271,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     }
     
     if (self.uniqueId.length == 0) {
-        if (self.body != nil && self.body.length > 0) {
-            NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:self.body];
-            NSString *messageId = [jsonPayload objectForKey:@"messageId"];
-            self.uniqueId = messageId;
-        } else {
-            self.uniqueId = NSUUID.new.UUIDString;
-        }
+        self.uniqueId = NSUUID.new.UUIDString;
     }
 
     _hasSyncedTranscript = NO;
