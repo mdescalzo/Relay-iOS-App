@@ -1031,12 +1031,14 @@ NS_ASSUME_NONNULL_BEGIN
                                                  transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
     NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:dataMessage.body];
-    NSString *threadId = [jsonPayload objectForKey:FLThreadIDKey];
+//    NSString *threadId = [jsonPayload objectForKey:FLThreadIDKey];
     
     // getOrCreate a thread and an incomingMessage
-    TSThread *thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
-    [thread updateWithPayload:jsonPayload transaction:transaction];
+//    TSThread *thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
+//    [thread updateWithPayload:jsonPayload transaction:transaction];
     
+    
+    TSThread *thread = [TSThread getOrCreateThreadWithBody:dataMessage.body transaction:transaction];
     // Check to see if we already have this message
     
     TSIncomingMessage *incomingMessage = [TSIncomingMessage fetchObjectWithUniqueID:[jsonPayload objectForKey:@"messageId"] transaction:transaction];
