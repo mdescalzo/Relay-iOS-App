@@ -198,7 +198,7 @@ void AssertIsOnDisappearingMessagesQueue()
                                     contactsManager:(id<ContactsManagerProtocol>)contactsManager
                                         transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    TSThread *thread = [message threadWithTransaction:transaction];
+    TSThread *thread = [TSThread getOrCreateThreadWithId: message.uniqueThreadId transaction: transaction];
     NSString *remoteContactName = nil;
     if ([message isKindOfClass:[TSIncomingMessage class]]) {
         TSIncomingMessage *incomingMessage = (TSIncomingMessage *)message;

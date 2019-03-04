@@ -74,7 +74,7 @@ NSString *NSStringFromOWSInteractionType(OWSInteractionType value)
     return @"TSInteraction";
 }
 
-- (instancetype)initInteractionWithTimestamp:(uint64_t)timestamp inThread:(nonnull TSThread *)thread
+- (instancetype)initInteractionWithTimestamp:(uint64_t)timestamp inThread:(nonnull TSThread *)t
 {
     OWSAssert(timestamp > 0);
 
@@ -85,7 +85,7 @@ NSString *NSStringFromOWSInteractionType(OWSInteractionType value)
     }
 
     _timestamp = timestamp;
-    _uniqueThreadId = thread.uniqueId;
+    _uniqueThreadId = t.uniqueId;
 
     return self;
 }
