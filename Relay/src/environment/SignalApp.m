@@ -73,30 +73,6 @@ NS_ASSUME_NONNULL_BEGIN
     return _conferenceCallService;
 }
 
-//- (CallUIAdapter *)callUIAdapter
-//{
-//    return nil;
-//}
-//
-//- (OutboundCallInitiator *)outboundCallInitiator
-//{
-//    /*
-//    @synchronized(self)
-//    {
-//        if (!_outboundCallInitiator) {
-//            OWSAssert(Environment.current.contactsManager);
-//            OWSAssert(Environment.current.contactsUpdater);
-//            _outboundCallInitiator =
-//                [[OutboundCallInitiator alloc] initWithContactsManager:Environment.current.contactsManager
-//                                                       contactsUpdater:Environment.current.contactsUpdater];
-//        }
-//    }
-//
-//    return _outboundCallInitiator;
-//    */
-//    return nil;
-//}
-
 - (OWSMessageFetcherJob *)messageFetcherJob
 {
     @synchronized(self)

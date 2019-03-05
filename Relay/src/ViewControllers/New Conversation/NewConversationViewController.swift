@@ -158,8 +158,6 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
     func lines() -> CGFloat {
         return 2
     }
-
-
     
     // MARK: - TableView delegate/datasource methods
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -330,7 +328,6 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                                                                           handler: nil))
                                             self.navigationController?.present(alert, animated: true, completion: nil)
                                         }
-
         })
         
     }
@@ -390,8 +387,8 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
 
                                             if pretty.count > 0 {
                                                 do {
-                                                let regex = try NSRegularExpression(pattern: "@[a-zA-Z0-9-.:]+(\\b|$)",
-                                                                                    options: [.caseInsensitive, .anchorsMatchLines])
+                                                    let regex = try NSRegularExpression(pattern: "@[a-zA-Z0-9-.:]+(\\b|$)",
+                                                                                        options: [.caseInsensitive, .anchorsMatchLines])
                                                     
                                                     let matches = regex.matches(in: pretty, options: [], range: NSRange(location: 0, length: pretty.count))
                                                     for match in matches {
@@ -434,7 +431,6 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                                             }
             })
         }
-            
     }
     
     // MARK: - Thread creation methods
@@ -472,30 +468,61 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                 }
             })
         } else {
-            // build thread and go
-            var thread: TSThread?
-            self.searchDBConnection.asyncReadWrite({ (transaction) in
-                thread = TSThread.getOrCreateThread(withParticipants: userIds, transaction: transaction)
-                
-                guard thread != nil else {
-                    Logger.error("Unable to build thread!")
-                    return;
-                }
-                
-                thread!.type = FLThreadTypeConversation
-                thread!.prettyExpression = results.object(forKey: "pretty") as? String
-                thread!.universalExpression = results.object(forKey: "universal") as? String
-                thread!.save(with: transaction)
-            }) {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                object: self, userInfo: ["userIds" : userIds])
-                DispatchQueue.main.async {
-                    self.navigationController?.dismiss(animated: true, completion: {
-                        if thread != nil {
+            // build/get thread and go
+            
+            // Block to avoid repeating myself
+            let createNewThreadBlock: ()->Void = {
+                var thread: TSThread?
+                self.searchDBConnection.asyncReadWrite({ (transaction) in
+                    thread = TSThread(uniqueId: UUID().uuidString.lowercased())
+                    thread!.type = FLThreadTypeConversation
+                    thread!.prettyExpression = results.object(forKey: "pretty") as? String
+                    thread!.universalExpression = results.object(forKey: "universal") as? String
+                    thread!.save(with: transaction)
+                }, completionBlock: {
+                    DispatchMainThreadSafe {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                        object: self, userInfo: ["userIds" : userIds])
+                        self.navigationController?.dismiss(animated: true, completion: {
                             SignalApp.shared().presentConversation(for: thread!, action: .compose)
+                        })
+                    }
+                })
+            }
+            
+            
+            // Check to see if there are other threads like it
+            var candidateThreads = [TSThread]()
+            self.searchDBConnection.readWrite({ (transaction) in
+                candidateThreads = TSThread.threadsWith(matchingParticipants: userIds, transaction: transaction)
+            })
+            
+            if candidateThreads.count > 0 {
+                // query for which thread to use
+                
+                let alert = UIAlertController(title: nil, message: NSLocalizedString("FOUND_DUPLICATE_THREAD_ALERT_MESSAGE", comment: ""), preferredStyle: .actionSheet)
+                
+                // Add a button for each found match
+                for thread in candidateThreads {
+                    alert.addAction(UIAlertAction(title: thread.displayName(), style: .default, handler: { (action) in
+                        DispatchMainThreadSafe {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                            object: self, userInfo: ["userIds" : userIds])
+                            self.navigationController?.dismiss(animated: true, completion: {
+                                SignalApp.shared().presentConversation(for: thread, action: .compose)
+                            })
                         }
-                    })
+                    }))
                 }
+                // Add new conversation button
+                alert.addAction(UIAlertAction(title: NSLocalizedString("NEW_THREAD", comment: ""), style: .default, handler: { (action) in
+                    createNewThreadBlock()
+                }))
+                DispatchMainThreadSafe {
+                    self.navigationController?.present(alert, animated: true, completion: nil)
+                }
+            } else {
+                createNewThreadBlock()
             }
         }
     }

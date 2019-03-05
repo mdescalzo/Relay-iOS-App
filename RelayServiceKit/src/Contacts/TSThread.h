@@ -228,7 +228,13 @@ extern NSString *const TSThread_NotificationKey_UniqueId;
               transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 /**
- * thread containing participant id
+ * Threads containing exact match of participants
+ */
++(NSArray<TSThread *> *)threadsWithMatchingParticipants:(nonnull NSArray <NSString *> *)participants
+                                            transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
+
+/**
+ * threads containing participant id
  */
 +(NSArray<TSThread *> *)threadsContainingParticipant:(nonnull NSString *)participantId
                                          transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;

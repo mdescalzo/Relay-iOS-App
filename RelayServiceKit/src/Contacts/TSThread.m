@@ -548,8 +548,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 +(NSArray<TSThread *> *)threadsContainingParticipant:(NSString *)participantId transaction:transaction
 {
-    // FIXME: Not yet implemented
-    NSMutableArray<TSThread *> *results = [NSMutableArray<TSThread *> new];
+    __block NSMutableArray<TSThread *> *results = [NSMutableArray<TSThread *> new];
     [transaction enumerateKeysAndObjectsInCollection:[TSThread collection]
                                           usingBlock:^(NSString * _Nonnull key, id  _Nonnull object, BOOL * _Nonnull stop) {
                                               TSThread *thread = (TSThread *)object;
@@ -560,6 +559,25 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     
     return [NSArray<TSThread *> arrayWithArray:results];
 }
+
++(NSArray<TSThread *> *)threadsWithMatchingParticipants:(nonnull NSArray <NSString *> *)participants
+                                            transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    __block NSMutableArray<TSThread *> *results = [NSMutableArray<TSThread *> new];
+    __block NSCountedSet *inputSet = [NSCountedSet setWithArray:participants];
+
+    [transaction enumerateKeysAndObjectsInCollection:[TSThread collection]
+                                          usingBlock:^(NSString * _Nonnull key, id  _Nonnull object, BOOL * _Nonnull stop) {
+                                              TSThread *thread = (TSThread *)object;
+                                              NSCountedSet *testSet = [NSCountedSet setWithArray:thread.participantIds];
+                                              if ([inputSet isEqualToSet:testSet]) {
+                                                  [results addObject:thread];
+                                              }
+                                          }];
+    
+    return [NSArray<TSThread *> arrayWithArray:results];
+}
+
 
 +(instancetype)getOrCreateThreadWithParticipants:(NSArray <NSString *> *)participantIDs
 {
