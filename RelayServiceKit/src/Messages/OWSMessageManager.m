@@ -774,12 +774,12 @@ NS_ASSUME_NONNULL_BEGIN
     
     //  Catch incoming messages and process the new way.
     NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:body];
-    TSThread *thread = [TSThread getOrCreateThreadWithBody:body transaction:transaction];
+//    TSThread *thread = [TSThread getOrCreateThreadWithBody:body transaction:transaction];
     
-    if (thread == nil) {
-        DDLogDebug(@"%@: unable to build thread for received envelope.", self.logTag);
-        return nil;
-    }
+//    if (thread == nil) {
+//        DDLogDebug(@"%@: unable to build thread for received envelope.", self.logTag);
+//        return nil;
+//    }
     
     NSDictionary *dataBlob = [jsonPayload objectForKey:@"data"];
     if ([dataBlob allKeys].count == 0) {
@@ -789,8 +789,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     // Process per messageType
     if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"control"]) {
-            IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:thread
-                                                                                          timestamp:envelope.timestamp
+            IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithTimestamp:envelope.timestamp
                                                                                              author:envelope.source
                                                                                             payload:jsonPayload
                                                                                         attachments:dataMessage.attachments];

@@ -84,10 +84,18 @@ class ControlMessageManager : NSObject
     
     static private func handleCallICECandidates(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.info("Received callICECandidates message.")
+        guard #available(iOS 10.0, *) else {
+            Logger.info("\(self.tag): Ignoring \(message.controlMessageType) control message due to iOS version.")
+            return
+        }
         
         if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
-            
+ 
+            guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+                Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
+                return
+            }
+
             guard let callId: String = dataBlob.object(forKey: "callId") as? String else {
                 Logger.debug("Received callICECandidates message with no callId.")
                 return
@@ -104,7 +112,7 @@ class ControlMessageManager : NSObject
             }
             
             DispatchMainThreadSafe {
-                TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: message.thread,
+                TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: thread,
                                                                                    callId: callId,
                                                                                    peerId: peerId,
                                                                                    iceCandidates: iceCandidates);
@@ -116,31 +124,32 @@ class ControlMessageManager : NSObject
     static private func handleCallOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard #available(iOS 10.0, *) else {
-            Logger.info("\(self.tag): Ignoring callOffer control message due to iOS version.")
+            Logger.info("\(self.tag): Ignoring \(message.controlMessageType) control message due to iOS version.")
             return
         }
-        
+
+        let forstaPayload = message.forstaPayload as NSDictionary
+        guard let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary else {
+            Logger.info("Received callOffer message with no data object.")
+            return
+        }
+        guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+            Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
+            return
+        }
+
         let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
         let age = Date().timeIntervalSince(sendTime)
         if age > ConferenceCallStaleOfferTimeout {
             Logger.info("\(self.tag): Ignoring stale callOffer control message (>\(ConferenceCallStaleOfferTimeout) seconds old).")
             return
         }
-
-        let forstaPayload = message.forstaPayload as NSDictionary
         
-        let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary
-
-        guard dataBlob != nil else {
-            Logger.info("Received callOffer message with no data object.")
-            return
-        }
-        
-        guard let callId = dataBlob?.object(forKey: "callId") as? String,
-            let members = dataBlob?.object(forKey: "members") as? NSArray,
-            let originator = dataBlob?.object(forKey: "originator") as? String,
-            let peerId = dataBlob?.object(forKey: "peerId") as? String,
-            let offer = dataBlob?.object(forKey: "offer") as? NSDictionary else {
+        guard let callId = dataBlob.object(forKey: "callId") as? String,
+            let members = dataBlob.object(forKey: "members") as? NSArray,
+            let originator = dataBlob.object(forKey: "originator") as? String,
+            let peerId = dataBlob.object(forKey: "peerId") as? String,
+            let offer = dataBlob.object(forKey: "offer") as? NSDictionary else {
             Logger.debug("Received callOffer message missing required objects.")
             return
         }
@@ -152,7 +161,6 @@ class ControlMessageManager : NSObject
             return
         }
         
-        let thread = message.thread
         thread.update(withPayload: forstaPayload as! [AnyHashable : Any], transaction: transaction)
         thread.updateParticipants(members as! [Any], transaction: transaction)
         
@@ -168,10 +176,18 @@ class ControlMessageManager : NSObject
     
     static private func handleCallAcceptOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.debug("Received callAcceptOffer message.")
+        guard #available(iOS 10.0, *) else {
+            Logger.info("\(self.tag): Ignoring \(message.controlMessageType) control message due to iOS version.")
+            return
+        }
         
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.debug("Received callAcceptOffer message with no data object.")
+            return
+        }
+        
+        guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+            Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
             return
         }
 
@@ -200,23 +216,30 @@ class ControlMessageManager : NSObject
             Logger.info("Another device of self has answered a call")
             let deviceId = message.sourceDeviceId
             DispatchMainThreadSafe {
-                TextSecureKitEnv.shared().callMessageHandler.receivedSelfAcceptOffer(with: message.thread, callId: callId, deviceId: deviceId)
+                TextSecureKitEnv.shared().callMessageHandler.receivedSelfAcceptOffer(with: thread, callId: callId, deviceId: deviceId)
             }
             return
         }
         
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(with: message.thread, callId: callId, peerId: peerId, sessionDescription: sdp)
+            TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(with: thread, callId: callId, peerId: peerId, sessionDescription: sdp)
         }
     }
     
     
     static private func handleCallLeave(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.debug("Received callLeave message.")
+        guard #available(iOS 10.0, *) else {
+            Logger.info("\(self.tag): Ignoring \(message.controlMessageType) control message due to iOS version.")
+            return
+        }
 
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
             Logger.info("Received callLeave message with no data object.")
+            return
+        }
+        guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+            Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
             return
         }
 
@@ -231,18 +254,20 @@ class ControlMessageManager : NSObject
         }
         
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread, callId: callId, senderId: senderId)
+            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: thread, callId: callId, senderId: senderId)
         }
     }
     
     static private func handleThreadUpdate(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
+            guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+                Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
+                return
+            }
+
             if let threadUpdates = dataBlob.object(forKey: "threadUpdates") as? NSDictionary {
-                
-                let thread = message.thread
                 let senderId = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as! String
-                
                 let sender = RelayRecipient.registeredRecipient(forRecipientId: senderId, transaction: transaction)
                 
                 // Handle thread name change
@@ -278,9 +303,7 @@ class ControlMessageManager : NSObject
                 // Handle change to participants
                 if let expression = threadUpdates.object(forKey: FLExpressionKey) as? String {
                     if thread.universalExpression != expression {
-                        
                         thread.universalExpression = expression
-                        
                         NotificationCenter.default.postNotificationNameAsync(NSNotification.Name.TSThreadExpressionChanged,
                                                                              object: thread)
                     }
@@ -369,6 +392,7 @@ class ControlMessageManager : NSObject
     
     static private func handleThreadSnooze(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
+        // TODO: Implement this.  Tie it to thread muting.
         Logger.info("\(self.tag): Recieved Unimplemented control message type: \(message.controlMessageType)")
     }
     

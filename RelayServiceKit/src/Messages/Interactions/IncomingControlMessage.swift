@@ -13,8 +13,7 @@ import UIKit
     @objc let controlMessageType: String
     @objc let attachmentPointers: Array<OWSSignalServiceProtosAttachmentPointer>?
     
-    @objc required public init?(thread: TSThread,
-                                timestamp: UInt64,
+    @objc required public init?(timestamp: UInt64,
                                 author: String,
                                 payload: NSDictionary,
                                 attachments: Array<OWSSignalServiceProtosAttachmentPointer>?) {
@@ -47,7 +46,7 @@ import UIKit
         }
 
         super.init(incomingMessageWithTimestamp: timestamp,
-                   in: thread,
+                   in: nil,
                    authorId: author,
                    sourceDeviceId: OWSDeviceManager.shared().currentDeviceId(),
                    messageBody: nil,
