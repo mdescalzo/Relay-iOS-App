@@ -478,6 +478,7 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                     thread!.type = FLThreadTypeConversation
                     thread!.prettyExpression = results.object(forKey: "pretty") as? String
                     thread!.universalExpression = results.object(forKey: "universal") as? String
+                    thread!.participantIds = userIds;
                     thread!.save(with: transaction)
                 }, completionBlock: {
                     DispatchMainThreadSafe {
