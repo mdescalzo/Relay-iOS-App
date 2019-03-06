@@ -76,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     if (transcript.isEndSessionMessage) {
         if (![[jsonPayload objectForKey:FLThreadIDKey] isEqualToString:@"deadbeef-1111-2222-3333-000000000000"]) {
-            TSThread *thread = [TSThread getOrCreateThreadWithBody:transcript.body transaction:transaction];
+            TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
             if (thread == nil) {
                 OWSFailDebug(@"%@: Received sync message contained invalid thread data.", self.logTag);
                 return;
@@ -112,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
         
     } else if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"content"]) {
         
-        TSThread *thread = [TSThread getOrCreateThreadWithBody:transcript.body transaction:transaction];
+        TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
         if (thread == nil) {
             OWSFailDebug(@"%@: Received sync message contained invalid thread data.", self.logTag);
             return;

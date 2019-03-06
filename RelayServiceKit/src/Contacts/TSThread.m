@@ -105,16 +105,10 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     return thread;
 }
 
-+(nullable instancetype)getOrCreateThreadWithBody:(nonnull NSString *)bodyString
++(nullable instancetype)getOrCreateThreadWithPayload:(nonnull NSDictionary *)payload
                              transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
 {
-    //  get the threadId from the payload
-    NSDictionary *payloadDict = [FLCCSMJSONService payloadDictionaryFromMessageBody:bodyString];
-    if (payloadDict == nil) {
-        DDLogError(@"%@: unable to parse payload.", self.logTag);
-        return nil;
-    }
-    NSString *threadId = [payloadDict objectForKey:FLThreadIDKey];
+    NSString *threadId = [payload objectForKey:FLThreadIDKey];
     if (threadId == nil) {
         DDLogError(@"%@: unable to extract threadId from payload.", self.logTag);
         return nil;
@@ -128,7 +122,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
         }
         [thread saveWithTransaction:transaction];
     }
-    [thread updateWithPayload:payloadDict transaction:transaction];
+    [thread updateWithPayload:payload transaction:transaction];
     
     return thread;
 }

@@ -212,7 +212,7 @@ extern NSString *const TSThread_NotificationKey_UniqueId;
 /**
  *  Get or create thread with contents of payload
  */
-+(nullable instancetype)getOrCreateThreadWithBody:(nonnull NSString *)bodyString
++(nullable instancetype)getOrCreateThreadWithPayload:(nonnull NSDictionary *)payload
                      transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 /**

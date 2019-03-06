@@ -10,6 +10,7 @@
 #import "TSOutgoingMessage.h"
 #import "TSQuotedMessage.h"
 #import "TSThread.h"
+#import "FLCCSMJSONService.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,7 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
     _body = _dataMessage.body;
     _isExpirationTimerUpdate = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsExpirationTimerUpdate) != 0;
     _isEndSessionMessage = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsEndSession) != 0;
-    _thread = [TSThread getOrCreateThreadWithBody:sentProto.message.body transaction:transaction];
+    NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:sentProto.message.body];
+    _thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
 
     return self;
 }

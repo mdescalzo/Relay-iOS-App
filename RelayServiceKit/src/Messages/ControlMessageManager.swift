@@ -91,7 +91,7 @@ class ControlMessageManager : NSObject
         
         if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
  
-            guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+            guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction) else {
                 Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
                 return
             }
@@ -133,7 +133,7 @@ class ControlMessageManager : NSObject
             Logger.info("Received callOffer message with no data object.")
             return
         }
-        guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+        guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction) else {
             Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
             return
         }
@@ -186,7 +186,7 @@ class ControlMessageManager : NSObject
             return
         }
         
-        guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+        guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction) else {
             Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
             return
         }
@@ -238,7 +238,7 @@ class ControlMessageManager : NSObject
             Logger.info("Received callLeave message with no data object.")
             return
         }
-        guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+        guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction) else {
             Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
             return
         }
@@ -261,7 +261,7 @@ class ControlMessageManager : NSObject
     static private func handleThreadUpdate(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
-            guard let thread = TSThread.getOrCreateThread(withBody: message.body!, transaction: transaction) else {
+            guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction) else {
                 Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
                 return
             }
