@@ -260,27 +260,27 @@ static NSTimeInterval launchStartedAt;
             [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_WAL]);
     }
 
-    NSError *_Nullable error = [self convertDatabaseIfNecessary];
-
-    if (!error) {
-        [NSUserDefaults migrateToSharedUserDefaults];
-    }
-
-    if (!error) {
-        error = [OWSPrimaryStorage migrateToSharedData];
-    }
-    if (!error) {
-        error = [OWSUserProfile migrateToSharedData];
-    }
-    if (!error) {
-        error = [TSAttachmentStream migrateToSharedData];
-    }
-
-    if (error) {
-        OWSFail(@"%@ database conversion failed: %@", self.logTag, error);
-        [self showLaunchFailureUI:error];
-        return NO;
-    }
+//    NSError *_Nullable error = [self convertDatabaseIfNecessary];
+//
+//    if (!error) {
+//        [NSUserDefaults migrateToSharedUserDefaults];
+//    }
+//
+//    if (!error) {
+//        error = [OWSPrimaryStorage migrateToSharedData];
+//    }
+//    if (!error) {
+//        error = [OWSUserProfile migrateToSharedData];
+//    }
+//    if (!error) {
+//        error = [TSAttachmentStream migrateToSharedData];
+//    }
+//
+//    if (error) {
+//        OWSFail(@"%@ database conversion failed: %@", self.logTag, error);
+//        [self showLaunchFailureUI:error];
+//        return NO;
+//    }
 
     backgroundTask = nil;
 
@@ -325,52 +325,62 @@ static NSTimeInterval launchStartedAt;
     [fromViewController presentViewController:controller animated:YES completion:nil];
 }
 
-- (nullable NSError *)convertDatabaseIfNecessary
-{
-    DDLogInfo(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
-
-    NSString *databaseFilePath = [OWSPrimaryStorage legacyDatabaseFilePath];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:databaseFilePath]) {
-        DDLogVerbose(@"%@ no legacy database file found", self.logTag);
-        return nil;
-    }
-
-    NSError *_Nullable error;
-    NSData *_Nullable databasePassword = [OWSStorage tryToLoadDatabaseLegacyPassphrase:&error];
-    if (!databasePassword || error) {
-        return (error
-                ?: OWSErrorWithCodeDescription(
-                       OWSErrorCodeDatabaseConversionFatalError, @"Failed to load database password"));
-    }
-
-    YapRecordDatabaseSaltBlock recordSaltBlock = ^(NSData *saltData) {
-        DDLogVerbose(@"%@ saltData: %@", self.logTag, saltData.hexadecimalString);
-
-        // Derive and store the raw cipher key spec, to avoid the ongoing tax of future KDF
-        NSData *_Nullable keySpecData =
-            [YapDatabaseCryptoUtils deriveDatabaseKeySpecForPassword:databasePassword saltData:saltData];
-
-        if (!keySpecData) {
-            DDLogError(@"%@ Failed to derive key spec.", self.logTag);
-            return NO;
-        }
-
-        [OWSStorage storeDatabaseCipherKeySpec:keySpecData];
-
-        return YES;
-    };
-
-    YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
-    error = [YapDatabaseCryptoUtils convertDatabaseIfNecessary:databaseFilePath
-                                              databasePassword:databasePassword
-                                                       options:options
-                                               recordSaltBlock:recordSaltBlock];
-    if (!error) {
-        [OWSStorage removeLegacyPassphrase];
-    }
-
-    return error;
-}
+// Since we con't have legacy users, this should be unnecessary.
+//- (nullable NSError *)convertDatabaseIfNecessary
+//{
+//    DDLogInfo(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//
+//    NSString *databaseFilePath = [OWSPrimaryStorage legacyDatabaseFilePath];
+//    if (![[NSFileManager defaultManager] fileExistsAtPath:databaseFilePath]) {
+//        DDLogVerbose(@"%@ no legacy database file found", self.logTag);
+//        return nil;
+//    }
+//
+//    NSError *_Nullable error;
+//    NSData *_Nullable databasePassword = [OWSStorage tryToLoadDatabaseLegacyPassphrase:&error];
+//    if (!databasePassword || error) {
+//        return (error
+//                ?: OWSErrorWithCodeDescription(
+//                       OWSErrorCodeDatabaseConversionFatalError, @"Failed to load database password"));
+//    }
+//
+//    YapDatabaseSaltBlock saltBlock = ^(NSData *saltData) {
+//
+//    };
+//
+//    YapDatabaseSaltBlock recordSaltBlock = ^(NSData *saltData) {
+//        DDLogVerbose(@"%@ saltData: %@", self.logTag, saltData.hexadecimalString);
+//
+//        // Derive and store the raw cipher key spec, to avoid the ongoing tax of future KDF
+//        NSData *_Nullable keySpecData =
+//            [YapDatabaseCryptoUtils databaseKeySpecForPassword:databasePassword saltData:saltData];
+//
+//        if (!keySpecData) {
+//            DDLogError(@"%@ Failed to derive key spec.", self.logTag);
+//            return NO;
+//        }
+//
+//        [OWSStorage storeDatabaseCipherKeySpec:keySpecData];
+//
+//        return YES;
+//    };
+//
+////    YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
+//    error = [YapDatabaseCryptoUtils convertDatabaseIfNecessary:databaseFilePath
+//                                              databasePassword:databasePassword
+//                                                     saltBlock:recordSaltBlock
+//                                                  keySpecBlock:<#^(NSData * _Nonnull keySpecData)keySpecBlock#>];
+//
+////    error = [YapDatabaseCryptoUtils convertDatabaseIfNecessary:databaseFilePath
+////                                              databasePassword:databasePassword
+////                                                       options:options
+////                                               recordSaltBlock:recordSaltBlock];
+//    if (!error) {
+//        [OWSStorage removeLegacyPassphrase];
+//    }
+//
+//    return error;
+//}
 
 - (void)startupLogging
 {
