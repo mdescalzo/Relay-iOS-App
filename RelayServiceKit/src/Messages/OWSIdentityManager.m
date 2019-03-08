@@ -875,7 +875,7 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
     NSMutableArray<TSMessage *> *messages = [NSMutableArray new];
     
     TSThread *contactThread =
-    [TSThread getOrCreateThreadWithParticipants:@[ TSAccountManager.localUID, recipientId] ];
+    [TSThread getOrCreateThreadWithParticipants:@[ TSAccountManager.localUID, recipientId], transaction:transaction ];
     OWSAssert(contactThread);
     [messages addObject:[[OWSVerificationStateChangeMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp]
                                                                               thread:contactThread
