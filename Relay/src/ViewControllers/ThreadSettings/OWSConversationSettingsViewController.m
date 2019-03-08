@@ -691,7 +691,10 @@ ColorPickerDelegate>
     const NSUInteger kAvatarSize = 68;
     UIImage *avatarImage =
     [ThreadManager.sharedManager imageWithThreadId:self.thread.uniqueId];
-    OWSAssert(avatarImage);
+    OWSAssertDebug(avatarImage);
+    if (avatarImage == nil) {
+        avatarImage = [UIImage imageNamed:@"empty-group-avatar-gray"];
+    }
     
     AvatarImageView *avatarView = [[AvatarImageView alloc] initWithImage:avatarImage];
     _avatarView = avatarView;
