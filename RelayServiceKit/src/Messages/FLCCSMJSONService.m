@@ -331,7 +331,7 @@
 }
 
 // MARK: Helper
-+(NSString *)expressionForIds:(NSArray<NSString *>*)uids
++(nonnull NSString *)expressionForIds:(nonnull NSArray<NSString *>*)uids
 {
     NSString *presentation = @"";
     if (uids.count > 0) {

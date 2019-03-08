@@ -16,4 +16,5 @@
 +(nullable NSArray *)arrayFromMessageBody:(NSString *_Nonnull)body;
 +(nullable NSDictionary *)payloadDictionaryFromMessageBody:(NSString *_Nullable)body;
 
++(nonnull NSString *)expressionForIds:(nonnull NSArray<NSString *>*)uids;
 @end
