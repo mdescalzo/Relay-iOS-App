@@ -97,9 +97,17 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 +(instancetype)getOrCreateThreadWithId:(NSString *)threadId transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
+    if ([threadId isEqualToString:@"deadbeef-1111-2222-3333-000000000000"]) {
+        DDLogDebug(@"%@: We don't do deadbeef.", self.logTag);
+        return nil;
+    }
     TSThread *thread = [TSThread fetchObjectWithUniqueID:threadId transaction:transaction];
     if (thread == nil) {
         thread = [[TSThread alloc] initWithUniqueId:threadId];
+        if (thread == nil) {
+            OWSFailDebug(@"%@: unable to initialize new thread.", self.logTag);
+            return nil;
+        }
         [thread saveWithTransaction:transaction];
     }
     return thread;
@@ -113,16 +121,11 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
         DDLogError(@"%@: unable to extract threadId from payload.", self.logTag);
         return nil;
     }
-    TSThread *thread = [TSThread fetchObjectWithUniqueID:threadId transaction:transaction];
-    if (thread == nil) {
-        thread = [[TSThread alloc] initWithUniqueId:threadId];
-        if (thread == nil) {
-            OWSFailDebug(@"%@: unable to initialize new thread.", self.logTag);
-            return nil;
-        }
-        [thread saveWithTransaction:transaction];
+    TSThread *thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
+    
+    if (thread != nil) {
+        [thread updateWithPayload:payload transaction:transaction];
     }
-    [thread updateWithPayload:payload transaction:transaction];
     
     return thread;
 }
