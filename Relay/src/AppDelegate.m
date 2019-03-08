@@ -1060,7 +1060,7 @@ static NSTimeInterval launchStartedAt;
     DDLogInfo(@"%@ checkIfAppIsReady", self.logTag);
 
     // TODO: Once "app ready" logic is moved into AppSetup, move this line there.
-    // [[OWSProfileManager sharedManager] ensureLocalProfileCached];
+     [[OWSProfileManager sharedManager] ensureLocalProfileCached];
     
     // Note that this does much more than set a flag;
     // it will also run all deferred blocks.
