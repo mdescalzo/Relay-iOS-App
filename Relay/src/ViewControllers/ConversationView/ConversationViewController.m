@@ -4765,7 +4765,9 @@ typedef enum : NSUInteger {
                                                            conversationStyle:self.conversationStyle];
             }
             [viewItems addObject:viewItem];
-            OWSAssert(!viewItemCache[interaction.uniqueId]);
+            if (viewItemCache[interaction.uniqueId]) {
+                DDLogError(@"%@ Duplicate message in thread view.", self.logTag);
+            }
             viewItemCache[interaction.uniqueId] = viewItem;
         }
     }];

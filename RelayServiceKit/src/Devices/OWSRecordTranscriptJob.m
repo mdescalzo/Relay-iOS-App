@@ -88,9 +88,9 @@ NS_ASSUME_NONNULL_BEGIN
             [[[TSInfoMessage alloc] initWithTimestamp:transcript.timestamp
                                              inThread:thread
                                       infoMessageType:TSInfoMessageTypeSessionDidEnd] saveWithTransaction:transaction];
+            // Don't continue processing lest we print a bubble for the session reset.
+            return;
         }
-        // Don't continue processing lest we print a bubble for the session reset.
-        return;
     }
 
     NSDictionary *dataBlob = [jsonPayload objectForKey:@"data"];

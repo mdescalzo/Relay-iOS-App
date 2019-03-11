@@ -1111,7 +1111,7 @@ static NSTimeInterval launchStartedAt;
     // TODO: Orphan cleanup is somewhat expensive - not least in doing a bunch
     //       of disk access.  We might want to only run it "once per version"
     //       or something like that in production.
-    [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
+    // [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
 #endif
 
 //    [OWSProfileManager.sharedManager fetchLocalUsersProfile];
