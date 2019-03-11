@@ -217,14 +217,14 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
             return nil;
         }
         //  Validate we have a meaningful/correct collection.  This should be unnecessary, but
-        //    we've seen odd corner cases where collection key were coming up empty.
+        //    we've seen odd corner cases where collection key was coming up empty.
         if (![[TSThread collection] isEqualToString:collection]) {
             DDLogError(@"%@: Entity %@ with invalid collection: %@", self.logTag, object, collection);
             return nil;
         }
         
         // Validate we have a good uuid key
-        if ([[NSUUID alloc] initWithUUIDString:key] == nil) {
+        if ([[NSUUID alloc] initWithUUIDString:key] == nil || [key isEqualToString:@"deadbeef-1111-2222-3333-000000000000"]) {
             DDLogError(@"%@: Entity %@ with invalid key: %@", self.logTag, object, key);
             return nil;
         }

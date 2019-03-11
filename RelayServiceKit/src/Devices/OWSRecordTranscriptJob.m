@@ -76,14 +76,13 @@ NS_ASSUME_NONNULL_BEGIN
     __block NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:transcript.body];
 
     if (transcript.isEndSessionMessage) {
-        if (![[jsonPayload objectForKey:FLThreadIDKey] isEqualToString:@"deadbeef-1111-2222-3333-000000000000"]) {
-            TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
+        NSString *recipientId = [[jsonPayload objectForKey:@"sender"] objectForKey:@"userId"];
+        if (recipientId != nil) {
+            TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[TSAccountManager.localUID, recipientId] transaction:transaction];
             if (thread == nil) {
                 OWSFailDebug(@"%@: Received sync message contained invalid thread data.", self.logTag);
                 return;
             }
-            
-            NSString *recipientId = [[jsonPayload objectForKey:@"sender"] objectForKey:@"userId"];
             DDLogInfo(@"%@ EndSession was sent to recipient: %@.", self.logTag, recipientId);
             [self.primaryStorage deleteAllSessionsForContact:recipientId protocolContext:transaction];
             [[[TSInfoMessage alloc] initWithTimestamp:transcript.timestamp
@@ -93,7 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
         // Don't continue processing lest we print a bubble for the session reset.
         return;
     }
-    
+
     NSDictionary *dataBlob = [jsonPayload objectForKey:@"data"];
     if ([dataBlob allKeys].count == 0) {
         DDLogDebug(@"Received sync message contained no data object.");
