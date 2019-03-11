@@ -225,7 +225,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         
         // Validate we have a good uuid key
         if ([[NSUUID alloc] initWithUUIDString:key] == nil || [key isEqualToString:@"deadbeef-1111-2222-3333-000000000000"]) {
-            DDLogError(@"%@: Entity %@ with invalid key: %@", self.logTag, [object class], key);
+            DDLogError(@"%@: Entity %@ with invalid key: %@", self.logTag, object, key);
             return nil;
         }
 

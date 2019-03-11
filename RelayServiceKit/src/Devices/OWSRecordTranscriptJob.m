@@ -83,7 +83,6 @@ NS_ASSUME_NONNULL_BEGIN
                 OWSFailDebug(@"%@: Received sync message contained invalid thread data.", self.logTag);
                 return;
             }
-            
             DDLogInfo(@"%@ EndSession was sent to recipient: %@.", self.logTag, recipientId);
             [self.primaryStorage deleteAllSessionsForContact:recipientId protocolContext:transaction];
             [[[TSInfoMessage alloc] initWithTimestamp:transcript.timestamp
