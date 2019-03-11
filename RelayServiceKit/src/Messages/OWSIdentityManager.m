@@ -213,7 +213,7 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
     OWSAssert(recipientId.length > 0);
     OWSAssert([protocolContext isKindOfClass:[YapDatabaseReadWriteTransaction class]]);
     
-    YapDatabaseReadWriteTransaction *transaction = protocolContext;
+    YapDatabaseReadWriteTransaction *transaction = (YapDatabaseReadWriteTransaction *)protocolContext;
     
     // Deprecated. We actually no longer use the OWSPrimaryStorageTrustedKeysCollection for trust
     // decisions, but it's desirable to try to keep it up to date with our trusted identitys
@@ -539,16 +539,16 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
     
     NSMutableArray<TSMessage *> *messages = [NSMutableArray new];
     
-    TSThread *contactThread =
-    [TSThread getOrCreateThreadWithParticipants:@[ TSAccountManager.localUID, recipientId ]];
-    OWSAssert(contactThread != nil);
+    TSThread *thread =
+    [TSThread getOrCreateThreadWithParticipants:@[ TSAccountManager.localUID, recipientId ] transaction:transaction];
+    OWSAssert(thread != nil);
     
     TSErrorMessage *errorMessage =
-    [TSErrorMessage nonblockingIdentityChangeInThread:contactThread recipientId:recipientId];
+    [TSErrorMessage nonblockingIdentityChangeInThread:thread recipientId:recipientId];
     [messages addObject:errorMessage];
     
     for (TSThread *thread in [TSThread threadsContainingParticipant:recipientId transaction:transaction]) {
-        if (![thread.uniqueId isEqualToString:contactThread.uniqueId]) {
+        if (![thread.uniqueId isEqualToString:thread.uniqueId]) {
             [messages addObject:[TSErrorMessage nonblockingIdentityChangeInThread:thread recipientId:recipientId]];
         }
     }
@@ -558,7 +558,7 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
     }
     
     [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForErrorMessage:errorMessage
-                                                                          thread:contactThread
+                                                                          thread:thread
                                                                      transaction:transaction];
 }
 
@@ -875,7 +875,7 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
     NSMutableArray<TSMessage *> *messages = [NSMutableArray new];
     
     TSThread *contactThread =
-    [TSThread getOrCreateThreadWithParticipants:@[ TSAccountManager.localUID, recipientId] ];
+    [TSThread getOrCreateThreadWithParticipants:@[ TSAccountManager.localUID, recipientId] transaction:transaction ];
     OWSAssert(contactThread);
     [messages addObject:[[OWSVerificationStateChangeMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp]
                                                                               thread:contactThread

@@ -97,26 +97,8 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 +(instancetype)getOrCreateThreadWithId:(NSString *)threadId transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    TSThread *thread = [TSThread fetchObjectWithUniqueID:threadId transaction:transaction];
-    if (thread == nil) {
-        thread = [[TSThread alloc] initWithUniqueId:threadId];
-        [thread saveWithTransaction:transaction];
-    }
-    return thread;
-}
-
-+(nullable instancetype)getOrCreateThreadWithBody:(nonnull NSString *)bodyString
-                             transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
-{
-    //  get the threadId from the payload
-    NSDictionary *payloadDict = [FLCCSMJSONService payloadDictionaryFromMessageBody:bodyString];
-    if (payloadDict == nil) {
-        DDLogError(@"%@: unable to parse payload.", self.logTag);
-        return nil;
-    }
-    NSString *threadId = [payloadDict objectForKey:FLThreadIDKey];
-    if (threadId == nil) {
-        DDLogError(@"%@: unable to extract threadId from payload.", self.logTag);
+    if ([threadId isEqualToString:@"deadbeef-1111-2222-3333-000000000000"]) {
+        DDLogDebug(@"%@: We don't do deadbeef.", self.logTag);
         return nil;
     }
     TSThread *thread = [TSThread fetchObjectWithUniqueID:threadId transaction:transaction];
@@ -128,7 +110,22 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
         }
         [thread saveWithTransaction:transaction];
     }
-    [thread updateWithPayload:payloadDict transaction:transaction];
+    return thread;
+}
+
++(nullable instancetype)getOrCreateThreadWithPayload:(nonnull NSDictionary *)payload
+                             transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    NSString *threadId = [payload objectForKey:FLThreadIDKey];
+    if (threadId == nil) {
+        DDLogError(@"%@: unable to extract threadId from payload.", self.logTag);
+        return nil;
+    }
+    TSThread *thread = [TSThread getOrCreateThreadWithId:threadId transaction:transaction];
+    
+    if (thread != nil) {
+        [thread updateWithPayload:payload transaction:transaction];
+    }
     
     return thread;
 }
@@ -548,8 +545,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 +(NSArray<TSThread *> *)threadsContainingParticipant:(NSString *)participantId transaction:transaction
 {
-    // FIXME: Not yet implemented
-    NSMutableArray<TSThread *> *results = [NSMutableArray<TSThread *> new];
+    __block NSMutableArray<TSThread *> *results = [NSMutableArray<TSThread *> new];
     [transaction enumerateKeysAndObjectsInCollection:[TSThread collection]
                                           usingBlock:^(NSString * _Nonnull key, id  _Nonnull object, BOOL * _Nonnull stop) {
                                               TSThread *thread = (TSThread *)object;
@@ -560,6 +556,25 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     
     return [NSArray<TSThread *> arrayWithArray:results];
 }
+
++(NSArray<TSThread *> *)threadsWithMatchingParticipants:(nonnull NSArray <NSString *> *)participants
+                                            transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
+{
+    __block NSMutableArray<TSThread *> *results = [NSMutableArray<TSThread *> new];
+    __block NSCountedSet *inputSet = [NSCountedSet setWithArray:participants];
+
+    [transaction enumerateKeysAndObjectsInCollection:[TSThread collection]
+                                          usingBlock:^(NSString * _Nonnull key, id  _Nonnull object, BOOL * _Nonnull stop) {
+                                              TSThread *thread = (TSThread *)object;
+                                              NSCountedSet *testSet = [NSCountedSet setWithArray:thread.participantIds];
+                                              if ([inputSet isEqualToSet:testSet]) {
+                                                  [results addObject:thread];
+                                              }
+                                          }];
+    
+    return [NSArray<TSThread *> arrayWithArray:results];
+}
+
 
 +(instancetype)getOrCreateThreadWithParticipants:(NSArray <NSString *> *)participantIDs
 {
@@ -609,7 +624,13 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
         thread.title = ((threadTitle.length > 0) ? threadTitle : @"" );
         thread.type = ((threadType.length > 0) ? threadType : nil );
         
+        NSArray *members = [(NSDictionary *)[payload objectForKey:@"data"] objectForKey:@"members"];
+        if (members != nil) {
+            thread.participantIds = members;
+        }
+
         if (![threadExpression isEqualToString:self.universalExpression] ||
+            members != nil ||
             thread.participantIds.count == 0 ||
             thread.prettyExpression.length == 0) {
             thread.universalExpression = threadExpression;

@@ -90,13 +90,17 @@ import Foundation
     
     @objc public func validate(thread: TSThread) {
         
-        guard thread.universalExpression != nil else {
-            Logger.debug("Aborting attept to validate thread with empty universal expression.")
+        var lookupString: String
+        if thread.universalExpression != nil {
+            lookupString = thread.universalExpression!
+        } else if thread.participantIds.count > 0 {
+            lookupString = FLCCSMJSONService.expression(forIds: thread.participantIds)
+        } else {
+            Logger.debug("Aborting attept to validate thread with missing universal expression.")
             return
         }
         
-        CCSMCommManager.asyncTagLookup(with: thread.universalExpression!, success: { lookupDict in
-            //if lookupDict
+        CCSMCommManager.asyncTagLookup(with: lookupString, success: { lookupDict in
             self.dbReadWriteConnection.asyncReadWrite({ (transaction) in
                 thread.applyChange(toSelfAndLatestCopy: transaction, change: { object in
                     let aThread = object as! TSThread

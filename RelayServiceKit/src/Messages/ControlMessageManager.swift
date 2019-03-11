@@ -86,6 +86,7 @@ class ControlMessageManager : NSObject
     static private func handleCallICECandidates(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             let _ = dataBlob.object(forKey: "peerId") as? String,
@@ -94,9 +95,9 @@ class ControlMessageManager : NSObject
                 Logger.debug("Received callICECandidates missing requirements.")
                 return
         }
-
+        
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: message.thread,
+            TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: thread,
                                                                                senderId: message.authorId,
                                                                                senderDeviceId: message.sourceDeviceId,
                                                                                callId: callId,
@@ -107,32 +108,28 @@ class ControlMessageManager : NSObject
     static private func handleCallJoin(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard #available(iOS 10.0, *) else {
-            Logger.debug("\(self.tag): Ignoring callJoin due to iOS version.")
+            Logger.debug("Ignoring callJoin due to iOS version.")
             return
         }
-        
+
         let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
         let age = Date().timeIntervalSince(sendTime)
         if age > ConferenceCallStaleJoinTimeout {
-            Logger.info("\(self.tag): Ignoring stale callJoin message (>\(ConferenceCallStaleJoinTimeout) seconds old).")
+            Logger.info("Ignoring stale callJoin message (>\(ConferenceCallStaleJoinTimeout) seconds old).")
             return
         }
 
         let forstaPayload = message.forstaPayload as NSDictionary
         guard let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
-            let members = dataBlob.object(forKey: "members") as? NSArray,
             let originator = dataBlob.object(forKey: "originator") as? String,
             version == ConferenceCallProtocolLevel else {
                 Logger.debug("Received callJoin missing requirements.")
                 return
         }
 
-        let thread = message.thread
-        thread.update(withPayload: forstaPayload as! [AnyHashable : Any], transaction: transaction)
-        thread.updateParticipants(members as! [Any], transaction: transaction)
-        
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedJoin(with: thread,
                                                                       senderId: message.authorId,
@@ -145,6 +142,7 @@ class ControlMessageManager : NSObject
     static private func handleCallOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             let peerId = dataBlob.object(forKey: "peerId") as? String,
@@ -156,7 +154,7 @@ class ControlMessageManager : NSObject
         }
         
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: message.thread,
+            TextSecureKitEnv.shared().callMessageHandler.receivedOffer(with: thread,
                                                                        senderId: message.authorId,
                                                                        senderDeviceId: message.sourceDeviceId,
                                                                        callId: callId,
@@ -168,6 +166,7 @@ class ControlMessageManager : NSObject
     static private func handleCallAcceptOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             let peerId = dataBlob.object(forKey: "peerId") as? String,
@@ -179,7 +178,7 @@ class ControlMessageManager : NSObject
         }
 
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(with: message.thread, callId: callId, peerId: peerId, sessionDescription: sdp)
+            TextSecureKitEnv.shared().callMessageHandler.receivedAcceptOffer(with: thread, callId: callId, peerId: peerId, sessionDescription: sdp)
         }
     }
     
@@ -187,6 +186,7 @@ class ControlMessageManager : NSObject
     static private func handleCallLeave(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             version == ConferenceCallProtocolLevel else {
@@ -195,7 +195,7 @@ class ControlMessageManager : NSObject
         }
 
         DispatchMainThreadSafe {
-            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: message.thread,
+            TextSecureKitEnv.shared().callMessageHandler.receivedLeave(with: thread,
                                                                        senderId: message.authorId,
                                                                        senderDeviceId: message.sourceDeviceId,
                                                                        callId: callId)
@@ -205,11 +205,13 @@ class ControlMessageManager : NSObject
     static private func handleThreadUpdate(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
+            guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction) else {
+                Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
+                return
+            }
+
             if let threadUpdates = dataBlob.object(forKey: "threadUpdates") as? NSDictionary {
-                
-                let thread = message.thread
                 let senderId = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as! String
-                
                 let sender = RelayRecipient.registeredRecipient(forRecipientId: senderId, transaction: transaction)
                 
                 // Handle thread name change
@@ -245,9 +247,7 @@ class ControlMessageManager : NSObject
                 // Handle change to participants
                 if let expression = threadUpdates.object(forKey: FLExpressionKey) as? String {
                     if thread.universalExpression != expression {
-                        
                         thread.universalExpression = expression
-                        
                         NotificationCenter.default.postNotificationNameAsync(NSNotification.Name.TSThreadExpressionChanged,
                                                                              object: thread)
                     }
@@ -336,6 +336,7 @@ class ControlMessageManager : NSObject
     
     static private func handleThreadSnooze(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
+        // TODO: Implement this.  Tie it to thread muting.
         Logger.info("\(self.tag): Recieved Unimplemented control message type: \(message.controlMessageType)")
     }
     
