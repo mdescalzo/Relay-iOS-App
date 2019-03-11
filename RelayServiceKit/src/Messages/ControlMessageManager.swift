@@ -124,6 +124,7 @@ class ControlMessageManager : NSObject
             let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
+            let _ = dataBlob.object(forKey: "members") as? [String],
             let originator = dataBlob.object(forKey: "originator") as? String,
             version == ConferenceCallProtocolLevel else {
                 Logger.debug("Received callJoin missing requirements.")
