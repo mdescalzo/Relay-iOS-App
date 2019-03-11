@@ -307,27 +307,28 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     [[transaction ext:TSMessageDatabaseViewExtensionName]
      enumerateRowsInGroup:self.uniqueId
      withOptions:NSEnumerationReverse
-     usingBlock:^(
-                  NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop) {
+     usingBlock:^(NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop) {
          
-         OWSAssert([object isKindOfClass:[TSInteraction class]]);
-         
-         missedCount++;
-         TSInteraction *interaction = (TSInteraction *)object;
-         
-         if ([TSThread shouldInteractionAppearInInbox:interaction]) {
-             last = interaction;
-             
-             // For long ignored threads, with lots of SN changes this can get really slow.
-             // I see this in development because I have a lot of long forgotten threads with members
-             // who's test devices are constantly reinstalled. We could add a purpose-built DB view,
-             // but I think in the real world this is rare to be a hotspot.
-             if (missedCount > 50) {
-                 DDLogWarn(@"%@ found last interaction for inbox after skipping %lu items",
-                           self.logTag,
-                           (unsigned long)missedCount);
+         OWSAssertDebug([object isKindOfClass:[TSInteraction class]]);
+         if ([object isKindOfClass:[TSInteraction class]]) {
+             missedCount++;
+             TSInteraction *interaction = (TSInteraction *)object;
+             if ([TSThread shouldInteractionAppearInInbox:interaction]) {
+                 last = interaction;
+                 
+                 // For long ignored threads, with lots of SN changes this can get really slow.
+                 // I see this in development because I have a lot of long forgotten threads with members
+                 // who's test devices are constantly reinstalled. We could add a purpose-built DB view,
+                 // but I think in the real world this is rare to be a hotspot.
+                 if (missedCount > 50) {
+                     DDLogWarn(@"%@ found last interaction for inbox after skipping %lu items",
+                               self.logTag,
+                               (unsigned long)missedCount);
+                 }
+                 *stop = YES;
              }
-             *stop = YES;
+         } else {
+             DDLogError(@"%@: Invalid object %@, with key %@, in collection: %@", self.logTag, object, key, collection);
          }
      }];
     return last;
