@@ -15,8 +15,8 @@ class StubbableEnvironment: TextSecureKitEnv {
         super.init(callMessageHandler: proxy.callMessageHandler, contactsManager: proxy.contactsManager, messageSender: proxy.messageSender, notificationsManager: proxy.notificationsManager, profileManager: proxy.profileManager)
     }
 
-    var stubbedCallMessageHandler: OWSCallMessageHandler?
-    override var callMessageHandler: OWSCallMessageHandler {
+    var stubbedCallMessageHandler: FLCallMessageHandler?
+    override var callMessageHandler: FLCallMessageHandler {
         return stubbedCallMessageHandler ?? proxy.callMessageHandler
     }
 

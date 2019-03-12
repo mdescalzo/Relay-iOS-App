@@ -165,6 +165,9 @@ NSString *const CCSMStorageKeyTSServerURL = @"TSServerURL";
     if (_textSecureURLString == nil) {
         _textSecureURLString = [self tryGetValueForKey:CCSMStorageKeyTSServerURL];
     }
+    if (_textSecureURLString == nil) {
+        return @"https://signal-dev.forsta.io";
+    }
     return _textSecureURLString;
 }
 

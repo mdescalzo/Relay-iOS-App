@@ -14,8 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SignalApp ()
 
-@property (nonatomic) OWSWebRTCCallMessageHandler *callMessageHandler;
-@property (nonatomic) CallService *callService;
+@property (nonatomic) ConferenceCallService *conferenceCallService;
 @property (nonatomic) OutboundCallInitiator *outboundCallInitiator;
 @property (nonatomic) OWSMessageFetcherJob *messageFetcherJob;
 @property (nonatomic) NotificationsManager *notificationsManager;
@@ -62,60 +61,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Singletons
 
-- (OWSWebRTCCallMessageHandler *)callMessageHandler
+- (ConferenceCallService *)conferenceCallService
 {
     @synchronized(self)
     {
-        if (!_callMessageHandler) {
-            _callMessageHandler =
-                [[OWSWebRTCCallMessageHandler alloc] initWithAccountManager:self.accountManager
-                                                                callService:self.callService
-                                                              messageSender:Environment.current.messageSender];
+        if (!_conferenceCallService) {
+            _conferenceCallService = ConferenceCallService.shared;
         }
     }
 
-    return _callMessageHandler;
-}
-
-- (CallService *)callService
-{
-    @synchronized(self)
-    {
-        if (!_callService) {
-            OWSAssert(self.accountManager);
-            OWSAssert(Environment.current.contactsManager);
-            OWSAssert(Environment.current.messageSender);
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeCallLoggingPreference:) name:OWSPreferencesCallLoggingDidChangeNotification object:nil];
-            
-            _callService = [[CallService alloc] initWithAccountManager:self.accountManager
-                                                       contactsManager:Environment.current.contactsManager
-                                                         messageSender:Environment.current.messageSender
-                                                  notificationsAdapter:[OWSCallNotificationsAdapter new]];
-        }
-    }
-
-    return _callService;
-}
-
-- (CallUIAdapter *)callUIAdapter
-{
-    return self.callService.callUIAdapter;
-}
-
-- (OutboundCallInitiator *)outboundCallInitiator
-{
-    @synchronized(self)
-    {
-        if (!_outboundCallInitiator) {
-            OWSAssert(Environment.current.contactsManager);
-            OWSAssert(Environment.current.contactsUpdater);
-            _outboundCallInitiator =
-                [[OutboundCallInitiator alloc] initWithContactsManager:Environment.current.contactsManager
-                                                       contactsUpdater:Environment.current.contactsUpdater];
-        }
-    }
-
-    return _outboundCallInitiator;
+    return _conferenceCallService;
 }
 
 - (OWSMessageFetcherJob *)messageFetcherJob
@@ -246,9 +201,8 @@ NS_ASSUME_NONNULL_BEGIN
     });
 }
 
-- (void)didChangeCallLoggingPreference:(NSNotification *)notitication
+- (void)didChangeCallLoggingPreference:(NSNotification *)notification
 {
-    [self.callService createCallUIAdapter];
 }
 
 #pragma mark - Methods

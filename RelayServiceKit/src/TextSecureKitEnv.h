@@ -7,12 +7,12 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol ContactsManagerProtocol;
 @class MessageSender;
 @protocol NotificationsProtocol;
-@protocol OWSCallMessageHandler;
+@protocol FLCallMessageHandler;
 @protocol ProfileManagerProtocol;
 
 @interface TextSecureKitEnv : NSObject
 
-- (instancetype)initWithCallMessageHandler:(id<OWSCallMessageHandler>)callMessageHandler
+- (instancetype)initWithCallMessageHandler:(id<FLCallMessageHandler>)callMessageHandler
                            contactsManager:(id<ContactsManagerProtocol>)contactsManager
                              messageSender:(MessageSender *)messageSender
                       notificationsManager:(id<NotificationsProtocol>)notificationsManager
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedEnv;
 + (void)setSharedEnv:(TextSecureKitEnv *)env;
 
-@property (nonatomic, readonly) id<OWSCallMessageHandler> callMessageHandler;
+@property (nonatomic, readonly) id<FLCallMessageHandler> callMessageHandler;
 @property (nonatomic, readonly) id<ContactsManagerProtocol> contactsManager;
 @property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) id<NotificationsProtocol> notificationsManager;

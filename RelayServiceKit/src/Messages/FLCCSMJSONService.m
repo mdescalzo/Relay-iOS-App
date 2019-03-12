@@ -49,7 +49,7 @@
             message.messageType = @"receipt";
         holdingArray = [self arrayForTypeContentFromMessage:message];
     } else {
-        OWSFailDebug(@"Sending message with unknown message of class: %@", [message class]);
+        DDLogDebug(@"Sending message with unknown message of class: %@", [message class]);
         holdingArray = [self arrayForTypeContentFromMessage:message];
     }
     
@@ -331,7 +331,7 @@
 }
 
 // MARK: Helper
-+(NSString *)expressionForIds:(NSArray<NSString *>*)uids
++(nonnull NSString *)expressionForIds:(nonnull NSArray<NSString *>*)uids
 {
     NSString *presentation = @"";
     if (uids.count > 0) {

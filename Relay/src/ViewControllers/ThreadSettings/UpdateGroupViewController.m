@@ -347,21 +347,19 @@ OWSNavigationView>
 {
     OWSAssert(self.conversationSettingsViewDelegate);
     
-    self.thread.title = [self.groupNameTextField.text ows_stripped];
-    self.thread.participantIds = self.memberRecipientIds.allObjects;
-    if (self.avatarHasChanged) {
-        self.thread.image = self.groupAvatar;
-    }
-    
-    [self.thread save];
-    
+    [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
+        [self.thread updateTitle:[self.groupNameTextField.text ows_stripped] transaction:transaction];
+        [self.thread updateParticipants:self.memberRecipientIds.allObjects transaction:transaction];
+        if (self.avatarHasChanged) {
+            [self.thread updateImage:self.groupAvatar transaction:transaction];
+        }
+    }];
+
     // Send control message for changes
     OutgoingControlMessage *controlMessage = [[OutgoingControlMessage alloc] initWithThread:self.thread
                                                                                 controlType:FLControlMessageThreadUpdateKey
                                                                                   moreData:nil];
     if (self.avatarHasChanged) {
-        self.thread.image = self.groupAvatar;
-        
         NSData *data = UIImagePNGRepresentation(self.thread.image);
         DataSource *_Nullable dataSource = [DataSourceValue dataSourceWithData:data fileExtension:@"png"];
         [self.messageSender enqueueTemporaryAttachment:dataSource

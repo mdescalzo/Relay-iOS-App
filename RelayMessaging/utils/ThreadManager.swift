@@ -90,32 +90,37 @@ import Foundation
     
     @objc public func validate(thread: TSThread) {
         
-        guard thread.universalExpression != nil else {
-            Logger.debug("Aborting attept to validate thread with empty universal expression.")
+        var lookupString: String
+        if thread.universalExpression != nil {
+            lookupString = thread.universalExpression!
+        } else if thread.participantIds.count > 0 {
+            lookupString = FLCCSMJSONService.expression(forIds: thread.participantIds)
+        } else {
+            Logger.debug("Aborting attept to validate thread with missing universal expression.")
             return
         }
         
-        CCSMCommManager.asyncTagLookup(with: thread.universalExpression!, success: { lookupDict in
-            //if lookupDict
-            if let userIds:[String] = lookupDict["userids"] as? [String] {
-                thread.participantIds = userIds
-
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                object: nil,
-                                                userInfo: [ "userIds" : userIds ])
-            }
-            if let pretty:String = lookupDict["pretty"] as? String {
-                thread.prettyExpression = pretty
-            }
-            if let expression:String = lookupDict["universal"] as? String {
-                thread.universalExpression = expression
-            }
-            if let monitorids:[String] = lookupDict["monitorids"] as? [String] {
-                thread.monitorIds = NSCountedSet.init(array: monitorids)
-            }
-            
-            thread.save()
-            
+        CCSMCommManager.asyncTagLookup(with: lookupString, success: { lookupDict in
+            self.dbReadWriteConnection.asyncReadWrite({ (transaction) in
+                thread.applyChange(toSelfAndLatestCopy: transaction, change: { object in
+                    let aThread = object as! TSThread
+                    if let userIds = lookupDict["userids"] as? [String] {
+                        aThread.participantIds = userIds
+                        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                                             object: nil,
+                                                                             userInfo: [ "userIds" : userIds ])
+                    }
+                    if let pretty = lookupDict["pretty"] as? String {
+                        aThread.prettyExpression = pretty
+                    }
+                    if let expression = lookupDict["universal"] as? String {
+                        aThread.universalExpression = expression
+                    }
+                    if let monitorids = lookupDict["monitorids"] as? [String] {
+                        aThread.monitorIds = NSCountedSet.init(array: monitorids)
+                    }
+                })
+            })
         }, failure: { error in
             Logger.debug("\(self.logTag): TagMath query for expression failed.  Error: \(error.localizedDescription)")
         })

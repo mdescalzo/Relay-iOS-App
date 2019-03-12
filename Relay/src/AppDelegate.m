@@ -7,7 +7,6 @@
 #import "DebugLogger.h"
 #import "HomeViewController.h"
 #import "MainAppContext.h"
-#import "NotificationsManager.h"
 #import "OWS2FASettingsViewController.h"
 #import "OWSBackup.h"
 #import "OWSScreenLockUI.h"
@@ -126,7 +125,8 @@ static NSTimeInterval launchStartedAt;
     [DeviceSleepManager.sharedInstance addBlockWithBlockObject:self];
 
     [AppSetup setupEnvironmentWithCallMessageHandlerBlock:^{
-        return SignalApp.sharedApp.callMessageHandler;
+        [CallUIService shared];
+        return ConferenceCallService.shared;
     }
         notificationsProtocolBlock:^{
             return SignalApp.sharedApp.notificationsManager;
@@ -260,27 +260,27 @@ static NSTimeInterval launchStartedAt;
             [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_WAL]);
     }
 
-    NSError *_Nullable error = [self convertDatabaseIfNecessary];
-
-    if (!error) {
-        [NSUserDefaults migrateToSharedUserDefaults];
-    }
-
-    if (!error) {
-        error = [OWSPrimaryStorage migrateToSharedData];
-    }
-    if (!error) {
-        error = [OWSUserProfile migrateToSharedData];
-    }
-    if (!error) {
-        error = [TSAttachmentStream migrateToSharedData];
-    }
-
-    if (error) {
-        OWSFail(@"%@ database conversion failed: %@", self.logTag, error);
-        [self showLaunchFailureUI:error];
-        return NO;
-    }
+//    NSError *_Nullable error = [self convertDatabaseIfNecessary];
+//
+//    if (!error) {
+//        [NSUserDefaults migrateToSharedUserDefaults];
+//    }
+//
+//    if (!error) {
+//        error = [OWSPrimaryStorage migrateToSharedData];
+//    }
+//    if (!error) {
+//        error = [OWSUserProfile migrateToSharedData];
+//    }
+//    if (!error) {
+//        error = [TSAttachmentStream migrateToSharedData];
+//    }
+//
+//    if (error) {
+//        OWSFail(@"%@ database conversion failed: %@", self.logTag, error);
+//        [self showLaunchFailureUI:error];
+//        return NO;
+//    }
 
     backgroundTask = nil;
 
@@ -325,52 +325,62 @@ static NSTimeInterval launchStartedAt;
     [fromViewController presentViewController:controller animated:YES completion:nil];
 }
 
-- (nullable NSError *)convertDatabaseIfNecessary
-{
-    DDLogInfo(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
-
-    NSString *databaseFilePath = [OWSPrimaryStorage legacyDatabaseFilePath];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:databaseFilePath]) {
-        DDLogVerbose(@"%@ no legacy database file found", self.logTag);
-        return nil;
-    }
-
-    NSError *_Nullable error;
-    NSData *_Nullable databasePassword = [OWSStorage tryToLoadDatabaseLegacyPassphrase:&error];
-    if (!databasePassword || error) {
-        return (error
-                ?: OWSErrorWithCodeDescription(
-                       OWSErrorCodeDatabaseConversionFatalError, @"Failed to load database password"));
-    }
-
-    YapRecordDatabaseSaltBlock recordSaltBlock = ^(NSData *saltData) {
-        DDLogVerbose(@"%@ saltData: %@", self.logTag, saltData.hexadecimalString);
-
-        // Derive and store the raw cipher key spec, to avoid the ongoing tax of future KDF
-        NSData *_Nullable keySpecData =
-            [YapDatabaseCryptoUtils deriveDatabaseKeySpecForPassword:databasePassword saltData:saltData];
-
-        if (!keySpecData) {
-            DDLogError(@"%@ Failed to derive key spec.", self.logTag);
-            return NO;
-        }
-
-        [OWSStorage storeDatabaseCipherKeySpec:keySpecData];
-
-        return YES;
-    };
-
-    YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
-    error = [YapDatabaseCryptoUtils convertDatabaseIfNecessary:databaseFilePath
-                                              databasePassword:databasePassword
-                                                       options:options
-                                               recordSaltBlock:recordSaltBlock];
-    if (!error) {
-        [OWSStorage removeLegacyPassphrase];
-    }
-
-    return error;
-}
+// Since we con't have legacy users, this should be unnecessary.
+//- (nullable NSError *)convertDatabaseIfNecessary
+//{
+//    DDLogInfo(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//
+//    NSString *databaseFilePath = [OWSPrimaryStorage legacyDatabaseFilePath];
+//    if (![[NSFileManager defaultManager] fileExistsAtPath:databaseFilePath]) {
+//        DDLogVerbose(@"%@ no legacy database file found", self.logTag);
+//        return nil;
+//    }
+//
+//    NSError *_Nullable error;
+//    NSData *_Nullable databasePassword = [OWSStorage tryToLoadDatabaseLegacyPassphrase:&error];
+//    if (!databasePassword || error) {
+//        return (error
+//                ?: OWSErrorWithCodeDescription(
+//                       OWSErrorCodeDatabaseConversionFatalError, @"Failed to load database password"));
+//    }
+//
+//    YapDatabaseSaltBlock saltBlock = ^(NSData *saltData) {
+//
+//    };
+//
+//    YapDatabaseSaltBlock recordSaltBlock = ^(NSData *saltData) {
+//        DDLogVerbose(@"%@ saltData: %@", self.logTag, saltData.hexadecimalString);
+//
+//        // Derive and store the raw cipher key spec, to avoid the ongoing tax of future KDF
+//        NSData *_Nullable keySpecData =
+//            [YapDatabaseCryptoUtils databaseKeySpecForPassword:databasePassword saltData:saltData];
+//
+//        if (!keySpecData) {
+//            DDLogError(@"%@ Failed to derive key spec.", self.logTag);
+//            return NO;
+//        }
+//
+//        [OWSStorage storeDatabaseCipherKeySpec:keySpecData];
+//
+//        return YES;
+//    };
+//
+////    YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
+//    error = [YapDatabaseCryptoUtils convertDatabaseIfNecessary:databaseFilePath
+//                                              databasePassword:databasePassword
+//                                                     saltBlock:recordSaltBlock
+//                                                  keySpecBlock:<#^(NSData * _Nonnull keySpecData)keySpecBlock#>];
+//
+////    error = [YapDatabaseCryptoUtils convertDatabaseIfNecessary:databaseFilePath
+////                                              databasePassword:databasePassword
+////                                                       options:options
+////                                               recordSaltBlock:recordSaltBlock];
+//    if (!error) {
+//        [OWSStorage removeLegacyPassphrase];
+//    }
+//
+//    return error;
+//}
 
 - (void)startupLogging
 {
@@ -791,16 +801,6 @@ static NSTimeInterval launchStartedAt;
         }
 
         [AppReadiness runNowOrWhenAppIsReady:^{
-            NSString *_Nullable phoneNumber = handle;
-            if ([handle hasPrefix:CallKitCallManager.kAnonymousCallHandlePrefix]) {
-                phoneNumber = [[OWSPrimaryStorage sharedManager] phoneNumberForCallKitId:handle];
-                if (phoneNumber.length < 1) {
-                    DDLogWarn(
-                        @"%@ ignoring attempt to initiate video call to unknown anonymous signal user.", self.logTag);
-                    return;
-                }
-            }
-
             // This intent can be received from more than one user interaction.
             //
             // * It can be received if the user taps the "video" button in the CallKit UI for an
@@ -809,7 +809,8 @@ static NSTimeInterval launchStartedAt;
             // * It can be received if the user taps the "video" button for a contact in the
             //   contacts app.  If so, the correct response is to try to initiate a new call
             //   to that user - unless there already is another call in progress.
-            if (SignalApp.sharedApp.callService.call != nil) {
+            /*
+            if (SignalApp.sharedApp.call != nil) {
                 if ([phoneNumber isEqualToString:SignalApp.sharedApp.callService.call.callId]) {
                     DDLogWarn(@"%@ trying to upgrade ongoing call to video.", self.logTag);
                     [SignalApp.sharedApp.callService handleCallKitStartVideo];
@@ -821,9 +822,11 @@ static NSTimeInterval launchStartedAt;
                 }
             }
 
+             // TODO Implement this
             OutboundCallInitiator *outboundCallInitiator = SignalApp.sharedApp.outboundCallInitiator;
             OWSAssert(outboundCallInitiator);
             [outboundCallInitiator initiateCallWithHandle:phoneNumber];
+             */
         }];
         return YES;
     } else if ([userActivity.activityType isEqualToString:@"INStartAudioCallIntent"]) {
@@ -850,16 +853,8 @@ static NSTimeInterval launchStartedAt;
         }
 
         [AppReadiness runNowOrWhenAppIsReady:^{
-            NSString *_Nullable phoneNumber = handle;
-            if ([handle hasPrefix:CallKitCallManager.kAnonymousCallHandlePrefix]) {
-                phoneNumber = [[OWSPrimaryStorage sharedManager] phoneNumberForCallKitId:handle];
-                if (phoneNumber.length < 1) {
-                    DDLogWarn(
-                        @"%@ ignoring attempt to initiate audio call to unknown anonymous signal user.", self.logTag);
-                    return;
-                }
-            }
-
+            // TODO: Implement this
+            /*
             if (SignalApp.sharedApp.callService.call != nil) {
                 DDLogWarn(@"%@ ignoring INStartAudioCallIntent due to ongoing WebRTC call.", self.logTag);
                 return;
@@ -868,6 +863,7 @@ static NSTimeInterval launchStartedAt;
             OutboundCallInitiator *outboundCallInitiator = SignalApp.sharedApp.outboundCallInitiator;
             OWSAssert(outboundCallInitiator);
             [outboundCallInitiator initiateCallWithHandle:phoneNumber];
+             */
         }];
         return YES;
     } else {
@@ -1064,7 +1060,7 @@ static NSTimeInterval launchStartedAt;
     DDLogInfo(@"%@ checkIfAppIsReady", self.logTag);
 
     // TODO: Once "app ready" logic is moved into AppSetup, move this line there.
-    [[OWSProfileManager sharedManager] ensureLocalProfileCached];
+     [[OWSProfileManager sharedManager] ensureLocalProfileCached];
     
     // Note that this does much more than set a flag;
     // it will also run all deferred blocks.
@@ -1115,7 +1111,7 @@ static NSTimeInterval launchStartedAt;
     // TODO: Orphan cleanup is somewhat expensive - not least in doing a bunch
     //       of disk access.  We might want to only run it "once per version"
     //       or something like that in production.
-    [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
+    // [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
 #endif
 
 //    [OWSProfileManager.sharedManager fetchLocalUsersProfile];
@@ -1145,15 +1141,10 @@ static NSTimeInterval launchStartedAt;
 
     if ([TSAccountManager isRegistered]) {
         DDLogInfo(@"%@ localUID: %@", [TSAccountManager localUID], self.logTag);
-
-        [[OWSPrimaryStorage sharedManager].newDatabaseConnection
-            readWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
-                [ExperienceUpgradeFinder.sharedManager markAllAsSeenWithTransaction:transaction];
-            }];
         // Start running the disappearing messages job in case the newly registered user
         // enables this feature
         [[OWSDisappearingMessagesJob sharedJob] startIfNecessary];
-        [[OWSProfileManager sharedManager] ensureLocalProfileCached];
+        // [[OWSProfileManager sharedManager] ensureLocalProfileCached];
 
         // For non-legacy users, read receipts are on by default.
         [OWSReadReceiptManager.sharedManager setAreReadReceiptsEnabled:NO];
@@ -1183,6 +1174,7 @@ static NSTimeInterval launchStartedAt;
 
     if ([TSAccountManager isRegistered]) {
         HomeViewController *homeView = [HomeViewController new];
+        SignalApp.sharedApp.homeViewController = homeView;
         SignalsNavigationController *navigationController = [[SignalsNavigationController alloc] initWithRootViewController:homeView];
         self.window.rootViewController = navigationController;
     } else {

@@ -234,9 +234,9 @@ typedef enum : NSUInteger {
 
     _viewControllerCreatedAt = CACurrentMediaTime();
     _contactsManager = [Environment current].contactsManager;
-    _contactsUpdater = [Environment current].contactsUpdater;
+//    _contactsUpdater = [Environment current].contactsUpdater;
     _messageSender = [Environment current].messageSender;
-    _outboundCallInitiator = SignalApp.sharedApp.outboundCallInitiator;
+//    _outboundCallInitiator = SignalApp.sharedApp.outboundCallInitiator;
     _primaryStorage = [OWSPrimaryStorage sharedManager];
     _networkManager = [TSNetworkManager sharedManager];
     _blockingManager = [OWSBlockingManager sharedManager];
@@ -1300,7 +1300,7 @@ typedef enum : NSUInteger {
         imageEdgeInsets.bottom = round(kBarButtonSize - (image.size.height + imageEdgeInsets.top));
         callButton.imageEdgeInsets = imageEdgeInsets;
         callButton.accessibilityLabel = NSLocalizedString(@"CALL_LABEL", "Accessibility label for placing call button");
-        [callButton addTarget:self action:@selector(startAudioCall) forControlEvents:UIControlEventTouchUpInside];
+        [callButton addTarget:self action:@selector(handleCallTap:) forControlEvents:UIControlEventTouchUpInside];
         callButton.frame = CGRectMake(0,
             0,
             round(image.size.width + imageEdgeInsets.left + imageEdgeInsets.right),
@@ -1474,12 +1474,12 @@ typedef enum : NSUInteger {
         return;
     }
 
-    [self.outboundCallInitiator initiateCallWithRecipientId:self.thread.uniqueId isVideo:isVideo];
+    [CallUIService.shared startOutgoingCallWithThread:self.thread];
 }
 
 - (BOOL)canCall
 {
-    return self.thread.isOneOnOne;
+    return true;
 }
 
 #pragma mark - Dynamic Text
@@ -1871,7 +1871,7 @@ typedef enum : NSUInteger {
         return;
     }
 
-    NSString *displayName = [self.contactsManager displayNameForRecipientId:self.thread.otherParticipantId];
+    NSString *displayName = self.thread.displayName;
 
     UIAlertController *alertController = [UIAlertController
         alertControllerWithTitle:[CallStrings callBackAlertTitle]
@@ -3161,7 +3161,7 @@ typedef enum : NSUInteger {
 {
     OWSAssertIsOnMainThread();
 
-    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     if (self.shouldObserveDBModifications) {
         // External database modifications can't be converted into incremental updates,
@@ -3196,7 +3196,7 @@ typedef enum : NSUInteger {
         return;
     }
     
-    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     NSArray *notifications = notification.userInfo[OWSUIDatabaseConnectionNotificationsKey];
     OWSAssert([notifications isKindOfClass:[NSArray class]]);
@@ -4765,7 +4765,9 @@ typedef enum : NSUInteger {
                                                            conversationStyle:self.conversationStyle];
             }
             [viewItems addObject:viewItem];
-            OWSAssert(!viewItemCache[interaction.uniqueId]);
+            if (viewItemCache[interaction.uniqueId]) {
+                DDLogError(@"%@ Duplicate message in thread view.", self.logTag);
+            }
             viewItemCache[interaction.uniqueId] = viewItem;
         }
     }];

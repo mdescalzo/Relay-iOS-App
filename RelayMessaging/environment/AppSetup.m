@@ -9,9 +9,6 @@
 #import <RelayMessaging/OWSDatabaseMigration.h>
 #import <RelayMessaging/OWSProfileManager.h>
 #import <RelayMessaging/RelayMessaging-Swift.h>
-#import <RelayServiceKit/OWSBackgroundTask.h>
-#import <RelayServiceKit/OWSStorage.h>
-#import <RelayServiceKit/TextSecureKitEnv.h>
 
 @import RelayServiceKit;
 @import AxolotlKit;
@@ -38,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
         [Environment setCurrent:[Release releaseEnvironment]];
 
-        id<OWSCallMessageHandler> callMessageHandler = callMessageHandlerBlock();
+        id<FLCallMessageHandler> callMessageHandler = callMessageHandlerBlock();
         id<NotificationsProtocol> notificationsManager = notificationsManagerBlock();
 
         TextSecureKitEnv *sharedEnv =

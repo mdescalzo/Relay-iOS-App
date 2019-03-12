@@ -89,7 +89,7 @@ import RelayServiceKit
         
         // Check the avatarCache...
         if let image = self.avatarCache.object(forKey: cacheKey!) {
-            Logger.debug("Avatar cache hit!")
+//            Logger.debug("Avatar cache hit!")
             return image;
         }
         
@@ -193,15 +193,19 @@ import RelayServiceKit
         return RelayRecipient.allObjectsInCollection() as! [RelayRecipient]
     }
 
-    @objc public func selfRecipient() -> RelayRecipient {
-        let selfId = TSAccountManager.localUID()! as NSString
-        var recipient:RelayRecipient? = recipientCache.object(forKey: selfId)
-        
-        if recipient == nil {
-            recipient = RelayRecipient.fetch(uniqueId: selfId as String)
-            recipientCache.setObject(recipient!, forKey: selfId)
+    @objc public func selfRecipient() -> RelayRecipient? {
+        guard let selfId = TSAccountManager.localUID() else {
+            Logger.debug("\(self.logTag): No stored localUID.")
+            return nil
         }
-        return recipient!
+        
+        if let recipient:RelayRecipient = recipientCache.object(forKey: selfId as NSString) {
+            return recipient
+        } else if let recipient = RelayRecipient.fetch(uniqueId: selfId as String) {
+            recipientCache.setObject(recipient, forKey: selfId as NSString)
+            return recipient
+        }
+        return nil
     }
     
     @objc public class func recipientComparator() -> Comparator {

@@ -11,7 +11,7 @@ static TextSecureKitEnv *sharedTextSecureKitEnv;
 
 @interface TextSecureKitEnv ()
 
-@property (nonatomic) id<OWSCallMessageHandler> callMessageHandler;
+@property (nonatomic) id<FLCallMessageHandler> callMessageHandler;
 @property (nonatomic) id<ContactsManagerProtocol> contactsManager;
 @property (nonatomic) MessageSender *messageSender;
 @property (nonatomic) id<NotificationsProtocol> notificationsManager;
@@ -23,7 +23,7 @@ static TextSecureKitEnv *sharedTextSecureKitEnv;
 
 @implementation TextSecureKitEnv
 
-- (instancetype)initWithCallMessageHandler:(id<OWSCallMessageHandler>)callMessageHandler
+- (instancetype)initWithCallMessageHandler:(id<FLCallMessageHandler>)callMessageHandler
                            contactsManager:(id<ContactsManagerProtocol>)contactsManager
                              messageSender:(MessageSender *)messageSender
                       notificationsManager:(id<NotificationsProtocol>)notificationsManager

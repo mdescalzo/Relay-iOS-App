@@ -1379,7 +1379,7 @@
 "NEW_GROUP_MEMBER_LABEL" = "Member";
 
 /* Placeholder text for group name field */
-"NEW_GROUP_NAMEGROUP_REQUEST_DEFAULT" = "Name this group chat";
+"NEW_GROUP_NAMEGROUP_REQUEST_DEFAULT" = "Name this conversation";
 
 /* a title for the non-contacts section of the 'new group' view. */
 "NEW_GROUP_NON_CONTACTS_SECTION_TITLE" = "Other Users";
@@ -2421,3 +2421,7 @@
 
 /* Tag Lookup not-found message */
 "TAG_NOT_FOUND_FOR" = "Tag not found for";
+
+"NEW_THREAD" = "New Conversation";
+
+"FOUND_DUPLICATE_THREAD_ALERT_MESSAGE" = "Found matching conversation(s)\n\nWould you like to continue an existing conversation or start a new one?";

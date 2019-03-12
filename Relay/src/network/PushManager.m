@@ -4,7 +4,6 @@
 
 #import "PushManager.h"
 #import "AppDelegate.h"
-#import "NotificationsManager.h"
 #import "Relay-Swift.h"
 #import "SignalApp.h"
 #import "ThreadUtil.h"
@@ -79,7 +78,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
 
 - (CallUIAdapter *)callUIAdapter
 {
-    return SignalApp.sharedApp.callService.callUIAdapter;
+    return nil; // return SignalApp.sharedApp.callService.callUIAdapter;
 }
 
 - (void)handleMessageRead:(NSNotification *)notification
@@ -232,7 +231,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
             return;
         }
 
-        [self.callUIAdapter answerCallWithLocalId:localId];
+         [CallUIService.shared answerCallWithLocalId:localId];
         completionHandler();
     } else if ([identifier isEqualToString:PushManagerActionsDeclineCall]) {
         NSString *localIdString = notification.userInfo[PushManagerUserInfoKeysLocalCallId];
@@ -247,7 +246,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
             return;
         }
 
-        [self.callUIAdapter declineCallWithLocalId:localId];
+         [CallUIService.shared declineCallWithLocalId:localId];
         completionHandler();
     } else if ([identifier isEqualToString:PushManagerActionsCallBack]) {
         NSString *recipientId = notification.userInfo[PushManagerUserInfoKeysCallBackSignalRecipientId];
@@ -256,7 +255,8 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
             return;
         }
 
-        [self.callUIAdapter startAndShowOutgoingCallWithRecipientId:recipientId hasLocalVideo:NO];
+        // TODO: See if we can get a thread here and wire this up
+//        [ConferenceCallService.shared startCallWithThread:<#(TSThread * _Nonnull)#>]
         completionHandler();
     } else if ([identifier isEqualToString:PushManagerActionsShowThread]) {
         NSString *threadId = notification.userInfo[Signal_Thread_UserInfo_Key];

@@ -17,6 +17,9 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 #define textSecureHTTPTimeOut 10
 
+#define ConferenceCallStaleJoinTimeout 30.0
+#define ConferenceCallProtocolLevel 2LL
+
 //#define CONVERSATION_COLORS_ENABLED
 
 #define kSupportUrlString @"https://support.forsta.io/"
@@ -97,5 +100,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 #define textSecureSetProfileNameAPIFormat @"v1/profile/name/%@"
 #define textSecureProfileAvatarFormAPI @"v1/profile/form/avatar"
 #define textSecure2FAAPI @"/v1/accounts/pin"
+
+#define fallbackIceServerUrl @"stun:stun1.l.google.com:19302"
 
 #endif

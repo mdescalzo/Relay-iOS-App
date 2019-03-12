@@ -100,7 +100,10 @@ public class OWSAudioSession: NSObject {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 
-        self.currentActivities.append(Weak(value: audioActivity))
+        if !self.currentActivities.contains(where: { return $0.value == audioActivity}) {
+            self.currentActivities.append(Weak(value: audioActivity))
+        }
+        
     }
 
     @objc
@@ -151,7 +154,7 @@ public class OWSAudioSession: NSObject {
             // By notifying when we deactivate, the other app can resume playback.
             try avAudioSession.setActive(false, with: [.notifyOthersOnDeactivation])
         } catch {
-            owsFailDebug("\(logTag) in \(#function) failed with error: \(error)")
+            Logger.debug("\(logTag) in \(#function) failed with error: \(error)")
         }
     }
 

@@ -73,7 +73,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic, readonly) NSCache<NSString *, ThreadViewModel *> *threadViewModelCache;
 @property (nonatomic) BOOL isViewVisible;
 @property (nonatomic) BOOL shouldObserveDBModifications;
-@property (nonatomic) BOOL hasBeenPresented;
 
 // Mark: Search
 
@@ -148,12 +147,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     _blockingManager = [OWSBlockingManager sharedManager];
     _blockedPhoneNumberSet = [NSSet setWithArray:[_blockingManager blockedPhoneNumbers]];
     _threadViewModelCache = [NSCache new];
-
-    // Ensure ExperienceUpgradeFinder has been initialized.
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-    [ExperienceUpgradeFinder sharedManager];
-#pragma GCC diagnostic pop
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(blockedPhoneNumbersDidChange:)
@@ -268,11 +261,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         [FLContactsManager.shared refreshCCSMRecipients];
     });
     
-    // TODO: Remove this.
-    if (self.homeViewMode == HomeViewMode_Inbox) {
-        [SignalApp.sharedApp setHomeViewController:self];
-    }
-
     UIStackView *reminderStackView = [UIStackView new];
     _reminderStackView = reminderStackView;
     reminderStackView.axis = UILayoutConstraintAxisVertical;
@@ -455,7 +443,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 {
     [super viewDidAppear:animated];
 
-    [self displayAnyUnseenUpgradeExperience];
     [self applyDefaultBackButton];
 
     if (self.hasThemeChanged) {
@@ -721,36 +708,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 }
 
 #pragma mark - startup
-
-- (NSArray<ExperienceUpgrade *> *)unseenUpgradeExperiences
-{
-    OWSAssertIsOnMainThread();
-
-    __block NSArray<ExperienceUpgrade *> *unseenUpgrades = NSArray.new;
-//    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-//        unseenUpgrades = [ExperienceUpgradeFinder.sharedManager allUnseenWithTransaction:transaction];
-//    }];
-    return unseenUpgrades;
-}
-
-- (void)displayAnyUnseenUpgradeExperience
-{
-    OWSAssertIsOnMainThread();
-
-//    NSArray<ExperienceUpgrade *> *unseenUpgrades = [self unseenUpgradeExperiences];
-
-//    if (unseenUpgrades.count > 0) {
-//        ExperienceUpgradesPageViewController *experienceUpgradeViewController =
-//            [[ExperienceUpgradesPageViewController alloc] initWithExperienceUpgrades:unseenUpgrades];
-//        [self presentViewController:experienceUpgradeViewController animated:YES completion:nil];
-//    } else if (!self.hasBeenPresented && [ProfileViewController shouldDisplayProfileViewOnLaunch]) {
-//        [ProfileViewController presentForUpgradeOrNag:self];
-//    } else {
-        [OWSAlerts showIOSUpgradeNagIfNecessary];
-//    }
-
-    self.hasBeenPresented = YES;
-}
 
 - (void)tableViewSetUp
 {
@@ -1392,11 +1349,13 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
     // Perform the first step.
     if (self.presentedViewController) {
+        /*
         if ([self.presentedViewController isKindOfClass:[CallViewController class]]) {
             DDLogError(@"errorCouldNotPresentViewDueToCall");
             return;
         }
         [self.presentedViewController dismissViewControllerAnimated:animateDismissal completion:dismissNavigationBlock];
+         */
     } else {
         dismissNavigationBlock();
     }
@@ -1493,7 +1452,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 {
     OWSAssertIsOnMainThread();
 
-    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     if (self.shouldObserveDBModifications) {
         // External database modifications can't be converted into incremental updates,
@@ -1514,7 +1473,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         return;
     }
 
-    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+//    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     NSArray *notifications = [self.uiDatabaseConnection beginLongLivedReadTransaction];
 
@@ -1710,16 +1669,17 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     __block TSThread *thread = [self threadForIndexPath:indexPath];
     
     if (thread) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            if (thread.pinPosition) {
-                thread.pinPosition = nil;
-            } else {
-                thread.pinPosition = [NSNumber numberWithInteger:[self.tableView numberOfRowsInSection:HomeViewControllerSectionPinned] + 1];
-            }
-            [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                [thread saveWithTransaction:transaction];
+        __block NSNumber *newPosition;
+        if (thread.pinPosition) {
+            newPosition = nil;
+        } else {
+            newPosition = [NSNumber numberWithInteger:[self.tableView numberOfRowsInSection:HomeViewControllerSectionPinned] + 1];
+        }
+        [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+            [thread applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *theThread) {
+                theThread.pinPosition = newPosition;
             }];
-        });
+        }];
     }
 }
 

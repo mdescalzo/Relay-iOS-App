@@ -10,12 +10,15 @@
 #import "TSOutgoingMessage.h"
 #import "TSQuotedMessage.h"
 #import "TSThread.h"
+#import "FLCCSMJSONService.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation OWSIncomingSentMessageTranscript
 
 - (instancetype)initWithProto:(OWSSignalServiceProtosSyncMessageSent *)sentProto
+                 sourceDevice:(UInt32)sourceDevice
+                     threadId:(NSString *)threadId
                   transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
     self = [super init];
@@ -24,24 +27,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     _dataMessage = sentProto.message;
-    _recipientId = sentProto.destination;
+    _sourceDevice = sourceDevice;
     _timestamp = sentProto.timestamp;
     _expirationStartedAt = sentProto.expirationStartTimestamp;
     _expirationDuration = sentProto.message.expireTimer;
     _body = _dataMessage.body;
-//    _groupId = _dataMessage.group.id;
-//    _isGroupUpdate = _dataMessage.hasGroup && (_dataMessage.group.type == OWSSignalServiceProtosGroupContextTypeUpdate);
     _isExpirationTimerUpdate = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsExpirationTimerUpdate) != 0;
     _isEndSessionMessage = (_dataMessage.flags & OWSSignalServiceProtosDataMessageFlagsEndSession) != 0;
-
-//    if (self.dataMessage.hasGroup) {
-//        _thread = [TSGroupThread getOrCreateThreadWithGroupId:_dataMessage.group.id transaction:transaction];
-//    } else {
-        _thread = [TSThread getOrCreateThreadWithId:_recipientId transaction:transaction];
-//    }
-
-//    _quotedMessage = [TSQuotedMessage quotedMessageForDataMessage:_dataMessage thread:_thread transaction:transaction];
-//    _contact = [OWSContacts contactForDataMessage:_dataMessage transaction:transaction];
+    NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:sentProto.message.body];
+    _thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
 
     return self;
 }

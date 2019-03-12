@@ -14,7 +14,7 @@ class DebugUINotifications: DebugUIPage {
         return SignalApp.shared().notificationsManager
     }
     var notificationsAdapter: CallNotificationsAdapter {
-        return SignalApp.shared().callService.notificationsAdapter
+        return CallNotificationsAdapter() // totally bogus
     }
     var messageSender: MessageSender {
         return Environment.current().messageSender
@@ -69,7 +69,7 @@ class DebugUINotifications: DebugUIPage {
                     }
 
                     strongSelf.delayedNotificationDispatchWithFakeCall(thread: thread) { call in
-                        strongSelf.notificationsAdapter.presentMissedCall(call, callerName: thread.title!)
+                        strongSelf.notificationsAdapter.presentMissedCall(call, callName: thread.title!)
                     }
                 },
                 OWSTableItem(title: "Call Rejected: New Safety Number") { [weak self] in
@@ -118,11 +118,6 @@ class DebugUINotifications: DebugUIPage {
         }
     }
 
-    func delayedNotificationDispatchWithFakeCall(thread: TSThread, callBlock: @escaping (RelayCall) -> Void) {
-        let call = RelayCall.incomingCall(thread: thread, originatorId: UUID().uuidString, callId: thread.uniqueId, peerId: "0")
-
-        delayedNotificationDispatch {
-            callBlock(call)
-        }
+    func delayedNotificationDispatchWithFakeCall(thread: TSThread, callBlock: @escaping (ConferenceCall) -> Void) {
     }
 }
