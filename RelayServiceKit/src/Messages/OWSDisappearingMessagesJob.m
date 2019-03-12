@@ -198,7 +198,7 @@ void AssertIsOnDisappearingMessagesQueue()
                                     contactsManager:(id<ContactsManagerProtocol>)contactsManager
                                         transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    TSThread *thread = [message threadWithTransaction:transaction];
+    TSThread *thread = [TSThread getOrCreateThreadWithId: message.uniqueThreadId transaction: transaction];
     NSString *remoteContactName = nil;
     if ([message isKindOfClass:[TSIncomingMessage class]]) {
         TSIncomingMessage *incomingMessage = (TSIncomingMessage *)message;
@@ -214,15 +214,13 @@ void AssertIsOnDisappearingMessagesQueue()
 }
 
 - (void)becomeConsistentWithDisappearingDuration:(uint32_t)duration
-                                          thread:(TSThread *)thread
+                                          thread:(nonnull TSThread *)thread
                            appearBeforeTimestamp:(uint64_t)timestampForSorting
                       createdByRemoteContactName:(nullable NSString *)remoteContactName
                           createdInExistingGroup:(BOOL)createdInExistingGroup
-                                     transaction:(YapDatabaseReadWriteTransaction *)transaction
+                                     transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
     OWSAssert(timestampForSorting > 0);
-    OWSAssert(transaction);
 
     __block OWSBackgroundTask *_Nullable backgroundTask = [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];
     

@@ -367,8 +367,6 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
             do {
                 self.reportIncomingCall(call)
             }
-        case .vibrating:
-            do {}
         case .rejected:
             do {
                 OWSAudioSession.shared.endAudioActivity(call.audioActivity)
@@ -479,7 +477,8 @@ public class CallUIService: NSObject, ConferenceCallServiceDelegate, ConferenceC
 //        }
         
         if let call = ConferenceCallService.shared.conferenceCall {
-            if call.state == .ringing || call.state == .vibrating {
+            self.currentCallUUID = nil
+            if call.state == .ringing {
                 call.rejectCall()
             } else {
                 call.leaveCall()

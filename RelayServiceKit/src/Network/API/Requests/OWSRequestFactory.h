@@ -63,6 +63,10 @@ typedef NS_ENUM(NSUInteger, TSVerificationTransport) { TSVerificationTransportVo
                                         messages:(NSArray *)messages
                                        timeStamp:(uint64_t)timeStamp;
 
++ (TSRequest *)submitMessageRequestWithRecipient:(NSString *)recipientId
+                               recipientDeviceId:(NSNumber *)recipientDeviceId
+                                         message:(NSDictionary *)message;
+
 + (TSRequest *)registerSignedPrekeyRequestWithSignedPreKeyRecord:(SignedPreKeyRecord *)signedPreKey;
 
 + (TSRequest *)registerPrekeysRequestWithPrekeyArray:(NSArray *)prekeys

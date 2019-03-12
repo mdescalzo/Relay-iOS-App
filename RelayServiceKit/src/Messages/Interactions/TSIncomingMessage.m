@@ -36,11 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (instancetype)initIncomingMessageWithTimestamp:(uint64_t)timestamp
-                                        inThread:(TSThread *)thread
-                                        authorId:(NSString *)authorId
+                                        inThread:(nullable TSThread *)thread
+                                        authorId:(nonnull NSString *)authorId
                                   sourceDeviceId:(uint32_t)sourceDeviceId
                                      messageBody:(nullable NSString *)body
-                                   attachmentIds:(NSArray<NSString *> *)attachmentIds
+                                   attachmentIds:(nonnull NSArray<NSString *> *)attachmentIds
                                 expiresInSeconds:(uint32_t)expiresInSeconds
                                    quotedMessage:(nullable TSQuotedMessage *)quotedMessage
                                     contactShare:(nullable OWSContact *)contactShare

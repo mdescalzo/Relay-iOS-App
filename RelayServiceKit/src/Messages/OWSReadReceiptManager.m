@@ -129,12 +129,6 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 // Should only be accessed while synchronized on the OWSReadReceiptManager.
 @property (nonatomic, readonly) NSMutableDictionary<NSString *, OWSLinkedDeviceReadReceipt *> *toLinkedDevicesReadReceiptMap;
 
-// A map of "recipient id"-to-"timestamp list" for read receipts that
-// we will send to senders.
-//
-// Should only be accessed while synchronized on the OWSReadReceiptManager.
-@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSMutableSet<NSNumber *> *> *toSenderReadReceiptMap;
-
 // Should only be accessed while synchronized on the OWSReadReceiptManager.
 @property (nonatomic) BOOL isProcessing;
 
@@ -177,7 +171,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
     _dbConnection = primaryStorage.newDatabaseConnection;
 
     _toLinkedDevicesReadReceiptMap = [NSMutableDictionary new];
-    _toSenderReadReceiptMap = [NSMutableDictionary new];
+//    _toSenderReadReceiptMap = [NSMutableDictionary new];
 
     OWSSingletonAssert();
 
@@ -238,36 +232,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                 }];
         }
 
-        NSDictionary<NSString *, NSMutableSet<NSNumber *> *> *toSenderReadReceiptMap =
-            [self.toSenderReadReceiptMap copy];
-        [self.toSenderReadReceiptMap removeAllObjects];
-        if (toSenderReadReceiptMap.count > 0) {
-            for (NSString *recipientId in toSenderReadReceiptMap) {
-                NSSet<NSNumber *> *timestamps = toSenderReadReceiptMap[recipientId];
-                OWSAssert(timestamps.count > 0);
-                
-                // TODO: Modify to use passed threadId
-                __block TSThread *thread = nil;
-                [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction * transaction) {
-                    thread = [TSThread getOrCreateThreadWithId:recipientId transaction:transaction];
-                }];
-
-                OWSReadReceiptsForSenderMessage *message =
-                    [[OWSReadReceiptsForSenderMessage alloc] initWithThread:thread
-                                                          messageTimestamps:timestamps.allObjects];
-
-                [self.messageSender enqueueMessage:message
-                    success:^{
-                        DDLogInfo(@"%@ Successfully sent %lu read receipts to sender.", self.logTag, (unsigned long)timestamps.count);
-                    }
-                    failure:^(NSError *error) {
-                        DDLogError(@"%@ Failed to send read receipts to sender with error: %@", self.logTag, error);
-                    }];
-            }
-            [self.toSenderReadReceiptMap removeAllObjects];
-        }
-
-        BOOL didWork = (readReceiptsForLinkedDevices.count > 0 || toSenderReadReceiptMap.count > 0);
+        BOOL didWork = (readReceiptsForLinkedDevices.count > 0);
 
         if (didWork) {
             // Wait N seconds before processing read receipts again.
@@ -349,17 +314,6 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                                            failure:^(NSError * _Nonnull error) {
                                                DDLogError(@"%@ Failed to send read receipt to linked devices with error: %@", self.logTag, error);
                                            }];
-
-//            if ([self areReadReceiptsEnabled]) {
-//                DDLogVerbose(@"%@ Enqueuing read receipt for sender.", self.logTag);
-//                NSMutableSet<NSNumber *> *_Nullable timestamps = self.toSenderReadReceiptMap[messageAuthorId];
-//                if (!timestamps) {
-//                    timestamps = [NSMutableSet new];
-//                    self.toSenderReadReceiptMap[messageAuthorId] = timestamps;
-//                }
-//                [timestamps addObject:@(message.timestamp)];
-//            }
-
             [self scheduleProcessing];
         }
     });
@@ -446,7 +400,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
     NSString *senderId = message.messageAuthorId;
     uint64_t timestamp = message.timestamp;
     if (senderId.length < 1 || timestamp < 1) {
-        OWSFail(@"%@ Invalid incoming message: %@ %llu", self.logTag, senderId, timestamp);
+        OWSFailDebug(@"%@ Invalid incoming message: %@ %llu", self.logTag, senderId, timestamp);
         return;
     }
 
@@ -551,7 +505,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                   BOOL *stop) {
          
          if (![object conformsToProtocol:@protocol(OWSReadTracking)]) {
-             OWSFail(
+             OWSFailDebug(
                      @"Expected to conform to OWSReadTracking: object with class: %@ collection: %@ "
                      @"key: %@",
                      [object class],

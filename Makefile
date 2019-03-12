@@ -14,8 +14,10 @@ ci: dependencies test
 update_dependencies:
 	bundle exec pod update
 
-dependencies: update_dependencies
+bepi:
 	bundle exec pod install
+
+dependencies: update_dependencies bepi
 
 build: dependencies
 	$(XCODE_BUILD) build | xcpretty

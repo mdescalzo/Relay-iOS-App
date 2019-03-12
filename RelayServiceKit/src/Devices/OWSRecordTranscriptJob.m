@@ -8,6 +8,7 @@
 #import "OWSIncomingSentMessageTranscript.h"
 #import "OWSPrimaryStorage+SessionStore.h"
 #import "OWSReadReceiptManager.h"
+#import "OWSDevice.h"
 #import "TSAttachmentPointer.h"
 #import "TSInfoMessage.h"
 #import "TSNetworkManager.h"
@@ -76,35 +77,35 @@ NS_ASSUME_NONNULL_BEGIN
 
     if (transcript.isEndSessionMessage) {
         NSString *recipientId = [[jsonPayload objectForKey:@"sender"] objectForKey:@"userId"];
-        DDLogInfo(@"%@ EndSession was sent to recipient: %@.", self.logTag, recipientId);
-        [self.primaryStorage deleteAllSessionsForContact:recipientId protocolContext:transaction];
-        [[[TSInfoMessage alloc] initWithTimestamp:transcript.timestamp
-                                         inThread:transcript.thread
-                                  infoMessageType:TSInfoMessageTypeSessionDidEnd] saveWithTransaction:transaction];
-        
-        // Don't continue processing lest we print a bubble for the session reset.
-        return;
+        if (recipientId != nil) {
+            TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[TSAccountManager.localUID, recipientId] transaction:transaction];
+            if (thread == nil) {
+                OWSFailDebug(@"%@: Received sync message contained invalid thread data.", self.logTag);
+                return;
+            }
+            DDLogInfo(@"%@ EndSession was sent to recipient: %@.", self.logTag, recipientId);
+            [self.primaryStorage deleteAllSessionsForContact:recipientId protocolContext:transaction];
+            [[[TSInfoMessage alloc] initWithTimestamp:transcript.timestamp
+                                             inThread:thread
+                                      infoMessageType:TSInfoMessageTypeSessionDidEnd] saveWithTransaction:transaction];
+            // Don't continue processing lest we print a bubble for the session reset.
+            return;
+        }
     }
-    
+
     NSDictionary *dataBlob = [jsonPayload objectForKey:@"data"];
     if ([dataBlob allKeys].count == 0) {
         DDLogDebug(@"Received sync message contained no data object.");
         return;
     }
-    
-    NSString *threadId = [jsonPayload objectForKey:@"threadId"];
-    if (threadId.length == 0 || ![[threadId lowercaseString] isEqualToString:transcript.thread.uniqueId]) {
-        DDLogDebug(@"Received sync message contained no invalid thread data.");
-        return;
-    }
-    
+
     if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"control"]) {
         NSString *controlMessageType = [dataBlob objectForKey:@"control"];
         DDLogInfo(@"Control sync message received: %@", controlMessageType);
         
-        IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithThread:transcript.thread
-                                                                                      timestamp:transcript.timestamp
+        IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithTimestamp:transcript.timestamp
                                                                                          author:[TSAccountManager localUID]
+                                                                                         device:transcript.sourceDevice
                                                                                         payload:jsonPayload
                                                                                     attachments:transcript.attachmentPointerProtos];
         [ControlMessageManager processIncomingControlMessageWithMessage:controlMessage transaction:transaction];
@@ -112,10 +113,12 @@ NS_ASSUME_NONNULL_BEGIN
         
     } else if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"content"]) {
         
-        transcript.thread.universalExpression = [[jsonPayload objectForKey:@"distribution"] objectForKey:@"expression"];
-        [transcript.thread updateWithPayload:jsonPayload];
-        [transcript.thread saveWithTransaction:transaction];
-        
+        TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
+        if (thread == nil) {
+            OWSFailDebug(@"%@: Received sync message contained invalid thread data.", self.logTag);
+            return;
+        }
+
         OWSAttachmentsProcessor *attachmentsProcessor =
         [[OWSAttachmentsProcessor alloc] initWithAttachmentProtos:transcript.attachmentPointerProtos
                                                    networkManager:self.networkManager
@@ -125,7 +128,7 @@ NS_ASSUME_NONNULL_BEGIN
         // TODO: Build initializer that takes the jsonPayload as an argument
         TSOutgoingMessage *outgoingMessage =
         [[TSOutgoingMessage alloc] initOutgoingMessageWithTimestamp:transcript.timestamp
-                                                           inThread:transcript.thread
+                                                           inThread:thread
                                                         messageBody:transcript.body
                                                       attachmentIds:[attachmentsProcessor.attachmentIds mutableCopy]
                                                    expiresInSeconds:transcript.expirationDuration

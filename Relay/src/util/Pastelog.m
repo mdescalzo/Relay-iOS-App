@@ -519,7 +519,7 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
     DispatchMainThreadSafe(^{
         __block TSThread *thread = nil;
         [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-            thread = [TSThread getOrCreateThreadWithId:recipientId transaction:transaction];
+            thread = [TSThread getOrCreateThreadWithParticipants:@[ recipientId ] transaction:transaction];
         }];
         [ThreadUtil sendMessageWithText:url.absoluteString
                                inThread:thread

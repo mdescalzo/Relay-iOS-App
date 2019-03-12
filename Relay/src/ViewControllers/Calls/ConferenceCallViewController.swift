@@ -138,8 +138,8 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if self.call?.state == .ringing || self.call?.state == .vibrating {
-            self.call?.acceptCall()
+        if self.call?.state == .ringing {
+            self.call?.joinCall()
         }
         
         self.updateSecondaryPeerViews()
@@ -289,11 +289,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     message = ""
                     color = UIColor.clear
                 }
-            case .awaitingLocalJoin:
-                do {
-                    message = ""
-                    color = UIColor.cyan
-                }
             case .sendingAcceptOffer:
                 do {
                     message = "Accepting invitation"
@@ -309,7 +304,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     message = "Sending invitation"
                     color = UIColor.orange
                 }
-            case .readyToReceiveAcceptOffer:
+            case .awaitingAcceptOffer:
                 do {
                     message = "Awaiting response"
                     color = UIColor.brown
@@ -334,7 +329,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     message = "Left call"
                     color = UIColor.gray
                 }
-            case .discarded:
+            case .replaced:
                 do {
                     message = ""
                     color = UIColor.clear
@@ -678,8 +673,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         }
         
         if sender.isSelected {
-            // restart the call
-            self.call!.inviteMissingParticipants()
+            self.call!.joinCall()
         } else {
             // end the call
             Logger.info("\(self.logTag) called \(#function)")
@@ -877,7 +871,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
             }
             if allAlone {
                 // tear down the call
-                self.call!.leaveCall()
+                // self.call!.leaveCall()
             }
         }
     }
@@ -898,8 +892,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         case .undefined:
             do { /* TODO */ }
         case .ringing:
-            do { /* TODO */ }
-        case .vibrating:
             do { /* TODO */ }
         case .rejected:
             do { /* TODO */ }

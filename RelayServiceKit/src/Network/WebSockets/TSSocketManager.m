@@ -766,13 +766,14 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
             } @catch (NSException *exception) {
                 OWSFailDebug(@"%@ Received an invalid envelope: %@", self.logTag, exception.debugDescription);
                 // TODO: Add analytics.
-
-                [[OWSPrimaryStorage.sharedManager newDatabaseConnection] readWriteWithBlock:^(
-                    YapDatabaseReadWriteTransaction *transaction) {
-                    TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
-                    [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
-                                                                                               transaction:transaction];
-                }];
+                
+                // FIXME: Suppressing this message
+//                [[OWSPrimaryStorage.sharedManager newDatabaseConnection] readWriteWithBlock:^(
+//                    YapDatabaseReadWriteTransaction *transaction) {
+//                    TSErrorMessage *errorMessage = [TSErrorMessage corruptedMessageInUnknownThread];
+//                    [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForThreadlessErrorMessage:errorMessage
+//                                                                                               transaction:transaction];
+//                }];
             }
 
             dispatch_async(dispatch_get_main_queue(), ^{

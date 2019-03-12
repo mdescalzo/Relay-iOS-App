@@ -23,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // TODO: Convert to singletons?
 @property (nonatomic, readonly) ConferenceCallService *callService;
-//@property (nonatomic, readonly) CallUIAdapter *callUIAdapter;
-//@property (nonatomic, readonly) OutboundCallInitiator *outboundCallInitiator;
 @property (nonatomic, readonly) OWSMessageFetcherJob *messageFetcherJob;
 @property (nonatomic, readonly) NotificationsManager *notificationsManager;
 @property (nonatomic, readonly) AccountManager *accountManager;

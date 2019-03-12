@@ -442,7 +442,7 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
     // and our usage of sqlite's write-ahead logging retains a lock on the database, the OS
     // would kill the app/share extension as soon as it is backgrounded.
     options.cipherUnencryptedHeaderLength = kSqliteHeaderLength;
-
+    
     // If any of these asserts fails, we need to verify and update
     // OWSDatabaseConverter which assumes the values of these options.
     OWSAssert(options.cipherDefaultkdfIterNumber == 0);
@@ -562,8 +562,8 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
         return databaseViewCopy;
     } else if ([extension isKindOfClass:[YapDatabaseSecondaryIndex class]]) {
         YapDatabaseSecondaryIndex *secondaryIndex = (YapDatabaseSecondaryIndex *)extension;
-        OWSAssert(secondaryIndex->setup);
-        OWSAssert(secondaryIndex->handler);
+        OWSAssertDebug(secondaryIndex->setup);
+        OWSAssertDebug(secondaryIndex->handler);
         YapDatabaseSecondaryIndex *secondaryIndexCopy = [[YapDatabaseSecondaryIndex alloc]
             initWithSetup:secondaryIndex->setup
                   handler:secondaryIndex->handler
