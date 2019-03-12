@@ -159,17 +159,6 @@ public class ConversationSearcher: NSObject {
         }
     }
 
-//    @objc(filterGroupThreads:withSearchText:)
-//    public func filterGroupThreads(_ groupThreads: [ TSThread ], searchText: String) -> [ TSThread ] {
-//        guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 else {
-//            return groupThreads
-//        }
-//
-//        return groupThreads.filter { groupThread in
-//            return self.groupThreadSearcher.matches(item: groupThread, query: searchText)
-//        }
-//    }
-
     @objc(filterRelayTags:withSearchText:)
     public func filterRelayTags(_ relayTags: [FLTag], searchText: String) -> [FLTag] {
         guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 else {

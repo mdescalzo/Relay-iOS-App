@@ -605,13 +605,20 @@ import RelayServiceKit
     }
     
     @objc public func formattedDisplayName(forTagId tagId: String, font: UIFont) -> NSAttributedString? {
-        
+
         if let aTag = self.tag(withId:tagId) {
-            if let rawName = aTag.tagDescription {
-                let normalFontAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: Theme.primaryColor]
-                let attrName = NSAttributedString(string: rawName, attributes: normalFontAttributes as [NSAttributedStringKey : Any])
-                return attrName
+            var rawName: String
+            if aTag.recipientIds?.count == 1 {
+                rawName = self.displayName(forRecipientId: aTag.recipientIds?.anyObject() as! String)!
+            } else if aTag.tagDescription != nil {
+                rawName = aTag.tagDescription!
+            } else {
+                rawName = aTag.displaySlug
             }
+            
+            let normalFontAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: Theme.primaryColor]
+            let attrName = NSAttributedString(string: rawName, attributes: normalFontAttributes as [NSAttributedStringKey : Any])
+            return attrName
         }
         return nil
     }

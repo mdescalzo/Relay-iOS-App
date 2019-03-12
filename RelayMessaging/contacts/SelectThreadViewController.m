@@ -9,7 +9,6 @@
 #import "Environment.h"
 #import "NSString+OWS.h"
 #import "NewNonContactConversationViewController.h"
-//#import "OWSContactsManager.h"
 #import "OWSTableViewController.h"
 #import "ThreadViewHelper.h"
 #import "UIFont+OWS.h"
@@ -163,21 +162,6 @@ NS_ASSUME_NONNULL_BEGIN
     __weak SelectThreadViewController *weakSelf = self;
     ContactsViewHelper *helper = self.contactsViewHelper;
     OWSTableContents *contents = [OWSTableContents new];
-
-//    OWSTableSection *findByPhoneSection = [OWSTableSection new];
-//    [findByPhoneSection
-//        addItem:[OWSTableItem disclosureItemWithText:NSLocalizedString(@"NEW_CONVERSATION_FIND_BY_PHONE_NUMBER",
-//                                                         @"A label the cell that lets you add a new member to a group.")
-//                                     customRowHeight:UITableViewAutomaticDimension
-//                                         actionBlock:^{
-//                                             NewNonContactConversationViewController *viewController =
-//                                                 [NewNonContactConversationViewController new];
-//                                             viewController.nonContactConversationDelegate = weakSelf;
-//                                             viewController.isPresentedInNavigationController = YES;
-//                                             [weakSelf.navigationController pushViewController:viewController
-//                                                                                      animated:YES];
-//                                         }]];
-//    [contents addSection:findByPhoneSection];
 
     // Existing threads are listed first, ordered by most recently active
     OWSTableSection *recentChatsSection = [OWSTableSection new];

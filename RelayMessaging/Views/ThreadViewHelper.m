@@ -3,13 +3,9 @@
 //
 
 #import "ThreadViewHelper.h"
-#import <RelayServiceKit/AppContext.h>
-#import <RelayServiceKit/OWSPrimaryStorage.h>
-#import <RelayServiceKit/TSDatabaseView.h>
-#import <RelayServiceKit/TSThread.h>
-#import <YapDatabase/YapDatabase.h>
-#import <YapDatabase/YapDatabaseViewChange.h>
-#import <YapDatabase/YapDatabaseViewConnection.h>
+
+@import RelayServiceKit;
+@import YapDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -344,8 +344,6 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
                 strongSelf.buildAttachmentAndPresentConversationPicker()
             }
         }
-
-        // We don't use the AppUpdateNag in the SAE.
     }
 
     func startupLogging() {
