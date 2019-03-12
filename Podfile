@@ -12,9 +12,9 @@ def shared_pods
 
     # Forsta pods
     pod 'RelayServiceKit', path: '.'
-    pod 'SignalCoreKit', :git => 'git@github.com:ForstaLabs/SignalCoreKit.git', inhibit_warnings: true
+    pod 'SignalCoreKit', :git => 'https://github.com/ForstaLabs/SignalCoreKit.git', inhibit_warnings: true
     pod 'Curve25519Kit', git: 'https://github.com/ForstaLabs/Curve25519Kit.git', branch: 'autoProvision', inhibit_warnings: true
-    pod 'NSAttributedString-DDHTML', git: 'git@github.com:ForstaLabs/NSAttributedString-DDHTML.git', branch: 'master', :inhibit_warnings => true
+    pod 'NSAttributedString-DDHTML', :git => 'https://github.com/ForstaLabs/NSAttributedString-DDHTML.git', :inhibit_warnings => true
 
     # third party pods
     pod 'YapDatabase/SQLCipher', '~> 3.1.2', inhibit_warnings: true
