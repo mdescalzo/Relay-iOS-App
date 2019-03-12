@@ -216,7 +216,6 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
 {
     OWSAssert(messageText.length > 0);
 
-//    [ThreadUtil addThreadToProfileWhitelistIfEmptyContactThread:self.thread];
     [self tryToSendMessageWithBlock:^(SendCompletionBlock sendCompletion) {
         OWSAssertIsOnMainThread();
 
@@ -240,46 +239,6 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
 
 - (void)messageApprovalDidCancel:(MessageApprovalViewController *)approvalViewController
 {
-    [self cancelShareExperience];
-}
-
-#pragma mark - ContactShareApprovalViewControllerDelegate
-
-- (void)approveContactShare:(ContactShareApprovalViewController *)approvalViewController
-     didApproveContactShare:(ContactShareViewModel *)contactShare
-{
-    DDLogInfo(@"%@ in %s", self.logTag, __PRETTY_FUNCTION__);
-
-    [ThreadUtil addThreadToProfileWhitelistIfEmptyContactThread:self.thread];
-    [self tryToSendMessageWithBlock:^(SendCompletionBlock sendCompletion) {
-        OWSAssertIsOnMainThread();
-        [self.editingDBConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
-            if (contactShare.avatarImage) {
-                [contactShare.dbRecord saveAvatarImage:contactShare.avatarImage transaction:transaction];
-            }
-        }
-            completionBlock:^{
-                __block TSOutgoingMessage *outgoingMessage = nil;
-                outgoingMessage = [ThreadUtil sendMessageWithContactShare:contactShare.dbRecord
-                                                                 inThread:self.thread
-                                                            messageSender:self.messageSender
-                                                               completion:^(NSError *_Nullable error) {
-                                                                   sendCompletion(error, outgoingMessage);
-                                                               }];
-                // This is necessary to show progress.
-                self.outgoingMessage = outgoingMessage;
-            }];
-                                                    
-        
-    }
-                 fromViewController:approvalViewController];
-}
-
-- (void)approveContactShare:(ContactShareApprovalViewController *)approvalViewController
-      didCancelContactShare:(ContactShareViewModel *)contactShare
-{
-    DDLogInfo(@"%@ in %s", self.logTag, __PRETTY_FUNCTION__);
-
     [self cancelShareExperience];
 }
 
