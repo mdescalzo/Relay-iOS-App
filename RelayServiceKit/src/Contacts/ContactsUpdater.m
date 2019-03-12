@@ -50,71 +50,71 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (void)lookupIdentifiers:(NSArray<NSString *> *)identifiers
-                 success:(void (^)(NSArray<SignalRecipient *> *recipients))success
-                 failure:(void (^)(NSError *error))failure
-{
-    if (identifiers.count < 1) {
-        OWSFail(@"%@ Cannot lookup zero identifiers", self.logTag);
-        DispatchMainThreadSafe(^{
-            failure(
-                OWSErrorWithCodeDescription(OWSErrorCodeInvalidMethodParameters, @"Cannot lookup zero identifiers"));
-        });
-        return;
-    }
+//- (void)lookupIdentifiers:(NSArray<NSString *> *)identifiers
+//                 success:(void (^)(NSArray<SignalRecipient *> *recipients))success
+//                 failure:(void (^)(NSError *error))failure
+//{
+//    if (identifiers.count < 1) {
+//        OWSFail(@"%@ Cannot lookup zero identifiers", self.logTag);
+//        DispatchMainThreadSafe(^{
+//            failure(
+//                OWSErrorWithCodeDescription(OWSErrorCodeInvalidMethodParameters, @"Cannot lookup zero identifiers"));
+//        });
+//        return;
+//    }
+//
+//    [self contactIntersectionWithSet:[NSSet setWithArray:identifiers]
+//        success:^(NSSet<SignalRecipient *> *recipients) {
+//            if (recipients.count == 0) {
+//                DDLogInfo(@"%@ in %s no contacts are Signal users", self.logTag, __PRETTY_FUNCTION__);
+//            }
+//            DispatchMainThreadSafe(^{
+//                success(recipients.allObjects);
+//            });
+//        }
+//        failure:^(NSError *error) {
+//            DispatchMainThreadSafe(^{
+//                failure(error);
+//            });
+//        }];
+//}
 
-    [self contactIntersectionWithSet:[NSSet setWithArray:identifiers]
-        success:^(NSSet<SignalRecipient *> *recipients) {
-            if (recipients.count == 0) {
-                DDLogInfo(@"%@ in %s no contacts are Signal users", self.logTag, __PRETTY_FUNCTION__);
-            }
-            DispatchMainThreadSafe(^{
-                success(recipients.allObjects);
-            });
-        }
-        failure:^(NSError *error) {
-            DispatchMainThreadSafe(^{
-                failure(error);
-            });
-        }];
-}
-
-- (void)contactIntersectionWithSet:(NSSet<NSString *> *)recipientIdsToLookup
-                           success:(void (^)(NSSet<SignalRecipient *> *recipients))success
-                           failure:(void (^)(NSError *error))failure
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        OWSLegacyContactDiscoveryOperation *operation =
-            [[OWSLegacyContactDiscoveryOperation alloc] initWithRecipientIdsToLookup:recipientIdsToLookup.allObjects];
-
-        NSArray<NSOperation *> *operationAndDependencies = [operation.dependencies arrayByAddingObject:operation];
-        [self.contactIntersectionQueue addOperations:operationAndDependencies waitUntilFinished:YES];
-
-        if (operation.failingError != nil) {
-            failure(operation.failingError);
-            return;
-        }
-
-        NSSet<NSString *> *registeredRecipientIds = operation.registeredRecipientIds;
-
-        NSMutableSet<SignalRecipient *> *recipients = [NSMutableSet new];
-        [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-            for (NSString *recipientId in recipientIdsToLookup) {
-                if ([registeredRecipientIds containsObject:recipientId]) {
-                    SignalRecipient *recipient =
-                        [SignalRecipient markRecipientAsRegisteredAndGet:recipientId transaction:transaction];
-                    [recipients addObject:recipient];
-                } else {
-                    [SignalRecipient removeUnregisteredRecipient:recipientId transaction:transaction];
-                }
-            }
-        }];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            success([recipients copy]);
-        });
-    });
-}
+//- (void)contactIntersectionWithSet:(NSSet<NSString *> *)recipientIdsToLookup
+//                           success:(void (^)(NSSet<SignalRecipient *> *recipients))success
+//                           failure:(void (^)(NSError *error))failure
+//{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        OWSLegacyContactDiscoveryOperation *operation =
+//            [[OWSLegacyContactDiscoveryOperation alloc] initWithRecipientIdsToLookup:recipientIdsToLookup.allObjects];
+//
+//        NSArray<NSOperation *> *operationAndDependencies = [operation.dependencies arrayByAddingObject:operation];
+//        [self.contactIntersectionQueue addOperations:operationAndDependencies waitUntilFinished:YES];
+//
+//        if (operation.failingError != nil) {
+//            failure(operation.failingError);
+//            return;
+//        }
+//
+//        NSSet<NSString *> *registeredRecipientIds = operation.registeredRecipientIds;
+//
+//        NSMutableSet<SignalRecipient *> *recipients = [NSMutableSet new];
+//        [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+//            for (NSString *recipientId in recipientIdsToLookup) {
+//                if ([registeredRecipientIds containsObject:recipientId]) {
+//                    SignalRecipient *recipient =
+//                        [SignalRecipient markRecipientAsRegisteredAndGet:recipientId transaction:transaction];
+//                    [recipients addObject:recipient];
+//                } else {
+//                    [SignalRecipient removeUnregisteredRecipient:recipientId transaction:transaction];
+//                }
+//            }
+//        }];
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            success([recipients copy]);
+//        });
+//    });
+//}
 
 @end
 

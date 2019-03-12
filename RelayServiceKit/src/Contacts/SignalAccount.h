@@ -7,7 +7,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class Contact;
-@class SignalRecipient;
+//@class SignalRecipient;
 @class YapDatabaseReadTransaction;
 
 // This class represents a single valid Signal account.
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
-- (instancetype)initWithSignalRecipient:(SignalRecipient *)signalRecipient __deprecated;
+//- (instancetype)initWithSignalRecipient:(SignalRecipient *)signalRecipient __deprecated;
 
 - (instancetype)initWithRecipientId:(NSString *)recipientId;
 

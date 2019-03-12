@@ -12,7 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class CNContact;
 @class PhoneNumber;
-@class SignalRecipient;
 @class UIImage;
 @class YapDatabaseReadTransaction;
 
@@ -30,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isSignalContact;
 @property (nonatomic, readonly) NSString *cnContactId;
 
-- (NSArray<SignalRecipient *> *)signalRecipientsWithTransaction:(YapDatabaseReadTransaction *)transaction;
+//- (NSArray<SignalRecipient *> *)signalRecipientsWithTransaction:(YapDatabaseReadTransaction *)transaction;
 // TODO: Remove this method.
 - (NSArray<NSString *> *)textSecureIdentifiers;
 

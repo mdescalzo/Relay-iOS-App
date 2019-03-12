@@ -35,30 +35,30 @@ class DebugUICalling: DebugUIPage {
 
         let sectionItems = [
             OWSTableItem(title: "Send 'hangup' for old call") { [weak self] in
-                guard let strongSelf = self else { return }
-
-                let kFakeCallId = "12345"
-                let hangupMessage = OWSCallHangupMessage(peerId: kFakeCallId)
-                let callMessage = OWSOutgoingCallMessage(thread: aThread!, hangupMessage: hangupMessage)
-
-                strongSelf.messageSender.sendPromise(message: callMessage).done {
-                    Logger.debug("\(strongSelf.logTag) Successfully sent hangup call message to \(contactId)")
-                }.catch { error in
-                    Logger.error("\(strongSelf.logTag) failed to send hangup call message to \(contactId) with error: \(error)")
-                }.retainUntilComplete()
+//                guard let strongSelf = self else { return }
+//
+//                let kFakeCallId = "12345"
+//                let hangupMessage = OWSCallHangupMessage(peerId: kFakeCallId)
+//                let callMessage = OWSOutgoingCallMessage(thread: aThread!, hangupMessage: hangupMessage)
+//
+//                strongSelf.messageSender.sendPromise(message: callMessage).done {
+//                    Logger.debug("\(strongSelf.logTag) Successfully sent hangup call message to \(contactId)")
+//                }.catch { error in
+//                    Logger.error("\(strongSelf.logTag) failed to send hangup call message to \(contactId) with error: \(error)")
+//                }.retainUntilComplete()
             },
             OWSTableItem(title: "Send 'busy' for old call") { [weak self] in
-                guard let strongSelf = self else { return }
-
-                let kFakeCallId = "12345"
-                let busyMessage = OWSCallBusyMessage(peerId: kFakeCallId)
-                let callMessage = OWSOutgoingCallMessage(thread: aThread!, busyMessage: busyMessage)
-
-                strongSelf.messageSender.sendPromise(message: callMessage).done {
-                    Logger.debug("\(strongSelf.logTag) Successfully sent busy call message to \(contactId)")
-                }.catch { error in
-                    Logger.error("\(strongSelf.logTag) failed to send busy call message to \(contactId) with error: \(error)")
-                }.retainUntilComplete()
+//                guard let strongSelf = self else { return }
+//
+//                let kFakeCallId = "12345"
+//                let busyMessage = OWSCallBusyMessage(peerId: kFakeCallId)
+//                let callMessage = OWSOutgoingCallMessage(thread: aThread!, busyMessage: busyMessage)
+//
+//                strongSelf.messageSender.sendPromise(message: callMessage).done {
+//                    Logger.debug("\(strongSelf.logTag) Successfully sent busy call message to \(contactId)")
+//                }.catch { error in
+//                    Logger.error("\(strongSelf.logTag) failed to send busy call message to \(contactId) with error: \(error)")
+//                }.retainUntilComplete()
             }
         ]
 

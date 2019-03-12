@@ -6,7 +6,7 @@
 #import "NSString+SSK.h"
 #import "OWSPrimaryStorage.h"
 #import "PhoneNumber.h"
-#import "SignalRecipient.h"
+//#import "SignalRecipient.h"
 #import "TSAccountManager.h"
 #import "TextSecureKitEnv.h"
 
@@ -207,29 +207,29 @@ NS_ASSUME_NONNULL_BEGIN
     return [identifiers count] > 0;
 }
 
-- (NSArray<SignalRecipient *> *)signalRecipientsWithTransaction:(YapDatabaseReadTransaction *)transaction
-{
-    __block NSMutableArray *result = [NSMutableArray array];
-
-    for (PhoneNumber *number in [self.parsedPhoneNumbers sortedArrayUsingSelector:@selector(compare:)]) {
-        SignalRecipient *_Nullable signalRecipient =
-            [SignalRecipient registeredRecipientForRecipientId:number.toE164 transaction:transaction];
-        if (signalRecipient) {
-            [result addObject:signalRecipient];
-        }
-    }
-
-    return [result copy];
-}
+//- (NSArray<SignalRecipient *> *)signalRecipientsWithTransaction:(YapDatabaseReadTransaction *)transaction
+//{
+//    __block NSMutableArray *result = [NSMutableArray array];
+//
+//    for (PhoneNumber *number in [self.parsedPhoneNumbers sortedArrayUsingSelector:@selector(compare:)]) {
+//        SignalRecipient *_Nullable signalRecipient =
+//            [SignalRecipient registeredRecipientForRecipientId:number.toE164 transaction:transaction];
+//        if (signalRecipient) {
+//            [result addObject:signalRecipient];
+//        }
+//    }
+//
+//    return [result copy];
+//}
 
 - (NSArray<NSString *> *)textSecureIdentifiers {
     __block NSMutableArray *identifiers = [NSMutableArray array];
 
     [OWSPrimaryStorage.dbReadConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         for (PhoneNumber *number in self.parsedPhoneNumbers) {
-            if ([SignalRecipient isRegisteredRecipient:number.toE164 transaction:transaction]) {
-                [identifiers addObject:number.toE164];
-            }
+//            if ([SignalRecipient isRegisteredRecipient:number.toE164 transaction:transaction]) {
+//                [identifiers addObject:number.toE164];
+//            }
         }
     }];
     return [identifiers copy];

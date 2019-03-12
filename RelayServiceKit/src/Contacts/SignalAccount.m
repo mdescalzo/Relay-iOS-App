@@ -6,7 +6,7 @@
 #import "Contact.h"
 #import "NSString+SSK.h"
 #import "OWSPrimaryStorage.h"
-#import "SignalRecipient.h"
+//#import "SignalRecipient.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,11 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation SignalAccount
 
-- (instancetype)initWithSignalRecipient:(SignalRecipient *)signalRecipient
-{
-    OWSAssert(signalRecipient);
-    return [self initWithRecipientId:signalRecipient.recipientId];
-}
+//- (instancetype)initWithSignalRecipient:(SignalRecipient *)signalRecipient
+//{
+//    OWSAssert(signalRecipient);
+//    return [self initWithRecipientId:signalRecipient.recipientId];
+//}
 
 - (instancetype)initWithRecipientId:(NSString *)recipientId
 {

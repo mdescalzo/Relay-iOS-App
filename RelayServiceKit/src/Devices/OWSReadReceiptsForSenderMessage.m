@@ -5,7 +5,9 @@
 #import "OWSReadReceiptsForSenderMessage.h"
 #import "NSDate+OWS.h"
 #import "OWSSignalServiceProtos.pb.h"
-#import "SignalRecipient.h"
+//#import "SignalRecipient.h"
+#import <RelayServiceKit/RelayServiceKit-Swift.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -54,12 +56,12 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
-- (NSData *)buildPlainTextData:(SignalRecipient *)recipient
+- (NSData *)buildPlainTextData:(RelayRecipient *)recipient
 {
     OWSAssert(recipient);
 
     OWSSignalServiceProtosContentBuilder *contentBuilder = [OWSSignalServiceProtosContentBuilder new];
-    [contentBuilder setReceiptMessage:[self buildReceiptMessage:recipient.recipientId]];
+    [contentBuilder setReceiptMessage:[self buildReceiptMessage:recipient.uniqueId]];
     return [[contentBuilder build] data];
 }
 

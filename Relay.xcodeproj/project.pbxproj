@@ -693,8 +693,6 @@
 		7D65650E2113C53C00365A19 /* AttachmentApprovalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D65650D2113C53C00365A19 /* AttachmentApprovalViewController.swift */; };
 		7D6565102113C5DD00365A19 /* ModalActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D65650F2113C5DD00365A19 /* ModalActivityIndicatorViewController.swift */; };
 		7D6565162113C6AE00365A19 /* ContactFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6565152113C6AD00365A19 /* ContactFieldView.swift */; };
-		7D6565192113CB3E00365A19 /* OWSContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6565172113CB3E00365A19 /* OWSContactsManager.m */; };
-		7D65651A2113CB3E00365A19 /* OWSContactsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6565182113CB3E00365A19 /* OWSContactsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D705D972147533B00488180 /* UIColor+Forsta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D962147533B00488180 /* UIColor+Forsta.swift */; };
 		7D705D9A2148252400488180 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D992148252400488180 /* NewConversationViewController.swift */; };
 		7D705D9B2148252400488180 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D992148252400488180 /* NewConversationViewController.swift */; };
@@ -1466,8 +1464,6 @@
 		7D65650D2113C53C00365A19 /* AttachmentApprovalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentApprovalViewController.swift; sourceTree = "<group>"; };
 		7D65650F2113C5DD00365A19 /* ModalActivityIndicatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalActivityIndicatorViewController.swift; sourceTree = "<group>"; };
 		7D6565152113C6AD00365A19 /* ContactFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFieldView.swift; sourceTree = "<group>"; };
-		7D6565172113CB3E00365A19 /* OWSContactsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSContactsManager.m; sourceTree = "<group>"; };
-		7D6565182113CB3E00365A19 /* OWSContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSContactsManager.h; sourceTree = "<group>"; };
 		7D705D962147533B00488180 /* UIColor+Forsta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Forsta.swift"; sourceTree = "<group>"; };
 		7D705D992148252400488180 /* NewConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		7D705DA02148258100488180 /* SlugCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlugCell.swift; sourceTree = "<group>"; };
@@ -2092,8 +2088,6 @@
 				7D65650F2113C5DD00365A19 /* ModalActivityIndicatorViewController.swift */,
 				7D6564E72113BD8900365A19 /* NewNonContactConversationViewController.h */,
 				7D6564E52113BD8900365A19 /* NewNonContactConversationViewController.m */,
-				7D6565182113CB3E00365A19 /* OWSContactsManager.h */,
-				7D6565172113CB3E00365A19 /* OWSContactsManager.m */,
 				7D6564EE2113BD8A00365A19 /* SelectRecipientViewController.h */,
 				7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */,
 				7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */,
@@ -3001,7 +2995,6 @@
 				3421981421061A0700C57195 /* JSQMessagesAvatarImage.h in Headers */,
 				3461296F1FD1D74C00532771 /* Release.h in Headers */,
 				34480B571FD0A7A400BC14EF /* OWSScrubbingLogFormatter.h in Headers */,
-				7D65651A2113CB3E00365A19 /* OWSContactsManager.h in Headers */,
 				346129FC1FD5F31400532771 /* OWS101ExistingUsersBlockOnIdentityChange.h in Headers */,
 				451F8A491FD715CF005CB9DA /* OWSAvatarBuilder.h in Headers */,
 				346129951FD1E30000532771 /* OWSDatabaseMigration.h in Headers */,
@@ -4050,7 +4043,6 @@
 				346129AD1FD1F34E00532771 /* ImageCache.swift in Sources */,
 				452C7CA72037628B003D51A5 /* Weak.swift in Sources */,
 				34D5872F208E2C4200D2255A /* OWS109OutgoingMessageState.m in Sources */,
-				7D6565192113CB3E00365A19 /* OWSContactsManager.m in Sources */,
 				7DCA3B3E21BB00F700733FF2 /* ThreadManager.swift in Sources */,
 				451F8A341FD710C3005CB9DA /* ConversationSearcher.swift in Sources */,
 				346129F91FD5F31400532771 /* OWS104CreateRecipientIdentities.m in Sources */,
