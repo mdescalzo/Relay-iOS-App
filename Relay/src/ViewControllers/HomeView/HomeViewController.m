@@ -716,6 +716,15 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 #pragma mark - Table View Data Source
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self threadForIndexPath:indexPath] == nil) {
+        return 0.0;
+    } else {
+        return self.tableView.estimatedRowHeight;
+    }
+}
+
 -(nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (self.homeViewMode == HomeViewMode_Inbox) {
@@ -788,18 +797,20 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (ThreadViewModel *)threadViewModelForIndexPath:(NSIndexPath *)indexPath
 {
     TSThread *threadRecord = [self threadForIndexPath:indexPath];
-    OWSAssert(threadRecord);
+    OWSAssertDebug(threadRecord);
 
+    __block ThreadViewModel *_Nullable newThreadViewModel = nil;
+    if (threadRecord != nil) {
     ThreadViewModel *_Nullable cachedThreadViewModel = [self.threadViewModelCache objectForKey:threadRecord.uniqueId];
     if (cachedThreadViewModel) {
         return cachedThreadViewModel;
     }
 
-    __block ThreadViewModel *_Nullable newThreadViewModel;
     [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *_Nonnull transaction) {
         newThreadViewModel = [[ThreadViewModel alloc] initWithThread:threadRecord transaction:transaction];
     }];
     [self.threadViewModelCache setObject:newThreadViewModel forKey:threadRecord.uniqueId];
+    }
     return newThreadViewModel;
 }
 
@@ -834,11 +845,14 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     OWSAssert(cell);
 
     ThreadViewModel *thread = [self threadViewModelForIndexPath:indexPath];
-    [cell configureWithThread:thread
-              contactsManager:self.contactsManager
-        blockedPhoneNumberSet:self.blockedPhoneNumberSet];
-
+    if (thread != nil) {
+        [cell configureWithThread:thread
+                  contactsManager:self.contactsManager
+            blockedPhoneNumberSet:self.blockedPhoneNumberSet];
     return cell;
+    } else {
+        return UITableViewCell.new;
+    }
 }
 
 - (UITableViewCell *)cellForArchivedConversationsRow:(UITableView *)tableView
@@ -891,7 +905,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         thread = [[transaction extension:TSThreadDatabaseViewExtensionName] objectAtIndexPath:indexPath
                                                                                  withMappings:self.threadMappings];
     }];
-
     return thread;
 }
 
