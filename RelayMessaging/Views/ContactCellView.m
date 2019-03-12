@@ -177,14 +177,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 
     self.contactsManager = contactsManager;
 
-    NSString *threadName = nil;
-    if (thread.title.length > 0) {
-        threadName = thread.title;
-    } else if (thread.prettyExpression.length > 0) {
-        threadName = thread.prettyExpression;
-    } else {
-        threadName = [MessageStrings newGroupDefaultTitle];
-    }
+    NSString *threadName = [thread displayName];;
 
     NSAttributedString *attributedText =
         [[NSAttributedString alloc] initWithString:threadName
@@ -192,16 +185,6 @@ const CGFloat kContactCellAvatarTextMargin = 12;
                                             NSForegroundColorAttributeName : [Theme primaryColor],
                                         }];
     self.nameLabel.attributedText = attributedText;
-
-//    if ([thread isKindOfClass:[TSThread class]]) {
-//        self.recipientId = thread.contactIdentifier;
-//
-//        [[NSNotificationCenter defaultCenter] addObserver:self
-//                                                 selector:@selector(otherUsersProfileDidChange:)
-//                                                     name:kNSNotificationName_OtherUsersProfileDidChange
-//                                                   object:nil];
-//        [self updateProfileName];
-//    }
     
     self.avatarView.image =
     [ThreadManager.sharedManager imageWithThreadId:thread.uniqueId];

@@ -33,7 +33,7 @@ NSString *const TSSecondaryDevicesGroup = @"TSSecondaryDevicesGroup";
 
 // YAPDB BUG: when changing from non-persistent to persistent view, we had to rename TSThreadDatabaseViewExtensionName
 // -> TSThreadDatabaseViewExtensionName2 to work around https://github.com/yapstudios/YapDatabase/issues/324
-NSString *const TSThreadDatabaseViewExtensionName = @"TSThreadDatabaseViewExtensionName2";
+NSString *const TSThreadDatabaseViewExtensionName = @"TSThreadDatabaseViewExtensionName3";
 NSString *const TSMessageDatabaseViewExtensionName = @"TSMessageDatabaseViewExtensionName";
 NSString *const TSThreadOutgoingMessageDatabaseViewExtensionName = @"TSThreadOutgoingMessageDatabaseViewExtensionName";
 NSString *const TSUnreadDatabaseViewExtensionName = @"TSUnreadDatabaseViewExtensionName";
