@@ -3371,6 +3371,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
     }();
 
     SSKEnvelope *envelope = [[SSKEnvelope alloc] initWithTimestamp:timestamp
+                                                               age:0
                                                             source:source
                                                       sourceDevice:1
                                                               type:SSKEnvelopeTypeCiphertext
@@ -3866,6 +3867,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
     NSData *content = plaintextData;
 
     SSKEnvelope *envelope = [[SSKEnvelope alloc] initWithTimestamp:timestamp
+                                                               age:0
                                                             source:source
                                                       sourceDevice:sourceDevice
                                                               type:envelopeType

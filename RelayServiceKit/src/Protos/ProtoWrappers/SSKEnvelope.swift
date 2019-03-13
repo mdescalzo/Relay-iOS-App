@@ -40,12 +40,16 @@ public class SSKEnvelope: NSObject {
 
     @objc
     public let legacyMessage: Data?
+    
+    @objc
+    public let age: NSNumber?
 
     @objc
-    public init(timestamp: UInt64, source: String, sourceDevice: UInt32, type: SSKEnvelopeType, content: Data?, legacyMessage: Data?) {
+    public init(timestamp: UInt64, age: NSNumber?, source: String, sourceDevice: UInt32, type: SSKEnvelopeType, content: Data?, legacyMessage: Data?) {
         self.source = source
         self.type = type
         self.timestamp = timestamp
+        self.age = age
         self.sourceDevice = sourceDevice
         self.relay = nil
         self.content = content
@@ -83,6 +87,12 @@ public class SSKEnvelope: NSObject {
             throw EnvelopeError.invalidProtobuf(description: "missing required field: timestamp")
         }
         self.timestamp = proto.timestamp
+        
+        if proto.hasAge {
+            self.age = NSNumber(value: proto.age)
+        } else {
+            self.age = nil
+        }
 
         guard proto.hasSourceDevice else {
             throw EnvelopeError.invalidProtobuf(description: "missing required field: sourceDevice")
@@ -133,6 +143,9 @@ public class SSKEnvelope: NSObject {
             }()
 
             builder.timestamp = self.timestamp
+            if (self.age != nil) {
+                builder.age = self.age!.uint64Value;
+            }
             builder.sourceDevice = self.sourceDevice
 
             if let relay = self.relay {

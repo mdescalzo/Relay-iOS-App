@@ -6,6 +6,14 @@
 // For information on using the generated types, please see the documenation:
 //   https://github.com/apple/swift-protobuf/
 
+//*
+// Copyright (C) 2014-2016 Open Whisper Systems
+//
+// Licensed according to the LICENSE file in this repository.
+
+/// iOS - since we use a modern proto-compiler, we must specify
+/// the legacy proto format.
+
 import Foundation
 import SwiftProtobuf
 
@@ -89,6 +97,15 @@ struct SignalServiceProtos_Envelope {
   /// Clears the value of `content`. Subsequent reads from it will return its default value.
   mutating func clearContent() {self._content = nil}
 
+  var age: UInt64 {
+    get {return _age ?? 0}
+    set {_age = newValue}
+  }
+  /// Returns true if `age` has been explicitly set.
+  var hasAge: Bool {return self._age != nil}
+  /// Clears the value of `age`. Subsequent reads from it will return its default value.
+  mutating func clearAge() {self._age = nil}
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   enum TypeEnum: SwiftProtobuf.Enum {
@@ -135,6 +152,7 @@ struct SignalServiceProtos_Envelope {
   fileprivate var _timestamp: UInt64? = nil
   fileprivate var _legacyMessage: Data? = nil
   fileprivate var _content: Data? = nil
+  fileprivate var _age: UInt64? = nil
 }
 
 #if swift(>=4.2)
@@ -2036,6 +2054,7 @@ extension SignalServiceProtos_Envelope: SwiftProtobuf.Message, SwiftProtobuf._Me
     5: .same(proto: "timestamp"),
     6: .same(proto: "legacyMessage"),
     8: .same(proto: "content"),
+    9: .same(proto: "age"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -2048,6 +2067,7 @@ extension SignalServiceProtos_Envelope: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 6: try decoder.decodeSingularBytesField(value: &self._legacyMessage)
       case 7: try decoder.decodeSingularUInt32Field(value: &self._sourceDevice)
       case 8: try decoder.decodeSingularBytesField(value: &self._content)
+      case 9: try decoder.decodeSingularUInt64Field(value: &self._age)
       default: break
       }
     }
@@ -2075,6 +2095,9 @@ extension SignalServiceProtos_Envelope: SwiftProtobuf.Message, SwiftProtobuf._Me
     if let v = self._content {
       try visitor.visitSingularBytesField(value: v, fieldNumber: 8)
     }
+    if let v = self._age {
+      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -2086,6 +2109,7 @@ extension SignalServiceProtos_Envelope: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs._timestamp != rhs._timestamp {return false}
     if lhs._legacyMessage != rhs._legacyMessage {return false}
     if lhs._content != rhs._content {return false}
+    if lhs._age != rhs._age {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
