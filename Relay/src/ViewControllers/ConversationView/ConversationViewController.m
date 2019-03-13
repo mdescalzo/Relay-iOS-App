@@ -5,7 +5,6 @@
 #import "ConversationViewController.h"
 #import "AppDelegate.h"
 #import "BlockListUIUtils.h"
-#import "BlockListViewController.h"
 #import "ContactsViewHelper.h"
 #import "ConversationCollectionView.h"
 #import "ConversationInputTextView.h"
@@ -916,25 +915,25 @@ typedef enum : NSUInteger {
     self.bannerView = bannerView;
 }
 
-- (void)blockBannerViewWasTapped:(UIGestureRecognizer *)sender
-{
-    if (sender.state != UIGestureRecognizerStateRecognized) {
-        return;
-    }
-
-    if ([self isBlockedContactConversation]) {
-        // If this a blocked 1:1 conversation, offer to unblock the user.
-        [self showUnblockContactUI:nil];
-    } else if (self.isGroupConversation) {
-        // If this a group conversation with at least one blocked member,
-        // Show the block list view.
-        int blockedGroupMemberCount = [self blockedGroupMemberCount];
-        if (blockedGroupMemberCount > 0) {
-            BlockListViewController *vc = [[BlockListViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-    }
-}
+//- (void)blockBannerViewWasTapped:(UIGestureRecognizer *)sender
+//{
+//    if (sender.state != UIGestureRecognizerStateRecognized) {
+//        return;
+//    }
+//
+//    if ([self isBlockedContactConversation]) {
+//        // If this a blocked 1:1 conversation, offer to unblock the user.
+//        [self showUnblockContactUI:nil];
+//    } else if (self.isGroupConversation) {
+//        // If this a group conversation with at least one blocked member,
+//        // Show the block list view.
+//        int blockedGroupMemberCount = [self blockedGroupMemberCount];
+//        if (blockedGroupMemberCount > 0) {
+//            BlockListViewController *vc = [[BlockListViewController alloc] init];
+//            [self.navigationController pushViewController:vc animated:YES];
+//        }
+//    }
+//}
 
 - (void)groupProfileWhitelistBannerWasTapped:(UIGestureRecognizer *)sender
 {

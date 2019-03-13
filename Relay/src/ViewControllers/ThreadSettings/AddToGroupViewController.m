@@ -6,8 +6,6 @@
 #import "BlockListUIUtils.h"
 #import "ContactsViewHelper.h"
 #import "Relay-Swift.h"
-//#import <RelayMessaging/OWSContactsManager.h>
-#import <RelayServiceKit/SignalAccount.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,11 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
         @"ADD_GROUP_MEMBER_VIEW_CONTACT_TITLE", @"Title for the 'add contact' section of the 'add group member' view.");
 }
 
-- (BOOL)canSignalAccountBeSelected:(SignalAccount *)signalAccount
+- (BOOL)canRecipientBeSelected:(RelayRecipient *)recipient
 {
-    OWSAssert(signalAccount);
-
-    return ![self.addToGroupDelegate isRecipientGroupMember:signalAccount.recipientId];
+    return ![self.addToGroupDelegate isRecipientGroupMember:recipient.uniqueId];
 }
 
 - (void)relayTagWasSelected:(FLTag *)relayTag
@@ -128,11 +124,9 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
-- (nullable NSString *)accessoryMessageForSignalAccount:(SignalAccount *)signalAccount
+- (nullable NSString *)accessoryMessageForSignalAccount:(RelayRecipient *)recipient
 {
-    OWSAssert(signalAccount);
-
-    if ([self.addToGroupDelegate isRecipientGroupMember:signalAccount.recipientId]) {
+    if ([self.addToGroupDelegate isRecipientGroupMember:recipient.uniqueId]) {
         return NSLocalizedString(@"NEW_GROUP_MEMBER_LABEL", @"An indicator that a user is a member of the new group.");
     }
 

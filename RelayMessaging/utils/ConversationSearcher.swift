@@ -170,16 +170,16 @@ public class ConversationSearcher: NSObject {
         }
     }
 
-    @objc(filterSignalAccounts:withSearchText:)
-    public func filterSignalAccounts(_ signalAccounts: [SignalAccount], searchText: String) -> [SignalAccount] {
-        guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 else {
-            return signalAccounts
-        }
-
-        return signalAccounts.filter { signalAccount in
-            self.signalAccountSearcher.matches(item: signalAccount, query: searchText)
-        }
-    }
+//    @objc(filterSignalAccounts:withSearchText:)
+//    public func filterSignalAccounts(_ signalAccounts: [SignalAccount], searchText: String) -> [SignalAccount] {
+//        guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 else {
+//            return signalAccounts
+//        }
+//
+//        return signalAccounts.filter { signalAccount in
+//            self.signalAccountSearcher.matches(item: signalAccount, query: searchText)
+//        }
+//    }
 
     // MARK: Searchers
 
@@ -197,10 +197,10 @@ public class ConversationSearcher: NSObject {
         return self.indexingString(tagId: tagId)
     }
 
-    private lazy var signalAccountSearcher: Searcher<SignalAccount> = Searcher { (signalAccount: SignalAccount) in
-        let recipientId = signalAccount.recipientId
-        return self.indexingString(recipientId: recipientId)
-    }
+//    private lazy var signalAccountSearcher: Searcher<SignalAccount> = Searcher { (signalAccount: SignalAccount) in
+//        let recipientId = signalAccount.recipientId
+//        return self.indexingString(recipientId: recipientId)
+//    }
 
     private var contactsManager: FLContactsManager {
         return Environment.current()!.contactsManager

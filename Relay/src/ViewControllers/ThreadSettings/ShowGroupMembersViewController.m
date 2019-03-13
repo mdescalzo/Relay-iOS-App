@@ -107,7 +107,6 @@ NS_ASSUME_NONNULL_BEGIN
     OWSTableContents *contents = [OWSTableContents new];
 
     __weak ShowGroupMembersViewController *weakSelf = self;
-    ContactsViewHelper *helper = self.contactsViewHelper;
 
     OWSTableSection *membersSection = [OWSTableSection new];
 

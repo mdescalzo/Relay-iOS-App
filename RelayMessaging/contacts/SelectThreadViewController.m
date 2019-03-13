@@ -8,7 +8,6 @@
 #import "ContactsViewHelper.h"
 #import "Environment.h"
 #import "NSString+OWS.h"
-#import "NewNonContactConversationViewController.h"
 #import "OWSTableViewController.h"
 #import "ThreadViewHelper.h"
 #import "UIFont+OWS.h"
@@ -23,8 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SelectThreadViewController () <OWSTableViewControllerDelegate,
     ThreadViewHelperDelegate,
     ContactsViewHelperDelegate,
-    UISearchBarDelegate,
-    NewNonContactConversationViewControllerDelegate>
+    UISearchBarDelegate>
 
 @property (nonatomic, readonly) ContactsViewHelper *contactsViewHelper;
 @property (nonatomic, readonly) ConversationSearcher *conversationSearcher;
@@ -374,18 +372,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldHideLocalNumber
 {
     return NO;
-}
-
-#pragma mark - NewNonContactConversationViewControllerDelegate
-
-- (void)recipientIdWasSelected:(NSString *)recipientId
-{
-    if (recipientId.length == 0) {
-        DDLogDebug(@"Selected recipient with empty id.");
-    } else {
-        TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[recipientId, TSAccountManager.localUID]];
-        [self.selectThreadViewDelegate threadWasSelected:thread];
-    }
 }
 
 @end

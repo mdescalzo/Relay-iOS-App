@@ -8,7 +8,6 @@
 #import <RelayMessaging/RelayMessaging-Swift.h>
 #import <RelayServiceKit/Contact.h>
 #import <RelayServiceKit/OWSBlockingManager.h>
-#import <RelayServiceKit/SignalAccount.h>
 #import <RelayServiceKit/TSAccountManager.h>
 
 NS_ASSUME_NONNULL_BEGIN

@@ -155,8 +155,6 @@ NS_ASSUME_NONNULL_BEGIN
     OWSTableContents *contents = [OWSTableContents new];
     contents.title = NSLocalizedString(@"CONVERSATION_SETTINGS", @"title for conversation settings screen");
 
-    __weak OWSAddToContactViewController *weakSelf = self;
-
     OWSTableSection *section = [OWSTableSection new];
     section.headerTitle = NSLocalizedString(
         @"EDIT_GROUP_CONTACTS_SECTION_TITLE", @"a title for the contacts section of the 'new/update group' view.");

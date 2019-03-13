@@ -47,13 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
                                                            actionBlock:^{
                                                                [DebugUIContacts deleteAllContacts];
                                                            }],
-                                           [OWSTableItem itemWithTitle:@"Clear SignalAccount Cache"
-                                                           actionBlock:^{
-                                                               [DebugUIContacts clearSignalAccountCache];
-                                                           }],
                                            [OWSTableItem itemWithTitle:@"Clear RelayRecipient Cache"
                                                            actionBlock:^{
-                                                               [DebugUIContacts clearSignalRecipientCache];
+                                                               [DebugUIContacts clearRelayRecipientCache];
                                                            }],
                                            [OWSTableItem itemWithTitle:@"New Unregistered Contact Thread"
                                                            actionBlock:^{
@@ -1297,13 +1293,7 @@ NS_ASSUME_NONNULL_BEGIN
                     }];
 }
 
-+ (void)clearSignalAccountCache
-{
-    DDLogWarn(@"%@ Deleting all signal accounts.", self.logTag);
-    [SignalAccount removeAllObjectsInCollection];
-}
-
-+ (void)clearSignalRecipientCache
++ (void)clearRelayRecipientCache
 {
     DDLogWarn(@"%@ Deleting all relay recipients.", self.logTag);
     [RelayRecipient removeAllObjectsInCollection];

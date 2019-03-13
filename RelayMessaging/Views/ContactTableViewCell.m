@@ -7,7 +7,6 @@
 #import "OWSTableViewController.h"
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
-#import <RelayServiceKit/SignalAccount.h>
 #import <RelayMessaging/RelayMessaging-Swift.h>
 
 NS_ASSUME_NONNULL_BEGIN

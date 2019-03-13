@@ -76,7 +76,6 @@
 #import <RelayServiceKit/OWSAttachmentsProcessor.h>
 #import <RelayServiceKit/OWSBackgroundTask.h>
 #import <RelayServiceKit/FLCallMessageHandler.h>
-#import <RelayServiceKit/OWSContactsOutputStream.h>
 #import <RelayServiceKit/OWSDispatch.h>
 #import <RelayServiceKit/OWSEndSessionMessage.h>
 #import <RelayServiceKit/OWSError.h>
@@ -93,7 +92,6 @@
 #import <RelayServiceKit/OWSRequestFactory.h>
 #import <RelayServiceKit/OWSSignalService.h>
 #import <RelayServiceKit/PhoneNumber.h>
-#import <RelayServiceKit/SignalAccount.h>
 #import <RelayServiceKit/TSAccountManager.h>
 #import <RelayServiceKit/TSAttachment.h>
 #import <RelayServiceKit/TSAttachmentPointer.h>
