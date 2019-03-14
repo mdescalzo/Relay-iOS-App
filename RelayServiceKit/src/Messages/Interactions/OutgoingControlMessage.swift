@@ -23,8 +23,7 @@ import UIKit
                    expiresInSeconds: 0,
                    expireStartedAt: 0,
                    isVoiceMessage: false,
-                   quotedMessage: nil,
-                   contactShare: nil)
+                   quotedMessage: nil)
         
         self.messageType = "control"
         self.moreData = moreData

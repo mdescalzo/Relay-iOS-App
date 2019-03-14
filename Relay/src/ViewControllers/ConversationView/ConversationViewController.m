@@ -36,7 +36,6 @@
 #import "TSInvalidIdentityKeyErrorMessage.h"
 #import "UIFont+OWS.h"
 #import "UIViewController+Permissions.h"
-#import "ViewControllerUtils.h"
 #import <ContactsUI/CNContactViewController.h>
 
 @import PromiseKit;

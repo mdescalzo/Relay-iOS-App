@@ -17,7 +17,6 @@
 #import "TSAccountManager.h"
 #import "TSDatabaseView.h"
 #import "TSThread.h"
-#import "ViewControllerUtils.h"
 #import "FLAnnouncementViewController.h"
 
 @import PromiseKit;

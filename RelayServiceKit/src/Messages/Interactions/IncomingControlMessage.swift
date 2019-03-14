@@ -53,8 +53,7 @@ import UIKit
                    messageBody: nil,
                    attachmentIds: attachmentIds,
                    expiresInSeconds: 0,
-                   quotedMessage: nil,
-                   contactShare: nil)
+                   quotedMessage: nil)
                 
         self.messageType = "control"
         self.forstaPayload = payload.mutableCopy() as! NSMutableDictionary

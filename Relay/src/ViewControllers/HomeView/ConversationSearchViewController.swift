@@ -46,17 +46,12 @@ class ConversationSearchViewController: UITableViewController {
         case messages
     }
 
-    var blockedPhoneNumberSet = Set<String>()
-
     private var hasThemeChanged = false
 
     // MARK: View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let blockingManager = OWSBlockingManager.shared()
-        blockedPhoneNumberSet = Set(blockingManager.blockedPhoneNumbers())
 
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 60
@@ -215,7 +210,7 @@ class ConversationSearchViewController: UITableViewController {
                 owsFailDebug("searchResult was unexpectedly nil")
                 return UITableViewCell()
             }
-            cell.configure(withThread: searchResult.thread, contactsManager: contactsManager, blockedPhoneNumber: self.blockedPhoneNumberSet)
+            cell.configure(withThread: searchResult.thread, contactsManager: contactsManager)
             return cell
         case .contacts:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.reuseIdentifier()) as? ContactTableViewCell else {
@@ -262,7 +257,6 @@ class ConversationSearchViewController: UITableViewController {
 
             cell.configure(withThread: searchResult.thread,
                            contactsManager: contactsManager,
-                           blockedPhoneNumber: self.blockedPhoneNumberSet,
                            overrideSnippet: overrideSnippet,
                            overrideDate: overrideDate)
 

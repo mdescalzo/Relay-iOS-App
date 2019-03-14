@@ -65,11 +65,6 @@ NS_ASSUME_NONNULL_BEGIN
                                     ignoreErrors:(BOOL)ignoreErrors
                                       completion:(void (^_Nullable)(NSError *_Nullable error))completion;
 
-+ (TSOutgoingMessage *)sendMessageWithContactShare:(OWSContact *)contactShare
-                                          inThread:(TSThread *)thread
-                                     messageSender:(MessageSender *)messageSender
-                                        completion:(void (^_Nullable)(NSError *_Nullable error))completion;
-
 // This method will create and/or remove any offers and indicators
 // necessary for this thread.  This includes:
 //

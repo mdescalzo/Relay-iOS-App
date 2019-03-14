@@ -9,7 +9,6 @@
 #import "Relay-Swift.h"
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
-#import "ViewControllerUtils.h"
 #import <RelayMessaging/OWSFormat.h>
 #import <RelayServiceKit/NSTimer+OWS.h>
 #import <RelayServiceKit/TSQuotedMessage.h>

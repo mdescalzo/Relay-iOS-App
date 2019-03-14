@@ -3,7 +3,6 @@
 //
 
 #import "SelectThreadViewController.h"
-#import "BlockListUIUtils.h"
 #import "ContactTableViewCell.h"
 #import "ContactsViewHelper.h"
 #import "Environment.h"

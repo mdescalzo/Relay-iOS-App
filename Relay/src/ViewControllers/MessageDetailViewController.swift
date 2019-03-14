@@ -12,7 +12,7 @@ enum MessageMetadataViewMode: UInt {
     case focusOnMetadata
 }
 
-class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDelegate, OWSMessageBubbleViewDelegate, ContactShareViewHelperDelegate {
+class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDelegate, OWSMessageBubbleViewDelegate {
 
     // MARK: Properties
 
@@ -41,8 +41,6 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
     var conversationStyle: ConversationStyle
 
-    private var contactShareViewHelper: ContactShareViewHelper
-
     // MARK: Initializers
 
     @available(*, unavailable, message:"use other constructor instead.")
@@ -57,12 +55,9 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
         self.message = message
         self.mode = mode
         self.uiDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
-        self.contactShareViewHelper = ContactShareViewHelper(contactsManager: contactsManager)
         self.conversationStyle = ConversationStyle(thread: thread)
 
         super.init(nibName: nil, bundle: nil)
-
-        contactShareViewHelper.delegate = self
     }
 
     // MARK: View Lifecycle
@@ -598,7 +593,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
     // MARK: OWSMessageBubbleViewDelegate
     func didTapWebPreviewViewItem(_ conversationItem: ConversationViewItem) {
         if let aurl = URL(string: conversationItem.urlString! as String) {
-            UIApplication.shared.openURL(aurl)
+            UIApplication.shared.open(aurl, options: [:], completionHandler:nil)
         }
     }
     
@@ -614,27 +609,6 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
         mediaGalleryViewController.addDataSourceDelegate(self)
         mediaGalleryViewController.presentDetailView(fromViewController: self, mediaMessage: self.message, replacingView: imageView)
-    }
-
-    func didTapContactShare(_ viewItem: ConversationViewItem) {
-        guard let contactShare = viewItem.contactShare else {
-            owsFailDebug("\(logTag) missing contact.")
-            return
-        }
-        let contactViewController = ContactViewController(contactShare: contactShare)
-        self.navigationController?.pushViewController(contactViewController, animated: true)
-    }
-
-    func didTapSendMessage(toContactShare contactShare: ContactShareViewModel) {
-        contactShareViewHelper.sendMessage(contactShare: contactShare, fromViewController: self)
-    }
-
-    func didTapSendInvite(toContactShare contactShare: ContactShareViewModel) {
-        contactShareViewHelper.showInviteContact(contactShare: contactShare, fromViewController: self)
-    }
-
-    func didTapShowAddToContactUI(forContactShare contactShare: ContactShareViewModel) {
-        contactShareViewHelper.showAddToContacts(contactShare: contactShare, fromViewController: self)
     }
 
     var audioAttachmentPlayer: OWSAudioPlayer?
@@ -715,12 +689,5 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
         self.dismiss(animated: true) {
             self.navigationController?.popViewController(animated: true)
         }
-    }
-
-    // MARK: - ContactShareViewHelperDelegate
-
-    public func didCreateOrEditContact() {
-        updateContent()
-        self.dismiss(animated: true)
     }
 }

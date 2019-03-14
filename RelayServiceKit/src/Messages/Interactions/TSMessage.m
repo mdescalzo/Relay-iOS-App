@@ -7,7 +7,6 @@
 #import "MIMETypeUtil.h"
 #import "NSDate+OWS.h"
 #import "NSString+SSK.h"
-#import "OWSContact.h"
 #import "OWSDisappearingMessagesConfiguration.h"
 #import "TSAttachment.h"
 #import "TSAttachmentStream.h"
@@ -71,7 +70,6 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
                         expiresInSeconds:(uint32_t)expiresInSeconds
                          expireStartedAt:(uint64_t)expireStartedAt
                            quotedMessage:(nullable TSQuotedMessage *)quotedMessage
-                            contactShare:(nullable OWSContact *)contactShare
 {
     self = [super initInteractionWithTimestamp:timestamp inThread:thread];
 
@@ -88,7 +86,6 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
     [self updateExpiresAt];
     _receivedAtTimestamp = [NSDate ows_millisecondTimeStamp];
     _quotedMessage = quotedMessage;
-    _contactShare = contactShare;
 
     return self;
 }
@@ -278,12 +275,6 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
         return bodyDescription;
     } else if (attachmentDescription.length > 0) {
         return attachmentDescription;
-    } else if (self.contactShare) {
-        if (CurrentAppContext().isRTL) {
-            return [self.contactShare.name.displayName stringByAppendingString:@" 👤"];
-        } else {
-            return [@"👤 " stringByAppendingString:self.contactShare.name.displayName];
-        }
     } else if ([self.messageType isEqualToString:@"control"]) {
         return @"";
     } else {
@@ -323,10 +314,6 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
         }
         [attachment removeWithTransaction:transaction];
     };
-
-    if (self.contactShare.avatarAttachmentId) {
-        [self.contactShare removeAvatarAttachmentWithTransaction:transaction];
-    }
 
     // Updates inbox thread preview
     [self touchThreadWithTransaction:transaction];

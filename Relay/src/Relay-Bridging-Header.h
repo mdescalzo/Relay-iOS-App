@@ -33,14 +33,12 @@
 #import "OWSProgressView.h"
 #import "OWSQuotedMessageView.h"
 #import "OWSWindowManager.h"
-#import "PinEntryView.h"
 #import "PrivacySettingsTableViewController.h"
 #import "ProfileViewController.h"
 #import "PushManager.h"
 #import "RemoteVideoView.h"
 #import "SignalApp.h"
 #import "UIViewController+Permissions.h"
-#import "ViewControllerUtils.h"
 #import <AxolotlKit/NSData+keyVersionByte.h>
 #import <PureLayout/PureLayout.h>
 #import <Reachability/Reachability.h>
@@ -63,8 +61,6 @@
 #import <RelayMessaging/UIView+OWS.h>
 #import <RelayMessaging/UIViewController+OWS.h>
 #import <RelayServiceKit/AppVersion.h>
-#import <RelayServiceKit/Contact.h>
-#import <RelayServiceKit/ContactsUpdater.h>
 #import <RelayServiceKit/DataSource.h>
 #import <RelayServiceKit/MIMETypeUtil.h>
 #import <RelayServiceKit/NSData+Base64.h>
@@ -91,7 +87,6 @@
 #import <RelayServiceKit/OWSRecipientIdentity.h>
 #import <RelayServiceKit/OWSRequestFactory.h>
 #import <RelayServiceKit/OWSSignalService.h>
-#import <RelayServiceKit/PhoneNumber.h>
 #import <RelayServiceKit/TSAccountManager.h>
 #import <RelayServiceKit/TSAttachment.h>
 #import <RelayServiceKit/TSAttachmentPointer.h>

@@ -11,9 +11,7 @@
 #import "NSString+SSK.h"
 #import "NotificationsProtocol.h"
 #import "OWSAttachmentsProcessor.h"
-#import "OWSBlockingManager.h"
 #import "FLCallMessageHandler.h"
-#import "OWSContact.h"
 #import "OWSDevice.h"
 #import "OWSDisappearingConfigurationUpdateInfoMessage.h"
 #import "OWSDisappearingMessagesConfiguration.h"
@@ -56,7 +54,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
 @property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) OWSIncomingMessageFinder *incomingMessageFinder;
-@property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 @property (nonatomic, readonly) OWSIdentityManager *identityManager;
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
@@ -117,7 +114,6 @@ NS_ASSUME_NONNULL_BEGIN
     
     _dbConnection = primaryStorage.newDatabaseConnection;
     _incomingMessageFinder = [[OWSIncomingMessageFinder alloc] initWithPrimaryStorage:primaryStorage];
-    _blockingManager = [OWSBlockingManager sharedManager];
     
     OWSSingletonAssert();
     OWSAssert(CurrentAppContext().isMainApp);
@@ -153,15 +149,6 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
-#pragma mark - Blocking
-
-- (BOOL)isEnvelopeBlocked:(SSKEnvelope *)envelope
-{
-    OWSAssert(envelope);
-    
-    return [_blockingManager isRecipientIdBlocked:envelope.source];
-}
-
 #pragma mark - message handling
 
 - (void)processEnvelope:(SSKEnvelope *)envelope
@@ -183,7 +170,6 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     OWSAssert(envelope.source.length > 0);
-    OWSAssert(![self isEnvelopeBlocked:envelope]);
     
     switch (envelope.type) {
         case SSKEnvelopeTypeCiphertext:
@@ -552,17 +538,9 @@ NS_ASSUME_NONNULL_BEGIN
                                 transaction:transaction];
         
     } else if (syncMessage.hasRequest) {
-        if (syncMessage.request.type == OWSSignalServiceProtosSyncMessageRequestTypeBlocked) {
-            DDLogInfo(@"%@ Received request for block list", self.logTag);
-            [_blockingManager syncBlockedPhoneNumbers];
-        } else {
-            DDLogWarn(@"%@ ignoring unsupported sync request message", self.logTag);
-        }
+        DDLogWarn(@"%@ ignoring unsupported sync request message", self.logTag);
     } else if (syncMessage.hasBlocked) {
-        NSArray<NSString *> *blockedPhoneNumbers = [syncMessage.blocked.numbers copy];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self.blockingManager setBlockedPhoneNumbers:blockedPhoneNumbers sendSyncMessage:NO];
-        });
+        DDLogWarn(@"%@ ignoring unsupported block message", self.logTag);
     } else if (syncMessage.read.count > 0) {
         DDLogInfo(@"%@ Received %ld read receipt(s)", self.logTag, (u_long)syncMessage.read.count);
         [OWSReadReceiptManager.sharedManager processReadReceiptsFromLinkedDevice:syncMessage.read
@@ -883,8 +861,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                           messageBody:dataMessage.body
                                                                         attachmentIds:attachmentIds
                                                                      expiresInSeconds:dataMessage.expireTimer
-                                                                        quotedMessage:quotedMessage
-                                                                         contactShare:nil];
+                                                                        quotedMessage:quotedMessage];
         
         incomingMessage.uniqueId = [jsonPayload objectForKey:@"messageId"];
         incomingMessage.messageType = [jsonPayload objectForKey:@"messageType"];
@@ -988,37 +965,6 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
     
-    OWSContact *_Nullable contact = incomingMessage.contactShare;
-    if (contact && contact.avatarAttachmentId) {
-        TSAttachmentPointer *attachmentPointer =
-        [TSAttachmentPointer fetchObjectWithUniqueID:contact.avatarAttachmentId transaction:transaction];
-        
-        if (![attachmentPointer isKindOfClass:[TSAttachmentPointer class]]) {
-            OWSFail(@"%@ in %s avatar attachmentPointer was unexpectedly nil", self.logTag, __PRETTY_FUNCTION__);
-        } else {
-            OWSAttachmentsProcessor *attachmentProcessor =
-            [[OWSAttachmentsProcessor alloc] initWithAttachmentPointer:attachmentPointer
-                                                        networkManager:self.networkManager];
-            
-            DDLogDebug(@"%@ downloading contact avatar for message: %lu",
-                       self.logTag,
-                       (unsigned long)incomingMessage.timestamp);
-            [attachmentProcessor fetchAttachmentsForMessage:incomingMessage
-                                                transaction:transaction
-                                                    success:^(TSAttachmentStream *_Nonnull attachmentStream) {
-                                                        [self.dbConnection
-                                                         asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
-                                                             [incomingMessage touchWithTransaction:transaction];
-                                                         }];
-                                                    }
-                                                    failure:^(NSError *_Nonnull error) {
-                                                        DDLogWarn(@"%@ failed to fetch contact avatar for message: %lu with error: %@",
-                                                                  self.logTag,
-                                                                  (unsigned long)incomingMessage.timestamp,
-                                                                  error);
-                                                    }];
-        }
-    }
     // In case we already have a read receipt for this new message (this happens sometimes).
     [OWSReadReceiptManager.sharedManager applyEarlyReadReceiptsForIncomingMessage:incomingMessage
                                                                       transaction:transaction];

@@ -4,7 +4,6 @@
 
 #import "ConversationViewItem.h"
 #import "OWSAudioMessageView.h"
-#import "OWSContactOffersCell.h"
 #import "OWSMessageCell.h"
 #import "OWSMessageHeaderView.h"
 #import "OWSSystemMessageCell.h"
@@ -38,8 +37,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             return @"OWSMessageCellType_DownloadingAttachment";
         case OWSMessageCellType_Unknown:
             return @"OWSMessageCellType_Unknown";
-        case OWSMessageCellType_ContactShare:
-            return @"OWSMessageCellType_ContactShare";
         case MessageCellType_WebPreview:
             return @"MessageCellType_WebPreview";
     }
@@ -68,7 +65,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 @property (nonatomic, readonly, nullable) NSString *quotedRecipientId;
 @property (nonatomic, nullable) TSAttachmentStream *attachmentStream;
 @property (nonatomic, nullable) TSAttachmentPointer *attachmentPointer;
-@property (nonatomic, nullable) ContactShareViewModel *contactShare;
 @property (nonatomic) CGSize mediaSize;
 
 @end
@@ -311,9 +307,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             case OWSInteractionType_Call:
                 measurementCell = [OWSSystemMessageCell new];
                 break;
-            case OWSInteractionType_Offer:
-                measurementCell = [OWSContactOffersCell new];
-                break;
         }
 
         OWSAssert(measurementCell);
@@ -367,9 +360,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSInteractionType_Info:
         case OWSInteractionType_Call:
             return [collectionView dequeueReusableCellWithReuseIdentifier:[OWSSystemMessageCell cellReuseIdentifier]
-                                                             forIndexPath:indexPath];
-        case OWSInteractionType_Offer:
-            return [collectionView dequeueReusableCellWithReuseIdentifier:[OWSContactOffersCell cellReuseIdentifier]
                                                              forIndexPath:indexPath];
     }
 }
@@ -496,13 +486,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 
     self.hasViewState = YES;
 
-    TSMessage *message = (TSMessage *)self.interaction;
-    if (message.contactShare) {
-        self.contactShare =
-            [[ContactShareViewModel alloc] initWithContactShareRecord:message.contactShare transaction:transaction];
-        self.messageCellType = OWSMessageCellType_ContactShare;
-        return;
-    }
     TSAttachment *_Nullable attachment = [self firstAttachmentIfAnyOfMessage:message transaction:transaction];
     if (attachment) {
         if ([attachment isKindOfClass:[TSAttachmentStream class]]) {
@@ -672,11 +655,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             OWSFail(@"%@ No text to copy", self.logTag);
             break;
         }
-        case OWSMessageCellType_ContactShare: {
-            // TODO: Implement copy contact.
-            OWSFail(@"%@ Not implemented yet", self.logTag);
-            break;
-        }
     }
 }
 
@@ -686,10 +664,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
-        case OWSMessageCellType_ContactShare: {
-            OWSFail(@"%@ No media to copy", self.logTag);
-            break;
-        }
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
@@ -738,10 +712,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             OWSFail(@"%@ No text to share", self.logTag);
             break;
         }
-        case OWSMessageCellType_ContactShare: {
-            OWSFail(@"%@ share contact not implemented.", self.logTag);
-            break;
-        }
     }
 }
 
@@ -752,9 +722,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
-        case OWSMessageCellType_ContactShare:
-            OWSFail(@"No media to share.");
-            break;
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
@@ -775,9 +742,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
-        case OWSMessageCellType_ContactShare:
-            return NO;
-            break;
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
             return YES;
@@ -802,7 +766,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
-        case OWSMessageCellType_ContactShare:
         case MessageCellType_WebPreview:
             OWSFail(@"%@ Cannot save text data.", self.logTag);
             break;
@@ -894,8 +857,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_TextMessage:
         case MessageCellType_WebPreview:
         case OWSMessageCellType_OversizeTextMessage:
-        case OWSMessageCellType_ContactShare:
-            return NO;
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:

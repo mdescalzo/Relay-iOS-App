@@ -351,13 +351,6 @@
     return cell;
 }
 
-- (void)showInviteFlow
-{
-    OWSInviteFlow *inviteFlow =
-        [[OWSInviteFlow alloc] initWithPresentingViewController:self contactsManager:self.contactsManager];
-    [self presentViewController:inviteFlow.actionSheetController animated:YES completion:nil];
-}
-
 - (void)showPrivacy
 {
     PrivacySettingsTableViewController *vc = [[PrivacySettingsTableViewController alloc] init];

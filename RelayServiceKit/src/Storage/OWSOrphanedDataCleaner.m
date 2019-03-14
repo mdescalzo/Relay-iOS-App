@@ -4,7 +4,6 @@
 
 #import "OWSOrphanedDataCleaner.h"
 #import "NSDate+OWS.h"
-#import "OWSContact.h"
 #import "OWSPrimaryStorage.h"
 #import "TSAttachmentStream.h"
 #import "TSInteraction.h"
@@ -120,18 +119,12 @@ NS_ASSUME_NONNULL_BEGIN
                                                   TSQuotedMessage *_Nullable quotedMessage = message.quotedMessage;
                                                   if (quotedMessage) {
                                                       [quotedReplyThumbnailAttachmentIds
-                                                          addObjectsFromArray:quotedMessage
-                                                                                  .thumbnailAttachmentStreamIds];
-                                                  }
-
-                                                  OWSContact *_Nullable contactShare = message.contactShare;
-                                                  if (contactShare && contactShare.avatarAttachmentId) {
-                                                      [contactShareAvatarAttachmentIds
-                                                          addObject:contactShare.avatarAttachmentId];
+                                                       addObjectsFromArray:quotedMessage
+                                                       .thumbnailAttachmentStreamIds];
                                                   }
                                               }];
     }];
-
+    
     DDLogDebug(@"%@ attachmentIds: %lu", self.logTag, (unsigned long)attachmentIds.count);
     DDLogDebug(@"%@ messageAttachmentIds: %lu", self.logTag, (unsigned long)messageAttachmentIds.count);
     DDLogDebug(@"%@ quotedReplyThumbnailAttachmentIds: %lu",

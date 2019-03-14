@@ -19,8 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
                                  expireStartedAt:(uint64_t)expireStartedAt
                                   isVoiceMessage:(BOOL)isVoiceMessage
                                 groupMetaMessage:(TSGroupMetaMessage)groupMetaMessage
-                                   quotedMessage:(nullable TSQuotedMessage *)quotedMessage
-                                    contactShare:(nullable OWSContact *)contactShare NS_UNAVAILABLE;
+                                   quotedMessage:(nullable TSQuotedMessage *)quotedMessage NS_UNAVAILABLE;
 
 - (instancetype)initWithContactThread:(TSThread *)contactThread
          verificationStateSyncMessage:(OWSVerificationStateSyncMessage *)verificationStateSyncMessage;

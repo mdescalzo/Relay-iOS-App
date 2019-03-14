@@ -5,7 +5,6 @@
 #import "ShowGroupMembersViewController.h"
 #import "Relay-Swift.h"
 #import "SignalApp.h"
-#import "ViewControllerUtils.h"
 
 @import RelayMessaging;
 @import RelayServiceKit;

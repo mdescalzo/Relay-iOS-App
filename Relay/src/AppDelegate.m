@@ -15,7 +15,6 @@
 #import "Relay-Swift.h"
 #import "SignalApp.h"
 #import "SignalsNavigationController.h"
-#import "ViewControllerUtils.h"
 #import <sys/sysctl.h>
 
 @import WebRTC;

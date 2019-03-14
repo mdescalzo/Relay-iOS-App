@@ -3,7 +3,6 @@
 //
 
 #import "AddToGroupViewController.h"
-#import "BlockListUIUtils.h"
 #import "ContactsViewHelper.h"
 #import "Relay-Swift.h"
 
@@ -119,6 +118,12 @@ NS_ASSUME_NONNULL_BEGIN
     return self.hideContacts;
 }
 
+- (void)relayRecipientWasSelected:(nonnull RelayRecipient *)relayRecipient { 
+    // FIXME:  Implement this
+    // Add recipient to a thing
+}
+
+
 - (BOOL)shouldValidatePhoneNumbers
 {
     return YES;
@@ -129,7 +134,6 @@ NS_ASSUME_NONNULL_BEGIN
     if ([self.addToGroupDelegate isRecipientGroupMember:recipient.uniqueId]) {
         return NSLocalizedString(@"NEW_GROUP_MEMBER_LABEL", @"An indicator that a user is a member of the new group.");
     }
-
     return nil;
 }
 

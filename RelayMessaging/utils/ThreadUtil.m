@@ -125,8 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                    expiresInSeconds:expiresInSeconds
                                                     expireStartedAt:0
                                                      isVoiceMessage:[attachment isVoiceMessage]
-                                                      quotedMessage:[quotedReplyModel buildQuotedMessage]
-                                                       contactShare:nil];
+                                                      quotedMessage:[quotedReplyModel buildQuotedMessage]];
     
     message.messageType = FLMessageTypeContentKey;
     message.plainTextBody = attachment.captionText;
@@ -145,53 +144,6 @@ NS_ASSUME_NONNULL_BEGIN
         }
         failure:^(NSError *error) {
             DDLogError(@"%@ Failed to send message attachment with error: %@", self.logTag, error);
-            if (completion) {
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    completion(error);
-                });
-            }
-        }];
-
-    return message;
-}
-
-+ (TSOutgoingMessage *)sendMessageWithContactShare:(OWSContact *)contactShare
-                                          inThread:(TSThread *)thread
-                                     messageSender:(MessageSender *)messageSender
-                                        completion:(void (^_Nullable)(NSError *_Nullable error))completion
-{
-    OWSAssertIsOnMainThread();
-    OWSAssert(contactShare);
-    OWSAssert(contactShare.ows_isValid);
-    OWSAssert(thread);
-    OWSAssert(messageSender);
-
-    OWSDisappearingMessagesConfiguration *configuration =
-        [OWSDisappearingMessagesConfiguration fetchObjectWithUniqueID:thread.uniqueId];
-
-    uint32_t expiresInSeconds = (configuration.isEnabled ? configuration.durationSeconds : 0);
-    TSOutgoingMessage *message =
-        [[TSOutgoingMessage alloc] initOutgoingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
-                                                           inThread:thread
-                                                        messageBody:nil
-                                                      attachmentIds:[NSMutableArray new]
-                                                   expiresInSeconds:expiresInSeconds
-                                                    expireStartedAt:0
-                                                     isVoiceMessage:NO
-                                                      quotedMessage:nil
-                                                       contactShare:contactShare];
-
-    [messageSender enqueueMessage:message
-        success:^{
-            DDLogDebug(@"%@ Successfully sent contact share.", self.logTag);
-            if (completion) {
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    completion(nil);
-                });
-            }
-        }
-        failure:^(NSError *error) {
-            DDLogError(@"%@ Failed to send contact share with error: %@", self.logTag, error);
             if (completion) {
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     completion(error);

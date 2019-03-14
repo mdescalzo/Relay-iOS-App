@@ -9,8 +9,6 @@
 #import "NSDate+OWS.h"
 #import "NSError+MessageSending.h"
 #import "OWSBackgroundTask.h"
-#import "OWSBlockingManager.h"
-#import "OWSContact.h"
 #import "OWSDevice.h"
 #import "OWSDisappearingMessagesJob.h"
 #import "OWSError.h"
@@ -40,7 +38,7 @@
 #import "Threading.h"
 #import "SSKAsserts.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
-
+#import "ContactsManagerProtocol.h"
 
 @import PromiseKit;
 @import AxolotlKit;
@@ -306,18 +304,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                 [message.quotedMessage createThumbnailAttachmentsIfNecessaryWithTransaction:transaction];
             }
             
-            if (message.contactShare.avatarAttachmentId != nil) {
-                TSAttachment *avatarAttachment = [message.contactShare avatarAttachmentWithTransaction:transaction];
-                if ([avatarAttachment isKindOfClass:[TSAttachmentStream class]]) {
-                    contactShareAvatarAttachment = (TSAttachmentStream *)avatarAttachment;
-                } else {
-                    OWSFail(@"%@ in %s unexpected avatarAttachment: %@",
-                            self.logTag,
-                            __PRETTY_FUNCTION__,
-                            avatarAttachment);
-                }
-            }
-            
             // All outgoing messages should be saved at the time they are enqueued.
             [message saveWithTransaction:transaction];
             // When we start a message send, all "failed" recipients should be marked as "sending".
@@ -486,14 +472,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             // you might, for example, have a pending outgoing message when
             // you block them.
             OWSAssert(recipientContactId.length > 0);
-            if ([self.blockingManager isRecipientIdBlocked:recipientContactId]) {
-                DDLogInfo(@"%@ skipping 1:1 send to blocked contact: %@", self.logTag, recipientContactId);
-                NSError *error = OWSErrorMakeMessageSendFailedToBlockListError();
-                // No need to retry - the user will continue to be blocked.
-                [error setIsRetryable:NO];
-                failureHandler(error);
-                return;
-            }
             
             NSArray<RelayRecipient *> *recipients =
             [self relayRecipientsForRecipientIds:@[recipientContactId]];
@@ -532,7 +510,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             
             NSMutableSet<NSString *> *sendingRecipientIds = [NSMutableSet setWithArray:message.sendingRecipientIds];
             [sendingRecipientIds intersectSet:[NSSet setWithArray:thread.participantIds]];
-            [sendingRecipientIds minusSet:[NSSet setWithArray:self.blockingManager.blockedPhoneNumbers]];
             
             // Mark skipped recipients as such.  We skip because:
             //
@@ -826,9 +803,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             = NSLocalizedString(@"FAILED_SENDING_BECAUSE_UNTRUSTED_IDENTITY_KEY",
                                 @"action sheet header when re-sending message which failed because of untrusted identity keys");
             
-            NSString *localizedErrorDescription =
-            [NSString stringWithFormat:localizedErrorDescriptionFormat,
-             [self.contactsManager displayNameForRecipientId:recipient.uniqueId]];
+            NSString *localizedErrorDescription = [NSString stringWithFormat:localizedErrorDescriptionFormat, [self.contactsManager displayNameForRecipientId:recipient.uniqueId]];
             NSError *error = OWSErrorMakeUntrustedIdentityError(localizedErrorDescription, recipient.uniqueId);
             
             // Key will continue to be unaccepted, so no need to retry. It'll only cause us to hit the Pre-Key request

@@ -134,8 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                    expiresInSeconds:transcript.expirationDuration
                                                     expireStartedAt:transcript.expirationStartedAt
                                                      isVoiceMessage:NO
-                                                      quotedMessage:transcript.quotedMessage
-                                                       contactShare:transcript.contact];
+                                                      quotedMessage:transcript.quotedMessage];
         outgoingMessage.uniqueId = [jsonPayload objectForKey:@"messageId"];
         outgoingMessage.messageType = [jsonPayload objectForKey:@"messageType"];
         outgoingMessage.forstaPayload = [jsonPayload mutableCopy];

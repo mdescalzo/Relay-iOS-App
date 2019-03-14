@@ -162,21 +162,6 @@
     }();
     OWSAssert(authorId.length > 0);
     
-    if (conversationItem.contactShare) {
-        ContactShareViewModel *contactShare = conversationItem.contactShare;
-        
-        // TODO We deliberately always pass `nil` for `thumbnailImage`, even though we might have a contactShare.avatarImage
-        // because the QuotedReplyViewModel has some hardcoded assumptions that only quoted attachments have
-        // thumbnails. Until we address that we want to be consistent about neither showing nor sending the
-        // contactShare avatar in the quoted reply.
-        return [[OWSQuotedReplyModel alloc] initWithTimestamp:timestamp
-                                                     authorId:authorId
-                                                    messageId:messageId
-                                                         body:[@"👤 " stringByAppendingString:contactShare.displayName]
-                                               thumbnailImage:nil];
-        
-    }
-
     NSString *_Nullable quotedText = message.plainTextBody;
     BOOL hasText = quotedText.length > 0;
     BOOL hasAttachment = NO;

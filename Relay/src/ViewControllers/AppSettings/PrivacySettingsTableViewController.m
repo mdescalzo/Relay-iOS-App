@@ -3,7 +3,6 @@
 //
 
 #import "PrivacySettingsTableViewController.h"
-#import "OWS2FASettingsViewController.h"
 #import "Relay-Swift.h"
 
 @import RelayServiceKit;
@@ -132,24 +131,24 @@ NS_ASSUME_NONNULL_BEGIN
         [contents addSection:callKitSection];
     }
     
-    OWSTableSection *twoFactorAuthSection = [OWSTableSection new];
-    twoFactorAuthSection.headerTitle = NSLocalizedString(
-        @"SETTINGS_TWO_FACTOR_AUTH_TITLE", @"Title for the 'two factor auth' section of the privacy settings.");
-    [twoFactorAuthSection
-        addItem:
-            [OWSTableItem
-                disclosureItemWithText:NSLocalizedString(@"SETTINGS_TWO_FACTOR_AUTH_ITEM",
-                                           @"Label for the 'two factor auth' item of the privacy settings.")
-                            detailText:
-                                ([OWS2FAManager.sharedManager is2FAEnabled]
-                                        ? NSLocalizedString(@"SETTINGS_TWO_FACTOR_AUTH_ENABLED",
-                                              @"Indicates that 'two factor auth' is enabled in the privacy settings.")
-                                        : NSLocalizedString(@"SETTINGS_TWO_FACTOR_AUTH_DISABLED",
-                                              @"Indicates that 'two factor auth' is disabled in the privacy settings."))
-                            actionBlock:^{
-                                [weakSelf show2FASettings];
-                            }]];
-    [contents addSection:twoFactorAuthSection];
+//    OWSTableSection *twoFactorAuthSection = [OWSTableSection new];
+//    twoFactorAuthSection.headerTitle = NSLocalizedString(
+//        @"SETTINGS_TWO_FACTOR_AUTH_TITLE", @"Title for the 'two factor auth' section of the privacy settings.");
+//    [twoFactorAuthSection
+//        addItem:
+//            [OWSTableItem
+//                disclosureItemWithText:NSLocalizedString(@"SETTINGS_TWO_FACTOR_AUTH_ITEM",
+//                                           @"Label for the 'two factor auth' item of the privacy settings.")
+//                            detailText:
+//                                ([OWS2FAManager.sharedManager is2FAEnabled]
+//                                        ? NSLocalizedString(@"SETTINGS_TWO_FACTOR_AUTH_ENABLED",
+//                                              @"Indicates that 'two factor auth' is enabled in the privacy settings.")
+//                                        : NSLocalizedString(@"SETTINGS_TWO_FACTOR_AUTH_DISABLED",
+//                                              @"Indicates that 'two factor auth' is disabled in the privacy settings."))
+//                            actionBlock:^{
+//                                [weakSelf show2FASettings];
+//                            }]];
+//    [contents addSection:twoFactorAuthSection];
 
     OWSTableSection *historyLogsSection = [OWSTableSection new];
     historyLogsSection.headerTitle = NSLocalizedString(@"SETTINGS_HISTORYLOG_TITLE", @"Section header");
@@ -240,15 +239,6 @@ NS_ASSUME_NONNULL_BEGIN
 
     // rebuild callUIAdapter since CallKit configuration changed.
     // [SignalApp.sharedApp.callService createCallUIAdapter];
-}
-
-- (void)show2FASettings
-{
-    DDLogInfo(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
-
-    OWS2FASettingsViewController *vc = [OWS2FASettingsViewController new];
-    vc.mode = OWS2FASettingsMode_Status;
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)isScreenLockEnabledDidChange:(UISwitch *)sender
