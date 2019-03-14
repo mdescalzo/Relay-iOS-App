@@ -50,44 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)relayTagWasSelected:(FLTag *)relayTag
 {
-//    __weak AddToGroupViewController *weakSelf = self;
-//    ContactsViewHelper *helper = self.contactsViewHelper;
-    
-    // TODO: Implement this!
-//    if ([self.addToGroupDelegate isRecipientGroupMember:signalAccount.recipientId]) {
-//        OWSFail(@"%@ Cannot add user to group member if already a member.", self.logTag);
-//        return;
-//    }
-
-//    if ([helper isRecipientIdBlocked:signalAccount.recipientId]) {
-//        [BlockListUIUtils showUnblockSignalAccountActionSheet:signalAccount
-//                                           fromViewController:self
-//                                              blockingManager:helper.blockingManager
-//                                              contactsManager:helper.contactsManager
-//                                              completionBlock:^(BOOL isBlocked) {
-//                                                  if (!isBlocked) {
-//                                                      [weakSelf addToGroup:signalAccount.recipientId];
-//                                                  }
-//                                              }];
-//        return;
-//    }
-
-//    BOOL didShowSNAlert = [SafetyNumberConfirmationAlert
-//        presentAlertIfNecessaryWithRecipientId:signalAccount.recipientId
-//                              confirmationText:
-//                                  NSLocalizedString(@"SAFETY_NUMBER_CHANGED_CONFIRM_ADD_TO_GROUP_ACTION",
-//                                      @"button title to confirm adding a recipient to a group when their safety "
-//                                      @"number has recently changed")
-//                               contactsManager:helper.contactsManager
-//                                    completion:^(BOOL didConfirmIdentity) {
-//                                        if (didConfirmIdentity) {
-//                                            [weakSelf addToGroup:signalAccount.recipientId];
-//                                        }
-//                                    }];
-//    if (didShowSNAlert) {
-//        return;
-//    }
-
     [self addTagToGroup:relayTag];
 }
 

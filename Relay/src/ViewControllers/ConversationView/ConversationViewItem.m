@@ -486,6 +486,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 
     self.hasViewState = YES;
 
+    TSMessage *message = (TSMessage *)self.interaction;
     TSAttachment *_Nullable attachment = [self firstAttachmentIfAnyOfMessage:message transaction:transaction];
     if (attachment) {
         if ([attachment isKindOfClass:[TSAttachmentStream class]]) {

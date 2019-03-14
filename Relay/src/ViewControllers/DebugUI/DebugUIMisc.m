@@ -82,20 +82,6 @@ NS_ASSUME_NONNULL_BEGIN
                                          }]];
     }
 
-    [items addObject:[OWSTableItem itemWithTitle:@"Show 2FA Reminder"
-                                     actionBlock:^() {
-                                         OWSNavigationController *navController =
-                                             [OWS2FAReminderViewController wrappedInNavController];
-                                         [[[UIApplication sharedApplication] frontmostViewController]
-                                             presentViewController:navController
-                                                          animated:YES
-                                                        completion:nil];
-                                     }]];
-
-    [items addObject:[OWSTableItem itemWithTitle:@"Reset 2FA Repetition Interval"
-                                     actionBlock:^() {
-                                         [OWS2FAManager.sharedManager setDefaultRepetitionInterval];
-                                     }]];
 
 
 #ifdef DEBUG
@@ -146,27 +132,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)setManualCensorshipCircumventionEnabled:(BOOL)isEnabled
 {
-    OWSCountryMetadata *countryMetadata = nil;
-    NSString *countryCode = OWSSignalService.sharedInstance.manualCensorshipCircumventionCountryCode;
-    if (countryCode) {
-        countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
-    }
-
-    if (!countryMetadata) {
-        countryCode = [PhoneNumber defaultCountryCode];
-        if (countryCode) {
-            countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
-        }
-    }
-
-    if (!countryMetadata) {
-        countryCode = @"US";
-        countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
-    }
-
-    OWSAssert(countryMetadata);
-    OWSSignalService.sharedInstance.manualCensorshipCircumventionCountryCode = countryCode;
-    OWSSignalService.sharedInstance.isCensorshipCircumventionManuallyActivated = isEnabled;
+//    OWSCountryMetadata *countryMetadata = nil;
+//    NSString *countryCode = OWSSignalService.sharedInstance.manualCensorshipCircumventionCountryCode;
+//    if (countryCode) {
+//        countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
+//    }
+//
+//    if (!countryMetadata) {
+//        countryCode = [PhoneNumber defaultCountryCode];
+//        if (countryCode) {
+//            countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
+//        }
+//    }
+//
+//    if (!countryMetadata) {
+//        countryCode = @"US";
+//        countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
+//    }
+//
+//    OWSAssert(countryMetadata);
+//    OWSSignalService.sharedInstance.manualCensorshipCircumventionCountryCode = countryCode;
+//    OWSSignalService.sharedInstance.isCensorshipCircumventionManuallyActivated = isEnabled;
 }
 
 + (void)clearHasDismissedOffers

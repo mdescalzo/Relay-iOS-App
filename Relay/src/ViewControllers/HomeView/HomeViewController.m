@@ -68,7 +68,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic) YapDatabaseViewMappings *threadMappings;
 @property (nonatomic) HomeViewMode homeViewMode;
 @property (nonatomic) id previewingContext;
-@property (nonatomic) NSSet<NSString *> *blockedPhoneNumberSet;
 @property (nonatomic, readonly) NSCache<NSString *, ThreadViewModel *> *threadViewModelCache;
 @property (nonatomic) BOOL isViewVisible;
 @property (nonatomic) BOOL shouldObserveDBModifications;
@@ -83,7 +82,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic, readonly) AccountManager *accountManager;
 @property (nonatomic, readonly) FLContactsManager *contactsManager;
 @property (nonatomic, readonly) MessageSender *messageSender;
-@property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 
 // Views
 
@@ -143,14 +141,8 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     _accountManager = SignalApp.sharedApp.accountManager;
     _contactsManager = [Environment current].contactsManager;
     _messageSender = [Environment current].messageSender;
-    _blockingManager = [OWSBlockingManager sharedManager];
-    _blockedPhoneNumberSet = [NSSet setWithArray:[_blockingManager blockedPhoneNumbers]];
     _threadViewModelCache = [NSCache new];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(blockedPhoneNumbersDidChange:)
-                                                 name:kNSNotificationName_BlockedPhoneNumbersDidChange
-                                               object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(signalAccountsDidChange:)
 //                                                 name:OWSContactsManagerSignalAccountsDidChangeNotification
@@ -195,15 +187,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 }
 
 #pragma mark - Notifications
-
-- (void)blockedPhoneNumbersDidChange:(id)notification
-{
-    OWSAssertIsOnMainThread();
-
-    _blockedPhoneNumberSet = [NSSet setWithArray:[_blockingManager blockedPhoneNumbers]];
-
-    [self reloadTableViewData];
-}
 
 - (void)signalAccountsDidChange:(id)notification
 {
@@ -845,9 +828,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
     ThreadViewModel *thread = [self threadViewModelForIndexPath:indexPath];
     if (thread != nil) {
-        [cell configureWithThread:thread
-                  contactsManager:self.contactsManager
-            blockedPhoneNumberSet:self.blockedPhoneNumberSet];
+        [cell configureWithThread:thread contactsManager:self.contactsManager];
     return cell;
     } else {
         return UITableViewCell.new;

@@ -7,7 +7,6 @@
 #import "DebugLogger.h"
 #import "HomeViewController.h"
 #import "MainAppContext.h"
-#import "OWS2FASettingsViewController.h"
 #import "OWSBackup.h"
 #import "OWSScreenLockUI.h"
 #import "Pastelog.h"
@@ -621,20 +620,7 @@ static NSTimeInterval launchStartedAt;
                 __unused AnyPromise *promise =
                     [OWSSyncPushTokensJob runWithAccountManager:SignalApp.sharedApp.accountManager
                                                     preferences:[Environment preferences]];
-            }
-
-            if ([OWS2FAManager sharedManager].isDueForReminder) {
-                if (!self.hasInitialRootViewController || self.window.rootViewController == nil) {
-                    DDLogDebug(
-                        @"%@ Skipping 2FA reminder since there isn't yet an initial view controller", self.logTag);
-                } else {
-                    UIViewController *rootViewController = self.window.rootViewController;
-                    OWSNavigationController *reminderNavController =
-                        [OWS2FAReminderViewController wrappedInNavController];
-
-                    [rootViewController presentViewController:reminderNavController animated:YES completion:nil];
-                }
-            }
+            } 
         });
     }
 

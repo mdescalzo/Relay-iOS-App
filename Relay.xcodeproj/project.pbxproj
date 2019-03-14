@@ -27,7 +27,6 @@
 		340FC8B8204DAC8D007AEB0F /* AddToGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89B204DAC8D007AEB0F /* AddToGroupViewController.m */; };
 		340FC8B9204DAC8D007AEB0F /* UpdateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89C204DAC8D007AEB0F /* UpdateGroupViewController.m */; };
 		340FC8BA204DAC8D007AEB0F /* FingerprintViewScanController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */; };
-		340FC8BB204DAC8D007AEB0F /* OWSAddToContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */; };
 		340FC8BC204DAC8D007AEB0F /* FingerprintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */; };
 		340FC8BD204DAC8D007AEB0F /* ShowGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A6204DAC8D007AEB0F /* ShowGroupMembersViewController.m */; };
 		340FC8C0204DB7D2007AEB0F /* OWSBackupExportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8BF204DB7D2007AEB0F /* OWSBackupExportJob.m */; };
@@ -489,7 +488,6 @@
 		7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */; };
 		7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
 		7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539B5851F79348F007141FF /* PushRegistrationManager.swift */; };
-		7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */; };
 		7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8BF204DB7D2007AEB0F /* OWSBackupExportJob.m */; };
 		7D2CD5C9214C3C9C004E957A /* MediaPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F32C1D205718B000A300D5 /* MediaPageViewController.swift */; };
 		7D2CD5CA214C3C9C004E957A /* OWSLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3466087320E5649700AFFE73 /* OWSLayerView.swift */; };
@@ -937,7 +935,6 @@
 		340FC894204DAC8C007AEB0F /* OWSSoundSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSSoundSettingsViewController.h; sourceTree = "<group>"; };
 		340FC895204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSLinkedDevicesTableViewController.h; sourceTree = "<group>"; };
 		340FC896204DAC8C007AEB0F /* OWSQRCodeScanningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSQRCodeScanningViewController.m; sourceTree = "<group>"; };
-		340FC898204DAC8D007AEB0F /* OWSAddToContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSAddToContactViewController.h; sourceTree = "<group>"; };
 		340FC899204DAC8D007AEB0F /* OWSConversationSettingsViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSConversationSettingsViewDelegate.h; sourceTree = "<group>"; };
 		340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSConversationSettingsViewController.m; sourceTree = "<group>"; };
 		340FC89B204DAC8D007AEB0F /* AddToGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToGroupViewController.m; sourceTree = "<group>"; };
@@ -946,7 +943,6 @@
 		340FC89E204DAC8D007AEB0F /* ShowGroupMembersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowGroupMembersViewController.h; sourceTree = "<group>"; };
 		340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FingerprintViewScanController.m; sourceTree = "<group>"; };
 		340FC8A0204DAC8D007AEB0F /* OWSConversationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSConversationSettingsViewController.h; sourceTree = "<group>"; };
-		340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSAddToContactViewController.m; sourceTree = "<group>"; };
 		340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FingerprintViewController.m; sourceTree = "<group>"; };
 		340FC8A3204DAC8D007AEB0F /* UpdateGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateGroupViewController.h; sourceTree = "<group>"; };
 		340FC8A4204DAC8D007AEB0F /* AddToGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToGroupViewController.h; sourceTree = "<group>"; };
@@ -1757,8 +1753,6 @@
 				340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */,
 				340FC8A5204DAC8D007AEB0F /* FingerprintViewScanController.h */,
 				340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */,
-				340FC898204DAC8D007AEB0F /* OWSAddToContactViewController.h */,
-				340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */,
 				340FC8A0204DAC8D007AEB0F /* OWSConversationSettingsViewController.h */,
 				340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */,
 				340FC899204DAC8D007AEB0F /* OWSConversationSettingsViewDelegate.h */,
@@ -3524,7 +3518,6 @@
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
-				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3554,7 +3547,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3644,7 +3636,6 @@
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
-				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3674,7 +3665,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3790,7 +3780,6 @@
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
-				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3818,7 +3807,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4092,7 +4080,6 @@
 				7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */,
 				7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */,
 				7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */,
-				7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */,
 				7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */,
 				7D2CD5C9214C3C9C004E957A /* MediaPageViewController.swift in Sources */,
 				7D2CD5CA214C3C9C004E957A /* OWSLayerView.swift in Sources */,
@@ -4280,7 +4267,6 @@
 				45B5360E206DD8BB00D61655 /* UIResponder+OWS.swift in Sources */,
 				45C0DC1B1E68FE9000E04C47 /* UIApplication+OWS.swift in Sources */,
 				4539B5861F79348F007141FF /* PushRegistrationManager.swift in Sources */,
-				340FC8BB204DAC8D007AEB0F /* OWSAddToContactViewController.m in Sources */,
 				340FC8C0204DB7D2007AEB0F /* OWSBackupExportJob.m in Sources */,
 				45F32C232057297A00A300D5 /* MediaPageViewController.swift in Sources */,
 				3466087420E5649700AFFE73 /* OWSLayerView.swift in Sources */,

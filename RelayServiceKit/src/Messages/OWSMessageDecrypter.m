@@ -32,7 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
-@property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 @property (nonatomic, readonly) OWSIdentityManager *identityManager;
 
 @end

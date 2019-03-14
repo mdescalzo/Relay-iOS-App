@@ -17,7 +17,6 @@ typedef NS_ENUM(NSInteger, OWSMessageCellType) {
     OWSMessageCellType_Video,
     OWSMessageCellType_GenericAttachment,
     OWSMessageCellType_DownloadingAttachment,
-    OWSMessageCellType_ContactShare,
     MessageCellType_WebPreview,
 };
 

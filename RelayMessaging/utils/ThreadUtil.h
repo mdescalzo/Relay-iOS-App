@@ -4,7 +4,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OWSBlockingManager;
 @class FLContactsManager;
 @class MessageSender;
 @class OWSUnreadIndicator;
@@ -85,14 +84,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   always be inserted within that window.
 + (ThreadDynamicInteractions *)ensureDynamicInteractionsForThread:(TSThread *)thread
                                                   contactsManager:(FLContactsManager *)contactsManager
-                                                  blockingManager:(OWSBlockingManager *)blockingManager
                                                      dbConnection:(YapDatabaseConnection *)dbConnection
                                       hideUnreadMessagesIndicator:(BOOL)hideUnreadMessagesIndicator
                                               lastUnreadIndicator:(nullable OWSUnreadIndicator *)lastUnreadIndicator
                                                    focusMessageId:(nullable NSString *)focusMessageId
                                                      maxRangeSize:(int)maxRangeSize;
 
-+ (BOOL)shouldShowGroupProfileBannerInThread:(TSThread *)thread blockingManager:(OWSBlockingManager *)blockingManager;
++ (BOOL)shouldShowGroupProfileBannerInThread:(TSThread *)thread;
 
 // This method should be called right _before_ we send a message to a thread,
 // since we want to auto-add contact threads to the profile whitelist if the

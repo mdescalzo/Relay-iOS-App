@@ -156,7 +156,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (ThreadDynamicInteractions *)ensureDynamicInteractionsForThread:(TSThread *)thread
                                                   contactsManager:(FLContactsManager *)contactsManager
-                                                  blockingManager:(OWSBlockingManager *)blockingManager
                                                      dbConnection:(YapDatabaseConnection *)dbConnection
                                       hideUnreadMessagesIndicator:(BOOL)hideUnreadMessagesIndicator
                                               lastUnreadIndicator:(nullable OWSUnreadIndicator *)lastUnreadIndicator
@@ -593,7 +592,7 @@ NS_ASSUME_NONNULL_BEGIN
     return @(position);
 }
 
-+ (BOOL)shouldShowGroupProfileBannerInThread:(TSThread *)thread blockingManager:(OWSBlockingManager *)blockingManager
++ (BOOL)shouldShowGroupProfileBannerInThread:(TSThread *)thread
 {
     OWSAssert(thread);
 
