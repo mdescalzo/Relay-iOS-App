@@ -589,8 +589,6 @@ static NSTimeInterval launchStartedAt;
             // Unregistered user should have no unread messages. e.g. if you delete your account.
             [SignalApp clearAllNotifications];
 
-            [TSSocketManager requestSocketOpen];
-
             UITapGestureRecognizer *gesture =
                 [[UITapGestureRecognizer alloc] initWithTarget:[Pastelog class] action:@selector(submitLogs)];
             gesture.numberOfTapsRequired = 8;
@@ -602,8 +600,7 @@ static NSTimeInterval launchStartedAt;
     if ([TSAccountManager isRegistered]) {
         // At this point, potentially lengthy DB locking migrations could be running.
         // Avoid blocking app launch by putting all further possible DB access in async block
-        DispatchMainThreadSafe(^{
-            [TSSocketManager requestSocketOpen];
+        dispatch_async(dispatch_get_main_queue(), ^{
             
             [self refreshSessionToken];
             
