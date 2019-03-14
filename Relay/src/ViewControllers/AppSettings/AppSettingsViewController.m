@@ -199,7 +199,7 @@
     BOOL showBackup = isBackupEnabled;
     SUPPRESS_DEADSTORE_WARNING(showBackup);
 #ifdef DEBUG
-    showBackup = YES;
+    showBackup = NO;
 #endif
     if (showBackup) {
         [section addItem:[OWSTableItem disclosureItemWithText:NSLocalizedString(@"SETTINGS_BACKUP",

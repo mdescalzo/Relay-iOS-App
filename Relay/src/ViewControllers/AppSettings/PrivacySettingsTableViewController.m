@@ -51,18 +51,19 @@ NS_ASSUME_NONNULL_BEGIN
 
     __weak PrivacySettingsTableViewController *weakSelf = self;
 
-    OWSTableSection *readReceiptsSection = [OWSTableSection new];
-    readReceiptsSection.headerTitle
-        = NSLocalizedString(@"SETTINGS_READ_RECEIPT", @"Label for the 'read receipts' setting.");
-    readReceiptsSection.footerTitle = NSLocalizedString(
-        @"SETTINGS_READ_RECEIPTS_SECTION_FOOTER", @"An explanation of the 'read receipts' setting.");
-    [readReceiptsSection
-        addItem:[OWSTableItem switchItemWithText:NSLocalizedString(@"SETTINGS_READ_RECEIPT",
-                                                     @"Label for the 'read receipts' setting.")
-                                            isOn:[OWSReadReceiptManager.sharedManager areReadReceiptsEnabled]
-                                          target:weakSelf
-                                        selector:@selector(didToggleReadReceiptsSwitch:)]];
-    [contents addSection:readReceiptsSection];
+    // Read receipts are always on.
+//    OWSTableSection *readReceiptsSection = [OWSTableSection new];
+//    readReceiptsSection.headerTitle
+//        = NSLocalizedString(@"SETTINGS_READ_RECEIPT", @"Label for the 'read receipts' setting.");
+//    readReceiptsSection.footerTitle = NSLocalizedString(
+//        @"SETTINGS_READ_RECEIPTS_SECTION_FOOTER", @"An explanation of the 'read receipts' setting.");
+//    [readReceiptsSection
+//        addItem:[OWSTableItem switchItemWithText:NSLocalizedString(@"SETTINGS_READ_RECEIPT",
+//                                                     @"Label for the 'read receipts' setting.")
+//                                            isOn:[OWSReadReceiptManager.sharedManager areReadReceiptsEnabled]
+//                                          target:weakSelf
+//                                        selector:@selector(didToggleReadReceiptsSwitch:)]];
+//    [contents addSection:readReceiptsSection];
 
     OWSTableSection *screenLockSection = [OWSTableSection new];
     screenLockSection.headerTitle = NSLocalizedString(
@@ -103,32 +104,21 @@ NS_ASSUME_NONNULL_BEGIN
                                                            selector:@selector(didToggleScreenSecuritySwitch:)]];
     [contents addSection:screenSecuritySection];
     
-    // Allow calls to connect directly vs. using TURN exclusively
-    OWSTableSection *callingSection = [OWSTableSection new];
-    callingSection.headerTitle
-        = NSLocalizedString(@"SETTINGS_SECTION_TITLE_CALLING", @"settings topic header for table section");
-    callingSection.footerTitle = NSLocalizedString(@"SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE_DETAIL",
-        @"User settings section footer, a detailed explanation");
-    [callingSection addItem:[OWSTableItem switchItemWithText:NSLocalizedString(
-                                                                 @"SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE",
-                                                                 @"Table cell label")
-                                                        isOn:[Environment.preferences doCallsHideIPAddress]
-                                                      target:weakSelf
-                                                    selector:@selector(didToggleCallsHideIPAddressSwitch:)]];
-    [contents addSection:callingSection];
-
     if (@available(iOS 11, *)) {
-        OWSTableSection *callKitSection = [OWSTableSection new];
-        [callKitSection
-            addItem:[OWSTableItem switchItemWithText:NSLocalizedString(
-                                                         @"SETTINGS_PRIVACY_CALLKIT_SYSTEM_CALL_LOG_PREFERENCE_TITLE",
-                                                         @"Short table cell label")
-                                                isOn:[Environment.preferences isSystemCallLogEnabled]
-                                              target:weakSelf
-                                            selector:@selector(didToggleEnableSystemCallLogSwitch:)]];
-        callKitSection.footerTitle = NSLocalizedString(
-            @"SETTINGS_PRIVACY_CALLKIT_SYSTEM_CALL_LOG_PREFERENCE_DESCRIPTION", @"Settings table section footer.");
-        [contents addSection:callKitSection];
+        OWSTableSection *callingSection = [OWSTableSection new];
+        callingSection.headerTitle
+        = NSLocalizedString(@"SETTINGS_SECTION_TITLE_CALLING", @"settings topic header for table section");
+        
+        [callingSection
+         addItem:[OWSTableItem switchItemWithText:NSLocalizedString(
+                                                                    @"SETTINGS_PRIVACY_CALLKIT_SYSTEM_CALL_LOG_PREFERENCE_TITLE",
+                                                                    @"Short table cell label")
+                                             isOn:[Environment.preferences isSystemCallLogEnabled]
+                                           target:weakSelf
+                                         selector:@selector(didToggleEnableSystemCallLogSwitch:)]];
+        callingSection.footerTitle = NSLocalizedString(
+                                                       @"SETTINGS_PRIVACY_CALLKIT_SYSTEM_CALL_LOG_PREFERENCE_DESCRIPTION", @"Settings table section footer.");
+        [contents addSection:callingSection];
     }
     
 //    OWSTableSection *twoFactorAuthSection = [OWSTableSection new];
