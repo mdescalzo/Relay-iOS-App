@@ -1217,9 +1217,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                 break;
         }
     } completionBlock:^{
-        DispatchMainThreadSafe(^{
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:HomeViewControllerSectionArchiveButton] withRowAnimation:UITableViewRowAnimationFade];
-        });
         OutgoingControlMessage *controlMessage = nil;
         switch (self.homeViewMode) {
             case HomeViewMode_Inbox:
