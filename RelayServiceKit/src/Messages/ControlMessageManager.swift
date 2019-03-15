@@ -112,8 +112,9 @@ class ControlMessageManager : NSObject
             return
         }
 
-        let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
-        let age = Date().timeIntervalSince(sendTime)
+        // let sendTime = Date(timeIntervalSince1970: TimeInterval(message.timestamp) / 1000)
+        // let age = Date().timeIntervalSince(sendTime)
+        let age = TimeInterval(Double(message.serverAge?.uint64Value ?? 0) / 1000.0)
         if age > ConferenceCallStaleJoinTimeout {
             Logger.info("Ignoring stale callJoin message (>\(ConferenceCallStaleJoinTimeout) seconds old).")
             return

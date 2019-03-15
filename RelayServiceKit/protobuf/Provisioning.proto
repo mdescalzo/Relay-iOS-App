@@ -28,6 +28,6 @@ message ProvisionMessage {
   optional bool   readReceipts       = 7;
 }
 
-Message ProvisioningUuid {
+message ProvisioningUuid {
   optional string uuid = 1;
 }
