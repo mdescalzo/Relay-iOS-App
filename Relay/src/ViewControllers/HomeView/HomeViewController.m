@@ -718,10 +718,16 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self threadForIndexPath:indexPath] == nil) {
-        return 0.0;
+    if (!(indexPath.section == HomeViewControllerSectionArchiveButton ||
+        indexPath.section == HomeViewControllerSectionReminders)) {
+        
+        if ([self threadForIndexPath:indexPath] == nil) {
+            return 0.0;
+        } else {
+            return self.tableView.rowHeight;
+        }
     } else {
-        return self.tableView.estimatedRowHeight;
+        return self.tableView.rowHeight;
     }
 }
 
@@ -942,7 +948,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                                                      @"Pressing this button moves a thread from the inbox to the archive")
                              handler:^(UITableViewRowAction *_Nonnull action, NSIndexPath *_Nonnull tappedIndexPath) {
                                  [self archiveIndexPath:tappedIndexPath];
-                                 [Environment.preferences setHasArchivedAMessage:YES];
                              }];
             return @[ archiveAction ];
         }
