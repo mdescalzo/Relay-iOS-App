@@ -482,18 +482,18 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                 DispatchQueue.global(qos: .background).async {
                     var thread: TSThread?
                     self.searchDBConnection.readWrite({ (transaction) in
-                            thread = TSThread.getOrCreateThread(withParticipants: userIds)
-                            thread!.type = FLThreadTypeConversation
-                            if let pretty = results.object(forKey: "pretty") as? String {
-                                if pretty.count > 0 {
-                                    thread!.prettyExpression = pretty
-                                }
+                        thread = TSThread.getOrCreateThread(withParticipants: userIds, transaction: transaction)
+                        thread!.type = FLThreadTypeConversation
+                        if let pretty = results.object(forKey: "pretty") as? String {
+                            if pretty.count > 0 {
+                                thread!.prettyExpression = pretty
                             }
-                            if let expression = results.object(forKey: "universal") as? String {
-                                if expression.count > 0 {
-                                    thread!.universalExpression = expression
-                                }
+                        }
+                        if let expression = results.object(forKey: "universal") as? String {
+                            if expression.count > 0 {
+                                thread!.universalExpression = expression
                             }
+                        }
                             thread!.save(with: transaction)
                     })
                     DispatchMainThreadSafe {
