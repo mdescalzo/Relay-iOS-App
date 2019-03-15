@@ -108,7 +108,6 @@ NS_ASSUME_NONNULL_BEGIN
         OWSTableSection *callingSection = [OWSTableSection new];
         callingSection.headerTitle
         = NSLocalizedString(@"SETTINGS_SECTION_TITLE_CALLING", @"settings topic header for table section");
-        
         [callingSection
          addItem:[OWSTableItem switchItemWithText:NSLocalizedString(
                                                                     @"SETTINGS_PRIVACY_CALLKIT_SYSTEM_CALL_LOG_PREFERENCE_TITLE",
@@ -118,6 +117,7 @@ NS_ASSUME_NONNULL_BEGIN
                                          selector:@selector(didToggleEnableSystemCallLogSwitch:)]];
         callingSection.footerTitle = NSLocalizedString(
                                                        @"SETTINGS_PRIVACY_CALLKIT_SYSTEM_CALL_LOG_PREFERENCE_DESCRIPTION", @"Settings table section footer.");
+        
         [contents addSection:callingSection];
     }
     

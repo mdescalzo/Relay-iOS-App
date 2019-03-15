@@ -160,9 +160,6 @@ static NSTimeInterval launchStartedAt;
                                      screenBlockingWindow:OWSScreenLockUI.sharedManager.screenBlockingWindow];
     [OWSScreenLockUI.sharedManager startObserving];
 
-    // Ensure OWSContactsSyncing is instantiated.
-//    [OWSContactsSyncing sharedManager];
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(storageIsReady)
                                                  name:StorageIsReadyNotification
@@ -215,19 +212,15 @@ static NSTimeInterval launchStartedAt;
 
 - (BOOL)ensureIsReadyForAppExtensions
 {
-    // Forsta additions
-//    CCSMEnvironment.sharedInstance.appGroupIdString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"AppGroupPath"];
-//    CCSMEnvironment.sharedInstance.ccsmURLString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CCSM_Home_URL"];
-    
     // Given how sensitive this migration is, we verbosely
     // log the contents of all involved paths before and after.
     //
     // TODO: Remove this logging once we have high confidence
     // in our migration logic.
     NSArray<NSString *> *paths = @[
-        OWSPrimaryStorage.legacyDatabaseFilePath,
-        OWSPrimaryStorage.legacyDatabaseFilePath_SHM,
-        OWSPrimaryStorage.legacyDatabaseFilePath_WAL,
+//        OWSPrimaryStorage.legacyDatabaseFilePath,
+//        OWSPrimaryStorage.legacyDatabaseFilePath_SHM,
+//        OWSPrimaryStorage.legacyDatabaseFilePath_WAL,
         OWSPrimaryStorage.sharedDataDatabaseFilePath,
         OWSPrimaryStorage.sharedDataDatabaseFilePath_SHM,
         OWSPrimaryStorage.sharedDataDatabaseFilePath_WAL,
@@ -246,17 +239,17 @@ static NSTimeInterval launchStartedAt;
     OWSBackgroundTask *_Nullable backgroundTask = [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];
     SUPPRESS_DEADSTORE_WARNING(backgroundTask);
 
-    if ([NSFileManager.defaultManager fileExistsAtPath:OWSPrimaryStorage.legacyDatabaseFilePath]) {
-        DDLogInfo(@"%@ Legacy Database file size: %@",
-            self.logTag,
-            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath]);
-        DDLogInfo(@"%@ \t Legacy SHM file size: %@",
-            self.logTag,
-            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_SHM]);
-        DDLogInfo(@"%@ \t Legacy WAL file size: %@",
-            self.logTag,
-            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_WAL]);
-    }
+//    if ([NSFileManager.defaultManager fileExistsAtPath:OWSPrimaryStorage.legacyDatabaseFilePath]) {
+//        DDLogInfo(@"%@ Legacy Database file size: %@",
+//            self.logTag,
+//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath]);
+//        DDLogInfo(@"%@ \t Legacy SHM file size: %@",
+//            self.logTag,
+//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_SHM]);
+//        DDLogInfo(@"%@ \t Legacy WAL file size: %@",
+//            self.logTag,
+//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_WAL]);
+//    }
 
 //    NSError *_Nullable error = [self convertDatabaseIfNecessary];
 //
@@ -604,9 +597,6 @@ static NSTimeInterval launchStartedAt;
             
             [self refreshSessionToken];
             
-            // This will fetch new messages, if we're using domain fronting.
-            [[PushManager sharedManager] applicationDidBecomeActive];
-
             if (![UIApplication sharedApplication].isRegisteredForRemoteNotifications) {
                 DDLogInfo(
                     @"%@ Retrying to register for remote notifications since user hasn't registered yet.", self.logTag);
@@ -617,7 +607,7 @@ static NSTimeInterval launchStartedAt;
                 __unused AnyPromise *promise =
                     [OWSSyncPushTokensJob runWithAccountManager:SignalApp.sharedApp.accountManager
                                                     preferences:[Environment preferences]];
-            } 
+            }
         });
     }
 
@@ -626,7 +616,7 @@ static NSTimeInterval launchStartedAt;
 
 -(void)refreshSessionToken
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [CCSMCommManager refreshSessionTokenAsynchronousSuccess:^{  // Refresh success
             DDLogDebug(@"Session token refresh successful.");
             [CCSMCommManager refreshCCSMData];

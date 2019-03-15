@@ -444,7 +444,14 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
     }
     
     private func buildThreadWith(results: NSDictionary) {
-        let userIds = results.object(forKey: "userids") as! Array<String>
+        let userIds = results.object(forKey: "userids") as! [String]
+        
+        guard userIds.count > 0 else {
+            DispatchMainThreadSafe {
+                OWSAlerts.showAlert(title: "User lookup produced no valid users with whom to start a conversation.")
+            }
+            return
+        }
         
         // Verify myself is included
         if !(userIds.contains(TSAccountManager.sharedInstance().selfRecipient().uniqueId)) {
@@ -472,15 +479,23 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
             
             // Block to avoid repeating myself
             let createNewThreadBlock: ()->Void = {
-                var thread: TSThread?
-                self.searchDBConnection.asyncReadWrite({ (transaction) in
-                    thread = TSThread(uniqueId: UUID().uuidString.lowercased())
-                    thread!.type = FLThreadTypeConversation
-                    thread!.prettyExpression = results.object(forKey: "pretty") as? String
-                    thread!.universalExpression = results.object(forKey: "universal") as? String
-                    thread!.participantIds = userIds;
-                    thread!.save(with: transaction)
-                }, completionBlock: {
+                DispatchQueue.global(qos: .background).async {
+                    var thread: TSThread?
+                    self.searchDBConnection.readWrite({ (transaction) in
+                        thread = TSThread.getOrCreateThread(withParticipants: userIds, transaction: transaction)
+                        thread!.type = FLThreadTypeConversation
+                        if let pretty = results.object(forKey: "pretty") as? String {
+                            if pretty.count > 0 {
+                                thread!.prettyExpression = pretty
+                            }
+                        }
+                        if let expression = results.object(forKey: "universal") as? String {
+                            if expression.count > 0 {
+                                thread!.universalExpression = expression
+                            }
+                        }
+                            thread!.save(with: transaction)
+                    })
                     DispatchMainThreadSafe {
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
                                                         object: self, userInfo: ["userIds" : userIds])
@@ -488,9 +503,8 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                             SignalApp.shared().presentConversation(for: thread!, action: .compose)
                         })
                     }
-                })
+                }
             }
-            
             
             // Check to see if there are other threads like it
             var candidateThreads = [TSThread]()
