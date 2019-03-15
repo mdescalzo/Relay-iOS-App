@@ -93,7 +93,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic, readonly) UIView *deregisteredView;
 @property (nonatomic, readonly) UIView *outageView;
 @property (nonatomic, readonly) UIView *archiveReminderView;
-@property (nonatomic, readonly) UIView *missingContactsPermissionView;
 
 @property (nonatomic) TSThread *lastThread;
 
@@ -296,15 +295,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     _archiveReminderView = archiveReminderView;
     [reminderStackView addArrangedSubview:archiveReminderView];
 
-    ReminderView *missingContactsPermissionView = [ReminderView
-        nagWithText:NSLocalizedString(@"INBOX_VIEW_MISSING_CONTACTS_PERMISSION",
-                        @"Multi-line label explaining how to show names instead of phone numbers in your inbox")
-          tapAction:^{
-              [[UIApplication sharedApplication] openSystemSettings];
-          }];
-    _missingContactsPermissionView = missingContactsPermissionView;
-    [reminderStackView addArrangedSubview:missingContactsPermissionView];
-
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -344,12 +334,10 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     self.archiveReminderView.hidden = self.homeViewMode != HomeViewMode_Archive;
     // App is killed and restarted when the user changes their contact permissions, so need need to "observe" anything
     // to re-render this.
-    self.missingContactsPermissionView.hidden = !self.contactsManager.isSystemContactsDenied;
     self.deregisteredView.hidden = !TSAccountManager.sharedInstance.isDeregistered;
     self.outageView.hidden = !OutageDetection.sharedManager.hasOutage;
 
-    self.hasVisibleReminders = !self.archiveReminderView.isHidden || !self.missingContactsPermissionView.isHidden
-        || !self.deregisteredView.isHidden || !self.outageView.isHidden;
+    self.hasVisibleReminders = !self.archiveReminderView.isHidden || !self.deregisteredView.isHidden || !self.outageView.isHidden;
 }
 
 - (void)viewDidLoad
