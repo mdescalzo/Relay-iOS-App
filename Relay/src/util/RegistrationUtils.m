@@ -16,21 +16,32 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)showReregistrationUIFromViewController:(UIViewController *)fromViewController
 {
-//    UIAlertController *actionSheetController =
-//        [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-//
-//    [actionSheetController
-//        addAction:[UIAlertAction
-//                      actionWithTitle:NSLocalizedString(@"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER",
-//                                          @"Label for button that lets users re-register using the same phone number.")
-//                                style:UIAlertActionStyleDestructive
-//                              handler:^(UIAlertAction *action) {
-//                                  [RegistrationUtils reregisterWithFromViewController:fromViewController];
-//                              }]];
-//
-//    [actionSheetController addAction:[OWSAlerts cancelAction]];
-//
-//    [fromViewController presentViewController:actionSheetController animated:YES completion:nil];
+    UIAlertController *actionSheetController =
+        [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    [actionSheetController
+        addAction:[UIAlertAction
+                      actionWithTitle:NSLocalizedString(@"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER",
+                                          @"Label for button that lets users re-register using the same phone number.")
+                                style:UIAlertActionStyleDestructive
+                              handler:^(UIAlertAction *action) {
+                                  [self returnToLogin];
+                              }]];
+
+    [actionSheetController addAction:[OWSAlerts cancelAction]];
+
+    [fromViewController presentViewController:actionSheetController animated:YES completion:nil];
+}
+
++(void)returnToLogin
+{
+    DispatchMainThreadSafe(^{
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]];
+        UIViewController *viewController = [storyboard instantiateInitialViewController];
+        OWSNavigationController *navigationController = [[OWSNavigationController alloc] initWithRootViewController:viewController];
+        navigationController.navigationBarHidden = NO;
+        UIApplication.sharedApplication.delegate.window.rootViewController = navigationController;
+    });
 }
 
 + (void)reregisterWithFromViewController:(UIViewController *)fromViewController
