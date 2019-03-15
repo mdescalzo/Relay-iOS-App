@@ -782,11 +782,12 @@ NS_ASSUME_NONNULL_BEGIN
     
     // Process per messageType
     if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"control"]) {
-            IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithTimestamp:envelope.timestamp
-                                                                                             author:envelope.source
-                                                                                             device:envelope.sourceDevice
-                                                                                            payload:jsonPayload
-                                                                                        attachments:dataMessage.attachments];
+        IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithTimestamp:envelope.timestamp
+                                                                                         serverAge:envelope.age
+                                                                                            author:envelope.source
+                                                                                            device:envelope.sourceDevice
+                                                                                           payload:jsonPayload
+                                                                                       attachments:dataMessage.attachments];
             [ControlMessageManager processIncomingControlMessageWithMessage:controlMessage transaction:transaction];
         return nil;
         
@@ -855,6 +856,7 @@ NS_ASSUME_NONNULL_BEGIN
         
         // Build the message
         incomingMessage = [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:envelope.timestamp
+                                                                            serverAge:envelope.age
                                                                              inThread:thread
                                                                              authorId:envelope.source
                                                                        sourceDeviceId:envelope.sourceDevice

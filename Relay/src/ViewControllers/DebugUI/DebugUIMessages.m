@@ -2985,6 +2985,7 @@ NS_ASSUME_NONNULL_BEGIN
     }();
 
     SSKEnvelope *envelope = [[SSKEnvelope alloc] initWithTimestamp:timestamp
+                                                               age:0
                                                             source:source
                                                       sourceDevice:1
                                                               type:SSKEnvelopeTypeCiphertext
@@ -3304,6 +3305,7 @@ NS_ASSUME_NONNULL_BEGIN
             case 0: {
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:@"+19174054215"
                                                                  sourceDeviceId:0
@@ -3339,6 +3341,7 @@ NS_ASSUME_NONNULL_BEGIN
                 [pointer saveWithTransaction:transaction];
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:@"+19174054215"
                                                                  sourceDeviceId:0
@@ -3476,6 +3479,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSData *content = plaintextData;
 
     SSKEnvelope *envelope = [[SSKEnvelope alloc] initWithTimestamp:timestamp
+                                                               age:0
                                                             source:source
                                                       sourceDevice:sourceDevice
                                                               type:envelopeType
@@ -3795,6 +3799,7 @@ NS_ASSUME_NONNULL_BEGIN
             {
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:timestamp.unsignedLongLongValue
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:recipientId
                                                                  sourceDeviceId:0
@@ -3831,6 +3836,7 @@ NS_ASSUME_NONNULL_BEGIN
     uint64_t now = [NSDate ows_millisecondTimeStamp];
     TSIncomingMessage *message = [[TSIncomingMessage alloc]
         initIncomingMessageWithTimestamp:now
+                               serverAge:nil
                                 inThread:thread
                                 authorId:thread.participantIds.firstObject
                           sourceDeviceId:0
@@ -4140,6 +4146,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     TSIncomingMessage *message =
         [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                          serverAge:nil
                                                            inThread:thread
                                                            authorId:@"+19174054215"
                                                      sourceDeviceId:0

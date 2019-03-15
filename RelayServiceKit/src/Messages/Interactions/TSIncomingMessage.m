@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (instancetype)initIncomingMessageWithTimestamp:(uint64_t)timestamp
+                                       serverAge:(nullable NSNumber *)serverAge
                                         inThread:(nullable TSThread *)thread
                                         authorId:(nonnull NSString *)authorId
                                   sourceDeviceId:(uint32_t)sourceDeviceId
@@ -59,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
     _authorId = authorId;
     _sourceDeviceId = sourceDeviceId;
     _read = NO;
+    _serverAge = serverAge;
 
     return self;
 }
