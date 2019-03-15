@@ -110,8 +110,10 @@ class CallAVPolicy {
     
     var muted: Bool {
         didSet {
-            for peer in self.peerConnectionClients.values {
-                peer.audioSender?.track?.isEnabled = !self.muted
+            DispatchMainThreadSafe {
+                for peer in self.peerConnectionClients.values {
+                    peer.audioSender?.track?.isEnabled = !self.muted
+                }
             }
         }
     }
@@ -140,7 +142,6 @@ class CallAVPolicy {
         self.state = .undefined
         self.muted = policy.startAudioMuted
         self.audioActivity = AudioActivity(audioDescription: "\(TAG) with \(callId)")
-        self.muted = policy.startAudioMuted
 
         super.init()
         if delegate != nil { self.addDelegate(delegate: delegate!) }
@@ -403,6 +404,9 @@ class CallAVPolicy {
     
     func updatedRemoteAudioTrack(strongPcc: PeerConnectionClient, remoteAudioTrack: RTCAudioTrack) {
         Logger.debug("updated remote audio track for peer \(strongPcc.peerId)")
+        DispatchMainThreadSafe {
+            remoteAudioTrack.isEnabled = !self.muted
+        }
         notifyDelegates({ delegate in delegate.peerConnectionDidUpdateRemoteAudioTrack(peerId: strongPcc.peerId, remoteAudioTrack: remoteAudioTrack)})
     }
     
@@ -536,7 +540,6 @@ class CallAVPolicy {
                 Logger.debug("\(strongSelf.logTag) \(#function) Ignoring obsolete event in terminated client")
                 return
             }
-            
             audioTrack.isEnabled = enabled
         }
     }
