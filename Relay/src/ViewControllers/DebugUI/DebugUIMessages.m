@@ -3691,6 +3691,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
             case 0: {
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:@"+19174054215"
                                                                  sourceDeviceId:0
@@ -3728,6 +3729,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
                 [pointer saveWithTransaction:transaction];
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:@"+19174054215"
                                                                  sourceDeviceId:0
@@ -4188,6 +4190,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
             {
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:timestamp.unsignedLongLongValue
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:recipientId
                                                                  sourceDeviceId:0
@@ -4226,6 +4229,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
     uint64_t now = [NSDate ows_millisecondTimeStamp];
     TSIncomingMessage *message = [[TSIncomingMessage alloc]
         initIncomingMessageWithTimestamp:now
+                               serverAge:nil
                                 inThread:thread
                                 authorId:thread.participantIds.firstObject
                           sourceDeviceId:0
@@ -4540,6 +4544,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
 
     TSIncomingMessage *message =
         [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                          serverAge:nil
                                                            inThread:thread
                                                            authorId:@"+19174054215"
                                                      sourceDeviceId:0

@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return initiated incoming group message
  */
 - (instancetype)initIncomingMessageWithTimestamp:(uint64_t)timestamp
+                                       serverAge:(nullable NSNumber *)serverAge
                                         inThread:(nullable TSThread *)thread
                                         authorId:(nonnull NSString *)authorId
                                   sourceDeviceId:(uint32_t)sourceDeviceId
@@ -72,6 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 // NOTE: Use messageAuthorId instead wherever possible.
 @property (nonatomic, readonly) NSString *authorId;
+
+// This is the protobuf age field (uint64) for how long the message sat on the server
+@property (nonatomic, readonly, nullable) NSNumber *serverAge;
 
 - (NSString *)messageAuthorId;
 
