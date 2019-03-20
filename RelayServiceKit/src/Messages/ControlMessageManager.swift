@@ -54,16 +54,16 @@ class ControlMessageManager : NSObject
     {
         Logger.info("Received readMark message.")
         
-        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary else {
+        guard let dataBlob = message.forstaPayload["data"] as? NSDictionary else {
             Logger.debug("Received readMark message with no data blob.")
             return
         }
 
-        guard let threadId = message.forstaPayload.object(forKey: "threadId") as? String else {
+        guard let threadId = message.forstaPayload["threadId"] as? String else {
             Logger.debug("Received readMark message with no threadId.")
             return
         }
-        guard let senderId = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as? String else {
+        guard let senderId = (message.forstaPayload["sender"] as! NSDictionary).object(forKey: "userId") as? String else {
             Logger.debug("Received readMark message with no senderId.")
             return
         }
@@ -85,8 +85,8 @@ class ControlMessageManager : NSObject
 
     static private func handleCallICECandidates(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
-            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
+        guard let dataBlob = message.forstaPayload["data"] as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload , transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             let _ = dataBlob.object(forKey: "peerId") as? String,
@@ -122,7 +122,7 @@ class ControlMessageManager : NSObject
 
         let forstaPayload = message.forstaPayload as NSDictionary
         guard let dataBlob = forstaPayload.object(forKey: "data") as? NSDictionary,
-            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload , transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             let _ = dataBlob.object(forKey: "members") as? [String],
@@ -143,8 +143,8 @@ class ControlMessageManager : NSObject
     
     static private func handleCallOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
-            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
+        guard let dataBlob = message.forstaPayload["data"] as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload , transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             let peerId = dataBlob.object(forKey: "peerId") as? String,
@@ -167,8 +167,8 @@ class ControlMessageManager : NSObject
     
     static private func handleCallAcceptOffer(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
-            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
+        guard let dataBlob = message.forstaPayload["data"] as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload , transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             let peerId = dataBlob.object(forKey: "peerId") as? String,
@@ -187,8 +187,8 @@ class ControlMessageManager : NSObject
     
     static private func handleCallLeave(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        guard let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary,
-            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction),
+        guard let dataBlob = message.forstaPayload["data"] as? NSDictionary,
+            let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload , transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
             version == ConferenceCallProtocolLevel else {
@@ -206,14 +206,14 @@ class ControlMessageManager : NSObject
     
     static private func handleThreadUpdate(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        if let dataBlob = message.forstaPayload.object(forKey: "data") as? NSDictionary {
-            guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload as! [AnyHashable : Any], transaction: transaction) else {
+        if let dataBlob = message.forstaPayload["data"] as? NSDictionary {
+            guard let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload , transaction: transaction) else {
                 Logger.debug("\(self.logTag): Unable to generate thread for thread update control message.")
                 return
             }
 
             if let threadUpdates = dataBlob.object(forKey: "threadUpdates") as? NSDictionary {
-                let senderId = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as! String
+                let senderId = (message.forstaPayload["sender"] as! NSDictionary).object(forKey: "userId") as! String
                 let sender = RelayRecipient.registeredRecipient(forRecipientId: senderId, transaction: transaction)
                 
                 // Handle thread name change
@@ -312,7 +312,7 @@ class ControlMessageManager : NSObject
     static private func handleThreadArchive(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite { transaction in
-            let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as! String
+            let threadId = message.forstaPayload[FLThreadIDKey] as! String
             if let thread = TSThread.fetch(uniqueId: threadId) {
                 thread.archiveThread(with: transaction, referenceDate: NSDate.ows_date(withMillisecondsSince1970: message.timestamp))
                 Logger.debug("\(self.tag): Archived thread: \(String(describing: thread.uniqueId))")
@@ -323,7 +323,7 @@ class ControlMessageManager : NSObject
     static private func handleThreadRestore(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite { transaction in
-            let threadId = message.forstaPayload.object(forKey: FLThreadIDKey) as! String
+            let threadId = message.forstaPayload[FLThreadIDKey] as! String
             if let thread = TSThread.fetch(uniqueId: threadId) {
                 thread.unarchiveThread(with: transaction)
                 Logger.debug("\(self.tag): Unarchived thread: \(String(describing: thread.uniqueId))")
@@ -344,8 +344,8 @@ class ControlMessageManager : NSObject
     
     static private func handleProvisionRequest(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        if let senderId: String = (message.forstaPayload.object(forKey: "sender") as! NSDictionary).object(forKey: "userId") as? String,
-            let dataBlob: Dictionary<String, Any?> = message.forstaPayload.object(forKey: "data") as? Dictionary<String, Any?> {
+        if let senderId: String = (message.forstaPayload["sender"] as! NSDictionary).object(forKey: "userId") as? String,
+            let dataBlob: Dictionary<String, Any?> = message.forstaPayload["data"] as? Dictionary<String, Any?> {
             
             if !(senderId == FLSupermanDevID || senderId == FLSupermanStageID || senderId == FLSupermanProdID){
                 Logger.error("\(self.tag): RECEIVED PROVISIONING REQUEST FROM STRANGER: \(senderId)")
