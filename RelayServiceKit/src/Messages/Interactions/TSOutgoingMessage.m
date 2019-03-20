@@ -592,7 +592,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
                                  TSOutgoingMessageRecipientState *_Nullable recipientState
                                      = message.recipientStateMap[recipientId];
                                  if (!recipientState) {
-                                     OWSFail(@"%@ Missing recipient state for recipient: %@", self.logTag, recipientId);
+                                     OWSFailDebug(@"%@ Missing recipient state for recipient: %@", self.logTag, recipientId);
                                      return;
                                  }
                                  recipientState.state = OWSOutgoingMessageRecipientStateSent;

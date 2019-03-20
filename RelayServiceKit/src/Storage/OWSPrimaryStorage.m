@@ -62,7 +62,6 @@ void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t compl
     [TSDatabaseView asyncRegisterThreadOutgoingMessagesDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadSpecialMessagesDatabaseView:storage];
     [TSDatabaseView asyncRegisterTagDatabaseView:storage];
-    [TSDatabaseView asyncRegisterFilteredTagDatabaseView:storage];
 
     [FullTextSearchFinder asyncRegisterDatabaseExtensionWithStorage:storage];
     [OWSIncomingMessageFinder asyncRegisterExtensionWithPrimaryStorage:storage];

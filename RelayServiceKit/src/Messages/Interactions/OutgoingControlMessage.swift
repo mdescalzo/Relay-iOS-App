@@ -12,7 +12,7 @@ import UIKit
     
     @objc let controlMessageType: String
 
-    @objc required public init(thread: TSThread, controlType: String, moreData: NSMutableDictionary?) {
+    @objc required public init(thread: TSThread, controlType: String, moreData: NSDictionary?) {
         
         self.controlMessageType = controlType
         
@@ -26,9 +26,9 @@ import UIKit
                    quotedMessage: nil)
         
         self.messageType = "control"
-        self.moreData = moreData
+        self.moreData = moreData?.copy() as? [AnyHashable : Any]
         
-        self.body = FLCCSMJSONService.blob(from: self)
+//        self.body = FLCCSMJSONService.blob(from: self)
     }
     
     @objc required public init(coder: NSCoder) {

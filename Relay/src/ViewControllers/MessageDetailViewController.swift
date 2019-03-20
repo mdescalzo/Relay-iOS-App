@@ -371,7 +371,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
     }
 
     private func fetchAttachment(transaction: YapDatabaseReadTransaction) -> TSAttachment? {
-        guard let attachmentId = message.attachmentIds.firstObject as? String else {
+        guard let attachmentId = message.attachmentIds.first else {
             return nil
         }
 

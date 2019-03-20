@@ -58,7 +58,7 @@ import UIKit
                    quotedMessage: nil)
                 
         self.messageType = "control"
-        self.forstaPayload = payload.mutableCopy() as! NSMutableDictionary
+        self.forstaPayload = payload.copy() as! [AnyHashable : Any]
     }
     
     @objc required public init(coder: NSCoder) {

@@ -407,7 +407,11 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         }
         
         [attachmentStream save];
-        [message.attachmentIds addObject:attachmentStream.uniqueId];
+        
+        NSMutableArray *mutableIds = [message.attachmentIds mutableCopy];
+        [mutableIds addObject:attachmentStream.uniqueId];
+        message.attachmentIds = [NSArray arrayWithArray:mutableIds];
+        
         if (sourceFilename) {
             message.attachmentFilenameMap[attachmentStream.uniqueId] = sourceFilename;
         }
