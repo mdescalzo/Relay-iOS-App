@@ -124,7 +124,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-//    OWSFail(@"Do not load this from the storyboard.");
+//    OWSFailDebug(@"Do not load this from the storyboard.");
 
     self = [super initWithCoder:aDecoder];
     if (!self) {
@@ -784,7 +784,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         }
     }
 
-    OWSFail(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
+    OWSFailDebug(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
     return 0;
 }
 
@@ -829,7 +829,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         }
     }
 
-    OWSFail(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
+    OWSFailDebug(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
     return [UITableViewCell new];
 }
 
@@ -1188,7 +1188,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     if (!(section == HomeViewControllerSectionAnnouncements ||
          section == HomeViewControllerSectionPinned ||
          section == HomeViewControllerSectionConversations)) {
-        OWSFail(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)indexPath.section);
+        OWSFailDebug(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)indexPath.section);
         return;
     }
 
@@ -1275,7 +1275,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
        focusMessageId:(nullable NSString *)focusMessageId
 {
     if (thread == nil) {
-        OWSFail(@"Thread unexpectedly nil");
+        OWSFailDebug(@"Thread unexpectedly nil");
         return;
     }
 

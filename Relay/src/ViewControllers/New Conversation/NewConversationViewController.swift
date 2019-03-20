@@ -448,6 +448,7 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
         
         guard userIds.count > 0 else {
             DispatchMainThreadSafe {
+                // TODO: Localize this string
                 OWSAlerts.showAlert(title: "User lookup produced no valid users with whom to start a conversation.")
             }
             return
@@ -482,26 +483,29 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                 DispatchQueue.global(qos: .background).async {
                     var thread: TSThread?
                     self.searchDBConnection.readWrite({ (transaction) in
-                        thread = TSThread.getOrCreateThread(withParticipants: userIds, transaction: transaction)
-                        thread!.type = FLThreadTypeConversation
+                        thread = TSThread.init(uniqueId: UUID().uuidString.lowercased())
+                        thread?.participantIds = userIds
+                        thread?.type = FLThreadTypeConversation
                         if let pretty = results.object(forKey: "pretty") as? String {
                             if pretty.count > 0 {
-                                thread!.prettyExpression = pretty
+                                thread?.prettyExpression = pretty
                             }
                         }
                         if let expression = results.object(forKey: "universal") as? String {
                             if expression.count > 0 {
-                                thread!.universalExpression = expression
+                                thread?.universalExpression = expression
                             }
                         }
-                            thread!.save(with: transaction)
+                            thread?.save(with: transaction)
                     })
-                    DispatchMainThreadSafe {
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                        object: self, userInfo: ["userIds" : userIds])
-                        self.navigationController?.dismiss(animated: true, completion: {
-                            SignalApp.shared().presentConversation(for: thread!, action: .compose)
-                        })
+                    if thread != nil {
+                        DispatchMainThreadSafe {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                            object: self, userInfo: ["userIds" : userIds])
+                            self.navigationController?.dismiss(animated: true, completion: {
+                                SignalApp.shared().presentConversation(for: thread!, action: .compose)
+                            })
+                        }
                     }
                 }
             }
