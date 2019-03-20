@@ -2246,7 +2246,7 @@ typedef enum : NSUInteger {
     
     [UIApplication.sharedApplication openURL:[NSURL URLWithString:conversationItem.urlString]
                                      options:@{}
-                           completionHandler:nil];
+                           completionHandler:<#^(BOOL success)completion#>];
 }
 
 - (void)didTapFailedIncomingAttachment:(ConversationViewItem *)viewItem
