@@ -73,7 +73,5 @@ extern NSString *const TSLazyRestoreAttachmentsDatabaseViewExtensionName;
 
 // Forsta Additions
 +(void)asyncRegisterTagDatabaseView:(OWSStorage *)storage;
-+(void)asyncRegisterFilteredTagDatabaseView:(OWSStorage *)storage;
-
 
 @end

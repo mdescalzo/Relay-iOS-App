@@ -305,7 +305,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
             NSDictionary *allTheData = @{ FLControlMessageMessageReadKey : @(readTimestamp) };
             OutgoingControlMessage *controlMessage = [[OutgoingControlMessage alloc] initWithThread:message.thread
                                                                                         controlType:FLControlMessageMessageReadKey
-                                                                                           moreData:[allTheData mutableCopy]];
+                                                                                           moreData:[allTheData copy]];
             [self.messageSender sendControlMessage:controlMessage
                                       toRecipients:[NSCountedSet setWithObject:messageAuthorId]
                                            success:^{

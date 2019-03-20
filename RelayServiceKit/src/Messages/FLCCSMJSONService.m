@@ -54,16 +54,21 @@
     }
     
     if ([NSJSONSerialization isValidJSONObject:holdingArray]) {
-        message.forstaPayload = [holdingArray.lastObject mutableCopy];
+        message.forstaPayload = [((NSDictionary *)holdingArray.lastObject) copy];
+        
+        NSError *error = nil;
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:holdingArray
                                                            options:NSJSONWritingPrettyPrinted
-                                                             error:nil];
+                                                             error:&error];
+        if (error == nil) {
         NSString *json = [[NSString alloc] initWithData:jsonData
                                      encoding:NSUTF8StringEncoding];
-        return json;
-    } else {
-        return nil;
+            return json;
+        } else {
+            DDLogError(@"%@: Unable to convert payload to jsonData.", self.logTag);
+        }
     }
+        return nil;
 }
          
 +(NSArray *)arrayForTypeContentFromMessage:(TSOutgoingMessage *)message
@@ -184,7 +189,7 @@
     
     NSMutableDictionary *data = nil;
     if (message.moreData) {
-        data = message.moreData;
+        data = [message.moreData mutableCopy];
     } else {
         data = [NSMutableDictionary new];
     }

@@ -416,10 +416,8 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                        versionTag:@"1" options:options];
     
     [storage asyncRegisterExtension:databaseView withName:FLTagDatabaseViewExtensionName];
-}
 
-+(void)asyncRegisterFilteredTagDatabaseView:(OWSStorage *)storage
-{
+    // Register the filteredView which depends upon the above.
     YapDatabaseFilteredView *filteredView = [storage registeredExtension:FLFilteredTagDatabaseViewExtensionName];
     if (filteredView) {
         OWSFail(@"Registered database view twice: %@", FLFilteredTagDatabaseViewExtensionName);
