@@ -136,7 +136,7 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
     }
 
     if (!_attachmentIds) {
-        _attachmentIds = [NSMutableArray new];
+        _attachmentIds = [NSArray new];
     }
 
     if (_receivedAtTimestamp == 0) {
@@ -359,7 +359,7 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
 
 
 // MARK: Accessors
--(NSMutableDictionary *)forstaPayload
+-(NSDictionary *)forstaPayload
 {
     if (_forstaPayload == nil) {
         _forstaPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:self.body];
