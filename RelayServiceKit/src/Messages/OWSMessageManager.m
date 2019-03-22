@@ -468,14 +468,6 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(dataMessage);
     OWSAssert(transaction);
     
-    NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:dataMessage.body];
-
-    TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
-    if (thread == nil) {
-        DDLogDebug(@"%@: unable to build thread for received envelope.", self.logTag);
-        return;
-    }
-
     OWSAttachmentsProcessor *attachmentsProcessor =
     [[OWSAttachmentsProcessor alloc] initWithAttachmentProtos:dataMessage.attachments
                                                networkManager:self.networkManager
@@ -532,7 +524,7 @@ NS_ASSUME_NONNULL_BEGIN
             OWSFailDebug(@"sync message with no body");
             return;
         }
-        NSString *threadId = [jsonPayload objectForKey:@"threadId"];
+        NSString *threadId = [jsonPayload objectForKey:FLThreadIDKey];
         if (threadId == nil) {
             OWSFailDebug(@"sync message body had no threadId");
             return;

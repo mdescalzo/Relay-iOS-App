@@ -100,7 +100,7 @@
                                     @{ @"version" : version,
                                        @"userAgent" : userAgent,
                                @"messageId" : messageId,
-                               @"threadId" : threadId,
+                               FLThreadIDKey : threadId,
                                @"threadTitle" : threadTitle,
                                @"sendTime" : sendTime,
                                @"messageType" : messageType,
@@ -211,7 +211,7 @@
     [data setObject:controlMessageType forKey:@"control"];
     
     if ([controlMessageType isEqualToString:FLControlMessageThreadUpdateKey]) {
-        [data setObject:@{  @"threadId" : threadId,
+        [data setObject:@{  FLThreadIDKey : threadId,
                             @"threadTitle" : threadTitle,
                             @"expression" : presentation,
                             }
@@ -219,7 +219,7 @@
     } else if ([controlMessageType isEqualToString:FLControlMessageThreadCloseKey] ||
                [controlMessageType isEqualToString:FLControlMessageThreadArchiveKey] ||
                [controlMessageType isEqualToString:FLControlMessageThreadRestoreKey]) {
-        [data setObject:@{  @"threadId" : threadId,
+        [data setObject:@{  FLThreadIDKey : threadId,
                             @"threadTitle" : threadTitle,
                             @"expression" : presentation,
                             }
@@ -230,7 +230,7 @@
                                     @{ @"version" : version,
                                        @"userAgent" : userAgent,
                                        @"messageId" : messageId,
-                                       @"threadId" : threadId,
+                                       FLThreadIDKey : threadId,
                                        @"sendTime" : sendTime,
                                        @"messageType" : messageType,
                                        @"threadType" : threadType,
