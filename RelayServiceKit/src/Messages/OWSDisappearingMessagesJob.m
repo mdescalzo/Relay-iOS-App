@@ -17,6 +17,7 @@
 #import "TSMessage.h"
 #import "TSThread.h"
 #import "SSKAsserts.h"
+#import "FLCCSMJSONService.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -198,7 +199,13 @@ void AssertIsOnDisappearingMessagesQueue()
                                     contactsManager:(id<ContactsManagerProtocol>)contactsManager
                                         transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    TSThread *thread = [TSThread getOrCreateThreadWithId: message.uniqueThreadId transaction: transaction];
+    NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:message.body];
+    TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
+    if (thread == nil) {
+        DDLogError(@"%@: unable to create thread.", self.logTag);
+        return;
+    }
+    
     NSString *remoteContactName = nil;
     if ([message isKindOfClass:[TSIncomingMessage class]]) {
         TSIncomingMessage *incomingMessage = (TSIncomingMessage *)message;
