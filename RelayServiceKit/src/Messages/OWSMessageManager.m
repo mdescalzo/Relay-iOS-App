@@ -532,7 +532,7 @@ NS_ASSUME_NONNULL_BEGIN
             OWSFailDebug(@"sync message with no body");
             return;
         }
-        NSString *threadId = [jsonPayload objectForKey:@"threadId"];
+        NSString *threadId = [jsonPayload objectForKey:FLThreadIDKey];
         if (threadId == nil) {
             OWSFailDebug(@"sync message body had no threadId");
             return;
