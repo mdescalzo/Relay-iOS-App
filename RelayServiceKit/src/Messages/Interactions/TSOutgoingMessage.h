@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, TSGroupMetaMessage) {
 - (instancetype)initOutgoingMessageWithTimestamp:(uint64_t)timestamp
                                         inThread:(nullable TSThread *)thread
                                      messageBody:(nullable NSString *)body
-                                   attachmentIds:(NSMutableArray<NSString *> *)attachmentIds
+                                   attachmentIds:(NSArray<NSString *> *)attachmentIds
                                 expiresInSeconds:(uint32_t)expiresInSeconds
                                  expireStartedAt:(uint64_t)expireStartedAt
                                   isVoiceMessage:(BOOL)isVoiceMessage

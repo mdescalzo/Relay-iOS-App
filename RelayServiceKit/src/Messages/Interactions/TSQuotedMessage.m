@@ -102,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
     for (TSAttachmentStream *attachmentStream in attachments) {
         [attachmentInfos addObject:[[OWSAttachmentInfo alloc] initWithAttachmentStream:attachmentStream]];
     }
-    _quotedAttachments = [attachmentInfos copy];
+    _quotedAttachments = [NSArray arrayWithArray:attachmentInfos];
 
     return self;
 }
@@ -303,7 +303,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
 
-    return [streamIds copy];
+    return [NSArray arrayWithArray:streamIds];
 }
 
 // Before sending, persist a thumbnail attachment derived from the quoted attachment
@@ -331,7 +331,7 @@ NS_ASSUME_NONNULL_BEGIN
         [thumbnailAttachments addObject:thumbnailStream];
     }
 
-    return [thumbnailAttachments copy];
+    return [NSArray arrayWithArray:thumbnailAttachments];
 }
 
 @end
