@@ -59,7 +59,7 @@ class ControlMessageManager : NSObject
             return
         }
 
-        guard let threadId = message.forstaPayload["threadId"] as? String else {
+        guard let threadId = message.forstaPayload[FLThreadIDKey] as? String else {
             Logger.debug("Received readMark message with no threadId.")
             return
         }
