@@ -36,10 +36,17 @@
 #define FLThreadTypeAnnouncement @"announcement"
 
 // Message keys
+#define FLMessageIdKey @"messageId"
+#define FLMessageTypeKey @"messageType"
 #define FLMessageTypeContentKey @"content"
 #define FLMessageTypePollKey @"poll"
 #define FLMessageTypePollResponseKey @"pollResponse"
 #define FLMessageTypeControlKey @"control"
 #define FLMessageTypeReceiptKey @"receipt"
+#define FLMessageSenderKey @"sender"
+#define FLMessageSendTimeKey @"sendTime"
 
+// User/Tag Keys
+#define FLUserIdKey @"userId"
+    
 #endif /* CCSMKeys_h */

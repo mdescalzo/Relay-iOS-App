@@ -33,14 +33,14 @@ import UIKit
             return nil
         }
         
-        let controlType = dataBlob.object(forKey: "control") as! String
+        let controlType = dataBlob.object(forKey: FLMessageTypeControlKey) as! String
         if controlType.count == 0 {
             Logger.error("Attempted to create control message without a type.")
             return nil
         }
         
         self.attachmentPointers = attachments
-        self.controlMessageType = dataBlob.object(forKey: "control") as! String
+        self.controlMessageType = dataBlob.object(forKey: FLMessageTypeControlKey) as! String
         
         var attachmentIds:[String] = []
         if ((dataBlob.object(forKey: "attachments")) != nil) {
@@ -57,7 +57,7 @@ import UIKit
                    expiresInSeconds: 0,
                    quotedMessage: nil)
                 
-        self.messageType = "control"
+        self.messageType = FLMessageTypeControlKey
         self.forstaPayload = payload.copy() as! [AnyHashable : Any]
     }
     

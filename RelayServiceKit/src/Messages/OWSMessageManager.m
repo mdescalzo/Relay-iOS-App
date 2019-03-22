@@ -773,7 +773,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     // Process per messageType
-    if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"control"]) {
+    if ([[jsonPayload objectForKey:FLMessageTypeKey] isEqualToString:FLMessageTypeControlKey]) {
         IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithTimestamp:envelope.timestamp
                                                                                          serverAge:envelope.age
                                                                                             author:envelope.source
@@ -783,20 +783,20 @@ NS_ASSUME_NONNULL_BEGIN
             [ControlMessageManager processIncomingControlMessageWithMessage:controlMessage transaction:transaction];
         return nil;
         
-    } else if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"content"]) {
+    } else if ([[jsonPayload objectForKey:FLMessageTypeKey] isEqualToString:FLMessageTypeContentKey]) {
         // Process per Thread type
-        if ([[jsonPayload objectForKey:@"threadType"] isEqualToString:@"conversation"] ||
-            [[jsonPayload objectForKey:@"threadType"] isEqualToString:@"announcement"]) {
+        if ([[jsonPayload objectForKey:FLThreadTypeKey] isEqualToString:FLThreadTypeConversation] ||
+            [[jsonPayload objectForKey:FLThreadTypeKey] isEqualToString:FLThreadTypeAnnouncement]) {
             return [self handleThreadContentMessageWithEnvelope:envelope
                                                 withDataMessage:dataMessage
                                                   attachmentIds:attachmentIds
                                                     transaction:transaction];
         } else {
-            DDLogDebug(@"%@ Unhandled thread type: %@", self.logTag, [jsonPayload objectForKey:@"threadType"]);
+            DDLogDebug(@"%@ Unhandled thread type: %@", self.logTag, [jsonPayload objectForKey:FLThreadTypeKey]);
             return nil;
         }
     } else {
-        DDLogDebug(@"%@ Unhandled message type: %@", self.logTag, [jsonPayload objectForKey:@"messageType"]);
+        DDLogDebug(@"%@ Unhandled message type: %@", self.logTag, [jsonPayload objectForKey:FLMessageTypeKey]);
         return nil;
     }
     
@@ -821,7 +821,7 @@ NS_ASSUME_NONNULL_BEGIN
     TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
 
     // Check to see if we already have this message
-    TSIncomingMessage *incomingMessage = [TSIncomingMessage fetchObjectWithUniqueID:[jsonPayload objectForKey:@"messageId"] transaction:transaction];
+    TSIncomingMessage *incomingMessage = [TSIncomingMessage fetchObjectWithUniqueID:[jsonPayload objectForKey:FLMessageIdKey] transaction:transaction];
     
     if (incomingMessage == nil) {
         // Quoted/Replay message handling
@@ -857,8 +857,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                                      expiresInSeconds:dataMessage.expireTimer
                                                                         quotedMessage:quotedMessage];
         
-        incomingMessage.uniqueId = [jsonPayload objectForKey:@"messageId"];
-        incomingMessage.messageType = [jsonPayload objectForKey:@"messageType"];
+        incomingMessage.uniqueId = [jsonPayload objectForKey:FLMessageIdKey];
+        incomingMessage.messageType = [jsonPayload objectForKey:FLMessageTypeKey];
     }
     incomingMessage.forstaPayload = [jsonPayload mutableCopy];
     

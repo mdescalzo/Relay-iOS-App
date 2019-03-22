@@ -707,7 +707,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 -(NSString *)type
 {
     if (_type == nil) {
-        return @"conversation";
+        return FLThreadTypeConversation;
     } else {
         return _type;
     }

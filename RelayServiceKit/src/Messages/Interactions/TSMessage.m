@@ -15,6 +15,7 @@
 #import <YapDatabase/YapDatabase.h>
 #import <YapDatabase/YapDatabaseTransaction.h>
 #import "FLCCSMJSONService.h"
+#import "CCSMKeys.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -275,7 +276,7 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
         return bodyDescription;
     } else if (attachmentDescription.length > 0) {
         return attachmentDescription;
-    } else if ([self.messageType isEqualToString:@"control"]) {
+    } else if ([self.messageType isEqualToString:FLMessageTypeControlKey]) {
         return @"";
     } else {
         DDLogDebug(@"%@ message has neither body nor attachment.", self.logTag);

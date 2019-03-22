@@ -536,7 +536,7 @@
            success:^(NSDictionary *payload)
      {
          NSString *serverURL = [payload objectForKey:@"serverUrl"];
-         NSString *userId = [payload objectForKey:@"userId"];
+         NSString *userId = [payload objectForKey:FLUserIdKey];
          if (![TSAccountManager.sharedInstance.localUID isEqualToString:userId]) {
              DDLogError(@"SECURITY VIOLATION! USERID MISMATCH! IDs: %@, %@", userId, [TSAccountManager.sharedInstance localUID]);
              // TODO: Make a better error

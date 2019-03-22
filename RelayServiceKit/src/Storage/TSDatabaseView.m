@@ -235,9 +235,9 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
             return ([self threadShouldBeInInbox:thread]) ? TSInboxGroup : TSArchiveGroup;
         } else if (thread.archivalDate) {
             return TSArchiveGroup;
-        } else if (([thread.type isEqualToString:@"announcement"])) {
+        } else if (([thread.type isEqualToString:FLThreadTypeAnnouncement])) {
             return FLAnnouncementsGroup;
-        } else if ([thread.type isEqualToString:@"conversation"]) {
+        } else if ([thread.type isEqualToString:FLThreadTypeConversation]) {
             if (thread.pinPosition) {
                 return FLPinnedGroup;
             } else {

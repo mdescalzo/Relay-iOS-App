@@ -39,14 +39,14 @@
 {
     NSArray *holdingArray = nil;
     // TODO: add addition messageType handlers
-    if ([message.messageType isEqualToString:@"control"]) {
+    if ([message.messageType isEqualToString:FLMessageTypeControlKey]) {
         holdingArray = [self arrayForTypeControlFromMessage:message];
-    } else if ([message.messageType isEqualToString:@"content"]) {
+    } else if ([message.messageType isEqualToString:FLMessageTypeContentKey]) {
         holdingArray = [self arrayForTypeContentFromMessage:message];
-    } else if ([message.messageType isEqualToString:@"receipt"] ||
+    } else if ([message.messageType isEqualToString:FLMessageTypeReceiptKey] ||
                [message isKindOfClass:[OWSReadReceiptsForSenderMessage class]] ||
                [message isKindOfClass:[OWSLinkedDeviceReadReceipt class]]){
-            message.messageType = @"receipt";
+            message.messageType = FLMessageTypeReceiptKey;
         holdingArray = [self arrayForTypeContentFromMessage:message];
     } else {
         DDLogDebug(@"Sending message with unknown message of class: %@", [message class]);
@@ -83,7 +83,7 @@
     NSString *threadType = (message.thread.type.length > 0 ? message.thread.type : @"");
 
     // Sender blob
-    NSDictionary *sender = @{ @"userId" :  [TSAccountManager localUID] };
+    NSDictionary *sender = @{ FLUserIdKey :  [TSAccountManager localUID] };
     
     // Build recipient blob
     NSArray *userIds = message.thread.participantIds;
@@ -94,19 +94,19 @@
         DDLogDebug(@"Generating missing expression for thread named \"%@\" with id: %@", message.thread.displayName, message.thread.uniqueId);
         presentation = [self expressionForIds:userIds];
     }
-    NSDictionary *recipients = @{ @"expression" : presentation };
+    NSDictionary *recipients = @{ FLExpressionKey : presentation };
     
     NSMutableDictionary *tmpDict = [NSMutableDictionary dictionaryWithDictionary:
                                     @{ @"version" : version,
                                        @"userAgent" : userAgent,
-                               @"messageId" : messageId,
+                               FLMessageIdKey : messageId,
                                FLThreadIDKey : threadId,
-                               @"threadTitle" : threadTitle,
-                               @"sendTime" : sendTime,
-                               @"messageType" : messageType,
-                               @"threadType" : threadType,
-                               @"sender" : sender,
-                               @"distribution" : recipients
+                               FLThreadTitleKey : threadTitle,
+                               FLMessageSendTimeKey : sendTime,
+                               FLMessageTypeKey : messageType,
+                               FLThreadTypeKey : threadType,
+                               FLMessageSenderKey : sender,
+                               FLDistributionKey : recipients
                                }];
     // Handler for nil message.body
     NSMutableDictionary *data = [NSMutableDictionary new];
@@ -196,7 +196,7 @@
 
     
     // Sender blob
-    NSDictionary *sender = @{ @"userId" :  [TSAccountManager localUID] };
+    NSDictionary *sender = @{ FLUserIdKey :  [TSAccountManager localUID] };
     
     // Build recipient blob
     NSString *presentation = message.thread.universalExpression;
@@ -206,22 +206,22 @@
         presentation = [self expressionForIds:message.thread.participantIds];
     }
 
-    NSDictionary *recipients = @{ @"expression" : presentation };
+    NSDictionary *recipients = @{ FLExpressionKey : presentation };
     
-    [data setObject:controlMessageType forKey:@"control"];
+    [data setObject:controlMessageType forKey:FLMessageTypeControlKey];
     
     if ([controlMessageType isEqualToString:FLControlMessageThreadUpdateKey]) {
         [data setObject:@{  FLThreadIDKey : threadId,
-                            @"threadTitle" : threadTitle,
-                            @"expression" : presentation,
+                            FLThreadTitleKey : threadTitle,
+                            FLExpressionKey : presentation,
                             }
                  forKey:@"threadUpdates"];
     } else if ([controlMessageType isEqualToString:FLControlMessageThreadCloseKey] ||
                [controlMessageType isEqualToString:FLControlMessageThreadArchiveKey] ||
                [controlMessageType isEqualToString:FLControlMessageThreadRestoreKey]) {
         [data setObject:@{  FLThreadIDKey : threadId,
-                            @"threadTitle" : threadTitle,
-                            @"expression" : presentation,
+                            FLThreadTitleKey : threadTitle,
+                            FLExpressionKey : presentation,
                             }
                  forKey:@"threadUpdates"];
     }
@@ -229,13 +229,13 @@
     NSMutableDictionary *tmpDict = [NSMutableDictionary dictionaryWithDictionary:
                                     @{ @"version" : version,
                                        @"userAgent" : userAgent,
-                                       @"messageId" : messageId,
+                                       FLMessageIdKey : messageId,
                                        FLThreadIDKey : threadId,
-                                       @"sendTime" : sendTime,
-                                       @"messageType" : messageType,
-                                       @"threadType" : threadType,
-                                       @"sender" : sender,
-                                       @"distribution" : recipients,
+                                       FLMessageSendTimeKey : sendTime,
+                                       FLMessageTypeKey : messageType,
+                                       FLThreadTypeKey : threadType,
+                                       FLMessageSenderKey : sender,
+                                       FLDistributionKey : recipients,
                                        }];
     if ([data allKeys].count > 0) {
         [tmpDict setObject:data forKey:@"data"];

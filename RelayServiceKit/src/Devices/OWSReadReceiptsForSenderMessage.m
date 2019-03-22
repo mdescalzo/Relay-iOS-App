@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     _messageTimestamps = [messageTimestamps copy];
-    self.messageType = @"receipt";
+    self.messageType = FLMessageTypeReceiptKey;
 
     return self;
 }
