@@ -23,7 +23,7 @@ NSString *const FLPinnedGroup  = @"FLPinnedGroup";
 
 NSString *const FLActiveTagsGroup = @"FLActiveTagsGroup";
 NSString *const FLVisibleRecipientGroup = @"FLVisibleRecipientGroup";
-NSString *const FLHiddenContactsGroup = @"FLHiddenContactsGroup";
+NSString *const FLHiddenTagsGroup = @"FLHiddenTagsGroup";
 NSString *const FLMonitorGroup = @"FLMonitorGroup";
 NSString *const FLTagDatabaseViewExtensionName = @"FLTagDatabaseViewExtensionName";
 NSString *const FLFilteredTagDatabaseViewExtensionName = @"FLFilteredTagDatabaseViewExtensionName";
@@ -384,7 +384,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                                      FLTag *aTag = (FLTag *)object;
                                                      if (aTag.recipientIds.count > 1) {
                                                          if (aTag.hiddenDate) {
-                                                             return FLHiddenContactsGroup;
+                                                             return FLHiddenTagsGroup;
                                                          } else {
                                                              return FLActiveTagsGroup;
                                                          }
@@ -396,7 +396,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                                              return FLMonitorGroup;
                                                              // Removing hide/unhide per request.
                                                              // } else if (recipient.hiddenDate) {
-                                                             //  return FLHiddenContactsGroup;
+                                                             //  return FLHiddenTagsGroup;
                                                          } else {
                                                              return FLVisibleRecipientGroup;
                                                          }

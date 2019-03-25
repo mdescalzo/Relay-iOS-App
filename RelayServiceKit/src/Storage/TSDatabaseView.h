@@ -14,7 +14,7 @@ extern NSString *const FLPinnedGroup;
 extern NSString *const FLActiveTagsGroup;
 extern NSString *const FLVisibleRecipientGroup;
 extern NSString *const FLAnnouncementsGroup;
-extern NSString *const FLHiddenContactsGroup;
+extern NSString *const FLHiddenTagsGroup;
 extern NSString *const FLMonitorGroup;
 
 extern NSString *const FLTagDatabaseViewExtensionName;
