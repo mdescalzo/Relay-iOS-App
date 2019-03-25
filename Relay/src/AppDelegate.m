@@ -1075,16 +1075,16 @@ static NSTimeInterval launchStartedAt;
             }];
     }
 
-#ifdef DEBUG
-    // A bug in orphan cleanup could be disastrous so let's only
-    // run it in DEBUG builds for a few releases.
-    //
-    // TODO: Release to production once we have analytics.
-    // TODO: Orphan cleanup is somewhat expensive - not least in doing a bunch
-    //       of disk access.  We might want to only run it "once per version"
-    //       or something like that in production.
-    // [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
-#endif
+//#ifdef DEBUG
+//    // A bug in orphan cleanup could be disastrous so let's only
+//    // run it in DEBUG builds for a few releases.
+//    //
+//    // TODO: Release to production once we have analytics.
+//    // TODO: Orphan cleanup is somewhat expensive - not least in doing a bunch
+//    //       of disk access.  We might want to only run it "once per version"
+//    //       or something like that in production.
+//    // [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
+//#endif
 
 //    [OWSProfileManager.sharedManager fetchLocalUsersProfile];
     [[OWSReadReceiptManager sharedManager] prepareCachedValues];
@@ -1097,10 +1097,10 @@ static NSTimeInterval launchStartedAt;
 
     [OWSBackup.sharedManager setup];
 
-#ifdef DEBUG
-    // Resume lazy restore.
-    [OWSBackupLazyRestoreJob runAsync];
-#endif
+//#ifdef DEBUG
+//    // Resume lazy restore.
+//    [OWSBackupLazyRestoreJob runAsync];
+//#endif
 }
 
 - (void)registrationStateDidChange
