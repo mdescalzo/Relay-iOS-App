@@ -479,16 +479,6 @@
     NSData *rawData = [rawToken dataUsingEncoding:NSUTF8StringEncoding];
     NSString *base64String = [rawData base64EncodedStringWithOptions:0];
     NSString *authHeader = [@"Basic " stringByAppendingString:base64String];
-
-    
-//    NSString *rawToken = [NSString stringWithFormat:@"%@:%@", localNumber, password];
-//    NSData *encodedToken = [rawToken dataUsingEncoding:NSUTF8StringEncoding];
-//    NSString *tokenString = [encodedToken base64EncodedString];
-//    return [@"Basic " stringByAppendingString:tokenString];
-
-    
-//    NSString *authHeader = [HttpRequest computeBasicAuthorizationTokenForLocalNumber:[parameters objectForKey:@"username"]
-//                                                                         andPassword:[parameters objectForKey:@"password"]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
     request.HTTPMethod = @"PUT";
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
