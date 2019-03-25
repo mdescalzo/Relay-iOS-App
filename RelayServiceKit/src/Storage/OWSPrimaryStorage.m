@@ -38,6 +38,7 @@ void RunSyncRegistrationsForStorage(OWSStorage *storage)
 
     // Synchronously register extensions which are essential for views.
     [TSDatabaseView registerCrossProcessNotifier:storage];
+    [TSDatabaseView registerTagDatabaseView:storage];
 }
 
 void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t completion)
@@ -61,7 +62,6 @@ void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t compl
     [TSDatabaseView asyncRegisterUnseenDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadOutgoingMessagesDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadSpecialMessagesDatabaseView:storage];
-    [TSDatabaseView asyncRegisterTagDatabaseView:storage];
 
     [FullTextSearchFinder asyncRegisterDatabaseExtensionWithStorage:storage];
     [OWSIncomingMessageFinder asyncRegisterExtensionWithPrimaryStorage:storage];

@@ -370,7 +370,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     }];
 }
 
-+(void)asyncRegisterTagDatabaseView:(OWSStorage *)storage
++(void)registerTagDatabaseView:(OWSStorage *)storage
 {
     YapDatabaseView *tagView = [storage registeredExtension:FLTagDatabaseViewExtensionName];
     if (tagView) {
@@ -415,7 +415,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                           sorting:viewSorting
                                        versionTag:@"1" options:options];
     
-    [storage asyncRegisterExtension:databaseView withName:FLTagDatabaseViewExtensionName];
+    [storage registerExtension:databaseView withName:FLTagDatabaseViewExtensionName];
 
     // Register the filteredView which depends upon the above.
     YapDatabaseFilteredView *filteredView = [storage registeredExtension:FLFilteredTagDatabaseViewExtensionName];
@@ -435,7 +435,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     filteredView = [[YapDatabaseFilteredView alloc] initWithParentViewName:FLTagDatabaseViewExtensionName filtering:filtering];
     
     
-    [storage asyncRegisterExtension:filteredView withName:FLFilteredTagDatabaseViewExtensionName];
+    [storage registerExtension:filteredView withName:FLFilteredTagDatabaseViewExtensionName];
 }
 
 + (void)asyncRegisterSecondaryDevicesDatabaseView:(OWSStorage *)storage
