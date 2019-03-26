@@ -430,10 +430,20 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         }
         
         [attachmentStream save];
-        [message.attachmentIds addObject:attachmentStream.uniqueId];
-        if (sourceFilename) {
-            message.attachmentFilenameMap[attachmentStream.uniqueId] = sourceFilename;
+        
+        NSMutableArray *mutableIds = [message.attachmentIds mutableCopy];
+        [mutableIds addObject:attachmentStream.uniqueId];
+        message.attachmentIds = [NSArray arrayWithArray:mutableIds];
+        
+        NSMutableDictionary *placeholderMap = message.attachmentFilenameMap.mutableCopy;
+        if (placeholderMap == nil) {
+            placeholderMap = NSMutableDictionary.new;
         }
+        
+        if (sourceFilename) {
+            [placeholderMap setObject:sourceFilename forKey:attachmentStream.uniqueId];
+        }
+        message.attachmentFilenameMap = [NSDictionary dictionaryWithDictionary:placeholderMap];
         
         [self enqueueMessage:message success:successHandler failure:failureHandler];
     });

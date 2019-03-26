@@ -88,7 +88,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
     if ([notification.object isKindOfClass:[TSIncomingMessage class]]) {
         TSIncomingMessage *message = (TSIncomingMessage *)notification.object;
 
-        DDLogDebug(@"%@ canceled notification for message:%@", self.logTag, message);
+        DDLogDebug(@"%@ canceled notification for message:%@", self.logTag, message.plainTextBody);
         [self cancelNotificationsWithThreadId:message.uniqueThreadId];
     }
 }

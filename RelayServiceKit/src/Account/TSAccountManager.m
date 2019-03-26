@@ -136,9 +136,9 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
     @synchronized (self) {
         // Cache this once it's true since it's called alot, involves a dbLookup, and once set - it doesn't change.
         if (! _isRegistered) {
-            _isRegistered = [self storedLocalUID];
+//            _isRegistered = [self storedLocalUID] != nil;
             // FIXME: Maybe this is more correct?
-            // _isRegistered = ([self storedLocalUID] != nil && self.serverAuthToken.length > 0 && self.signalingKey.length > 0);
+             _isRegistered = ([self storedLocalUID] != nil && self.serverAuthToken.length > 0 && self.signalingKey.length > 0);
         }
         return _isRegistered;
     }

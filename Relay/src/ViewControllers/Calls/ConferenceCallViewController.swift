@@ -70,9 +70,6 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
         // Register cell classes - only use if not using Storyboard
         //        self.collectionView!.register(PeerViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
@@ -849,7 +846,14 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 // Check to see if we already have a view collection for this peer
                 if self.peerUIElements[pcc.peerId] == nil {
                     // We don't have this one, build it
-                    self.addSecondaryPeerId(pcc.peerId, index: 0)
+                    if mainPeerId == nil {
+                        setPeerIdAsMain(pcc.peerId)
+                    } else  if pcc.userId == call?.originatorId {
+                        addSecondaryPeerId(mainPeerId!, index: 0)
+                        setPeerIdAsMain(pcc.peerId)
+                    } else {
+                        addSecondaryPeerId(pcc.peerId, index: 0)
+                    }
                 }
             }
         }

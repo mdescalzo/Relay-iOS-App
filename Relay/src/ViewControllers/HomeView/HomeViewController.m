@@ -93,7 +93,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic, readonly) UIView *deregisteredView;
 @property (nonatomic, readonly) UIView *outageView;
 @property (nonatomic, readonly) UIView *archiveReminderView;
-@property (nonatomic, readonly) UIView *missingContactsPermissionView;
 
 @property (nonatomic) TSThread *lastThread;
 
@@ -125,7 +124,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-//    OWSFail(@"Do not load this from the storyboard.");
+//    OWSFailDebug(@"Do not load this from the storyboard.");
 
     self = [super initWithCoder:aDecoder];
     if (!self) {
@@ -296,15 +295,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     _archiveReminderView = archiveReminderView;
     [reminderStackView addArrangedSubview:archiveReminderView];
 
-    ReminderView *missingContactsPermissionView = [ReminderView
-        nagWithText:NSLocalizedString(@"INBOX_VIEW_MISSING_CONTACTS_PERMISSION",
-                        @"Multi-line label explaining how to show names instead of phone numbers in your inbox")
-          tapAction:^{
-              [[UIApplication sharedApplication] openSystemSettings];
-          }];
-    _missingContactsPermissionView = missingContactsPermissionView;
-    [reminderStackView addArrangedSubview:missingContactsPermissionView];
-
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -344,12 +334,10 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     self.archiveReminderView.hidden = self.homeViewMode != HomeViewMode_Archive;
     // App is killed and restarted when the user changes their contact permissions, so need need to "observe" anything
     // to re-render this.
-    self.missingContactsPermissionView.hidden = !self.contactsManager.isSystemContactsDenied;
     self.deregisteredView.hidden = !TSAccountManager.sharedInstance.isDeregistered;
     self.outageView.hidden = !OutageDetection.sharedManager.hasOutage;
 
-    self.hasVisibleReminders = !self.archiveReminderView.isHidden || !self.missingContactsPermissionView.isHidden
-        || !self.deregisteredView.isHidden || !self.outageView.isHidden;
+    self.hasVisibleReminders = !self.archiveReminderView.isHidden || !self.deregisteredView.isHidden || !self.outageView.isHidden;
 }
 
 - (void)viewDidLoad
@@ -716,6 +704,21 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 #pragma mark - Table View Data Source
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (!(indexPath.section == HomeViewControllerSectionArchiveButton ||
+        indexPath.section == HomeViewControllerSectionReminders)) {
+        
+        if ([self threadForIndexPath:indexPath] == nil) {
+            return 0.0;
+        } else {
+            return self.tableView.rowHeight;
+        }
+    } else {
+        return self.tableView.rowHeight;
+    }
+}
+
 -(nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (self.homeViewMode == HomeViewMode_Inbox) {
@@ -781,25 +784,27 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         }
     }
 
-    OWSFail(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
+    OWSFailDebug(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
     return 0;
 }
 
 - (ThreadViewModel *)threadViewModelForIndexPath:(NSIndexPath *)indexPath
 {
     TSThread *threadRecord = [self threadForIndexPath:indexPath];
-    OWSAssert(threadRecord);
+    OWSAssertDebug(threadRecord);
 
+    __block ThreadViewModel *_Nullable newThreadViewModel = nil;
+    if (threadRecord != nil) {
     ThreadViewModel *_Nullable cachedThreadViewModel = [self.threadViewModelCache objectForKey:threadRecord.uniqueId];
     if (cachedThreadViewModel) {
         return cachedThreadViewModel;
     }
 
-    __block ThreadViewModel *_Nullable newThreadViewModel;
     [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *_Nonnull transaction) {
         newThreadViewModel = [[ThreadViewModel alloc] initWithThread:threadRecord transaction:transaction];
     }];
     [self.threadViewModelCache setObject:newThreadViewModel forKey:threadRecord.uniqueId];
+    }
     return newThreadViewModel;
 }
 
@@ -824,7 +829,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         }
     }
 
-    OWSFail(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
+    OWSFailDebug(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)section);
     return [UITableViewCell new];
 }
 
@@ -834,11 +839,14 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     OWSAssert(cell);
 
     ThreadViewModel *thread = [self threadViewModelForIndexPath:indexPath];
-    [cell configureWithThread:thread
-              contactsManager:self.contactsManager
-        blockedPhoneNumberSet:self.blockedPhoneNumberSet];
-
+    if (thread != nil) {
+        [cell configureWithThread:thread
+                  contactsManager:self.contactsManager
+            blockedPhoneNumberSet:self.blockedPhoneNumberSet];
     return cell;
+    } else {
+        return UITableViewCell.new;
+    }
 }
 
 - (UITableViewCell *)cellForArchivedConversationsRow:(UITableView *)tableView
@@ -891,7 +899,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         thread = [[transaction extension:TSThreadDatabaseViewExtensionName] objectAtIndexPath:indexPath
                                                                                  withMappings:self.threadMappings];
     }];
-
     return thread;
 }
 
@@ -929,7 +936,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                                                      @"Pressing this button moves a thread from the inbox to the archive")
                              handler:^(UITableViewRowAction *_Nonnull action, NSIndexPath *_Nonnull tappedIndexPath) {
                                  [self archiveIndexPath:tappedIndexPath];
-                                 [Environment.preferences setHasArchivedAMessage:YES];
                              }];
             return @[ archiveAction ];
         }
@@ -1182,7 +1188,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     if (!(section == HomeViewControllerSectionAnnouncements ||
          section == HomeViewControllerSectionPinned ||
          section == HomeViewControllerSectionConversations)) {
-        OWSFail(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)indexPath.section);
+        OWSFailDebug(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)indexPath.section);
         return;
     }
 
@@ -1269,7 +1275,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
        focusMessageId:(nullable NSString *)focusMessageId
 {
     if (thread == nil) {
-        OWSFail(@"Thread unexpectedly nil");
+        OWSFailDebug(@"Thread unexpectedly nil");
         return;
     }
 

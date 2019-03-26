@@ -54,16 +54,21 @@
     }
     
     if ([NSJSONSerialization isValidJSONObject:holdingArray]) {
-        message.forstaPayload = [holdingArray.lastObject mutableCopy];
+        message.forstaPayload = [((NSDictionary *)holdingArray.lastObject) copy];
+        
+        NSError *error = nil;
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:holdingArray
                                                            options:NSJSONWritingPrettyPrinted
-                                                             error:nil];
+                                                             error:&error];
+        if (error == nil) {
         NSString *json = [[NSString alloc] initWithData:jsonData
                                      encoding:NSUTF8StringEncoding];
-        return json;
-    } else {
-        return nil;
+            return json;
+        } else {
+            DDLogError(@"%@: Unable to convert payload to jsonData.", self.logTag);
+        }
     }
+        return nil;
 }
          
 +(NSArray *)arrayForTypeContentFromMessage:(TSOutgoingMessage *)message
@@ -95,7 +100,7 @@
                                     @{ @"version" : version,
                                        @"userAgent" : userAgent,
                                @"messageId" : messageId,
-                               @"threadId" : threadId,
+                               FLThreadIDKey : threadId,
                                @"threadTitle" : threadTitle,
                                @"sendTime" : sendTime,
                                @"messageType" : messageType,
@@ -184,7 +189,7 @@
     
     NSMutableDictionary *data = nil;
     if (message.moreData) {
-        data = message.moreData;
+        data = [message.moreData mutableCopy];
     } else {
         data = [NSMutableDictionary new];
     }
@@ -206,7 +211,7 @@
     [data setObject:controlMessageType forKey:@"control"];
     
     if ([controlMessageType isEqualToString:FLControlMessageThreadUpdateKey]) {
-        [data setObject:@{  @"threadId" : threadId,
+        [data setObject:@{  FLThreadIDKey : threadId,
                             @"threadTitle" : threadTitle,
                             @"expression" : presentation,
                             }
@@ -214,7 +219,7 @@
     } else if ([controlMessageType isEqualToString:FLControlMessageThreadCloseKey] ||
                [controlMessageType isEqualToString:FLControlMessageThreadArchiveKey] ||
                [controlMessageType isEqualToString:FLControlMessageThreadRestoreKey]) {
-        [data setObject:@{  @"threadId" : threadId,
+        [data setObject:@{  FLThreadIDKey : threadId,
                             @"threadTitle" : threadTitle,
                             @"expression" : presentation,
                             }
@@ -225,7 +230,7 @@
                                     @{ @"version" : version,
                                        @"userAgent" : userAgent,
                                        @"messageId" : messageId,
-                                       @"threadId" : threadId,
+                                       FLThreadIDKey : threadId,
                                        @"sendTime" : sendTime,
                                        @"messageType" : messageType,
                                        @"threadType" : threadType,

@@ -14,6 +14,7 @@ import UIKit
     @objc let attachmentPointers: Array<OWSSignalServiceProtosAttachmentPointer>?
     
     @objc required public init?(timestamp: UInt64,
+                                serverAge: NSNumber?,
                                 author: String,
                                 device: UInt32,
                                 payload: NSDictionary,
@@ -47,6 +48,7 @@ import UIKit
         }
 
         super.init(incomingMessageWithTimestamp: timestamp,
+                   serverAge:serverAge,
                    in: nil,
                    authorId: author,
                    sourceDeviceId: device,
@@ -57,7 +59,7 @@ import UIKit
                    contactShare: nil)
                 
         self.messageType = "control"
-        self.forstaPayload = payload.mutableCopy() as! NSMutableDictionary
+        self.forstaPayload = payload.copy() as! [AnyHashable : Any]
     }
     
     @objc required public init(coder: NSCoder) {

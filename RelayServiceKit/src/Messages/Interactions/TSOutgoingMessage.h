@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, TSGroupMetaMessage) {
 - (instancetype)initOutgoingMessageWithTimestamp:(uint64_t)timestamp
                                         inThread:(nullable TSThread *)thread
                                      messageBody:(nullable NSString *)body
-                                   attachmentIds:(NSMutableArray<NSString *> *)attachmentIds
+                                   attachmentIds:(NSArray<NSString *> *)attachmentIds
                                 expiresInSeconds:(uint32_t)expiresInSeconds
                                  expireStartedAt:(uint64_t)expireStartedAt
                                   isVoiceMessage:(BOOL)isVoiceMessage
@@ -115,7 +115,7 @@ typedef NS_ENUM(NSInteger, TSGroupMetaMessage) {
 @property (atomic, readonly) NSString *customMessage;
 @property (atomic, readonly) NSString *mostRecentFailureText;
 // A map of attachment id-to-"source" filename.
-@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSString *> *attachmentFilenameMap;
+@property (nonatomic) NSDictionary<NSString *, NSString *> *attachmentFilenameMap;
 
 @property (atomic, readonly) TSGroupMetaMessage groupMetaMessage;
 
@@ -202,12 +202,6 @@ typedef NS_ENUM(NSInteger, TSGroupMetaMessage) {
                          transaction:(YapDatabaseReadWriteTransaction *)transaction;
 
 - (void)updateWithWasSentFromLinkedDeviceWithTransaction:(YapDatabaseReadWriteTransaction *)transaction;
-
-// This method is used to rewrite the recipient list with a single recipient.
-// It is used to reply to a "group info request", which should only be
-// delivered to the requestor.
-- (void)updateWithSendingToSingleGroupRecipient:(NSString *)singleGroupRecipient
-                                    transaction:(YapDatabaseReadWriteTransaction *)transaction;
 
 // This method is used to record a successful "read" by one recipient.
 - (void)updateWithReadRecipientId:(NSString *)recipientId

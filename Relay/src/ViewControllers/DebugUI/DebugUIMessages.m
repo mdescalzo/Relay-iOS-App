@@ -3371,6 +3371,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
     }();
 
     SSKEnvelope *envelope = [[SSKEnvelope alloc] initWithTimestamp:timestamp
+                                                               age:0
                                                             source:source
                                                       sourceDevice:1
                                                               type:SSKEnvelopeTypeCiphertext
@@ -3690,6 +3691,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
             case 0: {
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:@"+19174054215"
                                                                  sourceDeviceId:0
@@ -3727,6 +3729,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
                 [pointer saveWithTransaction:transaction];
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:@"+19174054215"
                                                                  sourceDeviceId:0
@@ -3866,6 +3869,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
     NSData *content = plaintextData;
 
     SSKEnvelope *envelope = [[SSKEnvelope alloc] initWithTimestamp:timestamp
+                                                               age:0
                                                             source:source
                                                       sourceDevice:sourceDevice
                                                               type:envelopeType
@@ -4186,6 +4190,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
             {
                 TSIncomingMessage *message =
                     [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:timestamp.unsignedLongLongValue
+                                                                      serverAge:nil
                                                                        inThread:thread
                                                                        authorId:recipientId
                                                                  sourceDeviceId:0
@@ -4224,6 +4229,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
     uint64_t now = [NSDate ows_millisecondTimeStamp];
     TSIncomingMessage *message = [[TSIncomingMessage alloc]
         initIncomingMessageWithTimestamp:now
+                               serverAge:nil
                                 inThread:thread
                                 authorId:thread.participantIds.firstObject
                           sourceDeviceId:0
@@ -4460,7 +4466,12 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
                                                        contactShare:contactShare];
 
     if (attachmentId.length > 0 && filename.length > 0) {
-        message.attachmentFilenameMap[attachmentId] = filename;
+        NSMutableDictionary *placeHolderMap = message.attachmentFilenameMap.mutableCopy;
+        if (placeHolderMap == nil) {
+            placeHolderMap = NSMutableDictionary.new;
+        }
+        [placeHolderMap setObject:filename forKey:attachmentId];
+        message.attachmentFilenameMap = [NSDictionary dictionaryWithDictionary:placeHolderMap];
     }
 
     [message saveWithTransaction:transaction];
@@ -4538,6 +4549,7 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
 
     TSIncomingMessage *message =
         [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:[NSDate ows_millisecondTimeStamp]
+                                                          serverAge:nil
                                                            inThread:thread
                                                            authorId:@"+19174054215"
                                                      sourceDeviceId:0

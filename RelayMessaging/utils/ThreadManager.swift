@@ -102,27 +102,31 @@ import Foundation
         
         CCSMCommManager.asyncTagLookup(with: lookupString, success: { lookupDict in
             self.dbReadWriteConnection.asyncReadWrite({ (transaction) in
-                thread.applyChange(toSelfAndLatestCopy: transaction, change: { object in
-                    let aThread = object as! TSThread
-                    if let userIds = lookupDict["userids"] as? [String] {
-                        aThread.participantIds = userIds
-                        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                                             object: nil,
-                                                                             userInfo: [ "userIds" : userIds ])
+                if let userIds = lookupDict["userids"] as? [String] {
+                    thread.participantIds = userIds
+                    NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                                         object: nil,
+                                                                         userInfo: [ "userIds" : userIds ])
+                }
+                if let pretty = lookupDict["pretty"] as? String {
+                    if pretty.count > 0 {
+                        thread.prettyExpression = pretty
                     }
-                    if let pretty = lookupDict["pretty"] as? String {
-                        aThread.prettyExpression = pretty
+                }
+                if let expression = lookupDict["universal"] as? String {
+                    if expression.count > 0 {
+                        thread.universalExpression = expression
                     }
-                    if let expression = lookupDict["universal"] as? String {
-                        aThread.universalExpression = expression
+                }
+                if let monitorids = lookupDict["monitorids"] as? [String] {
+                    if monitorids.count > 0 {
+                        thread.monitorIds = NSCountedSet.init(array: monitorids)
                     }
-                    if let monitorids = lookupDict["monitorids"] as? [String] {
-                        aThread.monitorIds = NSCountedSet.init(array: monitorids)
-                    }
-                })
+                }
+                thread.save(with: transaction)
             })
         }, failure: { error in
-            Logger.debug("\(self.logTag): TagMath query for expression failed.  Error: \(error.localizedDescription)")
+            Logger.debug("\(self.logTag): TagMath query failed for expression: \(lookupString).  Error: \(error.localizedDescription)")
         })
     }
     

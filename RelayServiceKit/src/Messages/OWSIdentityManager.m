@@ -449,6 +449,15 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
     return [self isTrustedIdentityKey:identityKey recipientId:recipientId direction:direction transaction:transaction];
 }
 
+- (nullable NSData *)identityKeyForRecipientId:(nonnull NSString *)recipientId protocolContext:(nullable id)protocolContext {
+    OWSAssert([protocolContext isKindOfClass:[YapDatabaseReadWriteTransaction class]]);
+    
+    YapDatabaseReadWriteTransaction *transaction = (YapDatabaseReadWriteTransaction *)protocolContext;
+
+    return [self identityKeyForRecipientId:recipientId transaction:transaction];
+}
+
+
 - (BOOL)isTrustedIdentityKey:(NSData *)identityKey
                  recipientId:(NSString *)recipientId
                    direction:(TSMessageDirection)direction

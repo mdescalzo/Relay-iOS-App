@@ -305,7 +305,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
             NSDictionary *allTheData = @{ FLControlMessageMessageReadKey : @(readTimestamp) };
             OutgoingControlMessage *controlMessage = [[OutgoingControlMessage alloc] initWithThread:message.thread
                                                                                         controlType:FLControlMessageMessageReadKey
-                                                                                           moreData:[allTheData mutableCopy]];
+                                                                                           moreData:[allTheData copy]];
             [self.messageSender sendControlMessage:controlMessage
                                       toRecipients:[NSCountedSet setWithObject:messageAuthorId]
                                            success:^{
@@ -590,27 +590,29 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 
 - (BOOL)areReadReceiptsEnabled
 {
-    // We don't need to worry about races around this cached value.
-    if (!self.areReadReceiptsEnabledCached) {
-        // Default to NO.
-        self.areReadReceiptsEnabledCached = @([self.dbConnection boolForKey:OWSReadReceiptManagerAreReadReceiptsEnabled
-                                                               inCollection:OWSReadReceiptManagerCollection]);
-    }
-
-    return [self.areReadReceiptsEnabledCached boolValue];
+    return YES;
+//    // We don't need to worry about races around this cached value.
+//    if (!self.areReadReceiptsEnabledCached) {
+//        // Default to NO.
+//        self.areReadReceiptsEnabledCached = @([self.dbConnection boolForKey:OWSReadReceiptManagerAreReadReceiptsEnabled
+//                                                               inCollection:OWSReadReceiptManagerCollection]);
+//    }
+//
+//    return [self.areReadReceiptsEnabledCached boolValue];
 }
 
 - (BOOL)areReadReceiptsEnabledWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    if (!self.areReadReceiptsEnabledCached) {
-        [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction *_Nonnull transaction) {
-            // Default to NO.
-            self.areReadReceiptsEnabledCached = [transaction objectForKey:OWSReadReceiptManagerAreReadReceiptsEnabled
-                                                             inCollection:OWSReadReceiptManagerCollection];
-        }];
-    }
-
-    return [self.areReadReceiptsEnabledCached boolValue];
+    return YES;
+//    if (!self.areReadReceiptsEnabledCached) {
+//        [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction *_Nonnull transaction) {
+//            // Default to NO.
+//            self.areReadReceiptsEnabledCached = [transaction objectForKey:OWSReadReceiptManagerAreReadReceiptsEnabled
+//                                                             inCollection:OWSReadReceiptManagerCollection];
+//        }];
+//    }
+//
+//    return [self.areReadReceiptsEnabledCached boolValue];
 }
 
 - (void)setAreReadReceiptsEnabled:(BOOL)value

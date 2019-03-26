@@ -140,6 +140,27 @@ struct ProvisioningProto_ProvisionMessage {
   fileprivate var _readReceipts: Bool? = nil
 }
 
+struct ProvisioningProto_ProvisioningUuid {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var uuid: String {
+    get {return _uuid ?? String()}
+    set {_uuid = newValue}
+  }
+  /// Returns true if `uuid` has been explicitly set.
+  var hasUuid: Bool {return self._uuid != nil}
+  /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
+  mutating func clearUuid() {self._uuid = nil}
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+
+  fileprivate var _uuid: String? = nil
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "ProvisioningProto"
@@ -171,10 +192,10 @@ extension ProvisioningProto_ProvisionEnvelope: SwiftProtobuf.Message, SwiftProto
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  func _protobuf_generated_isEqualTo(other: ProvisioningProto_ProvisionEnvelope) -> Bool {
-    if self._publicKey != other._publicKey {return false}
-    if self._body != other._body {return false}
-    if unknownFields != other.unknownFields {return false}
+  static func ==(lhs: ProvisioningProto_ProvisionEnvelope, rhs: ProvisioningProto_ProvisionEnvelope) -> Bool {
+    if lhs._publicKey != rhs._publicKey {return false}
+    if lhs._body != rhs._body {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
@@ -231,15 +252,44 @@ extension ProvisioningProto_ProvisionMessage: SwiftProtobuf.Message, SwiftProtob
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  func _protobuf_generated_isEqualTo(other: ProvisioningProto_ProvisionMessage) -> Bool {
-    if self._identityKeyPublic != other._identityKeyPublic {return false}
-    if self._identityKeyPrivate != other._identityKeyPrivate {return false}
-    if self._number != other._number {return false}
-    if self._provisioningCode != other._provisioningCode {return false}
-    if self._userAgent != other._userAgent {return false}
-    if self._profileKey != other._profileKey {return false}
-    if self._readReceipts != other._readReceipts {return false}
-    if unknownFields != other.unknownFields {return false}
+  static func ==(lhs: ProvisioningProto_ProvisionMessage, rhs: ProvisioningProto_ProvisionMessage) -> Bool {
+    if lhs._identityKeyPublic != rhs._identityKeyPublic {return false}
+    if lhs._identityKeyPrivate != rhs._identityKeyPrivate {return false}
+    if lhs._number != rhs._number {return false}
+    if lhs._provisioningCode != rhs._provisioningCode {return false}
+    if lhs._userAgent != rhs._userAgent {return false}
+    if lhs._profileKey != rhs._profileKey {return false}
+    if lhs._readReceipts != rhs._readReceipts {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension ProvisioningProto_ProvisioningUuid: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ProvisioningUuid"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "uuid"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self._uuid)
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._uuid {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: ProvisioningProto_ProvisioningUuid, rhs: ProvisioningProto_ProvisioningUuid) -> Bool {
+    if lhs._uuid != rhs._uuid {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }

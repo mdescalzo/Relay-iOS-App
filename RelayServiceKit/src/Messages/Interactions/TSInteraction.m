@@ -67,7 +67,7 @@ NSString *NSStringFromOWSInteractionType(OWSInteractionType value)
                              }
                       usingTransaction:transaction];
 
-    return [interactions copy];
+    return [NSArray arrayWithArray:interactions];
 }
 
 + (NSString *)collection {
@@ -177,14 +177,6 @@ NSString *NSStringFromOWSInteractionType(OWSInteractionType value)
 - (BOOL)isDynamicInteraction
 {
     return NO;
-}
-
--(NSMutableDictionary *)forstaPayload
-{
-    if (_forstaPayload == nil) {
-        _forstaPayload = [NSMutableDictionary new];
-    }
-    return _forstaPayload;
 }
 
 @end

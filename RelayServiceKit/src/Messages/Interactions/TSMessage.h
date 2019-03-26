@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TSMessage : TSInteraction <OWSPreviewText>
 
-@property (nonatomic, readonly) NSMutableArray<NSString *> *attachmentIds;
+@property (nonatomic) NSArray<NSString *> *attachmentIds;
 @property (nonatomic, nullable) NSString *body;
 @property (nonatomic, readonly) uint32_t expiresInSeconds;
 @property (nonatomic, readonly) uint64_t expireStartedAt;
@@ -52,6 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldStartExpireTimerWithTransaction:(YapDatabaseReadTransaction *)transaction;
 
 // JSON body handlers
+@property (nonatomic, strong) NSDictionary *forstaPayload;
 @property (nullable, nonatomic, copy) NSString *plainTextBody;
 @property (nullable, nonatomic, copy) NSString *htmlTextBody;
 @property (nonatomic, copy) NSString *messageType;
@@ -60,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *giphyURLString;
 
 // Used for supplemental data for support things like webRTC
-@property (nullable, nonatomic) NSMutableDictionary *moreData;
+@property (nullable, nonatomic) NSDictionary *moreData;
 
 #pragma mark - Update With... Methods
 
