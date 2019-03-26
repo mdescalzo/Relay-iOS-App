@@ -4466,7 +4466,12 @@ typedef OWSContact * (^OWSContactBlock)(YapDatabaseReadWriteTransaction *transac
                                                        contactShare:contactShare];
 
     if (attachmentId.length > 0 && filename.length > 0) {
-        message.attachmentFilenameMap[attachmentId] = filename;
+        NSMutableDictionary *placeHolderMap = message.attachmentFilenameMap.mutableCopy;
+        if (placeHolderMap == nil) {
+            placeHolderMap = NSMutableDictionary.new;
+        }
+        [placeHolderMap setObject:filename forKey:attachmentId];
+        message.attachmentFilenameMap = [NSDictionary dictionaryWithDictionary:placeHolderMap];
     }
 
     [message saveWithTransaction:transaction];
