@@ -365,7 +365,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     [searchBar sizeToFit];
 
     // Setting tableHeader calls numberOfSections, which must happen after updateMappings has been called at least once.
-    OWSAssert(self.tableView.tableHeaderView == nil);
+    OWSAssertDebug(self.tableView.tableHeaderView == nil);
     self.tableView.tableHeaderView = self.searchBar;
 
     ConversationSearchViewController *searchResultsController = [ConversationSearchViewController new];
@@ -536,10 +536,10 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
     BOOL isShowingSearchResults = !self.searchResultsController.view.hidden;
     if (isShowingSearchResults) {
-        OWSAssert(self.searchBar.text.ows_stripped.length > 0);
+        OWSAssertDebug(self.searchBar.text.ows_stripped.length > 0);
         [self scrollSearchBarToTopAnimated:NO];
     } else if (self.lastThread) {
-        OWSAssert(self.searchBar.text.ows_stripped.length == 0);
+        OWSAssertDebug(self.searchBar.text.ows_stripped.length == 0);
         
         // When returning to home view, try to ensure that the "last" thread is still
         // visible.  The threads often change ordering while in conversation view due
@@ -840,7 +840,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     }
 
     UIImage *disclosureImage = [UIImage imageNamed:(CurrentAppContext().isRTL ? @"NavBarBack" : @"NavBarBackRTL")];
-    OWSAssert(disclosureImage);
+    OWSAssertDebug(disclosureImage);
     UIImageView *disclosureImageView = [UIImageView new];
     disclosureImageView.image = [disclosureImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     disclosureImageView.tintColor = [UIColor colorWithHex:@"#d1d1d6"];
@@ -1526,7 +1526,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
     for (YapDatabaseViewRowChange *rowChange in rowChanges) {
         NSString *key = rowChange.collectionKey.key;
-        OWSAssert(key);
+        OWSAssertDebug(key);
         [self.threadViewModelCache removeObjectForKey:key];
 
         switch (rowChange.type) {

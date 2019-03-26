@@ -945,7 +945,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                                "peerId": self.peerId,
                                "originator" : call.originatorId,
                                "icecandidates" : payloadCandidates
-                ] as NSMutableDictionary
+                ] as NSDictionary
             
             let iceControlMessage = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallICECandidatesKey, moreData: allTheData)
             return messageSender.sendPromise(message: iceControlMessage, recipientId: self.userId, recipientDeviceId: self.deviceId)

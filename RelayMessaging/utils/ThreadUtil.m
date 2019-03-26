@@ -217,7 +217,7 @@ NS_ASSUME_NONNULL_BEGIN
                               // Remove obsolete unread indicator interactions;
                               [interactionsToDelete addObject:object];
                           } else if ([object isKindOfClass:[OWSContactOffersInteraction class]]) {
-                              OWSAssert(!existingContactOffers);
+                              OWSAssertDebug(!existingContactOffers);
                               if (existingContactOffers) {
                                   // There should never be more than one "contact offers" in
                                   // a given thread, but if there is, discard all but one.
@@ -228,7 +228,7 @@ NS_ASSUME_NONNULL_BEGIN
                               [blockingSafetyNumberChanges addObject:object];
                           } else if ([object isKindOfClass:[TSErrorMessage class]]) {
                               TSErrorMessage *errorMessage = (TSErrorMessage *)object;
-                              OWSAssert(errorMessage.errorType == TSErrorMessageNonBlockingIdentityChange);
+                              OWSAssertDebug(errorMessage.errorType == TSErrorMessageNonBlockingIdentityChange);
                               [nonBlockingSafetyNumberChanges addObject:errorMessage];
                           } else {
                               OWSFailDebug(@"Unexpected dynamic interaction type: %@", [object class]);
@@ -264,7 +264,7 @@ NS_ASSUME_NONNULL_BEGIN
                       usingBlock:^(
                           NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop) {
 
-                          OWSAssert([object isKindOfClass:[TSInteraction class]]);
+                          OWSAssertDebug([object isKindOfClass:[TSInteraction class]]);
 
                           if ([object isKindOfClass:[TSIncomingMessage class]] ||
                               [object isKindOfClass:[TSOutgoingMessage class]] ||
@@ -513,7 +513,7 @@ NS_ASSUME_NONNULL_BEGIN
         // expired.
         return;
     }
-    OWSAssert(visibleUnseenMessageCount > 0);
+    OWSAssertDebug(visibleUnseenMessageCount > 0);
 
     NSUInteger missingUnseenSafetyNumberChangeCount = 0;
     if (hasMoreUnseenMessages) {
@@ -594,7 +594,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)shouldShowGroupProfileBannerInThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     // Unused in Forsta world
     return NO;
@@ -703,7 +703,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSString *localUID = [TSAccountManager localUID];
     if (localUID.length < 1) {
-        OWSFail(@"%@ missing local number.", self.logTag);
+        OWSFailDebug(@"%@ missing local number.", self.logTag);
         return nil;
     }
 
