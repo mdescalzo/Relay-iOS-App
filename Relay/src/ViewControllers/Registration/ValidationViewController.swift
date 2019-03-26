@@ -139,7 +139,13 @@ class ValidationViewController: UITableViewController {
         })
     }
     
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "mainSegue" {
+            let nvc = segue.destination as! SignalsNavigationController
+            let hvc = nvc.topViewController as! HomeViewController
+            SignalApp.shared().homeViewController = hvc
+        }
+    }
     
     // MARK: - Actions
     @IBAction func onValidationButtonTap(sender: Any) {

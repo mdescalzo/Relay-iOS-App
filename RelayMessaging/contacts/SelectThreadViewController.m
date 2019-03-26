@@ -3,12 +3,10 @@
 //
 
 #import "SelectThreadViewController.h"
-#import "BlockListUIUtils.h"
 #import "ContactTableViewCell.h"
 #import "ContactsViewHelper.h"
 #import "Environment.h"
 #import "NSString+OWS.h"
-#import "NewNonContactConversationViewController.h"
 #import "OWSTableViewController.h"
 #import "ThreadViewHelper.h"
 #import "UIFont+OWS.h"
@@ -23,8 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SelectThreadViewController () <OWSTableViewControllerDelegate,
     ThreadViewHelperDelegate,
     ContactsViewHelperDelegate,
-    UISearchBarDelegate,
-    NewNonContactConversationViewControllerDelegate>
+    UISearchBarDelegate>
 
 @property (nonatomic, readonly) ContactsViewHelper *contactsViewHelper;
 @property (nonatomic, readonly) ConversationSearcher *conversationSearcher;
@@ -177,14 +174,6 @@ NS_ASSUME_NONNULL_BEGIN
                             // To be consistent with the threads (above), we use ContactTableViewCell
                             // instead of HomeViewCell to present contacts and threads.
                             ContactTableViewCell *cell = [ContactTableViewCell new];
-
-                            // Blocking not yet implemented in Forsta world
-//                            BOOL isBlocked = [helper isRecipientIdBlocked:thread.contactIdentifier];
-//                            if (isBlocked) {
-//                                cell.accessoryMessage = NSLocalizedString(
-//                                                                          @"CONTACT_CELL_IS_BLOCKED", @"An indicator that a contact has been blocked.");
-//                            }
-
                             [cell configureWithThread:thread contactsManager:helper.contactsManager];
 
                             if (!cell.hasAccessoryText) {
@@ -218,25 +207,6 @@ NS_ASSUME_NONNULL_BEGIN
                             if (!strongSelf) {
                                 return;
                             }
-
-                            // Blocking not yet implemented in Forsta world
-//                            if ([thread isKindOfClass:[TSThread class]]) {
-//                                BOOL isBlocked = [helper isRecipientIdBlocked:thread.contactIdentifier];
-//                                if (isBlocked && ![strongSelf.selectThreadViewDelegate canSelectBlockedContact]) {
-//                                    [BlockListUIUtils showUnblockPhoneNumberActionSheet:thread.contactIdentifier
-//                                                                     fromViewController:strongSelf
-//                                                                        blockingManager:helper.blockingManager
-//                                                                        contactsManager:helper.contactsManager
-//                                                                        completionBlock:^(BOOL isStillBlocked) {
-//                                                                            if (!isStillBlocked) {
-//                                                                                [strongSelf.selectThreadViewDelegate
-//                                                                                    threadWasSelected:thread];
-//                                                                            }
-//                                                                        }];
-//                                    return;
-//                                }
-//                            }
-
                             [strongSelf.selectThreadViewDelegate threadWasSelected:thread];
                         }]];
     }
@@ -293,25 +263,6 @@ NS_ASSUME_NONNULL_BEGIN
 {
     OWSAssert(relayTag);
     OWSAssert(self.selectThreadViewDelegate);
-    
-    
-    // TODO: Implement blocking
-//    ContactsViewHelper *helper = self.contactsViewHelper;
-//    if ([helper isRecipientIdBlocked:signalAccount.recipientId]
-//        && ![self.selectThreadViewDelegate canSelectBlockedContact]) {
-//
-//        __weak SelectThreadViewController *weakSelf = self;
-//        [BlockListUIUtils showUnblockSignalAccountActionSheet:signalAccount
-//                                           fromViewController:self
-//                                              blockingManager:helper.blockingManager
-//                                              contactsManager:helper.contactsManager
-//                                              completionBlock:^(BOOL isBlocked) {
-//                                                  if (!isBlocked) {
-//                                                      [weakSelf signalAccountWasSelected:signalAccount];
-//                                                  }
-//                                              }];
-//        return;
-//    }
     
     __block TSThread *thread = nil;
     __block NSCountedSet<NSString *> *participants = [relayTag recipientIds];
@@ -374,18 +325,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldHideLocalNumber
 {
     return NO;
-}
-
-#pragma mark - NewNonContactConversationViewControllerDelegate
-
-- (void)recipientIdWasSelected:(NSString *)recipientId
-{
-    if (recipientId.length == 0) {
-        DDLogDebug(@"Selected recipient with empty id.");
-    } else {
-        TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[recipientId, TSAccountManager.localUID]];
-        [self.selectThreadViewDelegate threadWasSelected:thread];
-    }
 }
 
 @end

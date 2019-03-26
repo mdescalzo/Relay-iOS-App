@@ -31,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 
 //@class CNContact;
-@class OWSBlockingManager;
 @class FLContactsManager;
 
 @interface ContactsViewHelper : NSObject
@@ -39,7 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, weak) id<ContactsViewHelperDelegate> delegate;
 
 @property (nonatomic, readonly) FLContactsManager *contactsManager;
-@property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 
 @property (nonatomic, readonly) NSArray<RelayRecipient *> *relayRecipients;
 @property (nonatomic, readonly) NSArray<FLTag *> *relayTags;
@@ -60,10 +58,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 //- (nullable SignalAccount *)fetchSignalAccountForRecipientId:(NSString *)recipientId;
 //- (SignalAccount *)fetchOrBuildSignalAccountForRecipientId:(NSString *)recipientId;
-
-// This method is faster than OWSBlockingManager but
-// is only safe to be called on the main thread.
-- (BOOL)isRecipientIdBlocked:(NSString *)recipientId;
 
 // NOTE: This method uses a transaction.
 - (NSString *)localUID;

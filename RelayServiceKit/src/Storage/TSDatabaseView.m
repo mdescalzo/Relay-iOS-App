@@ -23,7 +23,7 @@ NSString *const FLPinnedGroup  = @"FLPinnedGroup";
 
 NSString *const FLActiveTagsGroup = @"FLActiveTagsGroup";
 NSString *const FLVisibleRecipientGroup = @"FLVisibleRecipientGroup";
-NSString *const FLHiddenContactsGroup = @"FLHiddenContactsGroup";
+NSString *const FLHiddenTagsGroup = @"FLHiddenTagsGroup";
 NSString *const FLMonitorGroup = @"FLMonitorGroup";
 NSString *const FLTagDatabaseViewExtensionName = @"FLTagDatabaseViewExtensionName";
 NSString *const FLFilteredTagDatabaseViewExtensionName = @"FLFilteredTagDatabaseViewExtensionName";
@@ -235,9 +235,9 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
             return ([self threadShouldBeInInbox:thread]) ? TSInboxGroup : TSArchiveGroup;
         } else if (thread.archivalDate) {
             return TSArchiveGroup;
-        } else if (([thread.type isEqualToString:@"announcement"])) {
+        } else if (([thread.type isEqualToString:FLThreadTypeAnnouncement])) {
             return FLAnnouncementsGroup;
-        } else if ([thread.type isEqualToString:@"conversation"]) {
+        } else if ([thread.type isEqualToString:FLThreadTypeConversation]) {
             if (thread.pinPosition) {
                 return FLPinnedGroup;
             } else {
@@ -370,7 +370,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     }];
 }
 
-+(void)asyncRegisterTagDatabaseView:(OWSStorage *)storage
++(void)registerTagDatabaseView:(OWSStorage *)storage
 {
     YapDatabaseView *tagView = [storage registeredExtension:FLTagDatabaseViewExtensionName];
     if (tagView) {
@@ -384,7 +384,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                                      FLTag *aTag = (FLTag *)object;
                                                      if (aTag.recipientIds.count > 1) {
                                                          if (aTag.hiddenDate) {
-                                                             return FLHiddenContactsGroup;
+                                                             return FLHiddenTagsGroup;
                                                          } else {
                                                              return FLActiveTagsGroup;
                                                          }
@@ -396,7 +396,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                                              return FLMonitorGroup;
                                                              // Removing hide/unhide per request.
                                                              // } else if (recipient.hiddenDate) {
-                                                             //  return FLHiddenContactsGroup;
+                                                             //  return FLHiddenTagsGroup;
                                                          } else {
                                                              return FLVisibleRecipientGroup;
                                                          }
@@ -415,7 +415,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                           sorting:viewSorting
                                        versionTag:@"1" options:options];
     
-    [storage asyncRegisterExtension:databaseView withName:FLTagDatabaseViewExtensionName];
+    [storage registerExtension:databaseView withName:FLTagDatabaseViewExtensionName];
 
     // Register the filteredView which depends upon the above.
     YapDatabaseFilteredView *filteredView = [storage registeredExtension:FLFilteredTagDatabaseViewExtensionName];
@@ -435,7 +435,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     filteredView = [[YapDatabaseFilteredView alloc] initWithParentViewName:FLTagDatabaseViewExtensionName filtering:filtering];
     
     
-    [storage asyncRegisterExtension:filteredView withName:FLFilteredTagDatabaseViewExtensionName];
+    [storage registerExtension:filteredView withName:FLFilteredTagDatabaseViewExtensionName];
 }
 
 + (void)asyncRegisterSecondaryDevicesDatabaseView:(OWSStorage *)storage

@@ -76,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
     __block NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:transcript.body];
 
     if (transcript.isEndSessionMessage) {
-        NSString *recipientId = [[jsonPayload objectForKey:@"sender"] objectForKey:@"userId"];
+        NSString *recipientId = [[jsonPayload objectForKey:FLMessageSenderKey] objectForKey:FLUserIdKey];
         if (recipientId != nil) {
             TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[TSAccountManager.localUID, recipientId] transaction:transaction];
             if (thread == nil) {
@@ -99,8 +99,8 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
 
-    if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"control"]) {
-        NSString *controlMessageType = [dataBlob objectForKey:@"control"];
+    if ([[jsonPayload objectForKey:FLMessageTypeKey] isEqualToString:FLMessageTypeControlKey]) {
+        NSString *controlMessageType = [dataBlob objectForKey:FLMessageTypeControlKey];
         DDLogInfo(@"Control sync message received: %@", controlMessageType);
         
         IncomingControlMessage *controlMessage = [[IncomingControlMessage alloc] initWithTimestamp:transcript.timestamp
@@ -112,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
         [ControlMessageManager processIncomingControlMessageWithMessage:controlMessage transaction:transaction];
         return;
         
-    } else if ([[jsonPayload objectForKey:@"messageType"] isEqualToString:@"content"]) {
+    } else if ([[jsonPayload objectForKey:FLMessageTypeKey] isEqualToString:FLMessageTypeContentKey]) {
         
         TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
         if (thread == nil) {
@@ -135,10 +135,9 @@ NS_ASSUME_NONNULL_BEGIN
                                                    expiresInSeconds:transcript.expirationDuration
                                                     expireStartedAt:transcript.expirationStartedAt
                                                      isVoiceMessage:NO
-                                                      quotedMessage:transcript.quotedMessage
-                                                       contactShare:transcript.contact];
-        outgoingMessage.uniqueId = [jsonPayload objectForKey:@"messageId"];
-        outgoingMessage.messageType = [jsonPayload objectForKey:@"messageType"];
+                                                      quotedMessage:transcript.quotedMessage];
+        outgoingMessage.uniqueId = [jsonPayload objectForKey:FLMessageIdKey];
+        outgoingMessage.messageType = [jsonPayload objectForKey:FLMessageTypeKey];
         outgoingMessage.forstaPayload = [jsonPayload mutableCopy];
         
         TSQuotedMessage *_Nullable quotedMessage = transcript.quotedMessage;

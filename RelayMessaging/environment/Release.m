@@ -19,13 +19,11 @@
         OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
         TSNetworkManager *networkManager = [TSNetworkManager sharedManager];
         FLContactsManager *contactsManager = [FLContactsManager shared];
-        ContactsUpdater *contactsUpdater = [ContactsUpdater sharedUpdater];
         MessageSender *messageSender = [[MessageSender alloc] initWithNetworkManager:networkManager
                                                                             primaryStorage:primaryStorage
                                                                            contactsManager:contactsManager];
 
         instance = [[Environment alloc] initWithContactsManager:contactsManager
-                                                contactsUpdater:contactsUpdater
                                                  networkManager:networkManager
                                                   messageSender:messageSender];
     });

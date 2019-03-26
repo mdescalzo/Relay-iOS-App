@@ -8,8 +8,6 @@
 #import "OWSAudioMessageView.h"
 #import "OWSBubbleShapeView.h"
 #import "OWSBubbleView.h"
-#import "OWSContactShareButtonsView.h"
-#import "OWSContactShareView.h"
 #import "OWSGenericAttachmentView.h"
 #import "OWSMessageFooterView.h"
 #import "OWSMessageTextView.h"
@@ -22,7 +20,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OWSMessageBubbleView () <OWSQuotedMessageViewDelegate, OWSContactShareButtonsViewDelegate>
+@interface OWSMessageBubbleView () <OWSQuotedMessageViewDelegate>
 
 @property (nonatomic) OWSBubbleView *bubbleView;
 
@@ -47,8 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) NSMutableArray<NSLayoutConstraint *> *viewConstraints;
 
 @property (nonatomic) OWSMessageFooterView *footerView;
-
-@property (nonatomic, nullable) OWSContactShareButtonsView *contactShareButtonsView;
 
 @end
 
@@ -237,8 +233,6 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_Video:
             // Is there a caption?
             return self.hasBodyText;
-        case OWSMessageCellType_ContactShare:
-            return NO;
     }
 }
 
@@ -323,9 +317,6 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_DownloadingAttachment:
             bodyMediaView = [self loadViewForDownloadingAttachment];
             break;
-        case OWSMessageCellType_ContactShare:
-            bodyMediaView = [self loadViewForContactShare];
-            break;
         case MessageCellType_WebPreview:
             bodyMediaView = [self loadViewForWebPreview];
             break;
@@ -360,24 +351,6 @@ NS_ASSUME_NONNULL_BEGIN
                 [bodyMediaView addSubview:strokeView];
                 [self.bubbleView addPartnerView:strokeView];
                 [self.viewConstraints addObjectsFromArray:[strokeView ows_autoPinToSuperviewEdges]];
-            } else {
-                OWSAssert(self.cellType == OWSMessageCellType_ContactShare);
-
-                if (self.contactShareHasSpacerTop) {
-                    UIView *spacerView = [UIView containerView];
-                    [spacerView autoSetDimension:ALDimensionHeight toSize:self.contactShareVSpacing];
-                    [spacerView setCompressionResistanceHigh];
-                    [self.stackView addArrangedSubview:spacerView];
-                }
-
-                [self.stackView addArrangedSubview:bodyMediaView];
-
-                if (self.contactShareHasSpacerBottom) {
-                    UIView *spacerView = [UIView containerView];
-                    [spacerView autoSetDimension:ALDimensionHeight toSize:self.contactShareVSpacing];
-                    [spacerView setCompressionResistanceHigh];
-                    [self.stackView addArrangedSubview:spacerView];
-                }
             }
         } else {
             [textViews addObject:bodyMediaView];
@@ -461,84 +434,9 @@ NS_ASSUME_NONNULL_BEGIN
             addObject:[bodyMediaView autoSetDimension:ALDimensionHeight toSize:bodyMediaSize.CGSizeValue.height]];
     }
 
-    [self insertContactShareButtonsIfNecessary];
-
     [self updateBubbleColor];
 
     [self configureBubbleRounding];
-}
-
-- (void)insertContactShareButtonsIfNecessary
-{
-    if (self.cellType != OWSMessageCellType_ContactShare) {
-        return;
-    }
-
-    if (![OWSContactShareButtonsView hasAnyButton:self.viewItem.contactShare]) {
-        return;
-    }
-
-    OWSAssert(self.viewItem.contactShare);
-
-    OWSContactShareButtonsView *buttonsView =
-        [[OWSContactShareButtonsView alloc] initWithContactShare:self.viewItem.contactShare delegate:self];
-
-    NSValue *_Nullable actionButtonsSize = [self actionButtonsSize];
-    OWSAssert(actionButtonsSize);
-    [self.viewConstraints addObjectsFromArray:@[
-        [buttonsView autoSetDimension:ALDimensionHeight toSize:actionButtonsSize.CGSizeValue.height],
-    ]];
-
-    // The "contact share" view casts a shadow "downward" onto adjacent views,
-    // so we use a "proxy" view to take its place within the v-stack
-    // view and then insert the "contact share" view above its proxy so that
-    // it floats above the other content of the bubble view.
-
-    UIView *proxyView = [UIView new];
-    [self.stackView addArrangedSubview:proxyView];
-
-    OWSBubbleShapeView *shadowView = [OWSBubbleShapeView bubbleShadowView];
-    OWSBubbleShapeView *clipView = [OWSBubbleShapeView bubbleClipView];
-
-    [self addSubview:shadowView];
-    [self addSubview:clipView];
-
-    [self.viewConstraints addObjectsFromArray:[shadowView autoPinToEdgesOfView:proxyView]];
-    [self.viewConstraints addObjectsFromArray:[clipView autoPinToEdgesOfView:proxyView]];
-
-    [clipView addSubview:buttonsView];
-    [self.viewConstraints addObjectsFromArray:[buttonsView ows_autoPinToSuperviewEdges]];
-
-    [self.bubbleView addPartnerView:shadowView];
-    [self.bubbleView addPartnerView:clipView];
-
-    // Prevent the layer from animating changes.
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-
-    OWSAssert(buttonsView.backgroundColor);
-    shadowView.fillColor = buttonsView.backgroundColor;
-    shadowView.layer.shadowColor = Theme.boldColor.CGColor;
-    shadowView.layer.shadowOpacity = 0.12f;
-    shadowView.layer.shadowOffset = CGSizeZero;
-    shadowView.layer.shadowRadius = 1.f;
-
-    [CATransaction commit];
-}
-
-- (BOOL)contactShareHasSpacerTop
-{
-    return (self.cellType == OWSMessageCellType_ContactShare && (self.isQuotedReply || !self.shouldShowSenderName));
-}
-
-- (BOOL)contactShareHasSpacerBottom
-{
-    return (self.cellType == OWSMessageCellType_ContactShare && !self.hasBottomFooter);
-}
-
-- (CGFloat)contactShareVSpacing
-{
-    return 12.f;
 }
 
 - (CGFloat)senderNameBottomSpacing
@@ -612,14 +510,13 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_GenericAttachment:
         case OWSMessageCellType_DownloadingAttachment:
-        case OWSMessageCellType_ContactShare:
             return NO;
     }
 }
 
 - (BOOL)hasFullWidthMediaView
 {
-    return (self.hasBodyMediaWithThumbnail || self.cellType == OWSMessageCellType_ContactShare);
+    return (self.hasBodyMediaWithThumbnail);
 }
 
 - (BOOL)canFooterOverlayMedia
@@ -1066,26 +963,6 @@ NS_ASSUME_NONNULL_BEGIN
     return wrapper;
 }
 
-- (UIView *)loadViewForContactShare
-{
-    OWSAssert(self.viewItem.contactShare);
-
-    OWSContactShareView *contactShareView = [[OWSContactShareView alloc] initWithContactShare:self.viewItem.contactShare
-                                                                                   isIncoming:self.isIncoming
-                                                                            conversationStyle:self.conversationStyle];
-    [contactShareView createContents];
-    // TODO: Should we change appearance if contact avatar is uploading?
-
-    self.loadCellContentBlock = ^{
-        // Do nothing.
-    };
-    self.unloadCellContentBlock = ^{
-        // Do nothing.
-    };
-
-    return contactShareView;
-}
-
 - (void)addAttachmentUploadViewIfNecessary
 {
     [self addAttachmentUploadViewIfNecessaryWithAttachmentStateCallback:nil];
@@ -1215,11 +1092,6 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_DownloadingAttachment:
             result = CGSizeMake(MIN(200, maxMessageWidth), [AttachmentPointerView measureHeight]);
             break;
-        case OWSMessageCellType_ContactShare:
-            OWSAssert(self.viewItem.contactShare);
-
-            result = CGSizeMake(maxMessageWidth, [OWSContactShareView bubbleHeight]);
-            break;
         case MessageCellType_WebPreview:
             result = CGSizeRound(CGSizeMake(maxMessageWidth, maxMessageWidth * 0.3));
             break;
@@ -1278,15 +1150,6 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(self.conversationStyle);
     OWSAssert(self.conversationStyle.maxMessageWidth > 0);
 
-    if (self.cellType == OWSMessageCellType_ContactShare) {
-        OWSAssert(self.viewItem.contactShare);
-
-        if ([OWSContactShareButtonsView hasAnyButton:self.viewItem.contactShare]) {
-            CGSize buttonsSize = CGSizeCeil(
-                CGSizeMake(self.conversationStyle.maxMessageWidth, [OWSContactShareButtonsView bubbleHeight]));
-            return [NSValue valueWithCGSize:buttonsSize];
-        }
-    }
     return nil;
 }
 
@@ -1325,13 +1188,6 @@ NS_ASSUME_NONNULL_BEGIN
         } else {
             [textViewSizes addObject:bodyMediaSize];
             bodyMediaSize = nil;
-        }
-
-        if (self.contactShareHasSpacerTop) {
-            cellSize.height += self.contactShareVSpacing;
-        }
-        if (self.contactShareHasSpacerBottom) {
-            cellSize.height += self.contactShareVSpacing;
         }
     }
 
@@ -1435,10 +1291,6 @@ NS_ASSUME_NONNULL_BEGIN
     if (self.cellType == OWSMessageCellType_DownloadingAttachment) {
         return NO;
     }
-    if (self.cellType == OWSMessageCellType_ContactShare) {
-        // TODO: Handle this case.
-        return NO;
-    }
     if (!self.attachmentStream) {
         return NO;
     }
@@ -1490,9 +1342,6 @@ NS_ASSUME_NONNULL_BEGIN
             [subview removeFromSuperview];
         }
     }
-
-    [self.contactShareButtonsView removeFromSuperview];
-    self.contactShareButtonsView = nil;
 }
 
 #pragma mark - Gestures
@@ -1519,12 +1368,6 @@ NS_ASSUME_NONNULL_BEGIN
             return;
         } else if (outgoingMessage.messageState == TSOutgoingMessageStateSending) {
             // Ignore taps on outgoing messages being sent.
-            return;
-        }
-    }
-
-    if (self.contactShareButtonsView) {
-        if ([self.contactShareButtonsView handleTapGesture:sender]) {
             return;
         }
     }
@@ -1604,9 +1447,6 @@ NS_ASSUME_NONNULL_BEGIN
             }
             break;
         }
-        case OWSMessageCellType_ContactShare:
-            [self.delegate didTapContactShareViewItem:self.viewItem];
-            break;
         case MessageCellType_WebPreview:
             OWSAssert(self.viewItem.hasUrl);
             
@@ -1656,32 +1496,6 @@ NS_ASSUME_NONNULL_BEGIN
     [self.delegate didTapConversationItem:self.viewItem
                                      quotedReply:quotedReply
         failedThumbnailDownloadAttachmentPointer:attachmentPointer];
-}
-
-#pragma mark - OWSContactShareButtonsViewDelegate
-
-- (void)didTapSendMessageToContactShare:(ContactShareViewModel *)contactShare
-{
-    OWSAssertIsOnMainThread();
-    OWSAssert(contactShare);
-
-    [self.delegate didTapSendMessageToContactShare:contactShare];
-}
-
-- (void)didTapSendInviteToContactShare:(ContactShareViewModel *)contactShare
-{
-    OWSAssertIsOnMainThread();
-    OWSAssert(contactShare);
-
-    [self.delegate didTapSendInviteToContactShare:contactShare];
-}
-
-- (void)didTapShowAddToContactUIForContactShare:(ContactShareViewModel *)contactShare
-{
-    OWSAssertIsOnMainThread();
-    OWSAssert(contactShare);
-
-    [self.delegate didTapShowAddToContactUIForContactShare:contactShare];
 }
 
 @end

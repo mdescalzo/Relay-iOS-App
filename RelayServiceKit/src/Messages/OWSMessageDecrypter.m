@@ -5,7 +5,6 @@
 #import "OWSMessageDecrypter.h"
 #import "NSData+messagePadding.h"
 #import "NotificationsProtocol.h"
-#import "OWSBlockingManager.h"
 #import "OWSError.h"
 #import "OWSIdentityManager.h"
 #import "OWSPrimaryStorage+PreKeyStore.h"
@@ -33,7 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
-@property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 @property (nonatomic, readonly) OWSIdentityManager *identityManager;
 
 @end
@@ -56,14 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
 {
     OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
     OWSIdentityManager *identityManager = [OWSIdentityManager sharedManager];
-    OWSBlockingManager *blockingManager = [OWSBlockingManager sharedManager];
-
-    return [self initWithPrimaryStorage:primaryStorage identityManager:identityManager blockingManager:blockingManager];
+ 
+    return [self initWithPrimaryStorage:primaryStorage identityManager:identityManager];
 }
 
 - (instancetype)initWithPrimaryStorage:(OWSPrimaryStorage *)primaryStorage
                        identityManager:(OWSIdentityManager *)identityManager
-                       blockingManager:(OWSBlockingManager *)blockingManager
 {
     self = [super init];
 
@@ -73,22 +69,12 @@ NS_ASSUME_NONNULL_BEGIN
 
     _primaryStorage = primaryStorage;
     _identityManager = identityManager;
-    _blockingManager = blockingManager;
 
     _dbConnection = primaryStorage.newDatabaseConnection;
 
     OWSSingletonAssert();
 
     return self;
-}
-
-#pragma mark - Blocking
-
-- (BOOL)isEnvelopeBlocked:(SSKEnvelope *)envelope
-{
-    OWSAssert(envelope);
-
-    return [_blockingManager.blockedPhoneNumbers containsObject:envelope.source];
 }
 
 #pragma mark - Decryption
@@ -122,12 +108,6 @@ NS_ASSUME_NONNULL_BEGIN
         DDLogInfo(@"%@ decrypting envelope: %@", self.logTag, [self descriptionForEnvelope:envelope]);
 
         OWSAssert(envelope.source.length > 0);
-        if ([self isEnvelopeBlocked:envelope]) {
-            DDLogInfo(@"%@ ignoring blocked envelope: %@", self.logTag, envelope.source);
-            failureBlock();
-            return;
-        }
-
         switch (envelope.type) {
             case SSKEnvelopeTypeCiphertext: {
                 [self decryptSecureMessage:envelope

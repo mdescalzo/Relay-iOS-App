@@ -3,13 +3,9 @@
 //
 
 #import "OWSConversationSettingsViewController.h"
-#import "BlockListUIUtils.h"
 #import "ContactsViewHelper.h"
 #import "FingerprintViewController.h"
-#import "OWSAddToContactViewController.h"
-#import "OWSBlockingManager.h"
 #import "OWSSoundSettingsViewController.h"
-#import "PhoneNumber.h"
 #import "ShowGroupMembersViewController.h"
 #import "Relay-Swift.h"
 #import "UIFont+OWS.h"
@@ -40,7 +36,6 @@ ColorPickerDelegate>
 @property (nonatomic, readonly) TSAccountManager *accountManager;
 @property (nonatomic, readonly) FLContactsManager *contactsManager;
 @property (nonatomic, readonly) MessageSender *messageSender;
-@property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 @property (nonatomic, readonly) ContactsViewHelper *contactsViewHelper;
 @property (nonatomic, readonly) UIImageView *avatarView;
 @property (nonatomic, readonly) UILabel *disappearingMessagesDurationLabel;
@@ -92,7 +87,6 @@ ColorPickerDelegate>
     _accountManager = [TSAccountManager sharedInstance];
     _contactsManager = [Environment current].contactsManager;
     _messageSender = [Environment current].messageSender;
-    _blockingManager = [OWSBlockingManager sharedManager];
     _contactsViewHelper = [[ContactsViewHelper alloc] initWithDelegate:self];
     
     [self observeNotifications];
@@ -904,24 +898,6 @@ ColorPickerDelegate>
                                                         editImmediately:YES];
 }
 
-- (void)presentAddToContactViewControllerWithRecipientId:(NSString *)recipientId
-{
-    if (!self.contactsManager.supportsContactEditing) {
-        // Should not expose UI that lets the user get here.
-        OWSFail(@"%@ Contact editing not supported.", self.logTag);
-        return;
-    }
-    
-    if (!self.contactsManager.isSystemContactsAuthorized) {
-        [self.contactsViewHelper presentMissingContactAccessAlertControllerFromViewController:self];
-        return;
-    }
-    
-    OWSAddToContactViewController *viewController = [OWSAddToContactViewController new];
-    [viewController configureWithRecipientId:recipientId];
-    [self.navigationController pushViewController:viewController animated:YES];
-}
-
 - (void)didTapEditButton
 {
     [self presentContactViewController];
@@ -977,45 +953,6 @@ ColorPickerDelegate>
     [self updateTableContents];
 }
 
-- (void)blockUserSwitchDidChange:(id)sender
-{
-    OWSAssert(!self.isGroupThread);
-    
-    if (![sender isKindOfClass:[UISwitch class]]) {
-        OWSFail(@"%@ Unexpected sender for block user switch: %@", self.logTag, sender);
-    }
-    UISwitch *blockUserSwitch = (UISwitch *)sender;
-    
-    BOOL isCurrentlyBlocked = [[_blockingManager blockedPhoneNumbers] containsObject:self.thread.otherParticipantId];
-    
-    if (blockUserSwitch.isOn) {
-        OWSAssert(!isCurrentlyBlocked);
-        if (isCurrentlyBlocked) {
-            return;
-        }
-        [BlockListUIUtils showBlockPhoneNumberActionSheet:self.thread.otherParticipantId
-                                       fromViewController:self
-                                          blockingManager:_blockingManager
-                                          contactsManager:_contactsManager
-                                          completionBlock:^(BOOL isBlocked) {
-                                              // Update switch state if user cancels action.
-                                              blockUserSwitch.on = isBlocked;
-                                          }];
-    } else {
-        OWSAssert(isCurrentlyBlocked);
-        if (!isCurrentlyBlocked) {
-            return;
-        }
-        [BlockListUIUtils showUnblockPhoneNumberActionSheet:self.thread.otherParticipantId
-                                         fromViewController:self
-                                            blockingManager:_blockingManager
-                                            contactsManager:_contactsManager
-                                            completionBlock:^(BOOL isBlocked) {
-                                                // Update switch state if user cancels action.
-                                                blockUserSwitch.on = isBlocked;
-                                            }];
-    }
-}
 
 - (void)toggleDisappearingMessages:(BOOL)flag
 {

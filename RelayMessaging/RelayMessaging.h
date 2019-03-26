@@ -13,7 +13,6 @@ FOUNDATION_EXPORT const unsigned char RelayMessagingVersionString[];
 // The public headers of the framework
 #import <RelayMessaging/AppSetup.h>
 #import <RelayMessaging/AttachmentSharing.h>
-#import <RelayMessaging/BlockListUIUtils.h>
 #import <RelayMessaging/ContactTableViewCell.h>
 #import <RelayMessaging/ContactsViewHelper.h>
 #import <RelayMessaging/DebugLogger.h>
@@ -47,5 +46,4 @@ FOUNDATION_EXPORT const unsigned char RelayMessagingVersionString[];
 #import <RelayMessaging/UIView+OWS.h>
 #import <RelayMessaging/UIViewController+OWS.h>
 #import <RelayMessaging/VersionMigrations.h>
-#import <RelayMessaging/ViewControllerUtils.h>
 #import <RelayServiceKit/UIImage+OWS.h>

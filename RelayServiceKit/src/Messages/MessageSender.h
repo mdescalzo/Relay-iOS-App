@@ -8,7 +8,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern const NSUInteger kOversizeTextMessageSizeThreshold;
 
-@class OWSBlockingManager;
 @class OWSPrimaryStorage;
 @class OWSUploadingService;
 @class TSInvalidIdentityKeySendingErrorMessage;
@@ -49,7 +48,6 @@ NS_SWIFT_NAME(MessageSender)
                         primaryStorage:(OWSPrimaryStorage *)primaryStorage
                        contactsManager:(id<ContactsManagerProtocol>)contactsManager;
 
-- (void)setBlockingManager:(OWSBlockingManager *)blockingManager;
 
 /**
  * Send and resend text messages or resend messages with existing attachments.

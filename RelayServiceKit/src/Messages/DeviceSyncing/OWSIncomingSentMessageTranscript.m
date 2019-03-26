@@ -3,7 +3,6 @@
 //
 
 #import "OWSIncomingSentMessageTranscript.h"
-#import "OWSContact.h"
 #import "OWSMessageManager.h"
 #import "OWSPrimaryStorage.h"
 #import "OWSSignalServiceProtos.pb.h"

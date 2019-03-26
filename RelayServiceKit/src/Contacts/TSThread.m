@@ -309,7 +309,6 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
      withOptions:NSEnumerationReverse
      usingBlock:^(NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop) {
          
-         OWSAssertDebug([object isKindOfClass:[TSInteraction class]]);
          if ([object isKindOfClass:[TSInteraction class]]) {
              missedCount++;
              TSInteraction *interaction = (TSInteraction *)object;
@@ -328,7 +327,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
                  *stop = YES;
              }
          } else {
-             DDLogError(@"%@: Invalid object %@, with key %@, in collection: %@", self.logTag, object, key, collection);
+             OWSFailDebug(@"%@: Invalid object %@, with key %@, in collection: %@", self.logTag, object, key, collection);
          }
      }];
     return last;
@@ -707,7 +706,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 -(NSString *)type
 {
     if (_type == nil) {
-        return @"conversation";
+        return FLThreadTypeConversation;
     } else {
         return _type;
     }

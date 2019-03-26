@@ -5,6 +5,7 @@
 #import "OWSReadReceiptsForLinkedDevicesMessage.h"
 #import "OWSLinkedDeviceReadReceipt.h"
 #import "OWSSignalServiceProtos.pb.h"
+#import "CCSMKeys.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     _readReceipts = [readReceipts copy];
-    self.messageType = @"receipt";
+    self.messageType = FLMessageTypeReceiptKey;
 
     return self;
 }

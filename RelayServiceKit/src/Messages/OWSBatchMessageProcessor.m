@@ -130,14 +130,18 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
         OWSAssert(viewTransaction != nil);
         [viewTransaction enumerateKeysAndObjectsInGroup:OWSMessageContentJobFinderExtensionGroup
                                              usingBlock:^(NSString *_Nonnull collection,
-                                                 NSString *_Nonnull key,
-                                                 id _Nonnull object,
-                                                 NSUInteger index,
-                                                 BOOL *_Nonnull stop) {
-                                                 OWSMessageContentJob *job = object;
-                                                 [jobs addObject:job];
-                                                 if (jobs.count >= maxBatchSize) {
-                                                     *stop = YES;
+                                                          NSString *_Nonnull key,
+                                                          id _Nonnull object,
+                                                          NSUInteger index,
+                                                          BOOL *_Nonnull stop) {
+                                                 if (object != nil) {
+                                                     OWSMessageContentJob *job = object;
+                                                     [jobs addObject:job];
+                                                     if (jobs.count >= maxBatchSize) {
+                                                         *stop = YES;
+                                                     }
+                                                 } else {
+                                                     OWSFailDebug(@"%@: Unexpected nil object found in enumeration!", self.logTag);
                                                  }
                                              }];
     }];

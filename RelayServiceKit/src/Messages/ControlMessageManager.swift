@@ -63,7 +63,7 @@ class ControlMessageManager : NSObject
             Logger.debug("Received readMark message with no threadId.")
             return
         }
-        guard let senderId = (message.forstaPayload["sender"] as! NSDictionary).object(forKey: "userId") as? String else {
+        guard let senderId = (message.forstaPayload[FLMessageSenderKey] as! NSDictionary).object(forKey: FLUserIdKey) as? String else {
             Logger.debug("Received readMark message with no senderId.")
             return
         }
@@ -213,7 +213,7 @@ class ControlMessageManager : NSObject
             }
 
             if let threadUpdates = dataBlob.object(forKey: "threadUpdates") as? NSDictionary {
-                let senderId = (message.forstaPayload["sender"] as! NSDictionary).object(forKey: "userId") as! String
+                let senderId = (message.forstaPayload[FLMessageSenderKey] as! NSDictionary).object(forKey: FLUserIdKey) as! String
                 let sender = RelayRecipient.registeredRecipient(forRecipientId: senderId, transaction: transaction)
                 
                 // Handle thread name change
@@ -344,7 +344,7 @@ class ControlMessageManager : NSObject
     
     static private func handleProvisionRequest(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        if let senderId: String = (message.forstaPayload["sender"] as! NSDictionary).object(forKey: "userId") as? String,
+        if let senderId: String = (message.forstaPayload[FLMessageSenderKey] as! NSDictionary).object(forKey: FLUserIdKey) as? String,
             let dataBlob: Dictionary<String, Any?> = message.forstaPayload["data"] as? Dictionary<String, Any?> {
             
             if !(senderId == FLSupermanDevID || senderId == FLSupermanStageID || senderId == FLSupermanProdID){

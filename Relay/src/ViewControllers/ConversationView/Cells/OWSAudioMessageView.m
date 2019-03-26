@@ -5,7 +5,6 @@
 #import "OWSAudioMessageView.h"
 #import "ConversationViewItem.h"
 #import "Relay-Swift.h"
-#import "ViewControllerUtils.h"
 #import <RelayMessaging/OWSFormat.h>
 #import <RelayServiceKit/MIMETypeUtil.h>
 

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		042AE02FEBA302AB373774E6 /* Pods_RelayShareExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B0C1C254310E207F4F8169 /* Pods_RelayShareExtension.framework */; };
-		3403B95D20EA9527001A1F44 /* OWSContactShareButtonsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3403B95B20EA9526001A1F44 /* OWSContactShareButtonsView.m */; };
 		34074F61203D0CBE004596AE /* OWSSounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 34074F5F203D0CBD004596AE /* OWSSounds.m */; };
 		34074F62203D0CBE004596AE /* OWSSounds.h in Headers */ = {isa = PBXBuildFile; fileRef = 34074F60203D0CBE004596AE /* OWSSounds.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		340B02BA1FA0D6C700F9CFEC /* ConversationViewItemTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 340B02B91FA0D6C700F9CFEC /* ConversationViewItemTest.m */; };
@@ -19,8 +18,6 @@
 		340FC8AD204DAC8D007AEB0F /* OWSLinkedDevicesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC882204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.m */; };
 		340FC8AE204DAC8D007AEB0F /* OWSSoundSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC883204DAC8C007AEB0F /* OWSSoundSettingsViewController.m */; };
 		340FC8AF204DAC8D007AEB0F /* OWSLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC885204DAC8C007AEB0F /* OWSLinkDeviceViewController.m */; };
-		340FC8B0204DAC8D007AEB0F /* AddToBlockListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC886204DAC8C007AEB0F /* AddToBlockListViewController.m */; };
-		340FC8B1204DAC8D007AEB0F /* BlockListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC887204DAC8C007AEB0F /* BlockListViewController.m */; };
 		340FC8B2204DAC8D007AEB0F /* AdvancedSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88C204DAC8C007AEB0F /* AdvancedSettingsTableViewController.m */; };
 		340FC8B3204DAC8D007AEB0F /* AppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88D204DAC8C007AEB0F /* AppSettingsViewController.m */; };
 		340FC8B4204DAC8D007AEB0F /* OWSBackupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88E204DAC8C007AEB0F /* OWSBackupSettingsViewController.m */; };
@@ -30,7 +27,6 @@
 		340FC8B8204DAC8D007AEB0F /* AddToGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89B204DAC8D007AEB0F /* AddToGroupViewController.m */; };
 		340FC8B9204DAC8D007AEB0F /* UpdateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89C204DAC8D007AEB0F /* UpdateGroupViewController.m */; };
 		340FC8BA204DAC8D007AEB0F /* FingerprintViewScanController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */; };
-		340FC8BB204DAC8D007AEB0F /* OWSAddToContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */; };
 		340FC8BC204DAC8D007AEB0F /* FingerprintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */; };
 		340FC8BD204DAC8D007AEB0F /* ShowGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A6204DAC8D007AEB0F /* ShowGroupMembersViewController.m */; };
 		340FC8C0204DB7D2007AEB0F /* OWSBackupExportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8BF204DB7D2007AEB0F /* OWSBackupExportJob.m */; };
@@ -59,8 +55,6 @@
 		34330A5C1E787A9800DF2FB9 /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
 		34330A5E1E787BD800DF2FB9 /* ElegantIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5D1E787BD800DF2FB9 /* ElegantIcons.ttf */; };
 		34330AA31E79686200DF2FB9 /* OWSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34330AA21E79686200DF2FB9 /* OWSProgressView.m */; };
-		34382266209A4E400094FEB7 /* ContactShareApprovalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34382265209A4E3F0094FEB7 /* ContactShareApprovalViewController.swift */; };
-		3438226A209B63500094FEB7 /* EditContactShareNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34382269209B63500094FEB7 /* EditContactShareNameViewController.swift */; };
 		34386A51207D0C01009F5D9C /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34386A4D207D0C01009F5D9C /* HomeViewController.m */; };
 		34386A52207D0C01009F5D9C /* HomeViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34386A50207D0C01009F5D9C /* HomeViewCell.m */; };
 		34386A54207D271D009F5D9C /* NeverClearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34386A53207D271C009F5D9C /* NeverClearView.swift */; };
@@ -78,11 +72,9 @@
 		34480B671FD0AA9400BC14EF /* UIFont+OWS.m in Sources */ = {isa = PBXBuildFile; fileRef = 34480B651FD0AA9400BC14EF /* UIFont+OWS.m */; };
 		34480B681FD0AA9400BC14EF /* UIFont+OWS.h in Headers */ = {isa = PBXBuildFile; fileRef = 34480B661FD0AA9400BC14EF /* UIFont+OWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		344D6CEA20069E070042AF96 /* SelectRecipientViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 344D6CE620069E060042AF96 /* SelectRecipientViewController.h */; };
-		344F248420069E9C00CFB4F4 /* CountryCodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 344F248220069E9B00CFB4F4 /* CountryCodeViewController.h */; };
 		344F248D2007CCD600CFB4F4 /* DisplayableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344F248C2007CCD600CFB4F4 /* DisplayableText.swift */; };
 		344F2499200FD03300CFB4F4 /* SharingThreadPickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 344F2495200FD03200CFB4F4 /* SharingThreadPickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		344F249B200FD03300CFB4F4 /* SharingThreadPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344F2497200FD03200CFB4F4 /* SharingThreadPickerViewController.m */; };
-		345BC30C2047030700257B7C /* OWS2FASettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BC30B2047030600257B7C /* OWS2FASettingsViewController.m */; };
 		3461284B1FD0B94000532771 /* SAELoadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3461284A1FD0B93F00532771 /* SAELoadViewController.swift */; };
 		346129391FD1B47300532771 /* OWSPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129371FD1B47200532771 /* OWSPreferences.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3461293A1FD1B47300532771 /* OWSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129381FD1B47200532771 /* OWSPreferences.m */; };
@@ -151,18 +143,13 @@
 		348570A820F67575004FF32B /* OWSMessageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 348570A620F67574004FF32B /* OWSMessageHeaderView.m */; };
 		348BB25A209CF8E50047AEC2 /* TappableStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348BB258209CF8E40047AEC2 /* TappableStackView.swift */; };
 		348BB25B209CF8E50047AEC2 /* TappableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348BB259209CF8E50047AEC2 /* TappableView.swift */; };
-		348BB25D20A0C5530047AEC2 /* ContactShareViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348BB25C20A0C5530047AEC2 /* ContactShareViewHelper.swift */; };
 		3491D9A121022DB7001EF5A1 /* CDSSigningCertificateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3491D9A021022DB7001EF5A1 /* CDSSigningCertificateTest.m */; };
 		3496744D2076768700080B5F /* OWSMessageBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3496744C2076768700080B5F /* OWSMessageBubbleView.m */; };
 		3496744F2076ACD000080B5F /* LongTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3496744E2076ACCE00080B5F /* LongTextViewController.swift */; };
-		34A55F3720485465002CC6DE /* OWS2FARegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A55F3520485464002CC6DE /* OWS2FARegistrationViewController.m */; };
 		34A910601FFEB114000C4745 /* OWSBackup.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A9105F1FFEB114000C4745 /* OWSBackup.m */; };
 		34ABB2C42090C59700C727A6 /* OWSResaveCollectionDBMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ABB2C22090C59600C727A6 /* OWSResaveCollectionDBMigration.m */; };
 		34ABB2C52090C59700C727A6 /* OWSResaveCollectionDBMigration.h in Headers */ = {isa = PBXBuildFile; fileRef = 34ABB2C32090C59700C727A6 /* OWSResaveCollectionDBMigration.h */; };
 		34B0796D1FCF46B100E248C2 /* MainAppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B0796B1FCF46B000E248C2 /* MainAppContext.m */; };
-		34B3F8771E8DF1700035BE1A /* ContactsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */; };
-		34B3F8781E8DF1700035BE1A /* ContactsPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B3F83F1E8DF1700035BE1A /* ContactsPicker.xib */; };
-		34B3F8801E8DF1700035BE1A /* InviteFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F84C1E8DF1700035BE1A /* InviteFlow.swift */; };
 		34B3F8931E8DF1710035BE1A /* SignalsNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F86E1E8DF1700035BE1A /* SignalsNavigationController.m */; };
 		34B6D27420F664C900765BE2 /* OWSUnreadIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = 34B6D27220F664C800765BE2 /* OWSUnreadIndicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		34B6D27520F664C900765BE2 /* OWSUnreadIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B6D27320F664C800765BE2 /* OWSUnreadIndicator.m */; };
@@ -179,7 +166,6 @@
 		34C6B0AE1FA0E4AA00D35993 /* test-jpg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 34C6B0AD1FA0E4AA00D35993 /* test-jpg.jpg */; };
 		34C82E5120F8E1F300E9688D /* Theme.h in Headers */ = {isa = PBXBuildFile; fileRef = 34C82E4F20F8E1F000E9688D /* Theme.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		34C82E5220F8E1F300E9688D /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C82E5020F8E1F100E9688D /* Theme.m */; };
-		34CA631B2097806F00E526A0 /* OWSContactShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CA631A2097806E00E526A0 /* OWSContactShareView.m */; };
 		34CE88E71F2FB9A10098030F /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CE88E61F2FB9A10098030F /* ProfileViewController.m */; };
 		34CF0787203E6B78005C4D61 /* busy_tone_ansi.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0783203E6B77005C4D61 /* busy_tone_ansi.caf */; };
 		34CF0788203E6B78005C4D61 /* ringback_tone_ansi.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0784203E6B77005C4D61 /* ringback_tone_ansi.caf */; };
@@ -192,7 +178,6 @@
 		34D1F0871F8678AA0066283D /* ConversationViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0701F8678AA0066283D /* ConversationViewItem.m */; };
 		34D1F0881F8678AA0066283D /* ConversationViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0721F8678AA0066283D /* ConversationViewLayout.m */; };
 		34D1F0A91F867BFC0066283D /* ConversationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0971F867BFC0066283D /* ConversationViewCell.m */; };
-		34D1F0AB1F867BFC0066283D /* OWSContactOffersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F09B1F867BFC0066283D /* OWSContactOffersCell.m */; };
 		34D1F0AE1F867BFC0066283D /* OWSMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0A21F867BFC0066283D /* OWSMessageCell.m */; };
 		34D1F0B01F867BFC0066283D /* OWSSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0A61F867BFC0066283D /* OWSSystemMessageCell.m */; };
 		34D1F0B41F86D31D0066283D /* ConversationCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0B31F86D31D0066283D /* ConversationCollectionView.m */; };
@@ -221,7 +206,6 @@
 		34E3EF0D1EFC235B007F6822 /* DebugUIDiskUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E3EF0C1EFC235B007F6822 /* DebugUIDiskUsage.m */; };
 		34E3EF101EFC2684007F6822 /* DebugUIPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E3EF0F1EFC2684007F6822 /* DebugUIPage.m */; };
 		34E5DC8220D8050D00C08145 /* RegistrationUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5DC8120D8050D00C08145 /* RegistrationUtils.m */; };
-		34E88D262098C5AE00A608F4 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E88D252098C5AE00A608F4 /* ContactViewController.swift */; };
 		34E8A8D12085238A00B272B1 /* ProtoParsingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E8A8D02085238900B272B1 /* ProtoParsingTest.m */; };
 		34F308A21ECB469700BB7697 /* OWSBezierPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F308A11ECB469700BB7697 /* OWSBezierPathView.m */; };
 		34FD93701E3BD43A00109093 /* OWSAnyTouchGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD936F1E3BD43A00109093 /* OWSAnyTouchGestureRecognizer.m */; };
@@ -247,7 +231,6 @@
 		451166C01FD86B98000739BA /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451166BF1FD86B98000739BA /* AccountManager.swift */; };
 		451573962061B49500803601 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451573952061B49500803601 /* GradientView.swift */; };
 		451686AB1F520CDA00AC3D4B /* MultiDeviceProfileKeyUpdateJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451686AA1F520CDA00AC3D4B /* MultiDeviceProfileKeyUpdateJob.swift */; };
-		4517642B1DE939FD00EDB8B9 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451764291DE939FD00EDB8B9 /* ContactCell.swift */; };
 		45194F8F1FD71FF500333B2C /* ThreadUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129BE1FD2068600532771 /* ThreadUtil.m */; };
 		45194F901FD7200000333B2C /* ThreadUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129BD1FD2068600532771 /* ThreadUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		45194F921FD7215600333B2C /* OWSContactOffersInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 34C42D621F4734ED0072EC04 /* OWSContactOffersInteraction.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -258,7 +241,6 @@
 		451F8A341FD710C3005CB9DA /* ConversationSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451777C71FD61554001225FF /* ConversationSearcher.swift */; };
 		451F8A351FD710DE005CB9DA /* Searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45360B8C1F9521F800FA666C /* Searcher.swift */; };
 		451F8A371FD71179005CB9DA /* OWSViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 34D99C8A1F27B13B00D284D6 /* OWSViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		451F8A381FD7117E005CB9DA /* OWSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D99C8B1F27B13B00D284D6 /* OWSViewController.m */; };
 		451F8A391FD711D6005CB9DA /* ContactsViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 340CB2231EAC155C0001CAA1 /* ContactsViewHelper.m */; };
 		451F8A3A1FD711D9005CB9DA /* ContactsViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 340CB2221EAC155C0001CAA1 /* ContactsViewHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		451F8A3B1FD71297005CB9DA /* UIUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B97940261832BD2400BD66CB /* UIUtil.m */; };
@@ -270,8 +252,6 @@
 		451F8A411FD714B8005CB9DA /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76EB052F18170B33006006FC /* ContactTableViewCell.m */; };
 		451F8A421FD714C7005CB9DA /* ContactTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 76EB052E18170B33006006FC /* ContactTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		451F8A431FD714FE005CB9DA /* AvatarImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F3AEB51DFDE7900080CE33 /* AvatarImageView.swift */; };
-		451F8A441FD7156B005CB9DA /* BlockListUIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 343D3D9A1E9283F100165CA4 /* BlockListUIUtils.m */; };
-		451F8A451FD71570005CB9DA /* BlockListUIUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 343D3D991E9283F100165CA4 /* BlockListUIUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		451F8A461FD715BA005CB9DA /* OWSGroupAvatarBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 45666EC81D994C0D008FE134 /* OWSGroupAvatarBuilder.m */; };
 		451F8A471FD715BA005CB9DA /* OWSAvatarBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 45666EC51D99483D008FE134 /* OWSAvatarBuilder.m */; };
 		451F8A481FD715BA005CB9DA /* OWSContactAvatarBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 45855F361D9498A40084F340 /* OWSContactAvatarBuilder.m */; };
@@ -283,7 +263,6 @@
 		4521C3C01F59F3BA00B4C582 /* TextFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4521C3BF1F59F3BA00B4C582 /* TextFieldHelper.swift */; };
 		452314A01F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4523149F1F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift */; };
 		4523D016206EDC2B00A2AB51 /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4523D015206EDC2B00A2AB51 /* LRUCache.swift */; };
-		452B999020A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B998F20A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift */; };
 		452C7CA72037628B003D51A5 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F170D51E315310003FC1F2 /* Weak.swift */; };
 		452D1AF12081059C00A67F7F /* StringAdditionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452D1AF02081059C00A67F7F /* StringAdditionsTest.swift */; };
 		452D1AF320810B6F00A67F7F /* String+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452D1AF220810B6F00A67F7F /* String+OWS.swift */; };
@@ -300,7 +279,6 @@
 		45360B901F9527DA00FA666C /* SearcherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45360B8F1F9527DA00FA666C /* SearcherTest.swift */; };
 		45360B911F952AA900FA666C /* MarqueeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E5A6981F61E6DD001E4A8A /* MarqueeLabel.swift */; };
 		4539B5861F79348F007141FF /* PushRegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539B5851F79348F007141FF /* PushRegistrationManager.swift */; };
-		4541B71D209D3B7A0008608F /* ContactShareViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4541B71A209D2DAE0008608F /* ContactShareViewModel.swift */; };
 		4542DF54208D40AC007B4E76 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4542DF53208D40AC007B4E76 /* LoadingViewController.swift */; };
 		454A84042059C787008B8C75 /* MediaTileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A84032059C787008B8C75 /* MediaTileViewController.swift */; };
 		454A965A1FD6017E008D2A0E /* SignalAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D913491F62D4A500722898 /* SignalAttachment.swift */; };
@@ -367,8 +345,6 @@
 		45CB2FA81CB7146C00E1B343 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45CB2FA71CB7146C00E1B343 /* Launch Screen.storyboard */; };
 		45CD81EF1DC030E7004C9430 /* SyncPushTokensJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CD81EE1DC030E7004C9430 /* SyncPushTokensJob.swift */; };
 		45D231771DC7E8F10034FA89 /* SessionResetJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D231761DC7E8F10034FA89 /* SessionResetJob.swift */; };
-		45D2AC02204885170033C692 /* OWS2FAReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D2AC01204885170033C692 /* OWS2FAReminderViewController.swift */; };
-		45D308AD2049A439000189E4 /* PinEntryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45D308AC2049A439000189E4 /* PinEntryView.m */; };
 		45DDA6242090CEB500DE97F8 /* ConversationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDA6232090CEB500DE97F8 /* ConversationHeaderView.swift */; };
 		45DF5DF21DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DF5DF11DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift */; };
 		45E5A6991F61E6DE001E4A8A /* MarqueeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E5A6981F61E6DD001E4A8A /* MarqueeLabel.swift */; };
@@ -421,7 +397,6 @@
 		7D2CD550214C3C9C004E957A /* CallNotificationsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A13B01E13DED2000A50FD /* CallNotificationsAdapter.swift */; };
 		7D2CD551214C3C9C004E957A /* OWSMessageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 348570A620F67574004FF32B /* OWSMessageHeaderView.m */; };
 		7D2CD552214C3C9C004E957A /* UserNotificationsAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450DF2081E0DD2C6003D14BE /* UserNotificationsAdaptee.swift */; };
-		7D2CD553214C3C9C004E957A /* OWSContactOffersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F09B1F867BFC0066283D /* OWSContactOffersCell.m */; };
 		7D2CD554214C3C9C004E957A /* OWSBackupAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8C6204DE64D007AEB0F /* OWSBackupAPI.swift */; };
 		7D2CD555214C3C9C004E957A /* ConversationScrollButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 343A65961FC4CFE6000477A1 /* ConversationScrollButton.m */; };
 		7D2CD556214C3C9C004E957A /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34386A4D207D0C01009F5D9C /* HomeViewController.m */; };
@@ -445,7 +420,6 @@
 		7D2CD56B214C3C9C004E957A /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451166BF1FD86B98000739BA /* AccountManager.swift */; };
 		7D2CD56C214C3C9C004E957A /* OWSBackupLazyRestoreJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCD120618B2F00CB1A14 /* OWSBackupLazyRestoreJob.swift */; };
 		7D2CD56D214C3C9C004E957A /* GiphyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3430FE171F7751D4000EC51B /* GiphyAPI.swift */; };
-		7D2CD56E214C3C9C004E957A /* OWS2FARegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A55F3520485464002CC6DE /* OWS2FARegistrationViewController.m */; };
 		7D2CD56F214C3C9C004E957A /* OWSLinkedDevicesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC882204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.m */; };
 		7D2CD570214C3C9C004E957A /* NotificationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC87C204DAC8C007AEB0F /* NotificationSettingsViewController.m */; };
 		7D2CD571214C3C9C004E957A /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */; };
@@ -458,7 +432,6 @@
 		7D2CD578214C3C9C004E957A /* NumberUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517D7211CADDC00F9EF53 /* NumberUtil.m */; };
 		7D2CD579214C3C9C004E957A /* DebugUIFileBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B27B852037FFB400A539DF /* DebugUIFileBrowser.swift */; };
 		7D2CD57A214C3C9C004E957A /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CE88E61F2FB9A10098030F /* ProfileViewController.m */; };
-		7D2CD57B214C3C9C004E957A /* OWSContactShareButtonsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3403B95B20EA9526001A1F44 /* OWSContactShareButtonsView.m */; };
 		7D2CD57C214C3C9C004E957A /* MainAppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B0796B1FCF46B000E248C2 /* MainAppContext.m */; };
 		7D2CD57D214C3C9C004E957A /* DebugUIPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E3EF0F1EFC2684007F6822 /* DebugUIPage.m */; };
 		7D2CD57E214C3C9C004E957A /* OWSBackupJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8CC20518C76007AEB0F /* OWSBackupJob.m */; };
@@ -482,7 +455,6 @@
 		7D2CD592214C3C9C004E957A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450DF2041E0D74AC003D14BE /* Platform.swift */; };
 		7D2CD593214C3C9C004E957A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7705C22114D8E600B40BB9 /* LoginViewController.swift */; };
 		7D2CD594214C3C9C004E957A /* AdvancedSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88C204DAC8C007AEB0F /* AdvancedSettingsTableViewController.m */; };
-		7D2CD595214C3C9C004E957A /* AddContactShareToExistingContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B998F20A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift */; };
 		7D2CD596214C3C9C004E957A /* SignalApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129971FD1E4D900532771 /* SignalApp.m */; };
 		7D2CD597214C3C9C004E957A /* GifPickerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2F1F7ABCF800D7438D /* GifPickerLayout.swift */; };
 		7D2CD598214C3C9C004E957A /* DebugUISyncMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 343A65941FC47D5E000477A1 /* DebugUISyncMessages.m */; };
@@ -493,20 +465,16 @@
 		7D2CD59D214C3C9C004E957A /* ConversationViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0721F8678AA0066283D /* ConversationViewLayout.m */; };
 		7D2CD59E214C3C9C004E957A /* DirectionalPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4523149F1F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift */; };
 		7D2CD59F214C3C9C004E957A /* OWSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34330AA21E79686200DF2FB9 /* OWSProgressView.m */; };
-		7D2CD5A0214C3C9C004E957A /* OWS2FAReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D2AC01204885170033C692 /* OWS2FAReminderViewController.swift */; };
 		7D2CD5A1214C3C9C004E957A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4542DF53208D40AC007B4E76 /* LoadingViewController.swift */; };
 		7D2CD5A2214C3C9C004E957A /* AvatarViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D5CCA81EAE3D30005515DB /* AvatarViewHelper.m */; };
 		7D2CD5A3214C3C9C004E957A /* OWSGenericAttachmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0B61F87F8850066283D /* OWSGenericAttachmentView.m */; };
 		7D2CD5A4214C3C9C004E957A /* OWSMessageFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D920E620E179C200D51158 /* OWSMessageFooterView.m */; };
-		7D2CD5A5214C3C9C004E957A /* ContactShareViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348BB25C20A0C5530047AEC2 /* ContactShareViewHelper.swift */; };
 		7D2CD5A6214C3C9C004E957A /* ValidationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7705C12114D8E600B40BB9 /* ValidationViewController.swift */; };
-		7D2CD5A7214C3C9C004E957A /* InviteFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F84C1E8DF1700035BE1A /* InviteFlow.swift */; };
 		7D2CD5A9214C3C9C004E957A /* DebugUINotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457C87B72032645C008D52D6 /* DebugUINotifications.swift */; };
 		7D2CD5AA214C3C9C004E957A /* Crc32.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517DF211CAE1100F9EF53 /* Crc32.m */; };
 		7D2CD5AB214C3C9C004E957A /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13C9F520E57BA30089A98B /* ColorPickerViewController.swift */; };
 		7D2CD5AC214C3C9C004E957A /* OWSBackupIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8CE205BF2FA007AEB0F /* OWSBackupIO.m */; };
 		7D2CD5AD214C3C9C004E957A /* OWSDeviceProvisioningURLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 458E38361D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m */; };
-		7D2CD5AE214C3C9C004E957A /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451764291DE939FD00EDB8B9 /* ContactCell.swift */; };
 		7D2CD5AF214C3C9C004E957A /* DomainFrontingCountryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC87D204DAC8C007AEB0F /* DomainFrontingCountryViewController.m */; };
 		7D2CD5B0214C3C9C004E957A /* SlugCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705DA02148258100488180 /* SlugCell.swift */; };
 		7D2CD5B1214C3C9C004E957A /* OWSMessageBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3496744C2076768700080B5F /* OWSMessageBubbleView.m */; };
@@ -516,19 +484,14 @@
 		7D2CD5B7214C3C9C004E957A /* DebugUIMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D8C0241ED3673300188D7C /* DebugUIMessages.m */; };
 		7D2CD5B8214C3C9C004E957A /* OWSMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBEFFF206BD5A400025978 /* OWSMessageTextView.m */; };
 		7D2CD5B9214C3C9C004E957A /* ConversationCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0B31F86D31D0066283D /* ConversationCollectionView.m */; };
-		7D2CD5BB214C3C9C004E957A /* PinEntryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45D308AC2049A439000189E4 /* PinEntryView.m */; };
-		7D2CD5BC214C3C9C004E957A /* BlockListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC887204DAC8C007AEB0F /* BlockListViewController.m */; };
 		7D2CD5BD214C3C9C004E957A /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705DA6214827EF00488180 /* DirectoryCell.swift */; };
 		7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */; };
-		7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */; };
 		7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
 		7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539B5851F79348F007141FF /* PushRegistrationManager.swift */; };
-		7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */; };
 		7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8BF204DB7D2007AEB0F /* OWSBackupExportJob.m */; };
 		7D2CD5C9214C3C9C004E957A /* MediaPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F32C1D205718B000A300D5 /* MediaPageViewController.swift */; };
 		7D2CD5CA214C3C9C004E957A /* OWSLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3466087320E5649700AFFE73 /* OWSLayerView.swift */; };
 		7D2CD5CC214C3C9C004E957A /* OWSScreenLockUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCD92062E7D000CB1A14 /* OWSScreenLockUI.m */; };
-		7D2CD5CE214C3C9C004E957A /* OWS2FASettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BC30B2047030600257B7C /* OWS2FASettingsViewController.m */; };
 		7D2CD5CF214C3C9C004E957A /* OWSBackupImportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8C820517B84007AEB0F /* OWSBackupImportJob.m */; };
 		7D2CD5D0214C3C9C004E957A /* OWSConversationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */; };
 		7D2CD5D1214C3C9C004E957A /* GifPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2D1F7ABCE000D7438D /* GifPickerViewController.swift */; };
@@ -539,7 +502,6 @@
 		7D2CD5D8214C3C9C004E957A /* ConversationInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F06A1F8678AA0066283D /* ConversationInputToolbar.m */; };
 		7D2CD5D9214C3C9C004E957A /* QuotedReplyPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457F671A20746193000EABCD /* QuotedReplyPreview.swift */; };
 		7D2CD5DA214C3C9C004E957A /* OWSBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBF001206BD5A500025978 /* OWSBubbleView.m */; };
-		7D2CD5DB214C3C9C004E957A /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E88D252098C5AE00A608F4 /* ContactViewController.swift */; };
 		7D2CD5DC214C3C9C004E957A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 76EB03C318170B33006006FC /* AppDelegate.m */; };
 		7D2CD5DD214C3C9C004E957A /* ConversationInputTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0681F8678AA0066283D /* ConversationInputTextView.m */; };
 		7D2CD5DE214C3C9C004E957A /* OWSQRCodeScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC896204DAC8C007AEB0F /* OWSQRCodeScanningViewController.m */; };
@@ -554,14 +516,12 @@
 		7D2CD5E9214C3C9C004E957A /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11AA4F20FD59C700351FBD /* MessageStatusView.swift */; };
 		7D2CD5EA214C3C9C004E957A /* OWSSoundSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC883204DAC8C007AEB0F /* OWSSoundSettingsViewController.m */; };
 		7D2CD5EB214C3C9C004E957A /* Pastelog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4579431D1E7C8CE9008ED0C0 /* Pastelog.m */; };
-		7D2CD5EC214C3C9C004E957A /* AddToBlockListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC886204DAC8C007AEB0F /* AddToBlockListViewController.m */; };
 		7D2CD5ED214C3C9C004E957A /* AppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88D204DAC8C007AEB0F /* AppSettingsViewController.m */; };
 		7D2CD5EE214C3C9C004E957A /* CropScaleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346B66301F4E29B200E5122F /* CropScaleImageViewController.swift */; };
 		7D2CD5EF214C3C9C004E957A /* MarqueeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E5A6981F61E6DD001E4A8A /* MarqueeLabel.swift */; };
 		7D2CD5F0214C3C9C004E957A /* OWSBackup.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A9105F1FFEB114000C4745 /* OWSBackup.m */; };
 		7D2CD5F1214C3C9C004E957A /* OWSSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0A61F867BFC0066283D /* OWSSystemMessageCell.m */; };
 		7D2CD5F2214C3C9C004E957A /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A663C41F92EC760027B59E /* GroupTableViewCell.swift */; };
-		7D2CD5F3214C3C9C004E957A /* OWSContactShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CA631A2097806E00E526A0 /* OWSContactShareView.m */; };
 		7D2CD5F4214C3C9C004E957A /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F06E1F8678AA0066283D /* ConversationViewController.m */; };
 		7D2CD5F5214C3C9C004E957A /* OWSMessageTimerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3427C64220F500DF00EEC730 /* OWSMessageTimerView.m */; };
 		7D2CD5F6214C3C9C004E957A /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B90418E5183E9DD40038554A /* DateUtil.m */; };
@@ -620,7 +580,6 @@
 		7D2CD62D214C3C9C004E957A /* audio_play_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF3C1A73426500B5C81A /* audio_play_button@2x.png */; };
 		7D2CD62E214C3C9C004E957A /* message_sent.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 34661FB720C1C0D60056EDD6 /* message_sent.aiff */; };
 		7D2CD62F214C3C9C004E957A /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45CB2FA71CB7146C00E1B343 /* Launch Screen.storyboard */; };
-		7D2CD630214C3C9C004E957A /* ContactsPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B3F83F1E8DF1700035BE1A /* ContactsPicker.xib */; };
 		7D2CD631214C3C9C004E957A /* mute_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C5411A1D190B0059AC12 /* mute_off@2x.png */; };
 		7D2CD632214C3C9C004E957A /* audio_play_button_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF3A1A73426500B5C81A /* audio_play_button_blue@2x.png */; };
 		7D2CD633214C3C9C004E957A /* Opening.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 34C3C78C20409F320000134C /* Opening.m4r */; };
@@ -681,20 +640,11 @@
 		7D2CD67D214C46BC004E957A /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
 		7D2CD687214C5A3F004E957A /* RelayDevShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7D6564F42113BD8B00365A19 /* SelectThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564E42113BD8900365A19 /* SelectThreadViewController.m */; };
-		7D6564F52113BD8B00365A19 /* NewNonContactConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564E52113BD8900365A19 /* NewNonContactConversationViewController.m */; };
-		7D6564F72113BD8B00365A19 /* NewNonContactConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6564E72113BD8900365A19 /* NewNonContactConversationViewController.h */; };
-		7D6564F82113BD8B00365A19 /* ViewControllerUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564E82113BD8900365A19 /* ViewControllerUtils.m */; };
-		7D6564FA2113BD8B00365A19 /* ViewControllerUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6564EA2113BD8900365A19 /* ViewControllerUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7D6564FD2113BD8B00365A19 /* SystemContactsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564ED2113BD8A00365A19 /* SystemContactsFetcher.swift */; };
 		7D6565002113BD8B00365A19 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */; };
-		7D6565012113BD8B00365A19 /* CountryCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564F12113BD8A00365A19 /* CountryCodeViewController.m */; };
 		7D6565022113BD8B00365A19 /* SelectThreadViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D6565042113BDF500365A19 /* MessageApprovalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6565032113BDF400365A19 /* MessageApprovalViewController.swift */; };
 		7D65650E2113C53C00365A19 /* AttachmentApprovalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D65650D2113C53C00365A19 /* AttachmentApprovalViewController.swift */; };
 		7D6565102113C5DD00365A19 /* ModalActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D65650F2113C5DD00365A19 /* ModalActivityIndicatorViewController.swift */; };
-		7D6565162113C6AE00365A19 /* ContactFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6565152113C6AD00365A19 /* ContactFieldView.swift */; };
-		7D6565192113CB3E00365A19 /* OWSContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6565172113CB3E00365A19 /* OWSContactsManager.m */; };
-		7D65651A2113CB3E00365A19 /* OWSContactsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6565182113CB3E00365A19 /* OWSContactsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D705D972147533B00488180 /* UIColor+Forsta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D962147533B00488180 /* UIColor+Forsta.swift */; };
 		7D705D9A2148252400488180 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D992148252400488180 /* NewConversationViewController.swift */; };
 		7D705D9B2148252400488180 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D992148252400488180 /* NewConversationViewController.swift */; };
@@ -723,6 +673,7 @@
 		7D8517E5211CB08500F9EF53 /* Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E3211CB08400F9EF53 /* Conversions.m */; };
 		7D8517EC211CB19C00F9EF53 /* EvpMessageDigest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E7211CB19B00F9EF53 /* EvpMessageDigest.m */; };
 		7D8517ED211CB19C00F9EF53 /* EvpSymetricUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E8211CB19B00F9EF53 /* EvpSymetricUtil.m */; };
+		7D86A3EF223A1354004436A0 /* OWSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D99C8B1F27B13B00D284D6 /* OWSViewController.m */; };
 		7D92E4CE220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
 		7D92E4CF220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
 		7D92E4D0220E0A1600542694 /* PeerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CC220E0A1500542694 /* PeerViewCell.swift */; };
@@ -955,8 +906,6 @@
 		3325DBBA33AF4A7FCE5EEF2C /* Pods-Common-RelayShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayShareExtension/Pods-Common-RelayShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		3400C7971EAFB772008A8584 /* ThreadViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadViewHelper.h; sourceTree = "<group>"; };
 		3400C7981EAFB772008A8584 /* ThreadViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadViewHelper.m; sourceTree = "<group>"; };
-		3403B95B20EA9526001A1F44 /* OWSContactShareButtonsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSContactShareButtonsView.m; sourceTree = "<group>"; };
-		3403B95C20EA9527001A1F44 /* OWSContactShareButtonsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSContactShareButtonsView.h; sourceTree = "<group>"; };
 		34074F5F203D0CBD004596AE /* OWSSounds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSSounds.m; sourceTree = "<group>"; };
 		34074F60203D0CBE004596AE /* OWSSounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSSounds.h; sourceTree = "<group>"; };
 		340B02B91FA0D6C700F9CFEC /* ConversationViewItemTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewItemTest.m; sourceTree = "<group>"; };
@@ -973,8 +922,6 @@
 		340FC883204DAC8C007AEB0F /* OWSSoundSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSSoundSettingsViewController.m; sourceTree = "<group>"; };
 		340FC884204DAC8C007AEB0F /* AboutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutTableViewController.h; sourceTree = "<group>"; };
 		340FC885204DAC8C007AEB0F /* OWSLinkDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSLinkDeviceViewController.m; sourceTree = "<group>"; };
-		340FC886204DAC8C007AEB0F /* AddToBlockListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToBlockListViewController.m; sourceTree = "<group>"; };
-		340FC887204DAC8C007AEB0F /* BlockListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockListViewController.m; sourceTree = "<group>"; };
 		340FC888204DAC8C007AEB0F /* OWSQRCodeScanningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSQRCodeScanningViewController.h; sourceTree = "<group>"; };
 		340FC889204DAC8C007AEB0F /* DomainFrontingCountryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DomainFrontingCountryViewController.h; sourceTree = "<group>"; };
 		340FC88A204DAC8C007AEB0F /* NotificationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSettingsViewController.h; sourceTree = "<group>"; };
@@ -983,14 +930,11 @@
 		340FC88D204DAC8C007AEB0F /* AppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppSettingsViewController.m; sourceTree = "<group>"; };
 		340FC88E204DAC8C007AEB0F /* OWSBackupSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSBackupSettingsViewController.m; sourceTree = "<group>"; };
 		340FC88F204DAC8C007AEB0F /* PrivacySettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivacySettingsTableViewController.h; sourceTree = "<group>"; };
-		340FC890204DAC8C007AEB0F /* BlockListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockListViewController.h; sourceTree = "<group>"; };
 		340FC891204DAC8C007AEB0F /* OWSLinkDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSLinkDeviceViewController.h; sourceTree = "<group>"; };
-		340FC892204DAC8C007AEB0F /* AddToBlockListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToBlockListViewController.h; sourceTree = "<group>"; };
 		340FC893204DAC8C007AEB0F /* AboutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutTableViewController.m; sourceTree = "<group>"; };
 		340FC894204DAC8C007AEB0F /* OWSSoundSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSSoundSettingsViewController.h; sourceTree = "<group>"; };
 		340FC895204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSLinkedDevicesTableViewController.h; sourceTree = "<group>"; };
 		340FC896204DAC8C007AEB0F /* OWSQRCodeScanningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSQRCodeScanningViewController.m; sourceTree = "<group>"; };
-		340FC898204DAC8D007AEB0F /* OWSAddToContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSAddToContactViewController.h; sourceTree = "<group>"; };
 		340FC899204DAC8D007AEB0F /* OWSConversationSettingsViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSConversationSettingsViewDelegate.h; sourceTree = "<group>"; };
 		340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSConversationSettingsViewController.m; sourceTree = "<group>"; };
 		340FC89B204DAC8D007AEB0F /* AddToGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToGroupViewController.m; sourceTree = "<group>"; };
@@ -999,7 +943,6 @@
 		340FC89E204DAC8D007AEB0F /* ShowGroupMembersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowGroupMembersViewController.h; sourceTree = "<group>"; };
 		340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FingerprintViewScanController.m; sourceTree = "<group>"; };
 		340FC8A0204DAC8D007AEB0F /* OWSConversationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSConversationSettingsViewController.h; sourceTree = "<group>"; };
-		340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSAddToContactViewController.m; sourceTree = "<group>"; };
 		340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FingerprintViewController.m; sourceTree = "<group>"; };
 		340FC8A3204DAC8D007AEB0F /* UpdateGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateGroupViewController.h; sourceTree = "<group>"; };
 		340FC8A4204DAC8D007AEB0F /* AddToGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToGroupViewController.h; sourceTree = "<group>"; };
@@ -1042,8 +985,6 @@
 		34330A5D1E787BD800DF2FB9 /* ElegantIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ElegantIcons.ttf; sourceTree = "<group>"; };
 		34330AA11E79686200DF2FB9 /* OWSProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSProgressView.h; sourceTree = "<group>"; };
 		34330AA21E79686200DF2FB9 /* OWSProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSProgressView.m; sourceTree = "<group>"; };
-		34382265209A4E3F0094FEB7 /* ContactShareApprovalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactShareApprovalViewController.swift; path = RelayMessaging/attachments/ContactShareApprovalViewController.swift; sourceTree = SOURCE_ROOT; };
-		34382269209B63500094FEB7 /* EditContactShareNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditContactShareNameViewController.swift; path = RelayMessaging/attachments/EditContactShareNameViewController.swift; sourceTree = SOURCE_ROOT; };
 		34386A4D207D0C01009F5D9C /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		34386A4E207D0C01009F5D9C /* HomeViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewCell.h; sourceTree = "<group>"; };
 		34386A4F207D0C01009F5D9C /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -1053,8 +994,6 @@
 		343A65941FC47D5E000477A1 /* DebugUISyncMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugUISyncMessages.m; sourceTree = "<group>"; };
 		343A65961FC4CFE6000477A1 /* ConversationScrollButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationScrollButton.m; sourceTree = "<group>"; };
 		343A65971FC4CFE7000477A1 /* ConversationScrollButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationScrollButton.h; sourceTree = "<group>"; };
-		343D3D991E9283F100165CA4 /* BlockListUIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockListUIUtils.h; sourceTree = "<group>"; };
-		343D3D9A1E9283F100165CA4 /* BlockListUIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockListUIUtils.m; sourceTree = "<group>"; };
 		34480B341FD0929200BC14EF /* ShareAppExtensionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareAppExtensionContext.h; sourceTree = "<group>"; };
 		34480B351FD0929200BC14EF /* ShareAppExtensionContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareAppExtensionContext.m; sourceTree = "<group>"; };
 		34480B371FD092A900BC14EF /* RelayShareExtension-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RelayShareExtension-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1071,17 +1010,9 @@
 		34480B661FD0AA9400BC14EF /* UIFont+OWS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+OWS.h"; sourceTree = "<group>"; };
 		344D6CE620069E060042AF96 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectRecipientViewController.h; path = RelayMessaging/contacts/SelectRecipientViewController.h; sourceTree = SOURCE_ROOT; };
 		344D6CE720069E060042AF96 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectRecipientViewController.m; path = RelayMessaging/contacts/SelectRecipientViewController.m; sourceTree = SOURCE_ROOT; };
-		344D6CE820069E070042AF96 /* NewNonContactConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewNonContactConversationViewController.m; path = RelayMessaging/contacts/NewNonContactConversationViewController.m; sourceTree = SOURCE_ROOT; };
-		344D6CE920069E070042AF96 /* NewNonContactConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewNonContactConversationViewController.h; path = RelayMessaging/contacts/NewNonContactConversationViewController.h; sourceTree = SOURCE_ROOT; };
-		344F248220069E9B00CFB4F4 /* CountryCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountryCodeViewController.h; path = RelayMessaging/contacts/CountryCodeViewController.h; sourceTree = SOURCE_ROOT; };
-		344F248320069E9B00CFB4F4 /* CountryCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountryCodeViewController.m; path = RelayMessaging/contacts/CountryCodeViewController.m; sourceTree = SOURCE_ROOT; };
-		344F248820069F0600CFB4F4 /* ViewControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewControllerUtils.h; path = RelayMessaging/contacts/ViewControllerUtils.h; sourceTree = SOURCE_ROOT; };
-		344F248920069F0600CFB4F4 /* ViewControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewControllerUtils.m; path = RelayMessaging/contacts/ViewControllerUtils.m; sourceTree = SOURCE_ROOT; };
 		344F248C2007CCD600CFB4F4 /* DisplayableText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayableText.swift; sourceTree = "<group>"; };
 		344F2495200FD03200CFB4F4 /* SharingThreadPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingThreadPickerViewController.h; path = RelayMessaging/attachments/SharingThreadPickerViewController.h; sourceTree = SOURCE_ROOT; };
 		344F2497200FD03200CFB4F4 /* SharingThreadPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SharingThreadPickerViewController.m; path = RelayMessaging/attachments/SharingThreadPickerViewController.m; sourceTree = SOURCE_ROOT; };
-		345BC30A2047030600257B7C /* OWS2FASettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWS2FASettingsViewController.h; sourceTree = "<group>"; };
-		345BC30B2047030600257B7C /* OWS2FASettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWS2FASettingsViewController.m; sourceTree = "<group>"; };
 		3461284A1FD0B93F00532771 /* SAELoadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAELoadViewController.swift; sourceTree = "<group>"; };
 		346129371FD1B47200532771 /* OWSPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSPreferences.h; sourceTree = "<group>"; };
 		346129381FD1B47200532771 /* OWSPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSPreferences.m; sourceTree = "<group>"; };
@@ -1150,14 +1081,11 @@
 		348570A720F67574004FF32B /* OWSMessageHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSMessageHeaderView.h; sourceTree = "<group>"; };
 		348BB258209CF8E40047AEC2 /* TappableStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TappableStackView.swift; path = RelayMessaging/Views/TappableStackView.swift; sourceTree = SOURCE_ROOT; };
 		348BB259209CF8E50047AEC2 /* TappableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TappableView.swift; path = RelayMessaging/Views/TappableView.swift; sourceTree = SOURCE_ROOT; };
-		348BB25C20A0C5530047AEC2 /* ContactShareViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactShareViewHelper.swift; sourceTree = "<group>"; };
 		348F2EAD1F0D21BC00D4ECE0 /* DeviceSleepManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceSleepManager.swift; sourceTree = "<group>"; };
 		3491D9A021022DB7001EF5A1 /* CDSSigningCertificateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDSSigningCertificateTest.m; sourceTree = "<group>"; };
 		3496744B2076768600080B5F /* OWSMessageBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSMessageBubbleView.h; sourceTree = "<group>"; };
 		3496744C2076768700080B5F /* OWSMessageBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSMessageBubbleView.m; sourceTree = "<group>"; };
 		3496744E2076ACCE00080B5F /* LongTextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongTextViewController.swift; sourceTree = "<group>"; };
-		34A55F3520485464002CC6DE /* OWS2FARegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWS2FARegistrationViewController.m; sourceTree = "<group>"; };
-		34A55F3620485464002CC6DE /* OWS2FARegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWS2FARegistrationViewController.h; sourceTree = "<group>"; };
 		34A9105E1FFEB113000C4745 /* OWSBackup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSBackup.h; sourceTree = "<group>"; };
 		34A9105F1FFEB114000C4745 /* OWSBackup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSBackup.m; sourceTree = "<group>"; };
 		34ABB2C22090C59600C727A6 /* OWSResaveCollectionDBMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSResaveCollectionDBMigration.m; sourceTree = "<group>"; };
@@ -1166,9 +1094,6 @@
 		34B0796C1FCF46B000E248C2 /* MainAppContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainAppContext.h; sourceTree = "<group>"; };
 		34B3F8391E8DF1700035BE1A /* AttachmentSharing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentSharing.h; sourceTree = "<group>"; };
 		34B3F83A1E8DF1700035BE1A /* AttachmentSharing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentSharing.m; sourceTree = "<group>"; };
-		34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsPicker.swift; sourceTree = "<group>"; };
-		34B3F83F1E8DF1700035BE1A /* ContactsPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactsPicker.xib; sourceTree = "<group>"; };
-		34B3F84C1E8DF1700035BE1A /* InviteFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InviteFlow.swift; sourceTree = "<group>"; };
 		34B3F86D1E8DF1700035BE1A /* SignalsNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalsNavigationController.h; sourceTree = "<group>"; };
 		34B3F86E1E8DF1700035BE1A /* SignalsNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalsNavigationController.m; sourceTree = "<group>"; };
 		34B3F89D1E8DF5490035BE1A /* OWSTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSTableViewController.h; sourceTree = "<group>"; };
@@ -1197,8 +1122,6 @@
 		34C82E5020F8E1F100E9688D /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Theme.m; sourceTree = "<group>"; };
 		34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageDetailViewController.swift; sourceTree = "<group>"; };
 		34CA1C281F7164F700E51C51 /* MediaMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaMessageView.swift; sourceTree = "<group>"; };
-		34CA63192097806E00E526A0 /* OWSContactShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSContactShareView.h; sourceTree = "<group>"; };
-		34CA631A2097806E00E526A0 /* OWSContactShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSContactShareView.m; sourceTree = "<group>"; };
 		34CE88E51F2FB9A10098030F /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		34CE88E61F2FB9A10098030F /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		34CF0783203E6B77005C4D61 /* busy_tone_ansi.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = busy_tone_ansi.caf; path = Relay/AudioFiles/busy_tone_ansi.caf; sourceTree = SOURCE_ROOT; };
@@ -1218,8 +1141,6 @@
 		34D1F0721F8678AA0066283D /* ConversationViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewLayout.m; sourceTree = "<group>"; };
 		34D1F0961F867BFC0066283D /* ConversationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewCell.h; sourceTree = "<group>"; };
 		34D1F0971F867BFC0066283D /* ConversationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewCell.m; sourceTree = "<group>"; };
-		34D1F09A1F867BFC0066283D /* OWSContactOffersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSContactOffersCell.h; sourceTree = "<group>"; };
-		34D1F09B1F867BFC0066283D /* OWSContactOffersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSContactOffersCell.m; sourceTree = "<group>"; };
 		34D1F0A11F867BFC0066283D /* OWSMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSMessageCell.h; sourceTree = "<group>"; };
 		34D1F0A21F867BFC0066283D /* OWSMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSMessageCell.m; sourceTree = "<group>"; };
 		34D1F0A51F867BFC0066283D /* OWSSystemMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSSystemMessageCell.h; sourceTree = "<group>"; };
@@ -1273,7 +1194,6 @@
 		34E3EF0F1EFC2684007F6822 /* DebugUIPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugUIPage.m; sourceTree = "<group>"; };
 		34E5DC8020D8050D00C08145 /* RegistrationUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationUtils.h; sourceTree = "<group>"; };
 		34E5DC8120D8050D00C08145 /* RegistrationUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationUtils.m; sourceTree = "<group>"; };
-		34E88D252098C5AE00A608F4 /* ContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		34E8A8D02085238900B272B1 /* ProtoParsingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProtoParsingTest.m; sourceTree = "<group>"; };
 		34F308A01ECB469700BB7697 /* OWSBezierPathView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSBezierPathView.h; sourceTree = "<group>"; };
 		34F308A11ECB469700BB7697 /* OWSBezierPathView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSBezierPathView.m; sourceTree = "<group>"; };
@@ -1295,7 +1215,6 @@
 		451166BF1FD86B98000739BA /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		451573952061B49500803601 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GradientView.swift; path = RelayMessaging/Views/GradientView.swift; sourceTree = SOURCE_ROOT; };
 		451686AA1F520CDA00AC3D4B /* MultiDeviceProfileKeyUpdateJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiDeviceProfileKeyUpdateJob.swift; sourceTree = "<group>"; };
-		451764291DE939FD00EDB8B9 /* ContactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		451777C71FD61554001225FF /* ConversationSearcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationSearcher.swift; sourceTree = "<group>"; };
 		451A13B01E13DED2000A50FD /* CallNotificationsAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CallNotificationsAdapter.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		451DE9F11DC1585F00810E42 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
@@ -1305,7 +1224,6 @@
 		4521C3BF1F59F3BA00B4C582 /* TextFieldHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldHelper.swift; sourceTree = "<group>"; };
 		4523149F1F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionalPanGestureRecognizer.swift; sourceTree = "<group>"; };
 		4523D015206EDC2B00A2AB51 /* LRUCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LRUCache.swift; sourceTree = "<group>"; };
-		452B998F20A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactShareToExistingContactViewController.swift; sourceTree = "<group>"; };
 		452D1AF02081059C00A67F7F /* StringAdditionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringAdditionsTest.swift; sourceTree = "<group>"; };
 		452D1AF220810B6F00A67F7F /* String+OWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+OWS.swift"; sourceTree = "<group>"; };
 		452EA09D1EA7ABE00078744B /* AttachmentPointerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentPointerView.swift; sourceTree = "<group>"; };
@@ -1323,7 +1241,6 @@
 		45360B8C1F9521F800FA666C /* Searcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searcher.swift; sourceTree = "<group>"; };
 		45360B8F1F9527DA00FA666C /* SearcherTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearcherTest.swift; sourceTree = "<group>"; };
 		4539B5851F79348F007141FF /* PushRegistrationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushRegistrationManager.swift; sourceTree = "<group>"; };
-		4541B71A209D2DAE0008608F /* ContactShareViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactShareViewModel.swift; sourceTree = "<group>"; };
 		4542DF51208B82E9007B4E76 /* ThreadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadViewModel.swift; sourceTree = "<group>"; };
 		4542DF53208D40AC007B4E76 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		454A84032059C787008B8C75 /* MediaTileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaTileViewController.swift; sourceTree = "<group>"; };
@@ -1402,9 +1319,6 @@
 		45CB2FA71CB7146C00E1B343 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Relay/src/util/Launch Screen.storyboard"; sourceTree = SOURCE_ROOT; };
 		45CD81EE1DC030E7004C9430 /* SyncPushTokensJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPushTokensJob.swift; sourceTree = "<group>"; };
 		45D231761DC7E8F10034FA89 /* SessionResetJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionResetJob.swift; sourceTree = "<group>"; };
-		45D2AC01204885170033C692 /* OWS2FAReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OWS2FAReminderViewController.swift; sourceTree = "<group>"; };
-		45D308AB2049A439000189E4 /* PinEntryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PinEntryView.h; sourceTree = "<group>"; };
-		45D308AC2049A439000189E4 /* PinEntryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PinEntryView.m; sourceTree = "<group>"; };
 		45DDA6232090CEB500DE97F8 /* ConversationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderView.swift; sourceTree = "<group>"; };
 		45DF5DF11DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompareSafetyNumbersActivity.swift; sourceTree = "<group>"; };
 		45E2E91E1E13EE3500457AA0 /* OWSCallNotificationsAdaptee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OWSCallNotificationsAdaptee.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1452,22 +1366,14 @@
 		7D6564C12113B1C200365A19 /* Relay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Relay.entitlements; sourceTree = "<group>"; };
 		7D6564C22113B74900365A19 /* RelayShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelayShareExtension.entitlements; sourceTree = "<group>"; };
 		7D6564E42113BD8900365A19 /* SelectThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectThreadViewController.m; sourceTree = "<group>"; };
-		7D6564E52113BD8900365A19 /* NewNonContactConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewNonContactConversationViewController.m; sourceTree = "<group>"; };
-		7D6564E72113BD8900365A19 /* NewNonContactConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewNonContactConversationViewController.h; sourceTree = "<group>"; };
 		7D6564E82113BD8900365A19 /* ViewControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewControllerUtils.m; sourceTree = "<group>"; };
 		7D6564EA2113BD8900365A19 /* ViewControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewControllerUtils.h; sourceTree = "<group>"; };
-		7D6564EB2113BD8A00365A19 /* CountryCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryCodeViewController.h; sourceTree = "<group>"; };
-		7D6564ED2113BD8A00365A19 /* SystemContactsFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemContactsFetcher.swift; sourceTree = "<group>"; };
 		7D6564EE2113BD8A00365A19 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRecipientViewController.h; sourceTree = "<group>"; };
 		7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRecipientViewController.m; sourceTree = "<group>"; };
-		7D6564F12113BD8A00365A19 /* CountryCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryCodeViewController.m; sourceTree = "<group>"; };
 		7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectThreadViewController.h; sourceTree = "<group>"; };
 		7D6565032113BDF400365A19 /* MessageApprovalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageApprovalViewController.swift; sourceTree = "<group>"; };
 		7D65650D2113C53C00365A19 /* AttachmentApprovalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentApprovalViewController.swift; sourceTree = "<group>"; };
 		7D65650F2113C5DD00365A19 /* ModalActivityIndicatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalActivityIndicatorViewController.swift; sourceTree = "<group>"; };
-		7D6565152113C6AD00365A19 /* ContactFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactFieldView.swift; sourceTree = "<group>"; };
-		7D6565172113CB3E00365A19 /* OWSContactsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSContactsManager.m; sourceTree = "<group>"; };
-		7D6565182113CB3E00365A19 /* OWSContactsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSContactsManager.h; sourceTree = "<group>"; };
 		7D705D962147533B00488180 /* UIColor+Forsta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Forsta.swift"; sourceTree = "<group>"; };
 		7D705D992148252400488180 /* NewConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		7D705DA02148258100488180 /* SlugCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlugCell.swift; sourceTree = "<group>"; };
@@ -1812,14 +1718,10 @@
 			children = (
 				340FC884204DAC8C007AEB0F /* AboutTableViewController.h */,
 				340FC893204DAC8C007AEB0F /* AboutTableViewController.m */,
-				340FC892204DAC8C007AEB0F /* AddToBlockListViewController.h */,
-				340FC886204DAC8C007AEB0F /* AddToBlockListViewController.m */,
 				340FC881204DAC8C007AEB0F /* AdvancedSettingsTableViewController.h */,
 				340FC88C204DAC8C007AEB0F /* AdvancedSettingsTableViewController.m */,
 				340FC880204DAC8C007AEB0F /* AppSettingsViewController.h */,
 				340FC88D204DAC8C007AEB0F /* AppSettingsViewController.m */,
-				340FC890204DAC8C007AEB0F /* BlockListViewController.h */,
-				340FC887204DAC8C007AEB0F /* BlockListViewController.m */,
 				340FC889204DAC8C007AEB0F /* DomainFrontingCountryViewController.h */,
 				340FC87D204DAC8C007AEB0F /* DomainFrontingCountryViewController.m */,
 				340FC88B204DAC8C007AEB0F /* NotificationSettingsOptionsViewController.h */,
@@ -1851,8 +1753,6 @@
 				340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */,
 				340FC8A5204DAC8D007AEB0F /* FingerprintViewScanController.h */,
 				340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */,
-				340FC898204DAC8D007AEB0F /* OWSAddToContactViewController.h */,
-				340FC8A1204DAC8D007AEB0F /* OWSAddToContactViewController.m */,
 				340FC8A0204DAC8D007AEB0F /* OWSConversationSettingsViewController.h */,
 				340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */,
 				340FC899204DAC8D007AEB0F /* OWSConversationSettingsViewDelegate.h */,
@@ -1943,8 +1843,6 @@
 			isa = PBXGroup;
 			children = (
 				452EC6E0205FF5DC000E787C /* Bench.swift */,
-				343D3D991E9283F100165CA4 /* BlockListUIUtils.h */,
-				343D3D9A1E9283F100165CA4 /* BlockListUIUtils.m */,
 				451777C71FD61554001225FF /* ConversationSearcher.swift */,
 				3466087120E550F300AFFE73 /* ConversationStyle.swift */,
 				34480B4D1FD0A7A300BC14EF /* DebugLogger.h */,
@@ -2087,18 +1985,11 @@
 		346129A11FD1F09100532771 /* contacts */ = {
 			isa = PBXGroup;
 			children = (
-				7D6564EB2113BD8A00365A19 /* CountryCodeViewController.h */,
-				7D6564F12113BD8A00365A19 /* CountryCodeViewController.m */,
 				7D65650F2113C5DD00365A19 /* ModalActivityIndicatorViewController.swift */,
-				7D6564E72113BD8900365A19 /* NewNonContactConversationViewController.h */,
-				7D6564E52113BD8900365A19 /* NewNonContactConversationViewController.m */,
-				7D6565182113CB3E00365A19 /* OWSContactsManager.h */,
-				7D6565172113CB3E00365A19 /* OWSContactsManager.m */,
 				7D6564EE2113BD8A00365A19 /* SelectRecipientViewController.h */,
 				7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */,
 				7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */,
 				7D6564E42113BD8900365A19 /* SelectThreadViewController.m */,
-				7D6564ED2113BD8A00365A19 /* SystemContactsFetcher.swift */,
 				7D6564EA2113BD8900365A19 /* ViewControllerUtils.h */,
 				7D6564E82113BD8900365A19 /* ViewControllerUtils.m */,
 				7DF2E98E212360B400855424 /* FLContactsManager.swift */,
@@ -2144,22 +2035,16 @@
 		346129DB1FD5C02900532771 /* viewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				34382265209A4E3F0094FEB7 /* ContactShareApprovalViewController.swift */,
-				344F248220069E9B00CFB4F4 /* CountryCodeViewController.h */,
-				344F248320069E9B00CFB4F4 /* CountryCodeViewController.m */,
-				34382269209B63500094FEB7 /* EditContactShareNameViewController.swift */,
+				34D99C8A1F27B13B00D284D6 /* OWSViewController.h */,
+				34D99C8B1F27B13B00D284D6 /* OWSViewController.m */,
 				346129DC1FD5C02900532771 /* LockInteractionController.h */,
 				346129DD1FD5C02900532771 /* LockInteractionController.m */,
-				344D6CE920069E070042AF96 /* NewNonContactConversationViewController.h */,
-				344D6CE820069E070042AF96 /* NewNonContactConversationViewController.m */,
 				34641E1A2088DA4000E2EDE5 /* ScreenLockViewController.h */,
 				34641E192088DA3F00E2EDE5 /* ScreenLockViewController.m */,
 				344D6CE620069E060042AF96 /* SelectRecipientViewController.h */,
 				344D6CE720069E060042AF96 /* SelectRecipientViewController.m */,
 				344F2495200FD03200CFB4F4 /* SharingThreadPickerViewController.h */,
 				344F2497200FD03200CFB4F4 /* SharingThreadPickerViewController.m */,
-				344F248820069F0600CFB4F4 /* ViewControllerUtils.h */,
-				344F248920069F0600CFB4F4 /* ViewControllerUtils.m */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -2173,16 +2058,11 @@
 				34D5CCA71EAE3D30005515DB /* AvatarViewHelper.h */,
 				34D5CCA81EAE3D30005515DB /* AvatarViewHelper.m */,
 				7D92E4CA220E09F200542694 /* Calls */,
-				348BB25C20A0C5530047AEC2 /* ContactShareViewHelper.swift */,
-				34B3F83E1E8DF1700035BE1A /* ContactsPicker.swift */,
-				34B3F83F1E8DF1700035BE1A /* ContactsPicker.xib */,
-				34E88D252098C5AE00A608F4 /* ContactViewController.swift */,
 				3448BFC01EDF0EA7005B2D69 /* ConversationView */,
 				346B66301F4E29B200E5122F /* CropScaleImageViewController.swift */,
 				34D8C0221ED3673300188D7C /* DebugUI */,
 				34BECE2C1F7ABCE000D7438D /* GifPicker */,
 				34386A4C207D0C01009F5D9C /* HomeView */,
-				34B3F84C1E8DF1700035BE1A /* InviteFlow.swift */,
 				4542DF53208D40AC007B4E76 /* LoadingViewController.swift */,
 				3496744E2076ACCE00080B5F /* LongTextViewController.swift */,
 				45B9EE9A200E91FB005D2F2D /* MediaDetailViewController.h */,
@@ -2192,11 +2072,6 @@
 				454A84032059C787008B8C75 /* MediaTileViewController.swift */,
 				4CFF4C0920F55BBA005DA313 /* MenuActionsViewController.swift */,
 				34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */,
-				34A55F3620485464002CC6DE /* OWS2FARegistrationViewController.h */,
-				34A55F3520485464002CC6DE /* OWS2FARegistrationViewController.m */,
-				45D2AC01204885170033C692 /* OWS2FAReminderViewController.swift */,
-				345BC30A2047030600257B7C /* OWS2FASettingsViewController.h */,
-				345BC30B2047030600257B7C /* OWS2FASettingsViewController.m */,
 				34CE88E51F2FB9A10098030F /* ProfileViewController.h */,
 				34CE88E61F2FB9A10098030F /* ProfileViewController.m */,
 				340FC875204DAC8C007AEB0F /* Registration */,
@@ -2205,7 +2080,6 @@
 				34B3F86E1E8DF1700035BE1A /* SignalsNavigationController.m */,
 				340FC897204DAC8D007AEB0F /* ThreadSettings */,
 				34D1F0BE1F8EC1760066283D /* Utils */,
-				452B998F20A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift */,
 				4C13C9F520E57BA30089A98B /* ColorPickerViewController.swift */,
 			);
 			path = ViewControllers;
@@ -2262,12 +2136,6 @@
 				34DBF006206C3CB200025978 /* OWSBubbleShapeView.m */,
 				34DBF002206BD5A500025978 /* OWSBubbleView.h */,
 				34DBF001206BD5A500025978 /* OWSBubbleView.m */,
-				34D1F09A1F867BFC0066283D /* OWSContactOffersCell.h */,
-				34D1F09B1F867BFC0066283D /* OWSContactOffersCell.m */,
-				3403B95C20EA9527001A1F44 /* OWSContactShareButtonsView.h */,
-				3403B95B20EA9526001A1F44 /* OWSContactShareButtonsView.m */,
-				34CA63192097806E00E526A0 /* OWSContactShareView.h */,
-				34CA631A2097806E00E526A0 /* OWSContactShareView.m */,
 				34D1F0B51F87F8850066283D /* OWSGenericAttachmentView.h */,
 				34D1F0B61F87F8850066283D /* OWSGenericAttachmentView.m */,
 				3496744B2076768600080B5F /* OWSMessageBubbleView.h */,
@@ -2374,8 +2242,6 @@
 				34C42D5A1F45F7A80072EC04 /* OWSNavigationController.m */,
 				34B3F89D1E8DF5490035BE1A /* OWSTableViewController.h */,
 				34B3F89E1E8DF5490035BE1A /* OWSTableViewController.m */,
-				34D99C8A1F27B13B00D284D6 /* OWSViewController.h */,
-				34D99C8B1F27B13B00D284D6 /* OWSViewController.m */,
 				45A60E7220AC674100FB1ABF /* ReturnToCallViewController.swift */,
 			);
 			path = ViewControllers;
@@ -2426,7 +2292,6 @@
 		4541B71C209D3B4F0008608F /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				4541B71A209D2DAE0008608F /* ContactShareViewModel.swift */,
 				459B7759207BA3A80071D0AB /* OWSQuotedReplyModel.h */,
 				459B775A207BA3A80071D0AB /* OWSQuotedReplyModel.m */,
 				4542DF51208B82E9007B4E76 /* ThreadViewModel.swift */,
@@ -2440,7 +2305,6 @@
 				7D65650D2113C53C00365A19 /* AttachmentApprovalViewController.swift */,
 				34B3F8391E8DF1700035BE1A /* AttachmentSharing.h */,
 				34B3F83A1E8DF1700035BE1A /* AttachmentSharing.m */,
-				7D6565152113C6AD00365A19 /* ContactFieldView.swift */,
 				34D913491F62D4A500722898 /* SignalAttachment.swift */,
 				34CA1C281F7164F700E51C51 /* MediaMessageView.swift */,
 				7D6565032113BDF400365A19 /* MessageApprovalViewController.swift */,
@@ -2607,7 +2471,6 @@
 			children = (
 				452EA09D1EA7ABE00078744B /* AttachmentPointerView.swift */,
 				34E3E5671EC4B19400495BAC /* AudioProgressView.swift */,
-				451764291DE939FD00EDB8B9 /* ContactCell.swift */,
 				4523149F1F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift */,
 				45A663C41F92EC760027B59E /* GroupTableViewCell.swift */,
 				45E5A6981F61E6DD001E4A8A /* MarqueeLabel.swift */,
@@ -2619,8 +2482,6 @@
 				3466087320E5649700AFFE73 /* OWSLayerView.swift */,
 				34330AA11E79686200DF2FB9 /* OWSProgressView.h */,
 				34330AA21E79686200DF2FB9 /* OWSProgressView.m */,
-				45D308AB2049A439000189E4 /* PinEntryView.h */,
-				45D308AC2049A439000189E4 /* PinEntryView.m */,
 				457F671A20746193000EABCD /* QuotedReplyPreview.swift */,
 				45A6DAD51EBBF85500893231 /* ReminderView.swift */,
 				450D19111F85236600970622 /* RemoteVideoView.h */,
@@ -2988,7 +2849,6 @@
 				450C800D20AD193100F3A091 /* OWSNavigationController.h in Headers */,
 				346129A91FD1F0E000532771 /* OWSFormat.h in Headers */,
 				34480B551FD0A7A400BC14EF /* DebugLogger.h in Headers */,
-				344F248420069E9C00CFB4F4 /* CountryCodeViewController.h in Headers */,
 				4503F1C4204711D300CEE724 /* OWS107LegacySounds.h in Headers */,
 				3421981121061A0700C57195 /* JSQMessagesAvatarImageFactory.h in Headers */,
 				34C82E5120F8E1F300E9688D /* Theme.h in Headers */,
@@ -3001,13 +2861,11 @@
 				3421981421061A0700C57195 /* JSQMessagesAvatarImage.h in Headers */,
 				3461296F1FD1D74C00532771 /* Release.h in Headers */,
 				34480B571FD0A7A400BC14EF /* OWSScrubbingLogFormatter.h in Headers */,
-				7D65651A2113CB3E00365A19 /* OWSContactsManager.h in Headers */,
 				346129FC1FD5F31400532771 /* OWS101ExistingUsersBlockOnIdentityChange.h in Headers */,
 				451F8A491FD715CF005CB9DA /* OWSAvatarBuilder.h in Headers */,
 				346129951FD1E30000532771 /* OWSDatabaseMigration.h in Headers */,
 				34B6D27420F664C900765BE2 /* OWSUnreadIndicator.h in Headers */,
 				3421981821061A0700C57195 /* JSQMessageAvatarImageDataSource.h in Headers */,
-				7D6564F72113BD8B00365A19 /* NewNonContactConversationViewController.h in Headers */,
 				346129B41FD1F7E800532771 /* OWSProfileManager.h in Headers */,
 				3421981521061A0700C57195 /* UIColor+JSQMessages.h in Headers */,
 				34D2015120DC160E00A6FD3A /* ContactCellView.h in Headers */,
@@ -3015,7 +2873,6 @@
 				346129E21FD5C0BE00532771 /* VersionMigrations.h in Headers */,
 				3461295A1FD1D74C00532771 /* Environment.h in Headers */,
 				450C801020AD1AE400F3A091 /* OWSWindowManager.h in Headers */,
-				7D6564FA2113BD8B00365A19 /* ViewControllerUtils.h in Headers */,
 				34D58730208E2C4200D2255A /* OWS109OutgoingMessageState.h in Headers */,
 				4598198E204E2F28009414F2 /* OWS108CallLoggingPreference.h in Headers */,
 				34480B631FD0A98800BC14EF /* UIView+OWS.h in Headers */,
@@ -3025,7 +2882,6 @@
 				451F8A3E1FD713D2005CB9DA /* ThreadViewHelper.h in Headers */,
 				346129391FD1B47300532771 /* OWSPreferences.h in Headers */,
 				346129DE1FD5C02A00532771 /* LockInteractionController.h in Headers */,
-				451F8A451FD71570005CB9DA /* BlockListUIUtils.h in Headers */,
 				34C3C7922040B0DD0000134C /* OWSAudioPlayer.h in Headers */,
 				451F8A4A1FD715D9005CB9DA /* OWSContactAvatarBuilder.h in Headers */,
 				34480B5B1FD0A7E300BC14EF /* RelayMessaging-Prefix.pch in Headers */,
@@ -3413,7 +3269,6 @@
 				7D2CD62D214C3C9C004E957A /* audio_play_button@2x.png in Resources */,
 				7D2CD62E214C3C9C004E957A /* message_sent.aiff in Resources */,
 				7D2CD62F214C3C9C004E957A /* Launch Screen.storyboard in Resources */,
-				7D2CD630214C3C9C004E957A /* ContactsPicker.xib in Resources */,
 				7D2CD631214C3C9C004E957A /* mute_off@2x.png in Resources */,
 				7D2CD632214C3C9C004E957A /* audio_play_button_blue@2x.png in Resources */,
 				7D2CD633214C3C9C004E957A /* Opening.m4r in Resources */,
@@ -3502,7 +3357,6 @@
 				AD83FF431A73426500B5C81A /* audio_play_button@2x.png in Resources */,
 				34661FB820C1C0D60056EDD6 /* message_sent.aiff in Resources */,
 				45CB2FA81CB7146C00E1B343 /* Launch Screen.storyboard in Resources */,
-				34B3F8781E8DF1700035BE1A /* ContactsPicker.xib in Resources */,
 				B633C5C31A1D190B0059AC12 /* mute_off@2x.png in Resources */,
 				AD83FF411A73426500B5C81A /* audio_play_button_blue@2x.png in Resources */,
 				34C3C78D20409F320000134C /* Opening.m4r in Resources */,
@@ -3664,7 +3518,6 @@
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
-				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3694,7 +3547,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3784,7 +3636,6 @@
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
-				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3814,7 +3665,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3930,7 +3780,6 @@
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
-				"${BUILT_PRODUCTS_DIR}/libPhoneNumber-iOS/libPhoneNumber_iOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3958,7 +3807,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libPhoneNumber_iOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4034,23 +3882,19 @@
 				348BB25A209CF8E50047AEC2 /* TappableStackView.swift in Sources */,
 				346129961FD1E30000532771 /* OWSDatabaseMigration.m in Sources */,
 				346129FB1FD5F31400532771 /* OWS101ExistingUsersBlockOnIdentityChange.m in Sources */,
-				7D6564FD2113BD8B00365A19 /* SystemContactsFetcher.swift in Sources */,
 				7D6565042113BDF500365A19 /* MessageApprovalViewController.swift in Sources */,
 				7DF2E98F212360B400855424 /* FLContactsManager.swift in Sources */,
 				344F248D2007CCD600CFB4F4 /* DisplayableText.swift in Sources */,
-				7D6565012113BD8B00365A19 /* CountryCodeViewController.m in Sources */,
 				450998651FD8A34D00D89EB3 /* DeviceSleepManager.swift in Sources */,
 				3466087220E550F400AFFE73 /* ConversationStyle.swift in Sources */,
 				7D6565002113BD8B00365A19 /* SelectRecipientViewController.m in Sources */,
 				3478506B1FD9B78A007B8332 /* NoopCallMessageHandler.swift in Sources */,
-				7D6565162113C6AE00365A19 /* ContactFieldView.swift in Sources */,
-				7D6564F52113BD8B00365A19 /* NewNonContactConversationViewController.m in Sources */,
 				452D1AF320810B6F00A67F7F /* String+OWS.swift in Sources */,
 				451F8A3D1FD713CA005CB9DA /* ThreadViewHelper.m in Sources */,
+				7D86A3EF223A1354004436A0 /* OWSViewController.m in Sources */,
 				346129AD1FD1F34E00532771 /* ImageCache.swift in Sources */,
 				452C7CA72037628B003D51A5 /* Weak.swift in Sources */,
 				34D5872F208E2C4200D2255A /* OWS109OutgoingMessageState.m in Sources */,
-				7D6565192113CB3E00365A19 /* OWSContactsManager.m in Sources */,
 				7DCA3B3E21BB00F700733FF2 /* ThreadManager.swift in Sources */,
 				451F8A341FD710C3005CB9DA /* ConversationSearcher.swift in Sources */,
 				346129F91FD5F31400532771 /* OWS104CreateRecipientIdentities.m in Sources */,
@@ -4078,12 +3922,9 @@
 				451F8A3F1FD71455005CB9DA /* OWSTableViewController.m in Sources */,
 				451F8A351FD710DE005CB9DA /* Searcher.swift in Sources */,
 				451F8A481FD715BA005CB9DA /* OWSContactAvatarBuilder.m in Sources */,
-				34382266209A4E400094FEB7 /* ContactShareApprovalViewController.swift in Sources */,
 				4503F1C3204711D300CEE724 /* OWS107LegacySounds.m in Sources */,
-				3438226A209B63500094FEB7 /* EditContactShareNameViewController.swift in Sources */,
 				34B6D27520F664C900765BE2 /* OWSUnreadIndicator.m in Sources */,
 				3421981021061A0700C57195 /* JSQMessagesAvatarImage.m in Sources */,
-				4541B71D209D3B7A0008608F /* ContactShareViewModel.swift in Sources */,
 				4598198F204E2F28009414F2 /* OWS108CallLoggingPreference.m in Sources */,
 				346129D21FD2085A00532771 /* CommonStrings.swift in Sources */,
 				45F59A082028E4FB00E8D2B0 /* OWSAudioSession.swift in Sources */,
@@ -4091,9 +3932,7 @@
 				450C801220AD1D5B00F3A091 /* UIDevice+featureSupport.swift in Sources */,
 				451F8A471FD715BA005CB9DA /* OWSAvatarBuilder.m in Sources */,
 				34480B591FD0A7A400BC14EF /* OWSScrubbingLogFormatter.m in Sources */,
-				451F8A441FD7156B005CB9DA /* BlockListUIUtils.m in Sources */,
 				34641E182088D7E900E2EDE5 /* OWSScreenLock.swift in Sources */,
-				451F8A381FD7117E005CB9DA /* OWSViewController.m in Sources */,
 				7D65650E2113C53C00365A19 /* AttachmentApprovalViewController.swift in Sources */,
 				450C801120AD1CDB00F3A091 /* ReturnToCallViewController.swift in Sources */,
 				450C800C20AD191E00F3A091 /* OWSNavigationController.m in Sources */,
@@ -4107,7 +3946,6 @@
 				451F8A391FD711D6005CB9DA /* ContactsViewHelper.m in Sources */,
 				451F8A411FD714B8005CB9DA /* ContactTableViewCell.m in Sources */,
 				346129C81FD2072E00532771 /* NSAttributedString+OWS.m in Sources */,
-				7D6564F82113BD8B00365A19 /* ViewControllerUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4140,7 +3978,6 @@
 				7D2CD550214C3C9C004E957A /* CallNotificationsAdapter.swift in Sources */,
 				7D2CD551214C3C9C004E957A /* OWSMessageHeaderView.m in Sources */,
 				7D2CD552214C3C9C004E957A /* UserNotificationsAdaptee.swift in Sources */,
-				7D2CD553214C3C9C004E957A /* OWSContactOffersCell.m in Sources */,
 				7D2CD554214C3C9C004E957A /* OWSBackupAPI.swift in Sources */,
 				7D2CD555214C3C9C004E957A /* ConversationScrollButton.m in Sources */,
 				7D2CD556214C3C9C004E957A /* HomeViewController.m in Sources */,
@@ -4165,7 +4002,6 @@
 				7D2CD56B214C3C9C004E957A /* AccountManager.swift in Sources */,
 				7D2CD56C214C3C9C004E957A /* OWSBackupLazyRestoreJob.swift in Sources */,
 				7D2CD56D214C3C9C004E957A /* GiphyAPI.swift in Sources */,
-				7D2CD56E214C3C9C004E957A /* OWS2FARegistrationViewController.m in Sources */,
 				7D2CD56F214C3C9C004E957A /* OWSLinkedDevicesTableViewController.m in Sources */,
 				7D2CD570214C3C9C004E957A /* NotificationSettingsViewController.m in Sources */,
 				7D2CD571214C3C9C004E957A /* HapticFeedback.swift in Sources */,
@@ -4178,7 +4014,6 @@
 				7D2CD578214C3C9C004E957A /* NumberUtil.m in Sources */,
 				7D2CD579214C3C9C004E957A /* DebugUIFileBrowser.swift in Sources */,
 				7D2CD57A214C3C9C004E957A /* ProfileViewController.m in Sources */,
-				7D2CD57B214C3C9C004E957A /* OWSContactShareButtonsView.m in Sources */,
 				7D2CD57C214C3C9C004E957A /* MainAppContext.m in Sources */,
 				7D2CD57D214C3C9C004E957A /* DebugUIPage.m in Sources */,
 				7D2CD57E214C3C9C004E957A /* OWSBackupJob.m in Sources */,
@@ -4207,7 +4042,6 @@
 				7D2CD592214C3C9C004E957A /* Platform.swift in Sources */,
 				7D2CD593214C3C9C004E957A /* LoginViewController.swift in Sources */,
 				7D2CD594214C3C9C004E957A /* AdvancedSettingsTableViewController.m in Sources */,
-				7D2CD595214C3C9C004E957A /* AddContactShareToExistingContactViewController.swift in Sources */,
 				7D2CD596214C3C9C004E957A /* SignalApp.m in Sources */,
 				7D2CD597214C3C9C004E957A /* GifPickerLayout.swift in Sources */,
 				7D2CD598214C3C9C004E957A /* DebugUISyncMessages.m in Sources */,
@@ -4220,14 +4054,11 @@
 				7D2CD59D214C3C9C004E957A /* ConversationViewLayout.m in Sources */,
 				7D2CD59E214C3C9C004E957A /* DirectionalPanGestureRecognizer.swift in Sources */,
 				7D2CD59F214C3C9C004E957A /* OWSProgressView.m in Sources */,
-				7D2CD5A0214C3C9C004E957A /* OWS2FAReminderViewController.swift in Sources */,
 				7D2CD5A1214C3C9C004E957A /* LoadingViewController.swift in Sources */,
 				7D2CD5A2214C3C9C004E957A /* AvatarViewHelper.m in Sources */,
 				7D2CD5A3214C3C9C004E957A /* OWSGenericAttachmentView.m in Sources */,
 				7D2CD5A4214C3C9C004E957A /* OWSMessageFooterView.m in Sources */,
-				7D2CD5A5214C3C9C004E957A /* ContactShareViewHelper.swift in Sources */,
 				7D2CD5A6214C3C9C004E957A /* ValidationViewController.swift in Sources */,
-				7D2CD5A7214C3C9C004E957A /* InviteFlow.swift in Sources */,
 				7D2CD5A9214C3C9C004E957A /* DebugUINotifications.swift in Sources */,
 				7D2CD5AA214C3C9C004E957A /* Crc32.m in Sources */,
 				7D2CD5AB214C3C9C004E957A /* ColorPickerViewController.swift in Sources */,
@@ -4235,7 +4066,6 @@
 				7D2CD5AD214C3C9C004E957A /* OWSDeviceProvisioningURLParser.m in Sources */,
 				7D7DBD15215DB50200AE6C7F /* FLAnnouncementViewController.m in Sources */,
 				7D92E4D1220E0A1600542694 /* PeerViewCell.swift in Sources */,
-				7D2CD5AE214C3C9C004E957A /* ContactCell.swift in Sources */,
 				7D2CD5AF214C3C9C004E957A /* DomainFrontingCountryViewController.m in Sources */,
 				7D2CD5B0214C3C9C004E957A /* SlugCell.swift in Sources */,
 				7D2CD5B1214C3C9C004E957A /* OWSMessageBubbleView.m in Sources */,
@@ -4245,20 +4075,15 @@
 				7D2CD5B7214C3C9C004E957A /* DebugUIMessages.m in Sources */,
 				7D2CD5B8214C3C9C004E957A /* OWSMessageTextView.m in Sources */,
 				7D2CD5B9214C3C9C004E957A /* ConversationCollectionView.m in Sources */,
-				7D2CD5BB214C3C9C004E957A /* PinEntryView.m in Sources */,
 				7DCC43D12225A0900097EE0E /* NotificationsManager.swift in Sources */,
-				7D2CD5BC214C3C9C004E957A /* BlockListViewController.m in Sources */,
 				7D2CD5BD214C3C9C004E957A /* DirectoryCell.swift in Sources */,
 				7D2CD5BE214C3C9C004E957A /* UIResponder+OWS.swift in Sources */,
-				7D2CD5C1214C3C9C004E957A /* ContactsPicker.swift in Sources */,
 				7D2CD5C2214C3C9C004E957A /* UIApplication+OWS.swift in Sources */,
 				7D2CD5C5214C3C9C004E957A /* PushRegistrationManager.swift in Sources */,
-				7D2CD5C7214C3C9C004E957A /* OWSAddToContactViewController.m in Sources */,
 				7D2CD5C8214C3C9C004E957A /* OWSBackupExportJob.m in Sources */,
 				7D2CD5C9214C3C9C004E957A /* MediaPageViewController.swift in Sources */,
 				7D2CD5CA214C3C9C004E957A /* OWSLayerView.swift in Sources */,
 				7D2CD5CC214C3C9C004E957A /* OWSScreenLockUI.m in Sources */,
-				7D2CD5CE214C3C9C004E957A /* OWS2FASettingsViewController.m in Sources */,
 				7D2CD5CF214C3C9C004E957A /* OWSBackupImportJob.m in Sources */,
 				7D2CD5D0214C3C9C004E957A /* OWSConversationSettingsViewController.m in Sources */,
 				7D2CD5D1214C3C9C004E957A /* GifPickerViewController.swift in Sources */,
@@ -4269,7 +4094,6 @@
 				7D2CD5D8214C3C9C004E957A /* ConversationInputToolbar.m in Sources */,
 				7D2CD5D9214C3C9C004E957A /* QuotedReplyPreview.swift in Sources */,
 				7D2CD5DA214C3C9C004E957A /* OWSBubbleView.m in Sources */,
-				7D2CD5DB214C3C9C004E957A /* ContactViewController.swift in Sources */,
 				7D2CD5DC214C3C9C004E957A /* AppDelegate.m in Sources */,
 				7D2CD5DD214C3C9C004E957A /* ConversationInputTextView.m in Sources */,
 				7D2CD5DE214C3C9C004E957A /* OWSQRCodeScanningViewController.m in Sources */,
@@ -4284,14 +4108,12 @@
 				7D2CD5E9214C3C9C004E957A /* MessageStatusView.swift in Sources */,
 				7D2CD5EA214C3C9C004E957A /* OWSSoundSettingsViewController.m in Sources */,
 				7D2CD5EB214C3C9C004E957A /* Pastelog.m in Sources */,
-				7D2CD5EC214C3C9C004E957A /* AddToBlockListViewController.m in Sources */,
 				7D2CD5ED214C3C9C004E957A /* AppSettingsViewController.m in Sources */,
 				7D2CD5EE214C3C9C004E957A /* CropScaleImageViewController.swift in Sources */,
 				7D2CD5EF214C3C9C004E957A /* MarqueeLabel.swift in Sources */,
 				7D2CD5F0214C3C9C004E957A /* OWSBackup.m in Sources */,
 				7D2CD5F1214C3C9C004E957A /* OWSSystemMessageCell.m in Sources */,
 				7D2CD5F2214C3C9C004E957A /* GroupTableViewCell.swift in Sources */,
-				7D2CD5F3214C3C9C004E957A /* OWSContactShareView.m in Sources */,
 				7D92E4CF220E0A1600542694 /* ConferenceCallViewController.swift in Sources */,
 				7D2CD5F4214C3C9C004E957A /* ConversationViewController.m in Sources */,
 				7D2CD5F5214C3C9C004E957A /* OWSMessageTimerView.m in Sources */,
@@ -4343,7 +4165,6 @@
 				451A13B11E13DED2000A50FD /* CallNotificationsAdapter.swift in Sources */,
 				348570A820F67575004FF32B /* OWSMessageHeaderView.m in Sources */,
 				450DF2091E0DD2C6003D14BE /* UserNotificationsAdaptee.swift in Sources */,
-				34D1F0AB1F867BFC0066283D /* OWSContactOffersCell.m in Sources */,
 				340FC8C7204DE64D007AEB0F /* OWSBackupAPI.swift in Sources */,
 				343A65981FC4CFE7000477A1 /* ConversationScrollButton.m in Sources */,
 				34386A51207D0C01009F5D9C /* HomeViewController.m in Sources */,
@@ -4368,7 +4189,6 @@
 				451166C01FD86B98000739BA /* AccountManager.swift in Sources */,
 				34D2CCD220618B3000CB1A14 /* OWSBackupLazyRestoreJob.swift in Sources */,
 				3430FE181F7751D4000EC51B /* GiphyAPI.swift in Sources */,
-				34A55F3720485465002CC6DE /* OWS2FARegistrationViewController.m in Sources */,
 				340FC8AD204DAC8D007AEB0F /* OWSLinkedDevicesTableViewController.m in Sources */,
 				340FC8AA204DAC8D007AEB0F /* NotificationSettingsViewController.m in Sources */,
 				4C090A1B210FD9C7001FD7F9 /* HapticFeedback.swift in Sources */,
@@ -4381,7 +4201,6 @@
 				7D8517DB211CADDE00F9EF53 /* NumberUtil.m in Sources */,
 				45B27B862037FFB400A539DF /* DebugUIFileBrowser.swift in Sources */,
 				34CE88E71F2FB9A10098030F /* ProfileViewController.m in Sources */,
-				3403B95D20EA9527001A1F44 /* OWSContactShareButtonsView.m in Sources */,
 				34B0796D1FCF46B100E248C2 /* MainAppContext.m in Sources */,
 				34E3EF101EFC2684007F6822 /* DebugUIPage.m in Sources */,
 				340FC8CD20518C77007AEB0F /* OWSBackupJob.m in Sources */,
@@ -4410,7 +4229,6 @@
 				450DF2051E0D74AC003D14BE /* Platform.swift in Sources */,
 				7D7705C52114D8E700B40BB9 /* LoginViewController.swift in Sources */,
 				340FC8B2204DAC8D007AEB0F /* AdvancedSettingsTableViewController.m in Sources */,
-				452B999020A34B6B006F2F9E /* AddContactShareToExistingContactViewController.swift in Sources */,
 				346129991FD1E4DA00532771 /* SignalApp.m in Sources */,
 				34BECE301F7ABCF800D7438D /* GifPickerLayout.swift in Sources */,
 				343A65951FC47D5E000477A1 /* DebugUISyncMessages.m in Sources */,
@@ -4423,14 +4241,11 @@
 				34D1F0881F8678AA0066283D /* ConversationViewLayout.m in Sources */,
 				452314A01F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift in Sources */,
 				34330AA31E79686200DF2FB9 /* OWSProgressView.m in Sources */,
-				45D2AC02204885170033C692 /* OWS2FAReminderViewController.swift in Sources */,
 				4542DF54208D40AC007B4E76 /* LoadingViewController.swift in Sources */,
 				34D5CCA91EAE3D30005515DB /* AvatarViewHelper.m in Sources */,
 				34D1F0B71F87F8850066283D /* OWSGenericAttachmentView.m in Sources */,
 				34D920E720E179C200D51158 /* OWSMessageFooterView.m in Sources */,
-				348BB25D20A0C5530047AEC2 /* ContactShareViewHelper.swift in Sources */,
 				7D7705C42114D8E700B40BB9 /* ValidationViewController.swift in Sources */,
-				34B3F8801E8DF1700035BE1A /* InviteFlow.swift in Sources */,
 				457C87B82032645C008D52D6 /* DebugUINotifications.swift in Sources */,
 				7D8517E2211CAE1200F9EF53 /* Crc32.m in Sources */,
 				4C13C9F620E57BA30089A98B /* ColorPickerViewController.swift in Sources */,
@@ -4438,7 +4253,6 @@
 				458E38371D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m in Sources */,
 				7D7DBD14215DB50200AE6C7F /* FLAnnouncementViewController.m in Sources */,
 				7D92E4D0220E0A1600542694 /* PeerViewCell.swift in Sources */,
-				4517642B1DE939FD00EDB8B9 /* ContactCell.swift in Sources */,
 				340FC8AB204DAC8D007AEB0F /* DomainFrontingCountryViewController.m in Sources */,
 				7D705DA22148258100488180 /* SlugCell.swift in Sources */,
 				3496744D2076768700080B5F /* OWSMessageBubbleView.m in Sources */,
@@ -4448,20 +4262,15 @@
 				34D8C0271ED3673300188D7C /* DebugUIMessages.m in Sources */,
 				34DBF003206BD5A500025978 /* OWSMessageTextView.m in Sources */,
 				34D1F0B41F86D31D0066283D /* ConversationCollectionView.m in Sources */,
-				45D308AD2049A439000189E4 /* PinEntryView.m in Sources */,
 				7DCC43D02225A0900097EE0E /* NotificationsManager.swift in Sources */,
-				340FC8B1204DAC8D007AEB0F /* BlockListViewController.m in Sources */,
 				7D705DA7214827EF00488180 /* DirectoryCell.swift in Sources */,
 				45B5360E206DD8BB00D61655 /* UIResponder+OWS.swift in Sources */,
-				34B3F8771E8DF1700035BE1A /* ContactsPicker.swift in Sources */,
 				45C0DC1B1E68FE9000E04C47 /* UIApplication+OWS.swift in Sources */,
 				4539B5861F79348F007141FF /* PushRegistrationManager.swift in Sources */,
-				340FC8BB204DAC8D007AEB0F /* OWSAddToContactViewController.m in Sources */,
 				340FC8C0204DB7D2007AEB0F /* OWSBackupExportJob.m in Sources */,
 				45F32C232057297A00A300D5 /* MediaPageViewController.swift in Sources */,
 				3466087420E5649700AFFE73 /* OWSLayerView.swift in Sources */,
 				34D2CCDA2062E7D000CB1A14 /* OWSScreenLockUI.m in Sources */,
-				345BC30C2047030700257B7C /* OWS2FASettingsViewController.m in Sources */,
 				340FC8CA20517B84007AEB0F /* OWSBackupImportJob.m in Sources */,
 				340FC8B7204DAC8D007AEB0F /* OWSConversationSettingsViewController.m in Sources */,
 				34BECE2E1F7ABCE000D7438D /* GifPickerViewController.swift in Sources */,
@@ -4472,7 +4281,6 @@
 				34D1F0841F8678AA0066283D /* ConversationInputToolbar.m in Sources */,
 				457F671B20746193000EABCD /* QuotedReplyPreview.swift in Sources */,
 				34DBF004206BD5A500025978 /* OWSBubbleView.m in Sources */,
-				34E88D262098C5AE00A608F4 /* ContactViewController.swift in Sources */,
 				76EB054018170B33006006FC /* AppDelegate.m in Sources */,
 				34D1F0831F8678AA0066283D /* ConversationInputTextView.m in Sources */,
 				340FC8B6204DAC8D007AEB0F /* OWSQRCodeScanningViewController.m in Sources */,
@@ -4487,14 +4295,12 @@
 				4C11AA5020FD59C700351FBD /* MessageStatusView.swift in Sources */,
 				340FC8AE204DAC8D007AEB0F /* OWSSoundSettingsViewController.m in Sources */,
 				4579431E1E7C8CE9008ED0C0 /* Pastelog.m in Sources */,
-				340FC8B0204DAC8D007AEB0F /* AddToBlockListViewController.m in Sources */,
 				340FC8B3204DAC8D007AEB0F /* AppSettingsViewController.m in Sources */,
 				346B66311F4E29B200E5122F /* CropScaleImageViewController.swift in Sources */,
 				45E5A6991F61E6DE001E4A8A /* MarqueeLabel.swift in Sources */,
 				34A910601FFEB114000C4745 /* OWSBackup.m in Sources */,
 				34D1F0B01F867BFC0066283D /* OWSSystemMessageCell.m in Sources */,
 				45A663C51F92EC760027B59E /* GroupTableViewCell.swift in Sources */,
-				34CA631B2097806F00E526A0 /* OWSContactShareView.m in Sources */,
 				7D92E4CE220E0A1600542694 /* ConferenceCallViewController.swift in Sources */,
 				34D1F0861F8678AA0066283D /* ConversationViewController.m in Sources */,
 				3427C64320F500E000EEC730 /* OWSMessageTimerView.m in Sources */,
@@ -4755,12 +4561,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = THHR8L4QV3;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 304;
+				DYLIB_CURRENT_VERSION = 305;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -4824,12 +4630,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = THHR8L4QV3;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 304;
+				DYLIB_CURRENT_VERSION = 305;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4881,7 +4687,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				DEVELOPMENT_TEAM = THHR8L4QV3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4949,7 +4755,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				DEVELOPMENT_TEAM = THHR8L4QV3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5160,7 +4966,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -5233,7 +5039,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -5292,7 +5098,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				DEVELOPMENT_TEAM = THHR8L4QV3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5360,7 +5166,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 304;
+				CURRENT_PROJECT_VERSION = 305;
 				DEVELOPMENT_TEAM = THHR8L4QV3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -21,8 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
                                   expiresInSeconds:0
                                    expireStartedAt:0
                                     isVoiceMessage:NO
-                                     quotedMessage:nil
-                                      contactShare:nil];
+                                     quotedMessage:nil];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)coder

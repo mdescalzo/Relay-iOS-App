@@ -7,7 +7,6 @@
 #import "AvatarViewHelper.h"
 #import "OWSNavigationController.h"
 #import "Relay-Swift.h"
-#import "ViewControllerUtils.h"
 
 @import RelayServiceKit;
 @import RelayMessaging;
@@ -299,38 +298,6 @@ OWSNavigationView>
 //    [contents addSection:section];
 //    
 //    self.tableViewController.contents = contents;
-}
-
-- (void)showUnblockAlertForSignalAccount:(SignalAccount *)signalAccount
-{
-    OWSAssert(signalAccount);
-    
-    __weak UpdateGroupViewController *weakSelf = self;
-    [BlockListUIUtils showUnblockSignalAccountActionSheet:signalAccount
-                                       fromViewController:self
-                                          blockingManager:self.contactsViewHelper.blockingManager
-                                          contactsManager:self.contactsViewHelper.contactsManager
-                                          completionBlock:^(BOOL isBlocked) {
-                                              if (!isBlocked) {
-                                                  [weakSelf updateTableContents];
-                                              }
-                                          }];
-}
-
-- (void)showUnblockAlertForRecipientId:(NSString *)recipientId
-{
-    OWSAssert(recipientId.length > 0);
-    
-    __weak UpdateGroupViewController *weakSelf = self;
-    [BlockListUIUtils showUnblockPhoneNumberActionSheet:recipientId
-                                     fromViewController:self
-                                        blockingManager:self.contactsViewHelper.blockingManager
-                                        contactsManager:self.contactsViewHelper.contactsManager
-                                        completionBlock:^(BOOL isBlocked) {
-                                            if (!isBlocked) {
-                                                [weakSelf updateTableContents];
-                                            }
-                                        }];
 }
 
 - (void)removeRecipientId:(NSString *)recipientId

@@ -16,8 +16,7 @@ NS_SWIFT_NAME(EndSessionMessage)
                                 expiresInSeconds:(uint32_t)expiresInSeconds
                                  expireStartedAt:(uint64_t)expireStartedAt
                                   isVoiceMessage:(BOOL)isVoiceMessage
-                                   quotedMessage:(nullable TSQuotedMessage *)quotedMessage
-                                    contactShare:(nullable OWSContact *)contactShare NS_UNAVAILABLE;
+                                   quotedMessage:(nullable TSQuotedMessage *)quotedMessage NS_UNAVAILABLE;
 
 - (instancetype)initWithTimestamp:(uint64_t)timestamp inThread:(nullable TSThread *)thread NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;

@@ -23,10 +23,9 @@ import UIKit
                    expiresInSeconds: 0,
                    expireStartedAt: 0,
                    isVoiceMessage: false,
-                   quotedMessage: nil,
-                   contactShare: nil)
+                   quotedMessage: nil)
         
-        self.messageType = "control"
+        self.messageType = FLMessageTypeControlKey
         self.moreData = moreData?.copy() as? [AnyHashable : Any]
         
 //        self.body = FLCCSMJSONService.blob(from: self)

@@ -175,25 +175,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureWithThread:(ThreadViewModel *)thread
             contactsManager:(FLContactsManager *)contactsManager
-      blockedPhoneNumberSet:(NSSet<NSString *> *)blockedPhoneNumberSet
 {
     [self configureWithThread:thread
               contactsManager:contactsManager
-        blockedPhoneNumberSet:blockedPhoneNumberSet
               overrideSnippet:nil
                  overrideDate:nil];
 }
 
 - (void)configureWithThread:(ThreadViewModel *)thread
             contactsManager:(FLContactsManager *)contactsManager
-      blockedPhoneNumberSet:(NSSet<NSString *> *)blockedPhoneNumberSet
             overrideSnippet:(nullable NSAttributedString *)overrideSnippet
                overrideDate:(nullable NSDate *)overrideDate
 {
     OWSAssertIsOnMainThread();
     OWSAssert(thread);
     OWSAssert(contactsManager);
-    OWSAssert(blockedPhoneNumberSet);
 
     [OWSTableItem configureCell:self];
 
@@ -217,7 +213,7 @@ NS_ASSUME_NONNULL_BEGIN
         self.snippetLabel.attributedText = overrideSnippet;
     } else {
         self.snippetLabel.attributedText =
-            [self attributedSnippetForThread:thread blockedPhoneNumberSet:blockedPhoneNumberSet];
+            [self attributedSnippetForThread:thread];
     }
 
     self.dateTimeLabel.text
@@ -341,54 +337,38 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (NSAttributedString *)attributedSnippetForThread:(ThreadViewModel *)thread
-                             blockedPhoneNumberSet:(NSSet<NSString *> *)blockedPhoneNumberSet
 {
     OWSAssert(thread);
-
-    BOOL isBlocked = NO;
-//    if (!thread.isGroupThread) {
-//        NSString *contactIdentifier = thread.contactIdentifier;
-//        isBlocked = [blockedPhoneNumberSet containsObject:contactIdentifier];
-//    }
+    
     BOOL hasUnreadMessages = thread.hasUnreadMessages;
-
+    
     NSMutableAttributedString *snippetText = [NSMutableAttributedString new];
-    if (isBlocked) {
-        // If thread is blocked, don't show a snippet or mute status.
-        [snippetText
-            appendAttributedString:[[NSAttributedString alloc]
-                                       initWithString:NSLocalizedString(@"HOME_VIEW_BLOCKED_CONTACT_CONVERSATION",
-                                                          @"A label for conversations with blocked users.")
-                                           attributes:@{
-                                               NSFontAttributeName : self.snippetFont.ows_mediumWeight,
-                                               NSForegroundColorAttributeName : [Theme primaryColor],
-                                           }]];
-    } else {
-        if ([thread isMuted]) {
-            [snippetText appendAttributedString:[[NSAttributedString alloc]
-                                                    initWithString:LocalizationNotNeeded(@"\ue067  ")
-                                                        attributes:@{
-                                                            NSFontAttributeName : [UIFont ows_elegantIconsFont:9.f],
-                                                            NSForegroundColorAttributeName :
-                                                                (hasUnreadMessages ? [Theme primaryColor]
-                                                                                   : [Theme secondaryColor]),
-                                                        }]];
-        }
-        NSString *displayableText = thread.lastMessageText;
-        if (displayableText) {
-            [snippetText appendAttributedString:[[NSAttributedString alloc]
-                                                    initWithString:displayableText
-                                                        attributes:@{
-                                                            NSFontAttributeName :
-                                                                (hasUnreadMessages ? self.snippetFont.ows_mediumWeight
-                                                                                   : self.snippetFont),
-                                                            NSForegroundColorAttributeName :
-                                                                (hasUnreadMessages ? [Theme primaryColor]
-                                                                                   : [Theme secondaryColor]),
-                                                        }]];
-        }
+    
+    if ([thread isMuted]) {
+        [snippetText appendAttributedString:[[NSAttributedString alloc]
+                                             initWithString:LocalizationNotNeeded(@"\ue067  ")
+                                             attributes:@{
+                                                          NSFontAttributeName : [UIFont ows_elegantIconsFont:9.f],
+                                                          NSForegroundColorAttributeName :
+                                                              (hasUnreadMessages ? [Theme primaryColor]
+                                                               : [Theme secondaryColor]),
+                                                          }]];
     }
-
+    NSString *displayableText = thread.lastMessageText;
+    if (displayableText) {
+        [snippetText appendAttributedString:[[NSAttributedString alloc]
+                                             initWithString:displayableText
+                                             attributes:@{
+                                                          NSFontAttributeName :
+                                                              (hasUnreadMessages ? self.snippetFont.ows_mediumWeight
+                                                               : self.snippetFont),
+                                                          NSForegroundColorAttributeName :
+                                                              (hasUnreadMessages ? [Theme primaryColor]
+                                                               : [Theme secondaryColor]),
+                                                          }]];
+    }
+    
+    
     return snippetText;
 }
 

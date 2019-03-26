@@ -26,12 +26,10 @@ extern NSString *const FLRelayWipeAndReturnToRegistrationNotification;
 @interface Environment : NSObject
 
 - (instancetype)initWithContactsManager:(FLContactsManager *)contactsManager
-                        contactsUpdater:(ContactsUpdater *)contactsUpdater
                          networkManager:(TSNetworkManager *)networkManager
                           messageSender:(MessageSender *)messageSender;
 
 @property (nonatomic, readonly) FLContactsManager *contactsManager;
-@property (nonatomic, readonly) ContactsUpdater *contactsUpdater;
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
 @property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) ThreadManager *threadManager;

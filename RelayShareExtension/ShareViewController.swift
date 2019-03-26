@@ -717,21 +717,21 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
             Logger.info("\(strongSelf.logTag) value type: \(type(of: value))")
 
             if let data = value as? Data {
-                // Although we don't support contacts _yet_, when we do we'll want to make
-                // sure they are shared with a reasonable filename.
-                if ShareViewController.itemMatchesSpecificUtiType(itemProvider: itemProvider,
-                                                                  utiType: kUTTypeVCard as String) {
-                    customFileName = "Contact.vcf"
-
-                    if Contact(vCardData: data) != nil {
-                        isConvertibleToContactShare = true
-                    } else {
-                        Logger.error("\(strongSelf.logTag) could not parse vcard.")
-                        let writeError = ShareViewControllerError.assertionError(description: "Could not parse vcard data.")
-                        resolver.reject(writeError)
-                        return
-                    }
-                }
+//                // Although we don't support contacts _yet_, when we do we'll want to make
+//                // sure they are shared with a reasonable filename.
+//                if ShareViewController.itemMatchesSpecificUtiType(itemProvider: itemProvider,
+//                                                                  utiType: kUTTypeVCard as String) {
+//                    customFileName = "Contact.vcf"
+//
+//                    if Contact(vCardData: data) != nil {
+//                        isConvertibleToContactShare = true
+//                    } else {
+//                        Logger.error("\(strongSelf.logTag) could not parse vcard.")
+//                        let writeError = ShareViewControllerError.assertionError(description: "Could not parse vcard data.")
+//                        resolver.reject(writeError)
+//                        return
+//                    }
+//                }
 
                 let customFileExtension = MIMETypeUtil.fileExtension(forUTIType: srcUtiType)
                 guard let tempFilePath = OWSFileSystem.writeData(toTemporaryFile: data, fileExtension: customFileExtension) else {

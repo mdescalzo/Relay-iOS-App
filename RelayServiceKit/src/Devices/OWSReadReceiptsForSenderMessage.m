@@ -5,7 +5,9 @@
 #import "OWSReadReceiptsForSenderMessage.h"
 #import "NSDate+OWS.h"
 #import "OWSSignalServiceProtos.pb.h"
-#import "SignalRecipient.h"
+//#import "SignalRecipient.h"
+#import <RelayServiceKit/RelayServiceKit-Swift.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,14 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
                                   expiresInSeconds:0
                                    expireStartedAt:0
                                     isVoiceMessage:NO
-                                     quotedMessage:nil
-                                      contactShare:nil];
+                                     quotedMessage:nil];
     if (!self) {
         return self;
     }
 
     _messageTimestamps = [messageTimestamps copy];
-    self.messageType = @"receipt";
+    self.messageType = FLMessageTypeReceiptKey;
 
     return self;
 }
@@ -54,12 +55,12 @@ NS_ASSUME_NONNULL_BEGIN
     return YES;
 }
 
-- (NSData *)buildPlainTextData:(SignalRecipient *)recipient
+- (NSData *)buildPlainTextData:(RelayRecipient *)recipient
 {
     OWSAssert(recipient);
 
     OWSSignalServiceProtosContentBuilder *contentBuilder = [OWSSignalServiceProtosContentBuilder new];
-    [contentBuilder setReceiptMessage:[self buildReceiptMessage:recipient.recipientId]];
+    [contentBuilder setReceiptMessage:[self buildReceiptMessage:recipient.uniqueId]];
     return [[contentBuilder build] data];
 }
 

@@ -8,6 +8,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+NSString *const TappedStatusBarNotification = @"TappedStatusBarNotification";
+
 @interface OWSViewController ()
 
 @property (nonatomic, weak) UIView *bottomLayoutView;

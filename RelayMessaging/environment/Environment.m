@@ -17,7 +17,6 @@ static Environment *sharedEnvironment = nil;
 @interface Environment ()
 
 @property (nonatomic) FLContactsManager *contactsManager;
-@property (nonatomic) ContactsUpdater *contactsUpdater;
 @property (nonatomic) TSNetworkManager *networkManager;
 @property (nonatomic) MessageSender *messageSender;
 @property (nonatomic) OWSPreferences *preferences;
@@ -54,7 +53,6 @@ static Environment *sharedEnvironment = nil;
 }
 
 - (instancetype)initWithContactsManager:(FLContactsManager *)contactsManager
-                        contactsUpdater:(ContactsUpdater *)contactsUpdater
                          networkManager:(TSNetworkManager *)networkManager
                           messageSender:(MessageSender *)messageSender
 {
@@ -64,7 +62,6 @@ static Environment *sharedEnvironment = nil;
     }
 
     _contactsManager = contactsManager;
-    _contactsUpdater = contactsUpdater;
     _networkManager = networkManager;
     _messageSender = messageSender;
     _threadManager = ThreadManager.sharedManager;
@@ -79,13 +76,6 @@ static Environment *sharedEnvironment = nil;
     OWSAssert(_contactsManager);
 
     return _contactsManager;
-}
-
-- (ContactsUpdater *)contactsUpdater
-{
-    OWSAssert(_contactsUpdater);
-
-    return _contactsUpdater;
 }
 
 - (TSNetworkManager *)networkManager

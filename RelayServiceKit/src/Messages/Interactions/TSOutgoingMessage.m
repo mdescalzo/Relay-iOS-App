@@ -5,7 +5,6 @@
 #import "TSOutgoingMessage.h"
 #import "NSDate+OWS.h"
 #import "NSString+SSK.h"
-#import "OWSContact.h"
 #import "MessageSender.h"
 #import "OWSOutgoingSyncMessage.h"
 #import "OWSPrimaryStorage.h"
@@ -229,8 +228,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
                                                       expiresInSeconds:expiresInSeconds
                                                        expireStartedAt:0
                                                         isVoiceMessage:NO
-                                                         quotedMessage:quotedMessage
-                                                          contactShare:nil];
+                                                         quotedMessage:quotedMessage];
 }
 
 + (instancetype)outgoingMessageInThread:(nullable TSThread *)thread
@@ -244,8 +242,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
                                                       expiresInSeconds:expiresInSeconds
                                                        expireStartedAt:0
                                                         isVoiceMessage:NO
-                                                         quotedMessage:nil
-                                                          contactShare:nil];
+                                                         quotedMessage:nil];
 }
 
 - (instancetype)initOutgoingMessageWithTimestamp:(uint64_t)timestamp
@@ -256,7 +253,6 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
                                  expireStartedAt:(uint64_t)expireStartedAt
                                   isVoiceMessage:(BOOL)isVoiceMessage
                                    quotedMessage:(nullable TSQuotedMessage *)quotedMessage
-                                    contactShare:(nullable OWSContact *)contactShare
 {
     self = [super initMessageWithTimestamp:timestamp
                                   inThread:thread
@@ -264,8 +260,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
                              attachmentIds:attachmentIds
                           expiresInSeconds:expiresInSeconds
                            expireStartedAt:expireStartedAt
-                             quotedMessage:quotedMessage
-                              contactShare:contactShare];
+                             quotedMessage:quotedMessage];
     if (!self) {
         return self;
     }
@@ -813,17 +808,6 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     OWSSignalServiceProtosDataMessageQuoteBuilder *_Nullable quotedMessageBuilder = self.quotedMessageBuilder;
     if (quotedMessageBuilder) {
         [builder setQuoteBuilder:quotedMessageBuilder];
-    }
-
-    // Contact Share
-    if (self.contactShare) {
-        OWSSignalServiceProtosDataMessageContact *_Nullable contactProto =
-            [OWSContacts protoForContact:self.contactShare];
-        if (contactProto) {
-            [builder addContact:contactProto];
-        } else {
-            OWSFail(@"%@ in %s contactProto was unexpectedly nil", self.logTag, __PRETTY_FUNCTION__);
-        }
     }
 
     return builder;

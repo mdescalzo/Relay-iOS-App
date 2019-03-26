@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "PhoneNumber.h"
 
 @interface HttpRequest : NSObject
 

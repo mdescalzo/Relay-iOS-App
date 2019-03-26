@@ -216,37 +216,6 @@ NS_ASSUME_NONNULL_BEGIN
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (OWSCountryMetadata *)ensureManualCensorshipCircumventionCountry
-{
-    OWSAssertIsOnMainThread();
-
-    OWSCountryMetadata *countryMetadata = nil;
-    NSString *countryCode = OWSSignalService.sharedInstance.manualCensorshipCircumventionCountryCode;
-    if (countryCode) {
-        countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
-    }
-
-    if (!countryMetadata) {
-        countryCode = [PhoneNumber defaultCountryCode];
-        if (countryCode) {
-            countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
-        }
-    }
-
-    if (!countryMetadata) {
-        countryCode = @"US";
-        countryMetadata = [OWSCountryMetadata countryMetadataForCountryCode:countryCode];
-        OWSAssert(countryMetadata);
-    }
-
-    if (countryMetadata) {
-        // Ensure the "manual censorship circumvention" country state is in sync.
-        OWSSignalService.sharedInstance.manualCensorshipCircumventionCountryCode = countryCode;
-    }
-
-    return countryMetadata;
-}
-
 #pragma mark - Actions
 
 - (void)syncPushTokens

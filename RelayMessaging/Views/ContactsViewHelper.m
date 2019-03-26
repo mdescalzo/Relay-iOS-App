@@ -50,8 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(delegate);
     _delegate = delegate;
 
-    _blockingManager = [OWSBlockingManager sharedManager];
-    _blockedPhoneNumbers = [_blockingManager blockedPhoneNumbers];
     _conversationSearcher = ConversationSearcher.shared;
 
     _contactsManager = [Environment current].contactsManager;
@@ -87,15 +85,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)signalAccountsDidChange:(NSNotification *)notification
 {
     OWSAssertIsOnMainThread();
-
-    [self updateContacts];
-}
-
-- (void)blockedPhoneNumbersDidChange:(id)notification
-{
-    OWSAssertIsOnMainThread();
-
-    self.blockedPhoneNumbers = [_blockingManager blockedPhoneNumbers];
 
     [self updateContacts];
 }
@@ -212,83 +201,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<FLTag *> *)relayTagsMatchingSearchString:(NSString *)searchText
 {
     return [self.conversationSearcher filterRelayTags:self.relayTags withSearchText:searchText];
-}
-
-//- (NSArray<SignalAccount *> *)signalAccountsMatchingSearchString:(NSString *)searchText __deprecated
-//{
-//    return [self.conversationSearcher filterSignalAccounts:self.signalAccounts withSearchText:searchText];
-//}
-
-- (BOOL)doesContact:(Contact *)contact matchSearchTerm:(NSString *)searchTerm
-{
-    OWSAssert(contact);
-    OWSAssert(searchTerm.length > 0);
-
-    if ([contact.fullName.lowercaseString containsString:searchTerm.lowercaseString]) {
-        return YES;
-    }
-
-    NSString *asPhoneNumber = [PhoneNumber removeFormattingCharacters:searchTerm];
-    if (asPhoneNumber.length > 0) {
-        for (PhoneNumber *phoneNumber in contact.parsedPhoneNumbers) {
-            if ([phoneNumber.toE164 containsString:asPhoneNumber]) {
-                return YES;
-            }
-        }
-    }
-
-    return NO;
-}
-
-- (BOOL)doesContact:(Contact *)contact matchSearchTerms:(NSArray<NSString *> *)searchTerms
-{
-    OWSAssert(contact);
-    OWSAssert(searchTerms.count > 0);
-
-    for (NSString *searchTerm in searchTerms) {
-        if (![self doesContact:contact matchSearchTerm:searchTerm]) {
-            return NO;
-        }
-    }
-
-    return YES;
-}
-
-- (NSArray<Contact *> *)nonSignalContactsMatchingSearchString:(NSString *)searchText
-{
-    NSArray<NSString *> *searchTerms = [self searchTermsForSearchString:searchText];
-
-    if (searchTerms.count < 1) {
-        return [NSArray new];
-    }
-
-    return [self.nonSignalContacts filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(Contact *contact,
-                                                                   NSDictionary<NSString *, id> *_Nullable bindings) {
-        return [self doesContact:contact matchSearchTerms:searchTerms];
-    }]];
-}
-
-- (nullable NSArray<Contact *> *)nonSignalContacts
-{
-    // TODO: Implement later?
-//    if (!_nonSignalContacts) {
-//        NSMutableSet<Contact *> *nonSignalContacts = [NSMutableSet new];
-//        [OWSPrimaryStorage.dbReadConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-//            for (Contact *contact in self.contactsManager.allContactsMap.allValues) {
-//                NSArray<SignalRecipient *> *signalRecipients = [contact signalRecipientsWithTransaction:transaction];
-//                if (signalRecipients.count < 1) {
-//                    [nonSignalContacts addObject:contact];
-//                }
-//            }
-//        }];
-//        _nonSignalContacts = [nonSignalContacts.allObjects
-//            sortedArrayUsingComparator:^NSComparisonResult(Contact *_Nonnull left, Contact *_Nonnull right) {
-//                return [left.fullName compare:right.fullName];
-//            }];
-//    }
-//
-//    return _nonSignalContacts;
-    return NSArray.new;
 }
 
 #pragma mark - Editing

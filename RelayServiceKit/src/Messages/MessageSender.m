@@ -9,8 +9,6 @@
 #import "NSDate+OWS.h"
 #import "NSError+MessageSending.h"
 #import "OWSBackgroundTask.h"
-#import "OWSBlockingManager.h"
-#import "OWSContact.h"
 #import "OWSDevice.h"
 #import "OWSDisappearingMessagesJob.h"
 #import "OWSError.h"
@@ -40,7 +38,7 @@
 #import "Threading.h"
 #import "SSKAsserts.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
-
+#import "ContactsManagerProtocol.h"
 
 @import PromiseKit;
 @import AxolotlKit;
@@ -197,7 +195,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
 
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
-@property (nonatomic, readonly) OWSBlockingManager *blockingManager;
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
 @property (nonatomic, readonly) id<ContactsManagerProtocol> contactsManager;
 @property (atomic, readonly) NSMutableDictionary<NSString *, NSOperationQueue *> *sendingQueueMap;
@@ -224,14 +221,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
     OWSSingletonAssert();
     
     return self;
-}
-
-- (void)setBlockingManager:(OWSBlockingManager *)blockingManager
-{
-    OWSAssert(blockingManager);
-    OWSAssert(!_blockingManager);
-    
-    _blockingManager = blockingManager;
 }
 
 - (NSOperationQueue *)sendingQueueForMessage:(TSOutgoingMessage *)message
@@ -304,18 +293,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             if (message.quotedMessage) {
                 quotedThumbnailAttachments =
                 [message.quotedMessage createThumbnailAttachmentsIfNecessaryWithTransaction:transaction];
-            }
-            
-            if (message.contactShare.avatarAttachmentId != nil) {
-                TSAttachment *avatarAttachment = [message.contactShare avatarAttachmentWithTransaction:transaction];
-                if ([avatarAttachment isKindOfClass:[TSAttachmentStream class]]) {
-                    contactShareAvatarAttachment = (TSAttachmentStream *)avatarAttachment;
-                } else {
-                    OWSFail(@"%@ in %s unexpected avatarAttachment: %@",
-                            self.logTag,
-                            __PRETTY_FUNCTION__,
-                            avatarAttachment);
-                }
             }
             
             // All outgoing messages should be saved at the time they are enqueued.
@@ -496,14 +473,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             // you might, for example, have a pending outgoing message when
             // you block them.
             OWSAssert(recipientContactId.length > 0);
-            if ([self.blockingManager isRecipientIdBlocked:recipientContactId]) {
-                DDLogInfo(@"%@ skipping 1:1 send to blocked contact: %@", self.logTag, recipientContactId);
-                NSError *error = OWSErrorMakeMessageSendFailedToBlockListError();
-                // No need to retry - the user will continue to be blocked.
-                [error setIsRetryable:NO];
-                failureHandler(error);
-                return;
-            }
             
             NSArray<RelayRecipient *> *recipients =
             [self relayRecipientsForRecipientIds:@[recipientContactId]];
@@ -542,7 +511,6 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             
             NSMutableSet<NSString *> *sendingRecipientIds = [NSMutableSet setWithArray:message.sendingRecipientIds];
             [sendingRecipientIds intersectSet:[NSSet setWithArray:thread.participantIds]];
-            [sendingRecipientIds minusSet:[NSSet setWithArray:self.blockingManager.blockedPhoneNumbers]];
             
             // Mark skipped recipients as such.  We skip because:
             //
@@ -836,9 +804,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             = NSLocalizedString(@"FAILED_SENDING_BECAUSE_UNTRUSTED_IDENTITY_KEY",
                                 @"action sheet header when re-sending message which failed because of untrusted identity keys");
             
-            NSString *localizedErrorDescription =
-            [NSString stringWithFormat:localizedErrorDescriptionFormat,
-             [self.contactsManager displayNameForRecipientId:recipient.uniqueId]];
+            NSString *localizedErrorDescription = [NSString stringWithFormat:localizedErrorDescriptionFormat, [self.contactsManager displayNameForRecipientId:recipient.uniqueId]];
             NSError *error = OWSErrorMakeUntrustedIdentityError(localizedErrorDescription, recipient.uniqueId);
             
             // Key will continue to be unaccepted, so no need to retry. It'll only cause us to hit the Pre-Key request

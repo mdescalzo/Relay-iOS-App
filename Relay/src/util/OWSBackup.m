@@ -176,9 +176,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isBackupEnabled
 {
-    return [self.dbConnection boolForKey:OWSBackup_IsBackupEnabledKey
-                            inCollection:OWSPrimaryStorage_OWSBackupCollection
-                            defaultValue:NO];
+    // TODO:  Consider implementating this.
+    return NO;
+//    return [self.dbConnection boolForKey:OWSBackup_IsBackupEnabledKey
+//                            inCollection:OWSPrimaryStorage_OWSBackupCollection
+//                            defaultValue:NO];
 }
 
 - (void)setIsBackupEnabled:(BOOL)value

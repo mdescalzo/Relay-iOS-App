@@ -3,11 +3,8 @@
 //
 
 #import "AddToGroupViewController.h"
-#import "BlockListUIUtils.h"
 #import "ContactsViewHelper.h"
 #import "Relay-Swift.h"
-//#import <RelayMessaging/OWSContactsManager.h>
-#import <RelayServiceKit/SignalAccount.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,53 +43,13 @@ NS_ASSUME_NONNULL_BEGIN
         @"ADD_GROUP_MEMBER_VIEW_CONTACT_TITLE", @"Title for the 'add contact' section of the 'add group member' view.");
 }
 
-- (BOOL)canSignalAccountBeSelected:(SignalAccount *)signalAccount
+- (BOOL)canRecipientBeSelected:(RelayRecipient *)recipient
 {
-    OWSAssert(signalAccount);
-
-    return ![self.addToGroupDelegate isRecipientGroupMember:signalAccount.recipientId];
+    return ![self.addToGroupDelegate isRecipientGroupMember:recipient.uniqueId];
 }
 
 - (void)relayTagWasSelected:(FLTag *)relayTag
 {
-//    __weak AddToGroupViewController *weakSelf = self;
-//    ContactsViewHelper *helper = self.contactsViewHelper;
-    
-    // TODO: Implement this!
-//    if ([self.addToGroupDelegate isRecipientGroupMember:signalAccount.recipientId]) {
-//        OWSFail(@"%@ Cannot add user to group member if already a member.", self.logTag);
-//        return;
-//    }
-
-//    if ([helper isRecipientIdBlocked:signalAccount.recipientId]) {
-//        [BlockListUIUtils showUnblockSignalAccountActionSheet:signalAccount
-//                                           fromViewController:self
-//                                              blockingManager:helper.blockingManager
-//                                              contactsManager:helper.contactsManager
-//                                              completionBlock:^(BOOL isBlocked) {
-//                                                  if (!isBlocked) {
-//                                                      [weakSelf addToGroup:signalAccount.recipientId];
-//                                                  }
-//                                              }];
-//        return;
-//    }
-
-//    BOOL didShowSNAlert = [SafetyNumberConfirmationAlert
-//        presentAlertIfNecessaryWithRecipientId:signalAccount.recipientId
-//                              confirmationText:
-//                                  NSLocalizedString(@"SAFETY_NUMBER_CHANGED_CONFIRM_ADD_TO_GROUP_ACTION",
-//                                      @"button title to confirm adding a recipient to a group when their safety "
-//                                      @"number has recently changed")
-//                               contactsManager:helper.contactsManager
-//                                    completion:^(BOOL didConfirmIdentity) {
-//                                        if (didConfirmIdentity) {
-//                                            [weakSelf addToGroup:signalAccount.recipientId];
-//                                        }
-//                                    }];
-//    if (didShowSNAlert) {
-//        return;
-//    }
-
     [self addTagToGroup:relayTag];
 }
 
@@ -123,19 +80,22 @@ NS_ASSUME_NONNULL_BEGIN
     return self.hideContacts;
 }
 
+- (void)relayRecipientWasSelected:(nonnull RelayRecipient *)relayRecipient { 
+    // FIXME:  Implement this
+    // Add recipient to a thing
+}
+
+
 - (BOOL)shouldValidatePhoneNumbers
 {
     return YES;
 }
 
-- (nullable NSString *)accessoryMessageForSignalAccount:(SignalAccount *)signalAccount
+- (nullable NSString *)accessoryMessageForSignalAccount:(RelayRecipient *)recipient
 {
-    OWSAssert(signalAccount);
-
-    if ([self.addToGroupDelegate isRecipientGroupMember:signalAccount.recipientId]) {
+    if ([self.addToGroupDelegate isRecipientGroupMember:recipient.uniqueId]) {
         return NSLocalizedString(@"NEW_GROUP_MEMBER_LABEL", @"An indicator that a user is a member of the new group.");
     }
-
     return nil;
 }
 

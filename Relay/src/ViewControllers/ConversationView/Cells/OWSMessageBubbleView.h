@@ -7,7 +7,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class ContactShareViewModel;
 @class ConversationStyle;
 @class ConversationViewItem;
-@class OWSContact;
 @class OWSQuotedReplyModel;
 @class TSAttachmentPointer;
 @class TSAttachmentStream;
@@ -42,15 +41,6 @@ typedef NS_ENUM(NSUInteger, OWSMessageGestureLocation) {
 - (void)didTapConversationItem:(ConversationViewItem *)viewItem
                                  quotedReply:(OWSQuotedReplyModel *)quotedReply
     failedThumbnailDownloadAttachmentPointer:(TSAttachmentPointer *)attachmentPointer;
-
-- (void)didTapContactShareViewItem:(ConversationViewItem *)viewItem;
-
-- (void)didTapSendMessageToContactShare:(ContactShareViewModel *)contactShare
-    NS_SWIFT_NAME(didTapSendMessage(toContactShare:));
-- (void)didTapSendInviteToContactShare:(ContactShareViewModel *)contactShare
-    NS_SWIFT_NAME(didTapSendInvite(toContactShare:));
-- (void)didTapShowAddToContactUIForContactShare:(ContactShareViewModel *)contactShare
-    NS_SWIFT_NAME(didTapShowAddToContactUI(forContactShare:));
 
 -(void)didTapWebPreviewViewItem:(ConversationViewItem *)conversationItem;
 

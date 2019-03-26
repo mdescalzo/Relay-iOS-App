@@ -3,9 +3,6 @@
 //
 
 #import "SelectRecipientViewController.h"
-//#import "CountryCodeViewController.h"
-//#import "PhoneNumber.h"
-#import "ViewControllerUtils.h"
 #import <RelayMessaging/ContactTableViewCell.h>
 #import <RelayMessaging/ContactsViewHelper.h>
 #import <RelayMessaging/Environment.h>
@@ -91,7 +88,7 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
 
     [self updateTableContents];
 
-    [self updatePhoneNumberButtonEnabling];
+//    [self updatePhoneNumberButtonEnabling];
 }
 
 - (UILabel *)countryCodeLabel
@@ -205,7 +202,7 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
 {
     _callingCode = callingCode;
 
-    [self updatePhoneNumberButtonEnabling];
+//    [self updatePhoneNumberButtonEnabling];
 }
 
 #pragma mark - Actions
@@ -312,37 +309,37 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
 
 - (void)textFieldDidChange:(id)sender
 {
-    [self updatePhoneNumberButtonEnabling];
+//    [self updatePhoneNumberButtonEnabling];
 }
 
 // TODO: We could also do this in registration view.
-- (BOOL)hasValidPhoneNumber
-{
-    if (!self.callingCode) {
-        return NO;
-    }
-    NSString *possiblePhoneNumber =
-        [self.callingCode stringByAppendingString:self.phoneNumberTextField.text.digitsOnly];
-    NSArray<PhoneNumber *> *parsePhoneNumbers =
-        [PhoneNumber tryParsePhoneNumbersFromsUserSpecifiedText:possiblePhoneNumber
-                                              clientPhoneNumber:[TSAccountManager localUID]];
-    if (parsePhoneNumbers.count < 1) {
-        return NO;
-    }
-    PhoneNumber *parsedPhoneNumber = parsePhoneNumbers[0];
-    // It'd be nice to use [PhoneNumber isValid] but it always returns false for some countries
-    // (like afghanistan) and there doesn't seem to be a good way to determine beforehand
-    // which countries it can validate for without forking libPhoneNumber.
-    return parsedPhoneNumber.toE164.length > 1;
-}
+//- (BOOL)hasValidPhoneNumber
+//{
+//    if (!self.callingCode) {
+//        return NO;
+//    }
+//    NSString *possiblePhoneNumber =
+//        [self.callingCode stringByAppendingString:self.phoneNumberTextField.text.digitsOnly];
+//    NSArray<PhoneNumber *> *parsePhoneNumbers =
+//        [PhoneNumber tryParsePhoneNumbersFromsUserSpecifiedText:possiblePhoneNumber
+//                                              clientPhoneNumber:[TSAccountManager localUID]];
+//    if (parsePhoneNumbers.count < 1) {
+//        return NO;
+//    }
+//    PhoneNumber *parsedPhoneNumber = parsePhoneNumbers[0];
+//    // It'd be nice to use [PhoneNumber isValid] but it always returns false for some countries
+//    // (like afghanistan) and there doesn't seem to be a good way to determine beforehand
+//    // which countries it can validate for without forking libPhoneNumber.
+//    return parsedPhoneNumber.toE164.length > 1;
+//}
 
-- (void)updatePhoneNumberButtonEnabling
-{
-    BOOL isEnabled = [self hasValidPhoneNumber];
-    self.phoneNumberButton.enabled = isEnabled;
-    [self.phoneNumberButton
-        setBackgroundColorsWithUpColor:(isEnabled ? [UIColor FL_mediumBlue1] : [Theme secondaryColor])];
-}
+//- (void)updatePhoneNumberButtonEnabling
+//{
+//    BOOL isEnabled = [self hasValidPhoneNumber];
+//    self.phoneNumberButton.enabled = isEnabled;
+//    [self.phoneNumberButton
+//        setBackgroundColorsWithUpColor:(isEnabled ? [UIColor FL_mediumBlue1] : [Theme secondaryColor])];
+//}
 
 #pragma mark - CountryCodeViewControllerDelegate
 
@@ -369,12 +366,12 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
     shouldChangeCharactersInRange:(NSRange)range
                 replacementString:(NSString *)insertionText
 {
-    [ViewControllerUtils phoneNumberTextField:textField
-                shouldChangeCharactersInRange:range
-                            replacementString:insertionText
-                                  countryCode:_callingCode];
-
-    [self updatePhoneNumberButtonEnabling];
+//    [ViewControllerUtils phoneNumberTextField:textField
+//                shouldChangeCharactersInRange:range
+//                            replacementString:insertionText
+//                                  countryCode:_callingCode];
+//
+//    [self updatePhoneNumberButtonEnabling];
 
     return NO; // inform our caller that we took care of performing the change
 }
