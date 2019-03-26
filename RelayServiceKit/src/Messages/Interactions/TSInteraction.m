@@ -67,7 +67,7 @@ NSString *NSStringFromOWSInteractionType(OWSInteractionType value)
                              }
                       usingTransaction:transaction];
 
-    return [interactions copy];
+    return [NSArray arrayWithArray:interactions];
 }
 
 + (NSString *)collection {
