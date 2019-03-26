@@ -96,7 +96,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
 
     if (self) {
         if (!_attachmentFilenameMap) {
-            _attachmentFilenameMap = [NSMutableDictionary new];
+            _attachmentFilenameMap = [NSDictionary new];
         }
 
         if (!self.recipientStateMap) {
@@ -144,7 +144,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     NSDictionary<NSString *, NSNumber *> *_Nullable recipientReadMap = [coder decodeObjectForKey:@"recipientReadMap"];
     NSArray<NSString *> *_Nullable sentRecipients = [coder decodeObjectForKey:@"sentRecipients"];
 
-    NSMutableDictionary<NSString *, TSOutgoingMessageRecipientState *> *recipientStateMap = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, TSOutgoingMessageRecipientState *> *placeholderStateMap = [NSMutableDictionary new];
     // Our default recipient list is the current thread members.
     NSMutableArray *participants = self.thread.participantIds.mutableCopy;
     [participants removeObject:TSAccountManager.localUID];
@@ -173,9 +173,9 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
             recipientState.state = defaultState;
         }
 
-        recipientStateMap[recipientId] = recipientState;
+        placeholderStateMap[recipientId] = recipientState;
     }
-    self.recipientStateMap = [recipientStateMap copy];
+    self.recipientStateMap = [NSDictionary dictionaryWithDictionary:placeholderStateMap];
 }
 
 + (YapDatabaseConnection *)dbMigrationConnection
@@ -282,7 +282,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
 
     // New outgoing messages should immediately determine their
     // recipient list from current thread state.
-    NSMutableDictionary<NSString *, TSOutgoingMessageRecipientState *> *recipientStateMap = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, TSOutgoingMessageRecipientState *> *placeholderStatemap = [NSMutableDictionary new];
     NSArray<NSString *> *recipientIds;
     if ([self isKindOfClass:[OWSOutgoingSyncMessage class]]) {
         NSString *_Nullable localUID = [TSAccountManager localUID];
@@ -298,9 +298,9 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     for (NSString *recipientId in recipientIds) {
         TSOutgoingMessageRecipientState *recipientState = [TSOutgoingMessageRecipientState new];
         recipientState.state = OWSOutgoingMessageRecipientStateSending;
-        recipientStateMap[recipientId] = recipientState;
+        placeholderStatemap[recipientId] = recipientState;
     }
-    self.recipientStateMap = [recipientStateMap copy];
+    self.recipientStateMap = [NSDictionary dictionaryWithDictionary:placeholderStatemap];
 
     return self;
 }
@@ -460,7 +460,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
             [result addObject:recipientId];
         }
     }
-    return result;
+    return [NSArray arrayWithArray:result];
 }
 
 - (NSArray<NSString *> *)deliveredRecipientIds
@@ -472,7 +472,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
             [result addObject:recipientId];
         }
     }
-    return result;
+    return [NSArray arrayWithArray:result];
 }
 
 - (NSArray<NSString *> *)readRecipientIds
@@ -484,7 +484,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
             [result addObject:recipientId];
         }
     }
-    return result;
+    return [NSArray arrayWithArray:result];
 }
 
 - (NSUInteger)sentRecipientsCount
@@ -503,7 +503,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     OWSAssert(recipientId.length > 0);
 
     TSOutgoingMessageRecipientState *_Nullable result = self.recipientStateMap[recipientId];
-    OWSAssert(result);
+    OWSAssertDebug(result);
     return [result copy];
 }
 
@@ -592,16 +592,20 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     OWSAssert(recipientId.length > 0);
     OWSAssert(transaction);
 
+    TSOutgoingMessageRecipientState *_Nullable recipientState = self.recipientStateMap[recipientId];
+    if (!recipientState) {
+        recipientState = [TSOutgoingMessageRecipientState new];
+    }
+    recipientState.state = OWSOutgoingMessageRecipientStateSent;
+
+    __block NSMutableDictionary *placeHolderMap = [self.recipientStateMap mutableCopy];
+    [placeHolderMap setObject:recipientState forKey:recipientId];
+
+    
     [self applyChangeToSelfAndLatestCopy:transaction
                              changeBlock:^(TSOutgoingMessage *message) {
-                                 TSOutgoingMessageRecipientState *_Nullable recipientState
-                                     = message.recipientStateMap[recipientId];
-                                 if (!recipientState) {
-                                     OWSFailDebug(@"%@ Missing recipient state for recipient: %@", self.logTag, recipientId);
-                                     return;
-                                 }
-                                 recipientState.state = OWSOutgoingMessageRecipientStateSent;
-                             }];
+                                 message.recipientStateMap = [NSDictionary dictionaryWithDictionary:placeHolderMap];
+                              }];
 }
 
 - (void)updateWithSkippedRecipient:(NSString *)recipientId transaction:(YapDatabaseReadWriteTransaction *)transaction
@@ -609,15 +613,19 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     OWSAssert(recipientId.length > 0);
     OWSAssert(transaction);
 
+    TSOutgoingMessageRecipientState *_Nullable recipientState = self.recipientStateMap[recipientId];
+    if (!recipientState) {
+        recipientState = [TSOutgoingMessageRecipientState new];
+    }
+    
+    recipientState.state = OWSOutgoingMessageRecipientStateSkipped;
+
+    __block NSMutableDictionary *placeHolderMap = [self.recipientStateMap mutableCopy];
+    [placeHolderMap setObject:recipientState forKey:recipientId];
+
     [self applyChangeToSelfAndLatestCopy:transaction
                              changeBlock:^(TSOutgoingMessage *message) {
-                                 TSOutgoingMessageRecipientState *_Nullable recipientState
-                                     = message.recipientStateMap[recipientId];
-                                 if (!recipientState) {
-                                     OWSFail(@"%@ Missing recipient state for recipient: %@", self.logTag, recipientId);
-                                     return;
-                                 }
-                                 recipientState.state = OWSOutgoingMessageRecipientStateSkipped;
+                                 message.recipientStateMap = [NSDictionary dictionaryWithDictionary:placeHolderMap];
                              }];
 }
 
@@ -633,22 +641,23 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
         deliveryTimestamp = @([NSDate ows_millisecondTimeStamp]);
     }
 
+    TSOutgoingMessageRecipientState *_Nullable recipientState = self.recipientStateMap[recipientId];
+    if (!recipientState) {
+        recipientState = [TSOutgoingMessageRecipientState new];
+    }
+    if (recipientState.state != OWSOutgoingMessageRecipientStateSent) {
+        DDLogWarn(@"%@ marking unsent message as delivered.", self.logTag);
+    }
+    
+    recipientState.state = OWSOutgoingMessageRecipientStateSent;
+    recipientState.deliveryTimestamp = deliveryTimestamp;
+    
+    __block NSMutableDictionary *placeHolderMap = [self.recipientStateMap mutableCopy];
+    [placeHolderMap setObject:recipientState forKey:recipientId];
+    
     [self applyChangeToSelfAndLatestCopy:transaction
                              changeBlock:^(TSOutgoingMessage *message) {
-                                 TSOutgoingMessageRecipientState *_Nullable recipientState
-                                     = message.recipientStateMap[recipientId];
-                                 if (!recipientState) {
-                                     recipientState = [TSOutgoingMessageRecipientState new];
-//                                     OWSFail(@"%@ Missing recipient state for delivered recipient: %@",
-//                                         self.logTag,
-//                                         recipientId);
-//                                     return;
-                                 }
-                                 if (recipientState.state != OWSOutgoingMessageRecipientStateSent) {
-                                     DDLogWarn(@"%@ marking unsent message as delivered.", self.logTag);
-                                 }
-                                 recipientState.state = OWSOutgoingMessageRecipientStateSent;
-                                 recipientState.deliveryTimestamp = deliveryTimestamp;
+                                 message.recipientStateMap = [NSDictionary dictionaryWithDictionary:placeHolderMap];
                              }];
 }
 
@@ -659,20 +668,24 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     OWSAssert(recipientId.length > 0);
     OWSAssert(transaction);
 
+    TSOutgoingMessageRecipientState *_Nullable recipientState = [self.recipientStateMap valueForKey:recipientId];
+    if (!recipientState) {
+        recipientState = [TSOutgoingMessageRecipientState new];
+    }
+    if (recipientState.state != OWSOutgoingMessageRecipientStateSent) {
+        DDLogWarn(@"%@ marking unsent message as read.", self.logTag);
+    }
+    recipientState.state = OWSOutgoingMessageRecipientStateSent;
+    if (recipientState.readTimestamp == nil) {
+        recipientState.readTimestamp = @(readTimestamp);
+    }
+
+    __block NSMutableDictionary *placeHolderMap = [self.recipientStateMap mutableCopy];
+    [placeHolderMap setObject:recipientState forKey:recipientId];
+    
     [self applyChangeToSelfAndLatestCopy:transaction
                              changeBlock:^(TSOutgoingMessage *message) {
-                                 TSOutgoingMessageRecipientState *_Nullable recipientState
-                                     = [message.recipientStateMap valueForKey:recipientId];
-                                 if (!recipientState) {
-                                     recipientState = [TSOutgoingMessageRecipientState new];
-                                 }
-                                 if (recipientState.state != OWSOutgoingMessageRecipientStateSent) {
-                                     DDLogWarn(@"%@ marking unsent message as delivered.", self.logTag);
-                                 }
-                                 recipientState.state = OWSOutgoingMessageRecipientStateSent;
-                                 if (recipientState.readTimestamp == nil) {
-                                     recipientState.readTimestamp = @(readTimestamp);
-                                 }
+                                 message.recipientStateMap = [NSDictionary dictionaryWithDictionary:placeHolderMap];
                              }];
 }
 
@@ -680,33 +693,19 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
 {
     OWSAssert(transaction);
 
-    [self applyChangeToSelfAndLatestCopy:transaction
-                             changeBlock:^(TSOutgoingMessage *message) {
-                                 // Mark any "sending" recipients as "sent."
-                                 for (TSOutgoingMessageRecipientState *recipientState in message.recipientStateMap
-                                          .allValues) {
-                                     if (recipientState.state == OWSOutgoingMessageRecipientStateSending) {
-                                         recipientState.state = OWSOutgoingMessageRecipientStateSent;
-                                     }
-                                 }
-                                 [message setIsFromLinkedDevice:YES];
-                             }];
-}
+    // Mark any "sending" recipients as "sent."
+    __block NSMutableDictionary *placeHolderMap = [self.recipientStateMap mutableCopy];
 
-- (void)updateWithSendingToSingleGroupRecipient:(NSString *)singleGroupRecipient
-                                    transaction:(YapDatabaseReadWriteTransaction *)transaction
-{
-    OWSAssert(transaction);
-    OWSAssert(singleGroupRecipient.length > 0);
+    for (TSOutgoingMessageRecipientState *recipientState in placeHolderMap.allValues) {
+        if (recipientState.state == OWSOutgoingMessageRecipientStateSending) {
+            recipientState.state = OWSOutgoingMessageRecipientStateSent;
+        }
+    }
 
     [self applyChangeToSelfAndLatestCopy:transaction
                              changeBlock:^(TSOutgoingMessage *message) {
-                                 TSOutgoingMessageRecipientState *recipientState =
-                                     [TSOutgoingMessageRecipientState new];
-                                 recipientState.state = OWSOutgoingMessageRecipientStateSending;
-                                 [message setRecipientStateMap:@{
-                                     singleGroupRecipient : recipientState,
-                                 }];
+                                 message.recipientStateMap = [NSDictionary dictionaryWithDictionary:placeHolderMap];
+                                 message.isFromLinkedDevice = YES;
                              }];
 }
 
