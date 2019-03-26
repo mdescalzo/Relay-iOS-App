@@ -30,22 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
     self = [super initOutgoingMessageWithTimestamp:timestamp
                                           inThread:thread
                                        messageBody:nil
-                                     attachmentIds:[NSMutableArray new]
+                                     attachmentIds:@[]
                                   expiresInSeconds:0
                                    expireStartedAt:0
                                     isVoiceMessage:NO
                                      quotedMessage:nil];
-    
-//    self = [super initOutgoingMessageWithTimestamp:timestamp
-//                                          inThread:thread
-//                                       messageBody:nil
-//                                     attachmentIds:[NSMutableArray new]
-//                                  expiresInSeconds:0
-//                                   expireStartedAt:0
-//                                    isVoiceMessage:NO
-//                                  groupMetaMessage:TSGroupMessageUnspecified
-//                                     quotedMessage:nil];
-
     if (self) {
         _block = block;
     }
