@@ -21,7 +21,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>3.1.2</string>
 	<key>CFBundleVersion</key>
-	<string>306</string>
+	<string>307</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>
