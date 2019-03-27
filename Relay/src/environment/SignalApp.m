@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
     DDLogInfo(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     if (!thread) {
-        OWSFail(@"%@ Can't present nil thread.", self.logTag);
+        OWSFailDebug(@"%@ Can't present nil thread.", self.logTag);
         return;
     }
 

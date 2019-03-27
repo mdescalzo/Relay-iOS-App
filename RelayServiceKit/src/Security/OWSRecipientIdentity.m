@@ -134,7 +134,7 @@ OWSSignalServiceProtosVerifiedState OWSVerificationStateToProtoState(OWSVerifica
     [self enumerateCollectionObjectsUsingBlock:^(id obj, BOOL *stop) {
         count++;
         if (![obj isKindOfClass:[self class]]) {
-            OWSFail(@"%@ unexpected object in collection: %@", self.logTag, obj);
+            OWSFailDebug(@"%@ unexpected object in collection: %@", self.logTag, obj);
             return;
         }
         OWSRecipientIdentity *recipientIdentity = (OWSRecipientIdentity *)obj;

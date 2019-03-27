@@ -70,7 +70,7 @@ NSString *envelopeAddress(SSKEnvelope *envelope)
     } else {
         // Don't fire an analytics event; if we ever add a new content type, we'd generate a ton of
         // analytics traffic.
-        OWSFail(@"Unknown content type.");
+        OWSFailDebug(@"Unknown content type.");
         return @"UnknownContent";
     }
 }
@@ -96,7 +96,7 @@ NSString *envelopeAddress(SSKEnvelope *envelope)
         messageType = [NSString stringWithFormat:@"Ice Updates (%lu)", (unsigned long)callMessage.iceUpdate.count];
         callId = callMessage.iceUpdate.firstObject.id;
     } else {
-        OWSFail(@"%@ failure: unexpected call message type: %@", self.logTag, callMessage);
+        OWSFailDebug(@"%@ failure: unexpected call message type: %@", self.logTag, callMessage);
         messageType = @"Unknown";
         callId = 0;
     }
@@ -149,7 +149,7 @@ NSString *envelopeAddress(SSKEnvelope *envelope)
             [description appendString:@"ConfigurationRequest"];
         } else {
             // Shouldn't happen
-            OWSFail(@"Unknown sync message request type");
+            OWSFailDebug(@"Unknown sync message request type");
             [description appendString:@"UnknownRequest"];
         }
     } else if (syncMessage.hasBlocked) {
@@ -162,7 +162,7 @@ NSString *envelopeAddress(SSKEnvelope *envelope)
         [description appendString:verifiedString];
     } else {
         // Shouldn't happen
-        OWSFail(@"Unknown sync message type");
+        OWSFailDebug(@"Unknown sync message type");
         [description appendString:@"Unknown"];
     }
 

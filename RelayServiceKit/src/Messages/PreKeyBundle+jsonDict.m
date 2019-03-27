@@ -15,14 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 
     id identityKeyObject = [dictionary objectForKey:@"identityKey"];
     if (![identityKeyObject isKindOfClass:[NSString class]]) {
-        OWSFail(@"Unexpected identityKeyObject: %@", identityKeyObject);
+        OWSFailDebug(@"Unexpected identityKeyObject: %@", identityKeyObject);
         return nil;
     }
     NSString *identityKeyString = (NSString *)identityKeyObject;
 
     id devicesObject = [dictionary objectForKey:@"devices"];
     if (![devicesObject isKindOfClass:[NSArray class]]) {
-        OWSFail(@"Unexpected devicesObject: %@", devicesObject);
+        OWSFailDebug(@"Unexpected devicesObject: %@", devicesObject);
         return nil;
     }
     NSArray *devicesArray = (NSArray *)devicesObject;

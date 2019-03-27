@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (OWSSignalServiceProtosSyncMessageBuilder *)syncMessageBuilder
 {
-    OWSFail(@"Abstract method should be overridden in subclass.");
+    OWSFailDebug(@"Abstract method should be overridden in subclass.");
     return [OWSSignalServiceProtosSyncMessageBuilder new];
 }
 

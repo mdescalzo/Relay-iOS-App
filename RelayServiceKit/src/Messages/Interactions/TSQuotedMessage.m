@@ -120,13 +120,13 @@ NS_ASSUME_NONNULL_BEGIN
 //    OWSSignalServiceProtosDataMessageQuote *quoteProto = [dataMessage quote];
 //
 //    if (![quoteProto hasId] || [quoteProto id] == 0) {
-//        OWSFail(@"%@ quoted message missing id", self.logTag);
+//        OWSFailDebug(@"%@ quoted message missing id", self.logTag);
 //        return nil;
 //    }
 //    uint64_t timestamp = [quoteProto id];
 //
 //    if (![quoteProto hasAuthor] || [quoteProto author].length == 0) {
-//        OWSFail(@"%@ quoted message missing author", self.logTag);
+//        OWSFailDebug(@"%@ quoted message missing author", self.logTag);
 //        return nil;
 //    }
 //    // TODO: We could verify that this is a valid e164 value.
@@ -185,7 +185,7 @@ NS_ASSUME_NONNULL_BEGIN
 //    }
 //
 //    if (!hasText && !hasAttachment) {
-//        OWSFail(@"%@ quoted message has neither text nor attachment", self.logTag);
+//        OWSFailDebug(@"%@ quoted message has neither text nor attachment", self.logTag);
 //        return nil;
 //    }
 //

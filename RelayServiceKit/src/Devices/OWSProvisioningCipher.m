@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSData *_Nullable cipherText = [self encrypt:dataToEncrypt withKey:cipherKey];
     if (cipherText == nil) {
-        OWSFail(@"Provisioning cipher failed.");
+        OWSFailDebug(@"Provisioning cipher failed.");
         return nil;
     }
     
@@ -100,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSData *iv = self.initializationVector;
     if (iv.length != kCCBlockSizeAES128) {
-        OWSFail(@"Unexpected length for iv");
+        OWSFailDebug(@"Unexpected length for iv");
         return nil;
     }
 

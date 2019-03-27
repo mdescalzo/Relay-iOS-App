@@ -274,7 +274,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
                   NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop) {
          
          if (![object conformsToProtocol:@protocol(OWSReadTracking)]) {
-             OWSFail(@"%@ Unexpected object in unseen messages: %@", self.logTag, object);
+             OWSFailDebug(@"%@ Unexpected object in unseen messages: %@", self.logTag, object);
              return;
          }
          [messages addObject:(id<OWSReadTracking>)object];
@@ -295,7 +295,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     }
     
     // Just to be defensive, we'll also check for unread messages.
-    OWSAssert([self unseenMessagesWithTransaction:transaction].count < 1);
+    OWSAssertDebug([self unseenMessagesWithTransaction:transaction].count < 1);
 }
 
 - (nullable TSInteraction *)lastInteractionForInboxWithTransaction:(YapDatabaseReadTransaction *)transaction

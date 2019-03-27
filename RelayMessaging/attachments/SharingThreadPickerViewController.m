@@ -342,7 +342,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
         } else {
             // This shouldn't happen, but if it does we won't offer the user the ability to confirm.
             // They may have to return to the main app to accept the identity change.
-            OWSFail(@"%@ Untrusted recipient error is missing recipient id.", self.logTag);
+            OWSFailDebug(@"%@ Untrusted recipient error is missing recipient id.", self.logTag);
         }
 
         [fromViewController presentViewController:failureAlert animated:YES completion:nil];
@@ -389,7 +389,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
             [[OWSIdentityManager sharedManager] verificationStateForRecipientId:recipientId transaction:transaction];
         switch (verificationState) {
             case OWSVerificationStateVerified: {
-                OWSFail(@"%@ Shouldn't need to confirm identity if it was already verified", self.logTag);
+                OWSFailDebug(@"%@ Shouldn't need to confirm identity if it was already verified", self.logTag);
                 break;
             }
             case OWSVerificationStateDefault: {
@@ -492,7 +492,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
         if (!isnan(progress)) {
             [self.progressView setProgress:progress animated:YES];
         } else {
-            OWSFail(@"%@ Invalid attachment progress.", self.logTag);
+            OWSFailDebug(@"%@ Invalid attachment progress.", self.logTag);
         }
     }
 }

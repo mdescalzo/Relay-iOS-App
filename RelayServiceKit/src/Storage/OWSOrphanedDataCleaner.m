@@ -158,7 +158,7 @@ NS_ASSUME_NONNULL_BEGIN
             TSInteraction *interaction = [TSInteraction fetchObjectWithUniqueID:interactionId transaction:transaction];
             if (!interaction) {
                 // This could just be a race condition, but it should be very unlikely.
-                OWSFail(@"%@ Could not load interaction: %@", self.logTag, interactionId);
+                OWSFailDebug(@"%@ Could not load interaction: %@", self.logTag, interactionId);
                 continue;
             }
             DDLogInfo(@"%@ Removing orphan message: %@", self.logTag, interaction.uniqueId);
@@ -192,7 +192,7 @@ NS_ASSUME_NONNULL_BEGIN
         NSError *error;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:&error];
         if (!attributes || error) {
-            OWSFail(@"%@ Could not get attributes of file at: %@", self.logTag, filePath);
+            OWSFailDebug(@"%@ Could not get attributes of file at: %@", self.logTag, filePath);
             continue;
         }
         // Don't delete files which were created in the last N minutes.
@@ -206,7 +206,7 @@ NS_ASSUME_NONNULL_BEGIN
         DDLogInfo(@"%@ Deleting orphan attachment file: %@", self.logTag, filePath);
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
         if (error) {
-            OWSFail(@"%@ Could not remove orphan file at: %@", self.logTag, filePath);
+            OWSFailDebug(@"%@ Could not remove orphan file at: %@", self.logTag, filePath);
         }
     }
 
@@ -238,7 +238,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSError *error;
     NSArray<NSString *> *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dirPath error:&error];
     if (error) {
-        OWSFail(@"%@ contentsOfDirectoryAtPath error: %@", self.logTag, error);
+        OWSFailDebug(@"%@ contentsOfDirectoryAtPath error: %@", self.logTag, error);
         return [NSSet new];
     }
     for (NSString *fileName in fileNames) {
@@ -259,7 +259,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSError *error;
     NSNumber *fileSize = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:&error][NSFileSize];
     if (error) {
-        OWSFail(@"%@ attributesOfItemAtPath: %@ error: %@", self.logTag, filePath, error);
+        OWSFailDebug(@"%@ attributesOfItemAtPath: %@ error: %@", self.logTag, filePath, error);
         return 0;
     }
     return fileSize.longLongValue;
