@@ -178,7 +178,7 @@ class CallAVPolicy {
             "originator" : self.originatorId,
             "callId" : self.callId,
             "members" : members
-            ] as NSMutableDictionary
+            ] as NSDictionary
         let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallJoinKey, moreData: allTheData)
         messageSender.sendPromise(message: message, recipientIds: members).done({ _ in
             ConferenceCallEvents.add(.SentCallJoin(callId: self.callId))
@@ -207,7 +207,7 @@ class CallAVPolicy {
         
         let members = self.thread.participantIds
         
-        let allTheData = [ "version": ConferenceCallProtocolLevel, "callId" : self.callId ] as NSMutableDictionary
+        let allTheData = [ "version": ConferenceCallProtocolLevel, "callId" : self.callId ] as NSDictionary
         
         let message = OutgoingControlMessage(thread: self.thread, controlType: FLControlMessageCallLeaveKey, moreData: allTheData)
         messageSender.sendPromise(message: message, recipientIds: members).done({ _ in

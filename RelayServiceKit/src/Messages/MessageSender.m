@@ -1516,6 +1516,12 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
     }
     remainingAttempts -= 1;
     
+    // make sure the body is JSON
+    if (!(message.body && [NSJSONSerialization JSONObjectWithData:[message.body dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil])) {
+        NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
+        message.body = messageBlob;
+    }
+    
     __block RelayRecipient *recipient =  nil;
     [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction * _Nonnull transaction) {
         recipient = [RelayRecipient getOrBuildUnsavedRecipientForRecipientId:recipientId transaction:transaction];
