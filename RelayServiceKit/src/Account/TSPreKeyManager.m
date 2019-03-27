@@ -346,7 +346,7 @@ static const NSUInteger kMaxPrekeyUpdateFailureCount = 5;
 + (void)clearSignedPreKeyRecordsWithKeyId:(NSNumber *)keyId success:(void (^_Nullable)(void))successHandler
 {
     if (!keyId) {
-        OWSFail(@"%@ Ignoring request to clear signed preKeys since no keyId was specified", self.logTag);
+        OWSFailDebug(@"%@ Ignoring request to clear signed preKeys since no keyId was specified", self.logTag);
         return;
     }
 

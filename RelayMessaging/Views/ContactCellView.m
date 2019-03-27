@@ -201,7 +201,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 {
     FLContactsManager *contactsManager = self.contactsManager;
     if (contactsManager == nil) {
-        OWSFail(@"%@ contactsManager should not be nil", self.logTag);
+        OWSFailDebug(@"%@ contactsManager should not be nil", self.logTag);
         self.avatarView.image = nil;
         return;
     }
@@ -223,7 +223,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
                                                                             contactsManager:contactsManager] build];
         }
     } else {
-        OWSFail(@"%@ recipientId & tagId should not be nil", self.logTag);
+        OWSFailDebug(@"%@ recipientId & tagId should not be nil", self.logTag);
         self.avatarView.image = nil;
         return;
     }
@@ -233,7 +233,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 {
     FLContactsManager *contactsManager = self.contactsManager;
     if (contactsManager == nil) {
-        OWSFail(@"%@ contactsManager should not be nil", self.logTag);
+        OWSFailDebug(@"%@ contactsManager should not be nil", self.logTag);
         self.profileNameLabel.text = nil;
         return;
     }
@@ -246,7 +246,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
     } else if (tagId.length > 0) {
         self.profileNameLabel.text = [contactsManager tagWithId:tagId].orgSlug;
     } else {
-        OWSFail(@"%@ recipientId & tagId should not be nil", self.logTag);
+        OWSFailDebug(@"%@ recipientId & tagId should not be nil", self.logTag);
         self.profileNameLabel.text = nil;
         return;
     }

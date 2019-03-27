@@ -276,7 +276,7 @@ NSString *const kFLTSSURLKey = @"FLTSSURLKey";
     if (self.isCensorshipCircumventionManuallyActivated) {
         NSString *countryCode = self.manualCensorshipCircumventionCountryCode;
         if (countryCode.length == 0) {
-            OWSFail(@"%@ manualCensorshipCircumventionCountryCode was unexpectedly 0", self.logTag);
+            OWSFailDebug(@"%@ manualCensorshipCircumventionCountryCode was unexpectedly 0", self.logTag);
         }
 
         OWSCensorshipConfiguration *configuration =

@@ -316,7 +316,7 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
         //
         // The best we can try to do is to discard the current database
         // and behave like a clean install.
-        OWSFail(@"%@ Could not load database", self.logTag);
+        OWSFailDebug(@"%@ Could not load database", self.logTag);
 
         // Try to reset app by deleting all databases.
         //
@@ -324,7 +324,7 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
         // [OWSStorage deleteDatabaseFiles];
 
         if (![self tryToLoadDatabase]) {
-            OWSFail(@"%@ Could not load database (second try)", self.logTag);
+            OWSFailDebug(@"%@ Could not load database (second try)", self.logTag);
 
             // Sleep to give analytics events time to be delivered.
             [NSThread sleepForTimeInterval:15.0f];
@@ -627,7 +627,7 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
                                  withName:extensionName
                           completionBlock:^(BOOL ready) {
                               if (!ready) {
-                                  OWSFail(@"%@ asyncRegisterExtension failed: %@", self.logTag, extensionName);
+                                  OWSFailDebug(@"%@ asyncRegisterExtension failed: %@", self.logTag, extensionName);
                               } else {
                                   DDLogVerbose(@"%@ asyncRegisterExtension succeeded: %@", self.logTag, extensionName);
                               }
@@ -792,7 +792,7 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
         // "known good state" and behave like a new install.
         BOOL doesDBExist = [NSFileManager.defaultManager fileExistsAtPath:[self databaseFilePath]];
         if (doesDBExist) {
-            OWSFail(@"%@ Could not load database metadata", self.logTag);
+            OWSFailDebug(@"%@ Could not load database metadata", self.logTag);
         }
 
         // Try to reset app by deleting database.
@@ -872,7 +872,7 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
     [SAMKeychain setAccessibilityType:kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly];
     BOOL success = [SAMKeychain setPasswordData:data forService:keychainService account:keychainKey error:&error];
     if (!success || error) {
-        OWSFail(@"%@ Could not store database metadata", self.logTag);
+        OWSFailDebug(@"%@ Could not store database metadata", self.logTag);
 
         // Sleep to give analytics events time to be delivered.
         [NSThread sleepForTimeInterval:15.0f];

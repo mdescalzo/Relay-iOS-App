@@ -738,7 +738,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
                                              recipientState.state = OWSOutgoingMessageRecipientStateSent;
                                              break;
                                          default:
-                                             OWSFail(@"%@ unexpected message state.", self.logTag);
+                                             OWSFailDebug(@"%@ unexpected message state.", self.logTag);
                                              break;
                                      }
                                  }
@@ -755,7 +755,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     if ([self.body lengthOfBytesUsingEncoding:NSUTF8StringEncoding] <= kOversizeTextMessageSizeThreshold) {
         [builder setBody:self.body];
     } else {
-        OWSFail(@"%@ message body length too long.", self.logTag);
+        OWSFailDebug(@"%@ message body length too long.", self.logTag);
         NSString *truncatedBody = [self.body copy];
         while ([truncatedBody lengthOfBytesUsingEncoding:NSUTF8StringEncoding] > kOversizeTextMessageSizeThreshold) {
             DDLogError(@"%@ truncating body which is too long: %lu",
@@ -852,7 +852,7 @@ NSString *NSStringForOutgoingMessageRecipientState(OWSOutgoingMessageRecipientSt
     if (hasQuotedText || hasQuotedAttachment) {
         return quoteBuilder;
     } else {
-        OWSFail(@"%@ Invalid quoted message data.", self.logTag);
+        OWSFailDebug(@"%@ Invalid quoted message data.", self.logTag);
         return nil;
     }
 }

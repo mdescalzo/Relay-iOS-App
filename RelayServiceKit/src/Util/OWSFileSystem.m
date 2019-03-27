@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL success = [ressourceURL setResourceValues:resourcesAttrs error:&error];
 
     if (error || !success) {
-        OWSFail(@"Could not protect file or folder: %@", error);
+        OWSFailDebug(@"Could not protect file or folder: %@", error);
         return NO;
     }
     return YES;
@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL isDirectory;
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory];
     if (!exists) {
-        OWSFail(@"%@ error retrieving file attributes for issing file", self.logTag);
+        OWSFailDebug(@"%@ error retrieving file attributes for issing file", self.logTag);
         return;
     }
 
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
         NSDictionary<NSFileAttributeKey, id> *_Nullable attributes =
             [[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error];
         if (error) {
-            OWSFail(@"%@ error retrieving file attributes: %@", self.logTag, error);
+            OWSFailDebug(@"%@ error retrieving file attributes: %@", self.logTag, error);
         } else {
             DDLogDebug(@"%@ path: %@ has attributes: %@", self.logTag, path, attributes);
         }
@@ -225,7 +225,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                    attributes:nil
                                                         error:&error];
         if (error) {
-            OWSFail(@"%@ Failed to create directory: %@, error: %@", self.logTag, dirPath, error);
+            OWSFailDebug(@"%@ Failed to create directory: %@, error: %@", self.logTag, dirPath, error);
             return NO;
         }
         return [self protectFileOrFolderAtPath:dirPath];
@@ -240,7 +240,7 @@ NS_ASSUME_NONNULL_BEGIN
     } else {
         BOOL success = [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
         if (!success) {
-            OWSFail(@"%@ Failed to create file.", self.logTag);
+            OWSFailDebug(@"%@ Failed to create file.", self.logTag);
             return NO;
         }
         return [self protectFileOrFolderAtPath:filePath];
@@ -274,7 +274,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSArray<NSString *> *filenames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dirPath error:error];
     if (*error) {
-        OWSFail(@"%@ could not find files in directory: %@", self.logTag, *error);
+        OWSFailDebug(@"%@ could not find files in directory: %@", self.logTag, *error);
         return nil;
     }
 
@@ -323,7 +323,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSError *error;
     BOOL success = [data writeToFile:tempFilePath options:NSDataWritingAtomic error:&error];
     if (!success || error) {
-        OWSFail(@"%@ could not write to temporary file: %@", self.logTag, error);
+        OWSFailDebug(@"%@ could not write to temporary file: %@", self.logTag, error);
         return nil;
     }
 

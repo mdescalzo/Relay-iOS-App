@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 //    DDLogInfo(@"%@ reregisterWithSamePhoneNumber.", self.logTag);
 //
 //    if (![[TSAccountManager sharedInstance] resetForReregistration]) {
-//        OWSFail(@"%@ could not reset for re-registration.", self.logTag);
+//        OWSFailDebug(@"%@ could not reset for re-registration.", self.logTag);
 //        return;
 //    }
 //

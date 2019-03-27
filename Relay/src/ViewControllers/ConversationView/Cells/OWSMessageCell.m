@@ -254,13 +254,13 @@ NS_ASSUME_NONNULL_BEGIN
         return NO;
     }
     if (self.viewItem.interaction.interactionType != OWSInteractionType_IncomingMessage) {
-        OWSFail(@"%@ not an incoming message.", self.logTag);
+        OWSFailDebug(@"%@ not an incoming message.", self.logTag);
         return NO;
     }
 
     FLContactsManager *contactsManager = self.delegate.contactsManager;
     if (contactsManager == nil) {
-        OWSFail(@"%@ contactsManager should not be nil", self.logTag);
+        OWSFailDebug(@"%@ contactsManager should not be nil", self.logTag);
         return NO;
     }
 
@@ -293,7 +293,7 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
     if (self.viewItem.interaction.interactionType != OWSInteractionType_IncomingMessage) {
-        OWSFail(@"%@ not an incoming message.", self.logTag);
+        OWSFailDebug(@"%@ not an incoming message.", self.logTag);
         return;
     }
 

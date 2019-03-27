@@ -229,7 +229,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     TSYapDatabaseObject *latest = [[self class] fetchObjectWithUniqueID:self.uniqueId];
     if (!latest) {
-        OWSFail(@"%@ in %s `latest` was unexpectedly nil", self.logTag, __PRETTY_FUNCTION__);
+        OWSFailDebug(@"%@ in %s `latest` was unexpectedly nil", self.logTag, __PRETTY_FUNCTION__);
         return;
     }
 

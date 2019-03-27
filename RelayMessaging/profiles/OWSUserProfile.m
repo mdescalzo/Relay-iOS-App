@@ -328,28 +328,28 @@ NSString *const kLocalProfileUniqueId = @"kLocalProfileUniqueId";
 
 - (YapDatabaseConnection *)dbReadConnection
 {
-    OWSFail(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
+    OWSFailDebug(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
 
     return TSYapDatabaseObject.dbReadConnection;
 }
 
 + (YapDatabaseConnection *)dbReadConnection
 {
-    OWSFail(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
+    OWSFailDebug(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
 
     return TSYapDatabaseObject.dbReadConnection;
 }
 
 - (YapDatabaseConnection *)dbReadWriteConnection
 {
-    OWSFail(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
+    OWSFailDebug(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
 
     return TSYapDatabaseObject.dbReadWriteConnection;
 }
 
 + (YapDatabaseConnection *)dbReadWriteConnection
 {
-    OWSFail(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
+    OWSFailDebug(@"%@ UserProfile should always use OWSProfileManager's database connection.", self.logTag);
 
     return TSYapDatabaseObject.dbReadWriteConnection;
 }

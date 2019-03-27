@@ -147,7 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
         case PHAuthorizationStatusRestricted: {
             // when does this happen?
-            OWSFail(@"PHAuthorizationStatusRestricted");
+            OWSFailDebug(@"PHAuthorizationStatusRestricted");
             return;
         }
     }

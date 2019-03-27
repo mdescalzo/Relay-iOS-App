@@ -927,7 +927,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             // of new secondary devices via 409 "Mismatched devices" response.
             DDLogWarn(@"%@ account has secondary devices, but sync message has no device messages", self.logTag);
         } else if (!mayHaveLinkedDevices && hasDeviceMessages) {
-            OWSFail(@"%@ sync message has device messages for unknown secondary devices.", self.logTag);
+            OWSFailDebug(@"%@ sync message has device messages for unknown secondary devices.", self.logTag);
         }
         // TODO: Investigate other places where device query may be taking place.
         //    } else {

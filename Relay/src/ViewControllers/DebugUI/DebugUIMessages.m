@@ -3997,7 +3997,7 @@ NS_ASSUME_NONNULL_BEGIN
             [label appendString:@" (Sent)"];
         }
     } else {
-        OWSFail(@"%@ unknown message state.", self.logTag);
+        OWSFailDebug(@"%@ unknown message state.", self.logTag);
     }
     return label;
 }

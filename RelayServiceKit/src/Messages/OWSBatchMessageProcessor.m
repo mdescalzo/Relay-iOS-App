@@ -186,13 +186,13 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
             id object2) {
 
             if (![object1 isKindOfClass:[OWSMessageContentJob class]]) {
-                OWSFail(@"Unexpected object: %@ in collection: %@", [object1 class], collection1);
+                OWSFailDebug(@"Unexpected object: %@ in collection: %@", [object1 class], collection1);
                 return NSOrderedSame;
             }
             OWSMessageContentJob *job1 = (OWSMessageContentJob *)object1;
 
             if (![object2 isKindOfClass:[OWSMessageContentJob class]]) {
-                OWSFail(@"Unexpected object: %@ in collection: %@", [object2 class], collection2);
+                OWSFailDebug(@"Unexpected object: %@ in collection: %@", [object2 class], collection2);
                 return NSOrderedSame;
             }
             OWSMessageContentJob *job2 = (OWSMessageContentJob *)object2;
@@ -206,7 +206,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
             NSString *_Nonnull key,
             id _Nonnull object) {
             if (![object isKindOfClass:[OWSMessageContentJob class]]) {
-                OWSFail(@"Unexpected object: %@ in collection: %@", object, collection);
+                OWSFailDebug(@"Unexpected object: %@ in collection: %@", object, collection);
                 return nil;
             }
 
@@ -226,7 +226,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
 {
     YapDatabaseView *existingView = [storage registeredExtension:OWSMessageContentJobFinderExtensionName];
     if (existingView) {
-        OWSFail(@"%@ was already initialized.", OWSMessageContentJobFinderExtensionName);
+        OWSFailDebug(@"%@ was already initialized.", OWSMessageContentJobFinderExtensionName);
         // already initialized
         return;
     }

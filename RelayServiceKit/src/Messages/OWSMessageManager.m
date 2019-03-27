@@ -165,7 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
     if ([[NSUUID alloc] initWithUUIDString:envelope.source] == nil) {
         DDLogVerbose(
                      @"%@ incoming envelope has invalid source: %@", self.logTag, [self descriptionForEnvelope:envelope]);
-        OWSFail(@"%@ incoming envelope has invalid source", self.logTag);
+        OWSFailDebug(@"%@ incoming envelope has invalid source", self.logTag);
         return;
     }
     
@@ -177,7 +177,7 @@ NS_ASSUME_NONNULL_BEGIN
             if (plaintextData) {
                 [self handleEnvelope:envelope plaintextData:plaintextData transaction:transaction];
             } else {
-                OWSFail(
+                OWSFailDebug(
                         @"%@ missing decrypted data for envelope: %@", self.logTag, [self descriptionForEnvelope:envelope]);
             }
             break;
@@ -336,7 +336,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (profileKey.length == kAES256_KeyByteLength) {
             [self.profileManager setProfileKeyData:profileKey forRecipientId:recipientId];
         } else {
-            OWSFail(
+            OWSFailDebug(
                     @"Unexpected profile key length:%lu on message from:%@", (unsigned long)profileKey.length, recipientId);
         }
     }
@@ -419,7 +419,7 @@ NS_ASSUME_NONNULL_BEGIN
 //    TSGroupThread *_Nullable groupThread =
 //        [TSGroupThread threadWithGroupId:dataMessage.group.id transaction:transaction];
 //    if (!groupThread) {
-//        OWSFail(@"%@ Missing group for group avatar update", self.logTag);
+//        OWSFailDebug(@"%@ Missing group for group avatar update", self.logTag);
 //        return;
 //    }
 //
@@ -629,13 +629,13 @@ NS_ASSUME_NONNULL_BEGIN
     
     NSString *recipientId = envelope.source;
     if (!dataMessage.hasProfileKey) {
-        OWSFail(
+        OWSFailDebug(
                 @"%@ received profile key message without profile key from: %@", self.logTag, envelopeAddress(envelope));
         return;
     }
     NSData *profileKey = dataMessage.profileKey;
     if (profileKey.length != kAES256_KeyByteLength) {
-        OWSFail(@"%@ received profile key of unexpected length:%lu from:%@",
+        OWSFailDebug(@"%@ received profile key of unexpected length:%lu from:%@",
                 self.logTag,
                 (unsigned long)profileKey.length,
                 envelopeAddress(envelope));
@@ -700,7 +700,7 @@ NS_ASSUME_NONNULL_BEGIN
 //
 //    NSData *groupId = dataMessage.hasGroup ? dataMessage.group.id : nil;
 //    if (!groupId) {
-//        OWSFail(@"Group info request is missing group id.");
+//        OWSFailDebug(@"Group info request is missing group id.");
 //        return;
 //    }
 //
@@ -755,17 +755,10 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert(dataMessage);
     OWSAssert(transaction);
     
-    NSString *body = dataMessage.body;
     
     //  Catch incoming messages and process the new way.
+    NSString *body = dataMessage.body;
     NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:body];
-//    TSThread *thread = [TSThread getOrCreateThreadWithBody:body transaction:transaction];
-    
-//    if (thread == nil) {
-//        DDLogDebug(@"%@: unable to build thread for received envelope.", self.logTag);
-//        return nil;
-//    }
-    
     NSDictionary *dataBlob = [jsonPayload objectForKey:@"data"];
     if ([dataBlob allKeys].count == 0) {
         DDLogDebug(@"Received message contained no data object.");
@@ -799,14 +792,6 @@ NS_ASSUME_NONNULL_BEGIN
         DDLogDebug(@"%@ Unhandled message type: %@", self.logTag, [jsonPayload objectForKey:FLMessageTypeKey]);
         return nil;
     }
-    
-    // TODO: Investigate this finalize method
-    //        [self finalizeIncomingMessage:incomingMessage
-    //                               thread:thread
-    //                             envelope:envelope
-    //                          transaction:transaction];
-    //        return incomingMessage;
-    //    }
 }
 
 #pragma mark - message handlers by type
@@ -860,11 +845,7 @@ NS_ASSUME_NONNULL_BEGIN
         incomingMessage.uniqueId = [jsonPayload objectForKey:FLMessageIdKey];
         incomingMessage.messageType = [jsonPayload objectForKey:FLMessageTypeKey];
     }
-    incomingMessage.forstaPayload = [jsonPayload mutableCopy];
-    
-
-
-    
+    incomingMessage.forstaPayload = [jsonPayload copy];
     [incomingMessage saveWithTransaction:transaction];
     
     if (incomingMessage && thread) {
@@ -875,22 +856,6 @@ NS_ASSUME_NONNULL_BEGIN
                           transaction:transaction];
         
         return incomingMessage;
-        //        OWSReadReceiptsProcessor *readReceiptsProcessor =
-        //        [[OWSReadReceiptsProcessor alloc] initWithIncomingMessage:incomingMessage
-        //                                                   storageManager:self.storageManager];
-        //        [readReceiptsProcessor process];
-        //
-        //        [self.disappearingMessagesJob becomeConsistentWithConfigurationForMessage:incomingMessage
-        //                                                                  contactsManager:self.contactsManager];
-        //
-        //        // TODO Delay notification by 100ms?
-        //        // It's pretty annoying when you're phone keeps buzzing while you're having a conversation on Desktop.
-        //
-        //        NSString *senderName = [Environment.shared.contactsManager nameStringForContactId:envelope.source];
-        //        [[TextSecureKitEnv sharedEnv].notificationsManager notifyUserForIncomingMessage:incomingMessage
-        //                                                                                   from:senderName
-        //                                                                               inThread:thread];
-        //        return incomingMessage;
     } else {
         DDLogDebug(@"Unable to process incoming message.");
         return nil;
@@ -911,11 +876,11 @@ NS_ASSUME_NONNULL_BEGIN
     OWSAssert([TSAccountManager isRegistered]);
     
     if (!thread) {
-        OWSFail(@"%@ Can't finalize without thread", self.logTag);
+        OWSFailDebug(@"%@ Can't finalize without thread", self.logTag);
         return;
     }
     if (!incomingMessage) {
-        OWSFail(@"%@ Can't finalize missing message", self.logTag);
+        OWSFailDebug(@"%@ Can't finalize missing message", self.logTag);
         return;
     }
     
@@ -939,8 +904,7 @@ NS_ASSUME_NONNULL_BEGIN
             [[OWSAttachmentsProcessor alloc] initWithAttachmentPointer:attachmentPointer
                                                         networkManager:self.networkManager];
             
-            DDLogDebug(
-                       @"%@ downloading thumbnail for message: %lu", self.logTag, (unsigned long)incomingMessage.timestamp);
+            DDLogDebug(@"%@ downloading thumbnail for message: %lu", self.logTag, (unsigned long)incomingMessage.timestamp);
             [attachmentProcessor fetchAttachmentsForMessage:incomingMessage
                                                 transaction:transaction
                                                     success:^(TSAttachmentStream *_Nonnull attachmentStream) {

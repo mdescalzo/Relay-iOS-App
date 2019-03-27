@@ -77,7 +77,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
     YapDatabaseView *existingView = [storage registeredExtension:viewName];
     if (existingView) {
-        OWSFail(@"Registered database view twice: %@", viewName);
+        OWSFailDebug(@"Registered database view twice: %@", viewName);
         return;
     }
 
@@ -374,7 +374,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 {
     YapDatabaseView *tagView = [storage registeredExtension:FLTagDatabaseViewExtensionName];
     if (tagView) {
-        OWSFail(@"Registered database view twice: %@", FLTagDatabaseViewExtensionName);
+        OWSFailDebug(@"Registered database view twice: %@", FLTagDatabaseViewExtensionName);
         return;
     }
     
@@ -420,7 +420,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     // Register the filteredView which depends upon the above.
     YapDatabaseFilteredView *filteredView = [storage registeredExtension:FLFilteredTagDatabaseViewExtensionName];
     if (filteredView) {
-        OWSFail(@"Registered database view twice: %@", FLFilteredTagDatabaseViewExtensionName);
+        OWSFailDebug(@"Registered database view twice: %@", FLFilteredTagDatabaseViewExtensionName);
         return;
     }
     

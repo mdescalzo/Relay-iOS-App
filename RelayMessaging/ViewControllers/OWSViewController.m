@@ -153,7 +153,7 @@ NSString *const TappedStatusBarNotification = @"TappedStatusBarNotification";
 
     NSValue *_Nullable keyboardEndFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey];
     if (!keyboardEndFrameValue) {
-        OWSFail(@"%@ Missing keyboard end frame", self.logTag);
+        OWSFailDebug(@"%@ Missing keyboard end frame", self.logTag);
         return;
     }
 

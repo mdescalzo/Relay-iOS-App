@@ -663,7 +663,7 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
     @synchronized(self) {
         NSString *_Nullable localUID = self.localUID;
         if (!localUID) {
-            OWSFail(@"%@ can't re-register without valid local number.", self.logTag);
+            OWSFailDebug(@"%@ can't re-register without valid local number.", self.logTag);
             return NO;
         }
 
