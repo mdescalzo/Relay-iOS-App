@@ -303,8 +303,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                            "callId" : self.callId,
                            "peerId" : self.peerId,
                            "answer" : [ "type" : "answer",
-                                        "sdp" : hardenedSessionDescription.sdp ],
-                           ] as NSMutableDictionary
+                                        "sdp" : hardenedSessionDescription.sdp ] as NSDictionary,
+                           ] as NSDictionary
         
         let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallAcceptOfferKey, moreData: allTheData)
         return messageSender.sendPromise(message: message, recipientId: self.userId, recipientDeviceId: self.deviceId)
@@ -380,8 +380,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                                    "callId" : self.callId,
                                    "peerId" : self.peerId,
                                    "offer" : [ "type" : "offer",
-                                               "sdp" : hardenedSessionDescription.sdp ],
-                                   ] as NSMutableDictionary
+                                               "sdp" : hardenedSessionDescription.sdp ] as NSDictionary,
+                                   ] as NSDictionary
                 
                 let message = OutgoingControlMessage(thread: call.thread, controlType: FLControlMessageCallOfferKey, moreData: allTheData)
                 return messageSender.sendPromise(message: message, recipientId: self.userId, recipientDeviceId: self.deviceId)
