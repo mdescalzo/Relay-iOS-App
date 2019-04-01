@@ -79,13 +79,6 @@ static double const STALLED_PROGRESS = 0.9;
 - (void)updateSocketStatusView {
     OWSAssertIsOnMainThread();
 
-    if ([OWSSignalService sharedInstance].isCensorshipCircumventionActive) {
-        [_updateStatusTimer invalidate];
-        [_socketStatusView removeFromSuperview];
-        _socketStatusView = nil;
-        return;
-    }
-
     switch ([TSSocketManager sharedManager].state) {
         case SocketManagerStateClosed:
             if (_socketStatusView == nil) {

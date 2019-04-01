@@ -4,7 +4,6 @@
 
 #import "OWSProfileManager.h"
 #import "Environment.h"
-#import "NSString+OWS.h"
 #import "OWSUserProfile.h"
 #import <RelayMessaging/RelayMessaging-Swift.h>
 

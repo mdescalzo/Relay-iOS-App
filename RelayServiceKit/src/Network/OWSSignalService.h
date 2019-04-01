@@ -18,19 +18,12 @@ extern NSString *const kNSNotificationName_IsCensorshipCircumventionActiveDidCha
 /// For uploading avatar assets.
 @property (nonatomic, readonly) AFHTTPSessionManager *CDNSessionManager;
 
-// Store tss URL
-@property (nonatomic, nullable) NSString *textSecureURL;
-
 + (instancetype)sharedInstance;
 
 - (instancetype)init NS_UNAVAILABLE;
 
 #pragma mark - Censorship Circumvention
 
-@property (atomic, readonly) BOOL isCensorshipCircumventionActive;
-@property (atomic, readonly) BOOL hasCensoredPhoneNumber;
-@property (atomic) BOOL isCensorshipCircumventionManuallyActivated;
-@property (atomic, nullable) NSString *manualCensorshipCircumventionCountryCode;
 
 @end
 

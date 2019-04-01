@@ -4,13 +4,11 @@
 
 #import "ContactsViewHelper.h"
 #import "Environment.h"
-#import "NSString+OWS.h"
 #import "UIUtil.h"
 #import <RelayMessaging/OWSProfileManager.h>
 #import <RelayMessaging/RelayMessaging-Swift.h>
 
 @import RelayServiceKit;
-
 @import ContactsUI;
 
 NS_ASSUME_NONNULL_BEGIN

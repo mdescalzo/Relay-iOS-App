@@ -280,7 +280,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 - (void)ensureWebsocketIsOpen
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(!self.signalService.isCensorshipCircumventionActive);
 
     // Try to reuse the existing socket (if any) if it is in a valid state.
     if (self.websocket) {
@@ -897,11 +896,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
     }
 
     if (![TSAccountManager isRegistered]) {
-        return NO;
-    }
-
-    if (self.signalService.isCensorshipCircumventionActive) {
-        DDLogWarn(@"%@ Skipping opening of websocket due to censorship circumvention.", self.logTag);
         return NO;
     }
 

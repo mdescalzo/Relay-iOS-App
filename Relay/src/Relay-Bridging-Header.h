@@ -44,7 +44,6 @@
 #import <RelayMessaging/AttachmentSharing.h>
 #import <RelayMessaging/ContactTableViewCell.h>
 #import <RelayMessaging/Environment.h>
-#import <RelayMessaging/NSString+OWS.h>
 #import <RelayMessaging/OWSAudioPlayer.h>
 #import <RelayMessaging/OWSContactAvatarBuilder.h>
 #import <RelayMessaging/OWSFormat.h>

@@ -7,7 +7,6 @@
 #import "Relay-Swift.h"
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
-#import <RelayMessaging/NSString+OWS.h>
 #import <RelayMessaging/OWSFormat.h>
 #import <RelayServiceKit/MimeTypeUtil.h>
 #import <RelayServiceKit/TSAttachmentStream.h>
