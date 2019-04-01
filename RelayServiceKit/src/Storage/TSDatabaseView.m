@@ -54,21 +54,21 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
 @implementation TSDatabaseView
 
-+ (void)registerCrossProcessNotifier:(OWSStorage *)storage
-{
-    OWSAssert(storage);
-
-    // I don't think the identifier and name of this extension matter for our purposes,
-    // so long as they don't conflict with any other extension names.
-    YapDatabaseExtension *extension =
-        [[YapDatabaseCrossProcessNotification alloc] initWithIdentifier:@"SignalCrossProcessNotifier"];
-    [storage registerExtension:extension withName:@"SignalCrossProcessNotifier"];
-}
+//+ (void)registerCrossProcessNotifier:(nonnull OWSStorage *)storage
+//{
+//    OWSAssert(storage);
+//
+//    // I don't think the identifier and name of this extension matter for our purposes,
+//    // so long as they don't conflict with any other extension names.
+//    YapDatabaseExtension *extension =
+//        [[YapDatabaseCrossProcessNotification alloc] initWithIdentifier:@"SignalCrossProcessNotifier"];
+//    [storage registerExtension:extension withName:@"SignalCrossProcessNotifier"];
+//}
 
 + (void)registerMessageDatabaseViewWithName:(NSString *)viewName
                                viewGrouping:(YapDatabaseViewGrouping *)viewGrouping
                                     version:(NSString *)version
-                                    storage:(OWSStorage *)storage
+                                    storage:(nonnull OWSStorage *)storage
 {
     OWSAssertIsOnMainThread();
     OWSAssert(viewName.length > 0);
@@ -95,7 +95,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     [storage asyncRegisterExtension:view withName:viewName];
 }
 
-+ (void)asyncRegisterUnreadDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterUnreadDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
@@ -108,13 +108,13 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self registerMessageDatabaseViewWithName:TSUnreadDatabaseViewExtensionName
+    [self asyncRegisterMessageDatabaseViewWithName:TSUnreadDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
 }
 
-+ (void)asyncRegisterUnseenDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterUnseenDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
@@ -127,13 +127,13 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self registerMessageDatabaseViewWithName:TSUnseenDatabaseViewExtensionName
+    [self asyncRegisterMessageDatabaseViewWithName:TSUnseenDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
 }
 
-+ (void)asyncRegisterThreadSpecialMessagesDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterThreadSpecialMessagesDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
@@ -155,13 +155,13 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self registerMessageDatabaseViewWithName:TSThreadSpecialMessagesDatabaseViewExtensionName
+    [self asyncRegisterMessageDatabaseViewWithName:TSThreadSpecialMessagesDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
 }
 
-+ (void)asyncRegisterThreadInteractionsDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterThreadInteractionsDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
@@ -180,13 +180,13 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return interaction.uniqueThreadId;
     }];
 
-    [self registerMessageDatabaseViewWithName:TSMessageDatabaseViewExtensionName
+    [self asyncRegisterMessageDatabaseViewWithName:TSMessageDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
 }
 
-+ (void)asyncRegisterThreadOutgoingMessagesDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterThreadOutgoingMessagesDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
@@ -196,13 +196,13 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self registerMessageDatabaseViewWithName:TSThreadOutgoingMessageDatabaseViewExtensionName
+    [self asyncRegisterMessageDatabaseViewWithName:TSThreadOutgoingMessageDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"3"
                                       storage:storage];
 }
 
-+ (void)asyncRegisterThreadDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterThreadDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseView *threadView = [storage registeredExtension:TSThreadDatabaseViewExtensionName];
     if (threadView) {
@@ -370,7 +370,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     }];
 }
 
-+(void)registerTagDatabaseView:(OWSStorage *)storage
++(void)registerTagDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseView *tagView = [storage registeredExtension:FLTagDatabaseViewExtensionName];
     if (tagView) {
@@ -415,7 +415,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                           sorting:viewSorting
                                        versionTag:@"1" options:options];
     
-    [storage registerExtension:databaseView withName:FLTagDatabaseViewExtensionName];
+    [storage asyncRegisterExtension:databaseView withName:FLTagDatabaseViewExtensionName];
 
     // Register the filteredView which depends upon the above.
     YapDatabaseFilteredView *filteredView = [storage registeredExtension:FLFilteredTagDatabaseViewExtensionName];
@@ -435,10 +435,10 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     filteredView = [[YapDatabaseFilteredView alloc] initWithParentViewName:FLTagDatabaseViewExtensionName filtering:filtering];
     
     
-    [storage registerExtension:filteredView withName:FLFilteredTagDatabaseViewExtensionName];
+    [storage asyncRegisterExtension:filteredView withName:FLFilteredTagDatabaseViewExtensionName];
 }
 
-+ (void)asyncRegisterSecondaryDevicesDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterSecondaryDevicesDatabaseView:(nonnull OWSStorage *)storage
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *_Nullable(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
@@ -488,7 +488,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     [storage asyncRegisterExtension:view withName:TSSecondaryDevicesDatabaseViewExtensionName];
 }
 
-+ (void)asyncRegisterLazyRestoreAttachmentsDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterLazyRestoreAttachmentsDatabaseView:(nonnull OWSStorage *)storage
                                              completion:(nullable dispatch_block_t)completion
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *_Nullable(
