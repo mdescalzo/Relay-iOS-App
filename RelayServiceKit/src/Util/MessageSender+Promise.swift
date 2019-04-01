@@ -9,7 +9,7 @@ public extension MessageSender {
     /**
      * Wrap message sending in a Promise for easier callback chaining.
      */
-    public func sendPromise(message: TSOutgoingMessage) -> Promise<Void> {
+    func sendPromise(message: TSOutgoingMessage) -> Promise<Void> {
         let promise: Promise<Void> = Promise { resolver in
             self.enqueue(message, success: { resolver.fulfill() }, failure: { (error) in resolver.reject(error) })
         }
@@ -25,7 +25,7 @@ public extension MessageSender {
     /**
      * Wrap message sending in a Promise for easier callback chaining.
      */
-    public func sendPromise(message: OutgoingControlMessage, recipientIds: [String]) -> Promise<Void> {
+    func sendPromise(message: OutgoingControlMessage, recipientIds: [String]) -> Promise<Void> {
         let foo = NSCountedSet(array: recipientIds)
         let promise: Promise<Void> = Promise { resolver in
             self.send(message, toRecipients: foo, success: { resolver.fulfill() }, failure: { (error) in resolver.reject(error) })
@@ -42,7 +42,7 @@ public extension MessageSender {
     /**
      * Wrap message sending in a Promise for easier callback chaining.
      */
-    public func sendPromise(message: OutgoingControlMessage, recipientId: String, recipientDeviceId: UInt32) -> Promise<Void> {
+    func sendPromise(message: OutgoingControlMessage, recipientId: String, recipientDeviceId: UInt32) -> Promise<Void> {
         let promise: Promise<Void> = Promise { resolver in
             self.sendSpecialMessage(message,
                                     recipientId: recipientId,

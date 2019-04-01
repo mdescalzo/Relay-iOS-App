@@ -288,7 +288,7 @@ class ControlMessageManager : NSObject
                                                                         infoMessage.save(with: transaction)
                                                                     })
                             }) { (error) in
-                                Logger.error("\(self.tag): Failed to fetch attachments for avatar with error: \(error.localizedDescription)")
+                                Logger.error("\(String(describing: self.tag)): Failed to fetch attachments for avatar with error: \(error.localizedDescription)")
                             }
                         }
                         
@@ -300,7 +300,7 @@ class ControlMessageManager : NSObject
     
     static private func handleThreadClear(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.info("\(self.tag): Recieved Unimplemented control message type: \(message.controlMessageType)")
+        Logger.info("\(String(describing: self.tag)): Recieved Unimplemented control message type: \(message.controlMessageType)")
     }
     
     static private func handleThreadClose(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
@@ -315,7 +315,7 @@ class ControlMessageManager : NSObject
             let threadId = message.forstaPayload[FLThreadIDKey] as! String
             if let thread = TSThread.fetch(uniqueId: threadId) {
                 thread.archiveThread(with: transaction, referenceDate: NSDate.ows_date(withMillisecondsSince1970: message.timestamp))
-                Logger.debug("\(self.tag): Archived thread: \(String(describing: thread.uniqueId))")
+                Logger.debug("\(String(describing: self.tag)): Archived thread: \(String(describing: thread.uniqueId))")
             }
         }
     }
@@ -326,20 +326,20 @@ class ControlMessageManager : NSObject
             let threadId = message.forstaPayload[FLThreadIDKey] as! String
             if let thread = TSThread.fetch(uniqueId: threadId) {
                 thread.unarchiveThread(with: transaction)
-                Logger.debug("\(self.tag): Unarchived thread: \(String(describing: thread.uniqueId))")
+                Logger.debug("\(String(describing: self.tag)): Unarchived thread: \(String(describing: thread.uniqueId))")
             }
         }
     }
     
     static private func handleThreadDelete(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.info("\(self.tag): Recieved Unimplemented control message type: \(message.controlMessageType)")
+        Logger.info("\(String(describing: self.tag)): Recieved Unimplemented control message type: \(message.controlMessageType)")
     }
     
     static private func handleThreadSnooze(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
         // TODO: Implement this.  Tie it to thread muting.
-        Logger.info("\(self.tag): Recieved Unimplemented control message type: \(message.controlMessageType)")
+        Logger.info("\(String(describing: self.tag)): Recieved Unimplemented control message type: \(message.controlMessageType)")
     }
     
     static private func handleProvisionRequest(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
@@ -348,7 +348,7 @@ class ControlMessageManager : NSObject
             let dataBlob: Dictionary<String, Any?> = message.forstaPayload["data"] as? Dictionary<String, Any?> {
             
             if !(senderId == FLSupermanDevID || senderId == FLSupermanStageID || senderId == FLSupermanProdID){
-                Logger.error("\(self.tag): RECEIVED PROVISIONING REQUEST FROM STRANGER: \(senderId)")
+                Logger.error("\(String(describing: self.tag)): RECEIVED PROVISIONING REQUEST FROM STRANGER: \(senderId)")
                 return
             }
             
@@ -356,18 +356,18 @@ class ControlMessageManager : NSObject
             let deviceUUID = dataBlob["uuid"] as? String
             
             if publicKeyString?.count == 0 || deviceUUID?.count == 0 {
-                Logger.error("\(self.tag): Received malformed provisionRequest control message. Bad data payload.")
+                Logger.error("\(String(describing: self.tag)): Received malformed provisionRequest control message. Bad data payload.")
                 return
             }
             FLDeviceRegistrationService.sharedInstance().provisionOtherDevice(withPublicKey: publicKeyString!, andUUID: deviceUUID!)
         } else {
-            Logger.error("\(self.tag): Received malformed provisionRequest control message.")
+            Logger.error("\(String(describing: self.tag)): Received malformed provisionRequest control message.")
         }
     }
     
     static private func handleMessageSyncRequest(message: IncomingControlMessage, transaction: YapDatabaseReadWriteTransaction)
     {
-        Logger.info("\(self.tag): Recieved Unimplemented control message type: \(message.controlMessageType)")
+        Logger.info("\(String(describing: self.tag)): Recieved Unimplemented control message type: \(message.controlMessageType)")
     }
     
     // MARK: - Logging
