@@ -108,7 +108,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self asyncRegisterMessageDatabaseViewWithName:TSUnreadDatabaseViewExtensionName
+    [self registerMessageDatabaseViewWithName:TSUnreadDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
@@ -127,7 +127,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self asyncRegisterMessageDatabaseViewWithName:TSUnseenDatabaseViewExtensionName
+    [self registerMessageDatabaseViewWithName:TSUnseenDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
@@ -155,7 +155,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self asyncRegisterMessageDatabaseViewWithName:TSThreadSpecialMessagesDatabaseViewExtensionName
+    [self registerMessageDatabaseViewWithName:TSThreadSpecialMessagesDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
@@ -180,7 +180,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return interaction.uniqueThreadId;
     }];
 
-    [self asyncRegisterMessageDatabaseViewWithName:TSMessageDatabaseViewExtensionName
+    [self registerMessageDatabaseViewWithName:TSMessageDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"1"
                                       storage:storage];
@@ -196,7 +196,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return nil;
     }];
 
-    [self asyncRegisterMessageDatabaseViewWithName:TSThreadOutgoingMessageDatabaseViewExtensionName
+    [self registerMessageDatabaseViewWithName:TSThreadOutgoingMessageDatabaseViewExtensionName
                                  viewGrouping:viewGrouping
                                       version:@"3"
                                       storage:storage];
