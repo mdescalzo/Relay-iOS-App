@@ -166,6 +166,7 @@ NSString *const CCSMStorageKeyTSServerURL = @"TSServerURL";
         _textSecureURLString = [self tryGetValueForKey:CCSMStorageKeyTSServerURL];
     }
     if (_textSecureURLString == nil) {
+        OWSFailDebug(@"Falling back to default TSS URL!");
         return @"https://signal-dev.forsta.io";
     }
     return _textSecureURLString;
