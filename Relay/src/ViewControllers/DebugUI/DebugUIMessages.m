@@ -282,7 +282,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)sendMessages:(NSUInteger)count toAllMembersOfGroup:(TSThread *)thread
 {
     for (NSString *recipientId in thread.participantIds) {
-        TSThread *contactThread = [TSThread getOrCreateThreadWithId:recipientId];
+        TSThread *contactThread = [TSThread getOrCreateThreadWithParticipants:@[TSAccountManager.localUID, recipientId]];
         [[self sendTextMessagesActionInThread:contactThread] prepareAndPerformNTimes:count];
     }
 }

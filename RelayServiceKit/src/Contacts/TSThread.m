@@ -572,7 +572,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 }
 
 
-+(instancetype)getOrCreateThreadWithParticipants:(NSArray <NSString *> *)participantIDs
++(nullable instancetype)getOrCreateThreadWithParticipants:(NSArray <NSString *> *)participantIDs
 {
     __block TSThread *thread = nil;
     [[OWSPrimaryStorage.sharedManager dbReadWriteConnection] readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
@@ -582,25 +582,28 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     return thread;
 }
 
-+(instancetype)getOrCreateThreadWithParticipants:(NSArray <NSString *> *)participantIDs
++(nullable instancetype)getOrCreateThreadWithParticipants:(NSArray <NSString *> *)participantIDs
                                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
     __block TSThread *thread = nil;
-    __block NSCountedSet *testSet = [NSCountedSet setWithArray:participantIDs];
-    [transaction enumerateKeysAndObjectsInCollection:[TSThread collection] usingBlock:^(NSString *key, TSThread *aThread, BOOL *stop) {
-        NSCountedSet *aSet = [NSCountedSet setWithArray:aThread.participantIds];
-        if ([aSet isEqual:testSet]) {
-            thread = aThread;
-            *stop = YES;
+    if (participantIDs.count > 0) {
+        __block NSCountedSet *testSet = [NSCountedSet setWithArray:participantIDs];
+        [transaction enumerateKeysAndObjectsInCollection:[TSThread collection] usingBlock:^(NSString *key, TSThread *aThread, BOOL *stop) {
+            NSCountedSet *aSet = [NSCountedSet setWithArray:aThread.participantIds];
+            if ([aSet isEqual:testSet]) {
+                thread = aThread;
+                *stop = YES;
+            }
+        }];
+        
+        if (thread == nil && testSet.count > 0) {
+            thread = [TSThread getOrCreateThreadWithId:[[NSUUID UUID] UUIDString].lowercaseString transaction:transaction];
+            thread.participantIds = [testSet allObjects];
+            [thread saveWithTransaction:transaction];
         }
-    }];
-    
-    if (thread == nil) {
-        thread = [TSThread getOrCreateThreadWithId:[[NSUUID UUID] UUIDString].lowercaseString transaction:transaction];
-        thread.participantIds = [testSet allObjects];
-        [thread saveWithTransaction:transaction];
+    } else {
+        OWSFailDebug(@"Attempt to create a thread with 0 participants.");
     }
-    
     return thread;
 }
 
@@ -756,7 +759,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     } else if (self.prettyExpression.length > 0) {
         returnString = self.prettyExpression;
     } else {
-        returnString = NSLocalizedString(@"New conversation", @"");
+        returnString = NSLocalizedString(@"NEW_THREAD", @"");
     }
     return [returnString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }

@@ -175,15 +175,9 @@ extern NSString *const TSThread_NotificationKey_UniqueId;
 /**
  *  Get or create thread with array of participant UUIDs
  */
-+(instancetype)getOrCreateThreadWithParticipants:(nonnull NSArray <NSString *> *)participantIDs;
-+(instancetype)getOrCreateThreadWithParticipants:(nonnull NSArray <NSString *> *)participantIDs
++(nullable instancetype)getOrCreateThreadWithParticipants:(nonnull NSArray <NSString *> *)participantIDs;
++(nullable instancetype)getOrCreateThreadWithParticipants:(nonnull NSArray <NSString *> *)participantIDs
                                      transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
-/**
- *  Get or create thread with thread UUID
- */
-+(instancetype)getOrCreateThreadWithId:(nonnull NSString *)threadId;
-+(instancetype)getOrCreateThreadWithId:(nonnull NSString *)threadId
-                           transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction;
 
 /**
  *  Remove participant from thread
