@@ -230,22 +230,23 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         }
 
         TSThread *thread = (TSThread *)object;
-
-        if (thread.archivalDate) {
-            return ([self threadShouldBeInInbox:thread]) ? TSInboxGroup : TSArchiveGroup;
-        } else if (thread.archivalDate) {
-            return TSArchiveGroup;
-        } else if (([thread.type isEqualToString:FLThreadTypeAnnouncement])) {
-            return FLAnnouncementsGroup;
-        } else if ([thread.type isEqualToString:FLThreadTypeConversation]) {
-            if (thread.pinPosition) {
-                return FLPinnedGroup;
-            } else {
-                return TSInboxGroup;
+        
+        if (thread.hasEverHadMessage && thread.participantIds.count > 0) {
+            if (thread.archivalDate) {
+                return ([self threadShouldBeInInbox:thread]) ? TSInboxGroup : TSArchiveGroup;
+            } else if (thread.archivalDate) {
+                return TSArchiveGroup;
+            } else if (([thread.type isEqualToString:FLThreadTypeAnnouncement])) {
+                return FLAnnouncementsGroup;
+            } else if ([thread.type isEqualToString:FLThreadTypeConversation]) {
+                if (thread.pinPosition) {
+                    return FLPinnedGroup;
+                } else {
+                    return TSInboxGroup;
+                }
             }
-        } else {
-            return nil;
         }
+        return nil;
     }];
 
     YapDatabaseViewSorting *viewSorting = [self threadSorting];
