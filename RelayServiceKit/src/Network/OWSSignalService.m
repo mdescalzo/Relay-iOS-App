@@ -19,15 +19,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 NSString *const kOWSPrimaryStorage_OWSSignalService = @"kTSStorageManager_OWSSignalService";
-NSString *const kOWSPrimaryStorage_isCensorshipCircumventionManuallyActivated
-    = @"kTSStorageManager_isCensorshipCircumventionManuallyActivated";
-NSString *const kOWSPrimaryStorage_ManualCensorshipCircumventionDomain
-    = @"kTSStorageManager_ManualCensorshipCircumventionDomain";
-NSString *const kOWSPrimaryStorage_ManualCensorshipCircumventionCountryCode
-    = @"kTSStorageManager_ManualCensorshipCircumventionCountryCode";
-
-NSString *const kNSNotificationName_IsCensorshipCircumventionActiveDidChange =
-    @"kNSNotificationName_IsCensorshipCircumventionActiveDidChange";
 
 NSString *const kFLTSSURLKey = @"FLTSSURLKey";
 
@@ -37,8 +28,6 @@ NSString *const kFLTSSURLKey = @"FLTSSURLKey";
 
 @property (atomic) BOOL hasCensoredPhoneNumber;
 
-@property (atomic) BOOL isCensorshipCircumventionActive;
-
 @property (nonatomic, nullable) NSString *cachedTSSURL;
 
 @end
@@ -46,8 +35,6 @@ NSString *const kFLTSSURLKey = @"FLTSSURLKey";
 #pragma mark -
 
 @implementation OWSSignalService
-
-@synthesize isCensorshipCircumventionActive = _isCensorshipCircumventionActive;
 
 + (instancetype)sharedInstance
 {

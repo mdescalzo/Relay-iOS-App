@@ -57,17 +57,6 @@ static double const STALLED_PROGRESS = 0.9;
                                              selector:@selector(socketManagerStateDidChange)
                                                  name:kNSNotification_SocketManagerStateDidChange
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(isCensorshipCircumventionActiveDidChange:)
-                                                 name:kNSNotificationName_IsCensorshipCircumventionActiveDidChange
-                                               object:nil];
-}
-
-- (void)isCensorshipCircumventionActiveDidChange:(NSNotification *)notification
-{
-    OWSAssertIsOnMainThread();
-
-    [self updateSocketStatusView];
 }
 
 - (void)socketManagerStateDidChange {

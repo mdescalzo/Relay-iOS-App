@@ -4,8 +4,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *const kNSNotificationName_IsCensorshipCircumventionActiveDidChange;
-
 @class AFHTTPSessionManager;
 @class OWSPrimaryStorage;
 @class TSAccountManager;

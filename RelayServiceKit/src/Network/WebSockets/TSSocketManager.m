@@ -260,10 +260,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
                                              selector:@selector(registrationStateDidChange:)
                                                  name:RegistrationStateDidChangeNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(isCensorshipCircumventionActiveDidChange:)
-                                                 name:kNSNotificationName_IsCensorshipCircumventionActiveDidChange
-                                               object:nil];
 }
 
 + (instancetype)sharedManager {
@@ -1082,13 +1078,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 }
 
 - (void)registrationStateDidChange:(NSNotification *)notification
-{
-    OWSAssertIsOnMainThread();
-
-    [self applyDesiredSocketState];
-}
-
-- (void)isCensorshipCircumventionActiveDidChange:(NSNotification *)notification
 {
     OWSAssertIsOnMainThread();
 
