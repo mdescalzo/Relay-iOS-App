@@ -368,6 +368,18 @@ NS_ASSUME_NONNULL_BEGIN
                      [NSNumberFormatter localizedStringFromNumber:@(duration) numberStyle:NSNumberFormatterNoStyle]];
 }
 
+- (NSString *)rtlSafeAppend:(NSString *)string
+{
+    OWSAssert(string);
+    
+    if (CurrentAppContext().isRTL) {
+        return [string stringByAppendingString:self];
+    } else {
+        return [self stringByAppendingString:string];
+    }
+}
+
+
 @end
 
 NS_ASSUME_NONNULL_END

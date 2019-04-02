@@ -4,8 +4,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *const kNSNotificationName_IsCensorshipCircumventionActiveDidChange;
-
 @class AFHTTPSessionManager;
 @class OWSPrimaryStorage;
 @class TSAccountManager;
@@ -16,10 +14,7 @@ extern NSString *const kNSNotificationName_IsCensorshipCircumventionActiveDidCha
 @property (nonatomic, readonly) AFHTTPSessionManager *signalServiceSessionManager;
 
 /// For uploading avatar assets.
-@property (nonatomic, readonly) AFHTTPSessionManager *CDNSessionManager;
-
-// Store tss URL
-@property (nonatomic, nullable) NSString *textSecureURL;
+//@property (nonatomic, readonly) AFHTTPSessionManager *CDNSessionManager;
 
 + (instancetype)sharedInstance;
 
@@ -27,10 +22,6 @@ extern NSString *const kNSNotificationName_IsCensorshipCircumventionActiveDidCha
 
 #pragma mark - Censorship Circumvention
 
-@property (atomic, readonly) BOOL isCensorshipCircumventionActive;
-@property (atomic, readonly) BOOL hasCensoredPhoneNumber;
-@property (atomic) BOOL isCensorshipCircumventionManuallyActivated;
-@property (atomic, nullable) NSString *manualCensorshipCircumventionCountryCode;
 
 @end
 

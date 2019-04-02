@@ -260,10 +260,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
                                              selector:@selector(registrationStateDidChange:)
                                                  name:RegistrationStateDidChangeNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(isCensorshipCircumventionActiveDidChange:)
-                                                 name:kNSNotificationName_IsCensorshipCircumventionActiveDidChange
-                                               object:nil];
 }
 
 + (instancetype)sharedManager {
@@ -280,7 +276,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 - (void)ensureWebsocketIsOpen
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(!self.signalService.isCensorshipCircumventionActive);
 
     // Try to reuse the existing socket (if any) if it is in a valid state.
     if (self.websocket) {
@@ -900,11 +895,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
         return NO;
     }
 
-    if (self.signalService.isCensorshipCircumventionActive) {
-        DDLogWarn(@"%@ Skipping opening of websocket due to censorship circumvention.", self.logTag);
-        return NO;
-    }
-
     if (self.appIsActive) {
         // If app is active, keep web socket alive.
         return YES;
@@ -1088,13 +1078,6 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 }
 
 - (void)registrationStateDidChange:(NSNotification *)notification
-{
-    OWSAssertIsOnMainThread();
-
-    [self applyDesiredSocketState];
-}
-
-- (void)isCensorshipCircumventionActiveDidChange:(NSNotification *)notification
 {
     OWSAssertIsOnMainThread();
 

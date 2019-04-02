@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)formatDurationSeconds:(uint32_t)durationSeconds useShortFormat:(BOOL)useShortFormat;
 
+- (NSString *)rtlSafeAppend:(NSString *)string;
+
 @end
 
 NS_ASSUME_NONNULL_END

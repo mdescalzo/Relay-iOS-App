@@ -46,32 +46,32 @@ extern NSString *const TSLazyRestoreAttachmentsDatabaseViewExtensionName;
 
 #pragma mark - Registration
 
-+ (void)registerCrossProcessNotifier:(OWSStorage *)storage;
+//+ (void)registerCrossProcessNotifier:(nonnull OWSStorage *)storage;
 
 // This method must be called _AFTER_ asyncRegisterThreadInteractionsDatabaseView.
-+ (void)asyncRegisterThreadDatabaseView:(OWSStorage *)storage;
++ (void)asyncRegisterThreadDatabaseView:(nonnull OWSStorage *)storage;
 
-+ (void)asyncRegisterThreadInteractionsDatabaseView:(OWSStorage *)storage;
-+ (void)asyncRegisterThreadOutgoingMessagesDatabaseView:(OWSStorage *)storage;
++ (void)asyncRegisterThreadInteractionsDatabaseView:(nonnull OWSStorage *)storage;
++ (void)asyncRegisterThreadOutgoingMessagesDatabaseView:(nonnull OWSStorage *)storage;
 
 // Instances of OWSReadTracking for wasRead is NO and shouldAffectUnreadCounts is YES.
 //
 // Should be used for "unread message counts".
-+ (void)asyncRegisterUnreadDatabaseView:(OWSStorage *)storage;
++ (void)asyncRegisterUnreadDatabaseView:(nonnull OWSStorage *)storage;
 
 // Should be used for "unread indicator".
 //
 // Instances of OWSReadTracking for wasRead is NO.
-+ (void)asyncRegisterUnseenDatabaseView:(OWSStorage *)storage;
++ (void)asyncRegisterUnseenDatabaseView:(nonnull OWSStorage *)storage;
 
-+ (void)asyncRegisterThreadSpecialMessagesDatabaseView:(OWSStorage *)storage;
++ (void)asyncRegisterThreadSpecialMessagesDatabaseView:(nonnull OWSStorage *)storage;
 
-+ (void)asyncRegisterSecondaryDevicesDatabaseView:(OWSStorage *)storage;
++ (void)asyncRegisterSecondaryDevicesDatabaseView:(nonnull OWSStorage *)storage;
 
-+ (void)asyncRegisterLazyRestoreAttachmentsDatabaseView:(OWSStorage *)storage
++ (void)asyncRegisterLazyRestoreAttachmentsDatabaseView:(nonnull OWSStorage *)storage
                                              completion:(nullable dispatch_block_t)completion;
 
 // Forsta Additions
-+(void)registerTagDatabaseView:(OWSStorage *)storage;
++(void)registerTagDatabaseView:(nonnull OWSStorage *)storage;
 
 @end

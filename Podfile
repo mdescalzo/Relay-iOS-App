@@ -18,7 +18,7 @@ def shared_pods
 
     # third party pods
     pod 'SQLCipher', '~> 4.0'
-    pod 'YapDatabase/SQLCipher', '~> 3.1.2', inhibit_warnings: true
+    pod 'YapDatabase/SQLCipher', '= 3.1.1', inhibit_warnings: true
     pod 'AFNetworking', inhibit_warnings: true
     pod 'Mantle', '~> 2.1.0', :inhibit_warnings => true
     pod 'PureLayout', '~> 3.1.4',:inhibit_warnings => true

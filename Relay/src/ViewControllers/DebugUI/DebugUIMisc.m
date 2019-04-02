@@ -35,14 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable OWSTableSection *)sectionForThread:(nullable TSThread *)thread
 {
     NSMutableArray<OWSTableItem *> *items = [NSMutableArray new];
-    [items addObject:[OWSTableItem itemWithTitle:@"Enable Manual Censorship Circumvention"
-                                     actionBlock:^{
-                                         [DebugUIMisc setManualCensorshipCircumventionEnabled:YES];
-                                     }]];
-    [items addObject:[OWSTableItem itemWithTitle:@"Disable Manual Censorship Circumvention"
-                                     actionBlock:^{
-                                         [DebugUIMisc setManualCensorshipCircumventionEnabled:NO];
-                                     }]];
 
     [items addObject:[OWSTableItem itemWithTitle:@"Delete disappearing messages config"
                                      actionBlock:^{

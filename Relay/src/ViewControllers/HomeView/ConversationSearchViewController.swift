@@ -140,8 +140,9 @@ class ConversationSearchViewController: UITableViewController {
                 return
             }
             
-            let thread = TSThread.getOrCreateThread(withParticipants: [ TSAccountManager.localUID()!, searchResult.recipientId ])
+            if let thread = TSThread.getOrCreateThread(withParticipants: [ TSAccountManager.localUID()!, searchResult.recipientId ]) {
             SignalApp.shared().presentConversation(for: thread, action: .compose)
+            }
 
         case .messages:
             let sectionResults = searchResultSet.messages

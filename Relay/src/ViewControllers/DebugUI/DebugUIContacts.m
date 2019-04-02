@@ -1326,7 +1326,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)createUnregisteredContactThread
 {
     NSString *recipientId = [self unregisteredRecipientId];
-    TSThread *thread = [TSThread getOrCreateThreadWithId:recipientId];
+    TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[TSAccountManager.localUID, recipientId]];
     [SignalApp.sharedApp presentConversationForThread:thread];
 }
 

@@ -123,51 +123,42 @@
     }
                          customRowHeight:100.f
                          actionBlock:^{
-//                             [weakSelf showProfile];
+                             // TODO: add access to own fingerprint here
                          }]];
 
-    if (OWSSignalService.sharedInstance.isCensorshipCircumventionActive) {
-        [section
-            addItem:[OWSTableItem disclosureItemWithText:
-                                      NSLocalizedString(@"NETWORK_STATUS_CENSORSHIP_CIRCUMVENTION_ACTIVE",
-                                          @"Indicates to the user that censorship circumvention has been activated.")
-                                             actionBlock:^{
-                                                 [weakSelf showAdvanced];
-                                             }]];
-    } else {
-        [section addItem:[OWSTableItem
-                             itemWithCustomCellBlock:^{
-                                 UITableViewCell *cell = [OWSTableItem newCell];
-                                 cell.textLabel.text = NSLocalizedString(@"NETWORK_STATUS_HEADER", @"");
-                                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                                 UILabel *accessoryLabel = [UILabel new];
-                                 accessoryLabel.font = [UIFont ows_regularFontWithSize:18.f];
-                                 if (TSAccountManager.sharedInstance.isDeregistered) {
-                                     accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_DEREGISTERED",
-                                         @"Error indicating that this device is no longer registered.");
-                                     accessoryLabel.textColor = [UIColor FL_mediumRed];
-                                 } else {
-                                     switch ([TSSocketManager sharedManager].state) {
-                                         case SocketManagerStateClosed:
-                                             accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_OFFLINE", @"");
-                                             accessoryLabel.textColor = [UIColor FL_mediumRed];
-                                             break;
-                                         case SocketManagerStateConnecting:
-                                             accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_CONNECTING", @"");
-                                             accessoryLabel.textColor = [UIColor FL_mediumYellow];
-                                             break;
-                                         case SocketManagerStateOpen:
-                                             accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_CONNECTED", @"");
-                                             accessoryLabel.textColor = [UIColor FL_darkGreen];
-                                             break;
-                                     }
-                                 }
-                                 [accessoryLabel sizeToFit];
-                                 cell.accessoryView = accessoryLabel;
-                                 return cell;
-                             }
-                                         actionBlock:nil]];
-    }
+    [section addItem:[OWSTableItem
+                      itemWithCustomCellBlock:^{
+                          UITableViewCell *cell = [OWSTableItem newCell];
+                          cell.textLabel.text = NSLocalizedString(@"NETWORK_STATUS_HEADER", @"");
+                          cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                          UILabel *accessoryLabel = [UILabel new];
+                          accessoryLabel.font = [UIFont ows_regularFontWithSize:18.f];
+                          if (TSAccountManager.sharedInstance.isDeregistered) {
+                              accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_DEREGISTERED",
+                                                                      @"Error indicating that this device is no longer registered.");
+                              accessoryLabel.textColor = [UIColor FL_mediumRed];
+                          } else {
+                              switch ([TSSocketManager sharedManager].state) {
+                                  case SocketManagerStateClosed:
+                                      accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_OFFLINE", @"");
+                                      accessoryLabel.textColor = [UIColor FL_mediumRed];
+                                      break;
+                                  case SocketManagerStateConnecting:
+                                      accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_CONNECTING", @"");
+                                      accessoryLabel.textColor = [UIColor FL_mediumYellow];
+                                      break;
+                                  case SocketManagerStateOpen:
+                                      accessoryLabel.text = NSLocalizedString(@"NETWORK_STATUS_CONNECTED", @"");
+                                      accessoryLabel.textColor = [UIColor FL_darkGreen];
+                                      break;
+                              }
+                          }
+                          [accessoryLabel sizeToFit];
+                          cell.accessoryView = accessoryLabel;
+                          return cell;
+                      }
+                      actionBlock:nil]];
+    
 
     [section addItem:[OWSTableItem disclosureItemWithText:NSLocalizedString(@"SETTINGS_PRIVACY_TITLE",
                                                               @"Settings table view cell label")

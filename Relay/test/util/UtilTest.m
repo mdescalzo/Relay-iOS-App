@@ -5,10 +5,8 @@
 #import "UtilTest.h"
 #import "DateUtil.h"
 #import "TestUtil.h"
-#import <RelayMessaging/NSString+OWS.h>
-#import <RelayServiceKit/NSDate+OWS.h>
-#import <RelayServiceKit/NSObject+OWS.h>
-#import <RelayServiceKit/NSString+SSK.h>
+
+@import RelayServiceKit;
 
 @interface DateUtil (Test)
 

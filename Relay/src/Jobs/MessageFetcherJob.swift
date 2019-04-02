@@ -29,39 +29,8 @@ public class MessageFetcherJob: NSObject {
     @discardableResult
     public func run() -> Promise<Void> {
         Logger.debug("\(self.logTag) in \(#function)")
-
-        guard signalService.isCensorshipCircumventionActive else {
-            Logger.debug("\(self.logTag) delegating message fetching to SocketManager since we're using normal transport.")
             TSSocketManager.requestSocketOpen()
             return Promise.value(())
-        }
-
-        Logger.info("\(self.logTag) fetching messages via REST.")
-
-        let promise = self.fetchUndeliveredMessages().then { (envelopes: [SSKEnvelope], more: Bool) -> Promise<Void> in
-            for envelope in envelopes {
-                Logger.info("\(self.logTag) received envelope.")
-                do {
-                    let envelopeData = try envelope.serializedData()
-                    self.messageReceiver.handleReceivedEnvelopeData(envelopeData)
-                } catch {
-                    owsFailDebug("\(self.logTag) in \(#function) failed to serialize envelope")
-                }
-                self.acknowledgeDelivery(envelope: envelope)
-            }
-
-            if more {
-                Logger.info("\(self.logTag) fetching more messages.")
-                return self.run()
-            } else {
-                // All finished
-                return Promise.value(())
-            }
-        }
-
-        promise.retainUntilComplete()
-
-        return promise
     }
 
     @objc

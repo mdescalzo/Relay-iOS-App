@@ -104,6 +104,7 @@ import YapDatabase
                 if recipient.flTag?.orgSlug == nil || recipient.flTag?.orgSlug.count == 0 {
                     recipient.flTag?.orgSlug = recipient.orgSlug!
                 }
+                recipient.save(with: transaction)
                 return recipient
             } else {
                 Logger.debug("Missing tagDictionary for Recipient: \(String(describing: recipient.uniqueId))")

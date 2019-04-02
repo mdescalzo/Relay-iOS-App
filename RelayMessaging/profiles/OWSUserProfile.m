@@ -3,7 +3,6 @@
 //
 
 #import "OWSUserProfile.h"
-#import "NSString+OWS.h"
 
 @import RelayServiceKit;
 @import SignalCoreKit;

@@ -37,8 +37,7 @@ void RunSyncRegistrationsForStorage(OWSStorage *storage)
     OWSCAssert(storage);
 
     // Synchronously register extensions which are essential for views.
-    [TSDatabaseView registerCrossProcessNotifier:storage];
-    [TSDatabaseView registerTagDatabaseView:storage];
+//    [TSDatabaseView registerCrossProcessNotifier:storage];
 }
 
 void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t completion)
@@ -51,6 +50,7 @@ void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t compl
     // All sync registrations must be done before all async registrations,
     // or the sync registrations will block on the async registrations.
 
+    [TSDatabaseView registerTagDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadInteractionsDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadDatabaseView:storage];
     [TSDatabaseView asyncRegisterUnreadDatabaseView:storage];

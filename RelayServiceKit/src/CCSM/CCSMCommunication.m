@@ -16,6 +16,7 @@
 #import "TSPreKeyManager.h"
 #import "AFNetworking.h"
 #import "FLDeviceRegistrationService.h"
+#import "NSNotificationCenter+OWS.h"
 #import <RelayServiceKit/RelayServiceKit-Swift.h>
 
 #define FLTagMathPath @"/v1/directory/user/"
@@ -380,9 +381,7 @@
                 
         [CCSMStorage.sharedInstance setSessionToken:[payload objectForKey:@"token"]];
         
-        [CCSMStorage.sharedInstance setUserInfo:userDict];
-        RelayRecipient *recipient = [RelayRecipient getOrCreateRecipientWithUserDictionary:userDict];
-        [recipient save];
+        (void)[RelayRecipient getOrCreateRecipientWithUserDictionary:userDict];
         
         NSDictionary *orgDict = [userDict objectForKey:@"org"];
         [CCSMStorage.sharedInstance setOrgInfo:orgDict];
@@ -460,12 +459,12 @@
 
 +(void)notifyOfUsersRefresh
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:FLCCSMUsersUpdated object:nil];
+    [NSNotificationCenter.defaultCenter postNotificationNameAsync:FLCCSMUsersUpdated object:nil];
 }
 
 +(void)notifyOfTagsRefresh
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:FLCCSMTagsUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationNameAsync:FLCCSMTagsUpdated object:nil];
 }
 
 #pragma mark - CCSM proxied TextSecure registration

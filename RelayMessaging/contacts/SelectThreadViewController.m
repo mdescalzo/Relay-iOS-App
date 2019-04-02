@@ -6,7 +6,6 @@
 #import "ContactTableViewCell.h"
 #import "ContactsViewHelper.h"
 #import "Environment.h"
-#import "NSString+OWS.h"
 #import "OWSTableViewController.h"
 #import "ThreadViewHelper.h"
 #import "UIFont+OWS.h"
