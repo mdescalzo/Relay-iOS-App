@@ -210,6 +210,7 @@ class NewAccountViewController: UITableViewController, UITextFieldDelegate {
                     FLDeviceRegistrationService.sharedInstance().registerWithTSS { error in
                         if error == nil {
                             // Success!
+                            TSAccountManager.sharedInstance().finalizeRegistration()
                             self.proceedToMain()
                         } else {
                             Logger.error("TSS Validation error: \(String(describing: error?.localizedDescription))");

@@ -247,7 +247,6 @@ class ValidationViewController: UITableViewController {
             FLDeviceRegistrationService.sharedInstance().registerWithTSS { error in
                 if error == nil {
                     // Success!
-                    TSAccountManager.sharedInstance().finalizeRegistration()
                     self.proceedToMain()
                 } else {
                     let err = error! as NSError
