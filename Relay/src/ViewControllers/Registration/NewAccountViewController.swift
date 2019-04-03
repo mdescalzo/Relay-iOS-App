@@ -188,6 +188,14 @@ class NewAccountViewController: UITableViewController, UITextFieldDelegate {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "mainSegue" {
+            let nvc = segue.destination as! SignalsNavigationController
+            let hvc = nvc.topViewController as! HomeViewController
+            SignalApp.shared().homeViewController = hvc
+        }
+    }
+
     
     // MARK: - Helper methods
     private func accountCreationSucceeded() {
