@@ -551,36 +551,41 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
         let filterString = self.searchBar?.text?.lowercased()
         
         let filtering = YapDatabaseViewFiltering.withObjectBlock { (transaction, group, collection, key, object) -> Bool in
-            let obj: NSObject = object as! NSObject
-            if obj.isKind(of: RelayRecipient.classForCoder()) || obj.isKind(of: FLTag.classForCoder()) {
-                if (filterString?.count)! > 0 {
-                    if obj.isKind(of: FLTag.classForCoder()) {
-                        let aTag: FLTag = obj as! FLTag
-                        return ((aTag.displaySlug.lowercased() as NSString).contains(filterString!) ||
-                            (aTag.slug.lowercased() as NSString).contains(filterString!) ||
-                            (aTag.tagDescription!.lowercased() as NSString).contains(filterString!) ||
-                            (aTag.orgSlug.lowercased() as NSString).contains(filterString!))
-                        
-                    } else if obj.isKind(of: RelayRecipient.classForCoder()) {
-                        let recipient: RelayRecipient = obj as! RelayRecipient
-                        return ( (recipient.fullName().lowercased() as NSString).contains(filterString!) ||
-                            (recipient.flTag!.displaySlug.lowercased() as NSString).contains(filterString!) ||
-                            (recipient.orgSlug!.lowercased() as NSString).contains(filterString!))
-                    } else {
-                        return false
-                    }
-                } else {
-                    return true
-                }
+            
+            let obj = object as AnyObject
+            
+            guard obj != nil,
+                obj.isKind(of: RelayRecipient.classForCoder()) || obj.isKind(of: FLTag.classForCoder()) else {
+                    return false
             }
-            return false
+            
+            guard filterString != nil,
+                filterString!.count > 0 else {
+                return true
+            }
+            
+            if obj.isKind(of: FLTag.classForCoder()) {
+                let aTag: FLTag = obj as! FLTag
+                return ((aTag.displaySlug.lowercased() as NSString).contains(filterString!) ||
+                    (aTag.slug.lowercased() as NSString).contains(filterString!) ||
+                    (aTag.tagDescription!.lowercased() as NSString).contains(filterString!) ||
+                    (aTag.orgSlug.lowercased() as NSString).contains(filterString!))
+                
+            } else if obj.isKind(of: RelayRecipient.classForCoder()) {
+                let recipient: RelayRecipient = obj as! RelayRecipient
+                return ( (recipient.fullName().lowercased() as NSString).contains(filterString!) ||
+                    (recipient.flTag!.displaySlug.lowercased() as NSString).contains(filterString!) ||
+                    (recipient.orgSlug!.lowercased() as NSString).contains(filterString!))
+            } else {
+                return false
+            }
         }
-        self.searchDBConnection.asyncReadWrite({ (transaction) in
+        
+        self.searchDBConnection.readWrite({ (transaction) in
             let filteredViewTransaction = transaction.ext(FLFilteredTagDatabaseViewExtensionName) as! YapDatabaseFilteredViewTransaction
             filteredViewTransaction.setFiltering(filtering, versionTag: filterString)
-        }) {
-            self.updateContactsView()
-        }
+        })
+        self.updateContactsView()
     }
     
     private func removeSlug(slug: String) {
