@@ -231,7 +231,7 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
         TSThread *thread = (TSThread *)object;
         
-        if (thread.hasEverHadMessage && thread.participantIds.count > 0) {
+        if (thread.universalExpression.length > 0) {
             if (thread.archivalDate) {
                 return ([self threadShouldBeInInbox:thread]) ? TSInboxGroup : TSArchiveGroup;
             } else if (thread.archivalDate) {

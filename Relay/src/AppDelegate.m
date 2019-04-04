@@ -1146,7 +1146,6 @@ static NSTimeInterval launchStartedAt;
 
     if ([TSAccountManager isRegistered]) {
         HomeViewController *homeView = [HomeViewController new];
-        SignalApp.sharedApp.homeViewController = homeView;
         SignalsNavigationController *navigationController = [[SignalsNavigationController alloc] initWithRootViewController:homeView];
         self.window.rootViewController = navigationController;
     } else {

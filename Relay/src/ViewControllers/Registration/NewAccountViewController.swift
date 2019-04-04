@@ -8,6 +8,7 @@
 
 import UIKit
 import ReCaptcha
+import PromiseKit
 import CocoaLumberjack
 
 class NewAccountViewController: UITableViewController, UITextFieldDelegate {
@@ -179,15 +180,26 @@ class NewAccountViewController: UITableViewController, UITextFieldDelegate {
     
     // MARK: - Navigation    
     private func proceedToMain() {
+        TSAccountManager.sharedInstance().finalizeRegistration()
+
         DispatchQueue.global(qos: .background).async {
             TSSocketManager.requestSocketOpen()
             CCSMCommManager.refreshCCSMData()
         }
         DispatchQueue.main.async {
+            let _: Promise = SyncPushTokensJob.run(accountManager: SignalApp.shared().accountManager, preferences: Environment.preferences())
             self.performSegue(withIdentifier: "mainSegue", sender: self)
         }
     }
     
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "mainSegue" {
+//            let nvc = segue.destination as! SignalsNavigationController
+//            let hvc = nvc.topViewController as! HomeViewController
+//            SignalApp.shared().homeViewController = hvc
+//        }
+//    }
+
     
     // MARK: - Helper methods
     private func accountCreationSucceeded() {

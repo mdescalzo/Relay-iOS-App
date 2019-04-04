@@ -288,20 +288,19 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
         OWSFailDebug(@"%@ missing thread id for notification.", self.logTag);
         return;
     }
-
+    
     TSThread *thread = [TSThread fetchObjectWithUniqueID:threadId];
-    [OWSPrimaryStorage.dbReadWriteConnection
-        asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
+    if (thread != nil) {
+        [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
             // TODO: I suspect we only want to mark the message in
             // question as read.
             [thread markAllAsReadWithTransaction:transaction];
-        }
-        completionBlock:^{
-            [self cancelNotificationsWithThreadId:threadId];
-
-            completionHandler();
         }];
+        [self cancelNotificationsWithThreadId:threadId];
+    }
+    completionHandler();
 }
+
 
 - (UIUserNotificationCategory *)fullNewMessageNotificationCategory {
     UIMutableUserNotificationAction *action_markRead = [self markAsReadAction];

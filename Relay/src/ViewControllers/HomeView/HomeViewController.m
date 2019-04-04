@@ -384,6 +384,8 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     [self updateBarButtonItems];
 
     [self applyTheme];
+    
+    SignalApp.sharedApp.homeViewController = self;
 }
 
 - (void)applyDefaultBackButton
