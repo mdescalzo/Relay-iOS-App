@@ -537,6 +537,10 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                 alert.addAction(UIAlertAction(title: NSLocalizedString("NEW_THREAD", comment: ""), style: .default, handler: { (action) in
                     createNewThreadBlock()
                 }))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("TXT_CANCEL_TITLE", comment: ""), style: .cancel, handler: { (action) in
+                    /* Do nothin' */
+                }))
+
                 DispatchMainThreadSafe {
                     self.navigationController?.present(alert, animated: true, completion: nil)
                 }
