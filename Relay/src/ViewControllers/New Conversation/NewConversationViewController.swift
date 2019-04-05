@@ -558,7 +558,10 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
             
             let obj = object as AnyObject
             
+            // Sanity check
             guard obj != nil,
+                collection != nil,
+                key != nil,
                 obj.isKind(of: RelayRecipient.classForCoder()) || obj.isKind(of: FLTag.classForCoder()) else {
                     return false
             }

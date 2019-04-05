@@ -390,7 +390,7 @@ typedef enum : NSUInteger {
     [[OWSPrimaryStorage sharedManager] updateUIDatabaseConnectionToLatest];
 
     if (thread.uniqueId.length > 0) {
-        self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[ thread.uniqueId ]
+        self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[ thread.uniqueId.lowercaseString ]
                                                                           view:TSMessageDatabaseViewExtensionName];
     } else {
         OWSFailDebug(@"uniqueId unexpectedly empty for thread: %@", thread);
@@ -2283,13 +2283,12 @@ typedef enum : NSUInteger {
     if (indexPathOfUnreadIndicator) {
         ConversationViewItem *oldIndicatorItem = [self viewItemForIndex:indexPathOfUnreadIndicator.row];
         OWSAssert(oldIndicatorItem);
-
+        
         // TODO ideally this would be happening within the *same* transaction that caused the unreadMessageIndicator
         // to be cleared.
-        [self.editingDatabaseConnection
-            asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
-                [oldIndicatorItem.interaction touchWithTransaction:transaction];
-            }];
+        [self.editingDatabaseConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
+            [oldIndicatorItem.interaction touchWithTransaction:transaction];
+        }];
     }
 
     if (self.hasClearedUnreadMessagesIndicator) {
