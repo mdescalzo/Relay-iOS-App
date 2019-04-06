@@ -404,7 +404,7 @@ typedef enum : NSUInteger {
         @(-1),
         @(+1),
     ]]
-                                                 forGroup:self.thread.uniqueId];
+                                                 forGroup:self.thread.uniqueId.lowercaseString];
 
     // We need to impose the range restrictions on the mappings immediately to avoid
     // doing a great deal of unnecessary work and causing a perf hotspot.
@@ -450,9 +450,7 @@ typedef enum : NSUInteger {
 
 - (BOOL)userLeftGroup
 {
-    // FIXME: Temporary bandaid for demonstration
-//    return ![self.thread.participantIds containsObject:[TSAccountManager localUID]];
-    return NO;
+    return ![self.thread.participantIds containsObject:[TSAccountManager localUID]];
 }
 
 - (void)hideInputIfNeeded
@@ -1500,11 +1498,11 @@ typedef enum : NSUInteger {
         return;
     }
 
-    NSUInteger loadWindowSize = [self.messageMappings numberOfItemsInGroup:self.thread.uniqueId];
+    NSUInteger loadWindowSize = [self.messageMappings numberOfItemsInGroup:self.thread.uniqueId.lowercaseString];
     __block NSUInteger totalMessageCount;
     [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         totalMessageCount =
-            [[transaction ext:TSMessageDatabaseViewExtensionName] numberOfItemsInGroup:self.thread.uniqueId];
+            [[transaction ext:TSMessageDatabaseViewExtensionName] numberOfItemsInGroup:self.thread.uniqueId.lowercaseString];
     }];
     self.showLoadMoreHeader = loadWindowSize < totalMessageCount;
 }
@@ -2124,7 +2122,7 @@ typedef enum : NSUInteger {
             return;
         }
 
-        threadInteractionCount = [extension numberOfItemsInGroup:self.thread.uniqueId];
+        threadInteractionCount = [extension numberOfItemsInGroup:self.thread.uniqueId.lowercaseString];
 
         groupIndex = [self findGroupIndexOfThreadInteraction:quotedInteraction transaction:transaction];
     }];
@@ -2202,7 +2200,7 @@ typedef enum : NSUInteger {
 
     NSUInteger groupIndex = 0;
     BOOL foundInGroup =
-        [extension getGroup:nil index:&groupIndex forKey:interaction.uniqueId inCollection:TSInteraction.collection];
+        [extension getGroup:nil index:&groupIndex forKey:interaction.uniqueId.lowercaseString inCollection:TSInteraction.collection];
     if (!foundInGroup) {
         DDLogError(@"%@ Couldn't find quoted message in group.", self.logTag);
         return nil;
