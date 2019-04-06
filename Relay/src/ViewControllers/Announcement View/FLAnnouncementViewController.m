@@ -129,7 +129,7 @@
     if (_announcementMessage == nil) {
         __block TSInteraction *last;
         [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
-            last = [[transaction ext:TSMessageDatabaseViewExtensionName] lastObjectInGroup:self.thread.uniqueId];
+            last = [[transaction ext:TSMessageDatabaseViewExtensionName] lastObjectInGroup:self.thread.uniqueId.lowercaseString];
         }];
         _announcementMessage = (TSMessage *)last;
     }

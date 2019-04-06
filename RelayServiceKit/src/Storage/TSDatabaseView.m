@@ -97,12 +97,21 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
 + (void)asyncRegisterUnreadDatabaseView:(nonnull OWSStorage *)storage
 {
-    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
-        YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(YapDatabaseReadTransaction *transaction,
+                                                                                                 NSString *collection,
+                                                                                                 NSString *key,
+                                                                                                 id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
         if ([object conformsToProtocol:@protocol(OWSReadTracking)]) {
             id<OWSReadTracking> possiblyRead = (id<OWSReadTracking>)object;
             if (!possiblyRead.wasRead && possiblyRead.shouldAffectUnreadCounts) {
-                return possiblyRead.uniqueThreadId;
+                if ([[NSUUID alloc] initWithUUIDString:possiblyRead.uniqueThreadId] != nil) {
+                    return possiblyRead.uniqueThreadId.lowercaseString;
+                }
             }
         }
         return nil;
@@ -118,10 +127,18 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 {
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
         YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
+
         if ([object conformsToProtocol:@protocol(OWSReadTracking)]) {
             id<OWSReadTracking> possiblyRead = (id<OWSReadTracking>)object;
             if (!possiblyRead.wasRead) {
-                return possiblyRead.uniqueThreadId;
+                if ([[NSUUID alloc] initWithUUIDString:possiblyRead.uniqueThreadId] != nil) {
+                    return possiblyRead.uniqueThreadId.lowercaseString;
+                }
             }
         }
         return nil;
@@ -135,21 +152,31 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
 + (void)asyncRegisterThreadSpecialMessagesDatabaseView:(nonnull OWSStorage *)storage
 {
-    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
-        YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(YapDatabaseReadTransaction *transaction,
+                                                                                                 NSString *collection,
+                                                                                                 NSString *key,
+                                                                                                 id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
+        
         if (![object isKindOfClass:[TSInteraction class]]) {
             OWSFailDebug(@"%@ Unexpected entity %@ in collection: %@", self.logTag, [object class], collection);
             return nil;
         }
         TSInteraction *interaction = (TSInteraction *)object;
-        if ([interaction isDynamicInteraction]) {
-            return interaction.uniqueThreadId;
-        } else if ([object isKindOfClass:[TSInvalidIdentityKeyErrorMessage class]]) {
-            return interaction.uniqueThreadId;
-        } else if ([object isKindOfClass:[TSErrorMessage class]]) {
-            TSErrorMessage *errorMessage = (TSErrorMessage *)object;
-            if (errorMessage.errorType == TSErrorMessageNonBlockingIdentityChange) {
-                return errorMessage.uniqueThreadId;
+        if ([[NSUUID alloc] initWithUUIDString:interaction.uniqueThreadId] != nil) {
+            if ([interaction isDynamicInteraction]) {
+                return interaction.uniqueThreadId.lowercaseString;
+            } else if ([object isKindOfClass:[TSInvalidIdentityKeyErrorMessage class]]) {
+                return interaction.uniqueThreadId.lowercaseString;
+            } else if ([object isKindOfClass:[TSErrorMessage class]]) {
+                TSErrorMessage *errorMessage = (TSErrorMessage *)object;
+                if (errorMessage.errorType == TSErrorMessageNonBlockingIdentityChange) {
+                    return errorMessage.uniqueThreadId.lowercaseString;
+                }
             }
         }
         return nil;
@@ -163,8 +190,16 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
 + (void)asyncRegisterThreadInteractionsDatabaseView:(nonnull OWSStorage *)storage
 {
-    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
-        YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(YapDatabaseReadTransaction *transaction,
+                                                                                                 NSString *collection,
+                                                                                                 NSString *key,
+                                                                                                 id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
+        
         if (![object isKindOfClass:[TSInteraction class]]) {
             OWSFailDebug(@"%@ Unexpected entity %@ in collection: %@", self.logTag, [object class], collection);
             return nil;
@@ -176,8 +211,10 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         }
         
         TSInteraction *interaction = (TSInteraction *)object;
-
-        return interaction.uniqueThreadId;
+        if ([[NSUUID alloc] initWithUUIDString:interaction.uniqueThreadId] != nil) {
+            return interaction.uniqueThreadId.lowercaseString;
+        }
+        return nil;
     }];
 
     [self registerMessageDatabaseViewWithName:TSMessageDatabaseViewExtensionName
@@ -188,10 +225,18 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
 + (void)asyncRegisterThreadOutgoingMessagesDatabaseView:(nonnull OWSStorage *)storage
 {
-    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
-        YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(YapDatabaseReadTransaction *transaction,
+                                                                                                 NSString *collection,
+                                                                                                 NSString *key,
+                                                                                                 id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
+        
         if ([object isKindOfClass:[TSOutgoingMessage class]] && [[TSOutgoingMessage collection] isEqualToString:collection]) {
-            return ((TSOutgoingMessage *)object).uniqueThreadId;
+            return ((TSOutgoingMessage *)object).uniqueThreadId.lowercaseString;
         }
         return nil;
     }];
@@ -210,8 +255,16 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         return;
     }
 
-    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(
-        YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(YapDatabaseReadTransaction *transaction,
+                                                                                                 NSString *collection,
+                                                                                                 NSString *key,
+                                                                                                 id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
+        
         if (![object isKindOfClass:[TSThread class]]) {
             DDLogError(@"%@: Unexpected entity %@ in collection: %@", self.logTag, [object class], collection);
             return nil;
@@ -230,7 +283,6 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         }
 
         TSThread *thread = (TSThread *)object;
-        
         if (thread.universalExpression.length > 0) {
             if (thread.archivalDate) {
                 return ([self threadShouldBeInInbox:thread]) ? TSInboxGroup : TSArchiveGroup;
@@ -380,7 +432,16 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
     }
     
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping
-                                             withObjectBlock:^NSString *(YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+                                             withObjectBlock:^NSString *(YapDatabaseReadTransaction *transaction,
+                                                                         NSString *collection,
+                                                                         NSString *key,
+                                                                         id object) {
+                                                 // Sanity check
+                                                 if (object == nil || key == nil || collection == nil) {
+                                                     OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+                                                     return nil;
+                                                 }
+                                                 
                                                  if ([collection isEqualToString:[FLTag collection]]) {
                                                      FLTag *aTag = (FLTag *)object;
                                                      if (aTag.recipientIds.count > 1) {
@@ -430,6 +491,12 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                                                                           NSString * _Nonnull collection,
                                                                                           NSString * _Nonnull key,
                                                                                           id  _Nonnull object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return NO;
+        }
+
         return YES;
     }];
     
@@ -441,8 +508,16 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
 + (void)asyncRegisterSecondaryDevicesDatabaseView:(nonnull OWSStorage *)storage
 {
-    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *_Nullable(
-        YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *_Nullable(YapDatabaseReadTransaction *transaction,
+                                                                                                          NSString *collection,
+                                                                                                          NSString *key,
+                                                                                                          id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
+        
         if (![object isKindOfClass:[OWSDevice class]]) {
             OWSFailDebug(@"%@ Unexpected entity %@ in collection: %@", self.logTag, [object class], collection);
             return nil;
@@ -463,6 +538,13 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         NSString *collection2,
         NSString *key2,
         id object2) {
+        // Sanity check
+        if (object1 == nil || key1 == nil || collection1 == nil || object2 == nil || key2 == nil || collection2 == nil) {
+            OWSFailDebug(@"%@ Invalid object1 %@ in collection1: %@ with key1: %@\n\tobject2 %@ in collection2: %@ with key2: %@",
+                         self.logTag, [object1 class], collection1, key1, [object2 class], collection2, key2);
+            return NSOrderedSame;
+        }
+        
         if (![object1 isKindOfClass:[OWSDevice class]]) {
             OWSFailDebug(@"%@ Unexpected entity %@ in collection: %@", self.logTag, [object1 class], collection1);
             return NSOrderedSame;
@@ -492,8 +574,16 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 + (void)asyncRegisterLazyRestoreAttachmentsDatabaseView:(nonnull OWSStorage *)storage
                                              completion:(nullable dispatch_block_t)completion
 {
-    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *_Nullable(
-        YapDatabaseReadTransaction *transaction, NSString *collection, NSString *key, id object) {
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *_Nullable(YapDatabaseReadTransaction *transaction,
+                                                                                                          NSString *collection,
+                                                                                                          NSString *key,
+                                                                                                          id object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
+        
         if (![object isKindOfClass:[TSAttachment class]]) {
             OWSFailDebug(@"%@ Unexpected entity %@ in collection: %@", self.logTag, [object class], collection);
             return nil;
@@ -518,6 +608,13 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
         NSString *collection2,
         NSString *key2,
         id object2) {
+        // Sanity check
+        if (object1 == nil || key1 == nil || collection1 == nil || object2 == nil || key2 == nil || collection2 == nil) {
+            OWSFailDebug(@"%@ Invalid object1 %@ in collection1: %@ with key1: %@\n\tobject2 %@ in collection2: %@ with key2: %@",
+                         self.logTag, [object1 class], collection1, key1, [object2 class], collection2, key2);
+            return NSOrderedSame;
+        }
+        
         if (![object1 isKindOfClass:[TSAttachmentStream class]]) {
             OWSFailDebug(@"%@ Unexpected entity %@ in collection: %@", self.logTag, [object1 class], collection1);
             return NSOrderedSame;
