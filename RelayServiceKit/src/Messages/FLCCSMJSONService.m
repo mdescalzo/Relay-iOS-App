@@ -77,7 +77,7 @@
     NSString *userAgent = UIDevice.currentDevice.localizedModel;
     NSString *messageId = (message.uniqueId ? message.uniqueId : @"");
     NSString *threadId = (message.thread.uniqueId ? message.thread.uniqueId : @"");
-    NSString *threadTitle = (message.thread.title ? message.thread.title : @"");
+    NSString *threadTitle = (message.thread.title.length > 0 ? message.thread.title : nil);
     NSString *sendTime = [self formattedStringFromDate:[NSDate date]];
     NSString *messageType = (message.messageType.length > 0 ? message.messageType : @"");
     NSString *threadType = (message.thread.type.length > 0 ? message.thread.type : @"");
@@ -101,13 +101,15 @@
                                        @"userAgent" : userAgent,
                                FLMessageIdKey : messageId,
                                FLThreadIDKey : threadId,
-                               FLThreadTitleKey : threadTitle,
                                FLMessageSendTimeKey : sendTime,
                                FLMessageTypeKey : messageType,
                                FLThreadTypeKey : threadType,
                                FLMessageSenderKey : sender,
                                FLDistributionKey : recipients
                                }];
+    if (threadTitle != nil) {
+        [tmpDict setObject:threadTitle forKey:FLThreadTitleKey];
+    }
     // Handler for nil message.body
     NSMutableDictionary *data = [NSMutableDictionary new];
     if (message.plainTextBody) {
