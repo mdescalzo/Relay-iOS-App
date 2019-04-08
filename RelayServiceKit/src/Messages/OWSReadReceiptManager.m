@@ -48,7 +48,7 @@ NSString *const kIncomingMessageMarkedAsReadNotification = @"kIncomingMessageMar
 
 - (instancetype)initWithSentTimestamp:(uint64_t)sentTimestamp
 {
-    OWSAssert(sentTimestamp > 0);
+    OWSAssertDebug(sentTimestamp > 0);
 
     self = [super initWithUniqueId:[TSRecipientReadReceipt uniqueIdForSentTimestamp:sentTimestamp]];
 
@@ -67,8 +67,8 @@ NSString *const kIncomingMessageMarkedAsReadNotification = @"kIncomingMessageMar
 
 - (void)addRecipientId:(NSString *)recipientId timestamp:(uint64_t)timestamp
 {
-    OWSAssert(recipientId.length > 0);
-    OWSAssert(timestamp > 0);
+    OWSAssertDebug(recipientId.length > 0);
+    OWSAssertDebug(timestamp > 0);
 
     NSMutableDictionary<NSString *, NSNumber *> *recipientMapCopy = [self.recipientMap mutableCopy];
     recipientMapCopy[recipientId] = @(timestamp);
@@ -80,7 +80,7 @@ NSString *const kIncomingMessageMarkedAsReadNotification = @"kIncomingMessageMar
          readTimestamp:(uint64_t)readTimestamp
            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     TSRecipientReadReceipt *_Nullable recipientReadReceipt =
         [transaction objectForKey:[self uniqueIdForSentTimestamp:sentTimestamp] inCollection:[self collection]];
@@ -95,7 +95,7 @@ NSString *const kIncomingMessageMarkedAsReadNotification = @"kIncomingMessageMar
                                                                     transaction:
                                                                         (YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     TSRecipientReadReceipt *_Nullable recipientReadReceipt =
         [transaction objectForKey:[self uniqueIdForSentTimestamp:sentTimestamp] inCollection:[self collection]];
@@ -105,7 +105,7 @@ NSString *const kIncomingMessageMarkedAsReadNotification = @"kIncomingMessageMar
 + (void)removeRecipientIdsForTimestamp:(uint64_t)sentTimestamp
                            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     [transaction removeObjectForKey:[self uniqueIdForSentTimestamp:sentTimestamp] inCollection:[self collection]];
 }
@@ -191,7 +191,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 // Schedules a processing pass, unless one is already scheduled.
 - (void)scheduleProcessing
 {
-    OWSAssert(AppReadiness.isAppReady);
+    OWSAssertDebug(AppReadiness.isAppReady);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized(self)
@@ -257,7 +257,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 
 - (void)markAsReadLocallyBeforeTimestamp:(uint64_t)timestamp thread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
@@ -276,10 +276,10 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
         @synchronized(self)
         {
             NSString *threadUniqueId = message.uniqueThreadId;
-            OWSAssert(threadUniqueId.length > 0);
+            OWSAssertDebug(threadUniqueId.length > 0);
 
             NSString *messageAuthorId = message.messageAuthorId;
-            OWSAssert(messageAuthorId.length > 0);
+            OWSAssertDebug(messageAuthorId.length > 0);
             
             uint64_t readTimestamp = [NSDate ows_millisecondTimeStamp];
             OWSLinkedDeviceReadReceipt *newReadReceipt =
@@ -325,8 +325,8 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                             sentTimestamps:(NSArray<NSNumber *> *)sentTimestamps
                              readTimestamp:(uint64_t)readTimestamp
 {
-    OWSAssert(recipientId.length > 0);
-    OWSAssert(sentTimestamps);
+    OWSAssertDebug(recipientId.length > 0);
+    OWSAssertDebug(sentTimestamps);
 
     if (![self areReadReceiptsEnabled]) {
         DDLogInfo(@"%@ Ignoring incoming receipt message as read receipts are disabled.", self.logTag);
@@ -369,8 +369,8 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 - (void)applyEarlyReadReceiptsForOutgoingMessageFromLinkedDevice:(TSOutgoingMessage *)message
                                                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(message);
-    OWSAssert(transaction);
+    OWSAssertDebug(message);
+    OWSAssertDebug(transaction);
 
     uint64_t sentTimestamp = message.timestamp;
     NSDictionary<NSString *, NSNumber *> *recipientMap =
@@ -378,10 +378,10 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
     if (!recipientMap) {
         return;
     }
-    OWSAssert(recipientMap.count > 0);
+    OWSAssertDebug(recipientMap.count > 0);
     for (NSString *recipientId in recipientMap) {
         NSNumber *nsReadTimestamp = recipientMap[recipientId];
-        OWSAssert(nsReadTimestamp);
+        OWSAssertDebug(nsReadTimestamp);
         uint64_t readTimestamp = [nsReadTimestamp unsignedLongLongValue];
 
         [message updateWithReadRecipientId:recipientId readTimestamp:readTimestamp transaction:transaction];
@@ -394,8 +394,8 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
 - (void)applyEarlyReadReceiptsForIncomingMessage:(TSIncomingMessage *)message
                                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(message);
-    OWSAssert(transaction);
+    OWSAssertDebug(message);
+    OWSAssertDebug(transaction);
 
     NSString *senderId = message.messageAuthorId;
     uint64_t timestamp = message.timestamp;
@@ -420,8 +420,8 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                               readTimestamp:(uint64_t)readTimestamp
                                 transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(readReceiptProtos);
-    OWSAssert(transaction);
+    OWSAssertDebug(readReceiptProtos);
+    OWSAssertDebug(transaction);
 
     for (OWSSignalServiceProtosSyncMessageRead *readReceiptProto in readReceiptProtos) {
         NSString *_Nullable senderId = readReceiptProto.sender;
@@ -444,7 +444,7 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
         if (messages.count > 0) {
             for (TSIncomingMessage *message in messages) {
                 NSTimeInterval secondsSinceRead = [NSDate new].timeIntervalSince1970 - readTimestamp / 1000;
-                OWSAssert([message isKindOfClass:[TSIncomingMessage class]]);
+                OWSAssertDebug([message isKindOfClass:[TSIncomingMessage class]]);
                 DDLogDebug(@"%@ read on linked device %f seconds ago", self.logTag, secondsSinceRead);
                 [self markAsReadOnLinkedDevice:message readTimestamp:readTimestamp transaction:transaction];
             }
@@ -464,8 +464,8 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                    readTimestamp:(uint64_t)readTimestamp
                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(message);
-    OWSAssert(transaction);
+    OWSAssertDebug(message);
+    OWSAssertDebug(transaction);
 
     // Always re-mark the message as read to ensure any earlier read time is applied to disappearing messages.
     [message markAsReadAtTimestamp:readTimestamp sendReadReceipt:NO transaction:transaction];
@@ -489,9 +489,9 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                          wasLocal:(BOOL)wasLocal
                       transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(timestamp > 0);
-    OWSAssert(thread);
-    OWSAssert(transaction);
+    OWSAssertDebug(timestamp > 0);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(transaction);
 
     NSMutableArray<id<OWSReadTracking>> *newlyReadList = [NSMutableArray new];
 
@@ -520,8 +520,8 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
              return;
          }
          
-         OWSAssert(!possiblyRead.read);
-         OWSAssert(possiblyRead.expireStartedAt == 0);
+         OWSAssertDebug(!possiblyRead.read);
+         OWSAssertDebug(possiblyRead.expireStartedAt == 0);
          if (!possiblyRead.read) {
              [newlyReadList addObject:possiblyRead];
          }
@@ -547,10 +547,10 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                   wasLocal:(BOOL)wasLocal
                       transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(timestamp > 0);
-    OWSAssert(thread);
-    OWSAssert(transaction);
-    OWSAssert(recipientId);
+    OWSAssertDebug(timestamp > 0);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(recipientId);
     
     NSMutableArray<TSOutgoingMessage *> *newlyReadList = [NSMutableArray new];
     

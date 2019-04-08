@@ -225,15 +225,21 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
             return YES;
+            break;
         case OWSMessageCellType_GenericAttachment:
         case OWSMessageCellType_DownloadingAttachment:
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
+        case MessageCellType_WebPreview:
         case OWSMessageCellType_Video:
             // Is there a caption?
             return self.hasBodyText;
+            break;
+        default:
+            OWSFailDebug(@"%@: unknown celltype: %@", self.logTag, self.cellType);
     }
+    return NO;
 }
 
 #pragma mark - Load
