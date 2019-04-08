@@ -125,7 +125,13 @@ static NSString *const OWSMediaGalleryFinderExtensionName = @"OWSMediaGalleryFin
 + (YapDatabaseAutoView *)mediaGalleryDatabaseExtension
 {
     YapDatabaseViewSorting *sorting = [YapDatabaseViewSorting withObjectBlock:^NSComparisonResult(YapDatabaseReadTransaction * _Nonnull transaction, NSString * _Nonnull group, NSString * _Nonnull collection1, NSString * _Nonnull key1, id  _Nonnull object1, NSString * _Nonnull collection2, NSString * _Nonnull key2, id  _Nonnull object2) {
-        
+        // Sanity check
+        if (object1 == nil || key1 == nil || collection1 == nil || object2 == nil || key2 == nil || collection2 == nil) {
+            OWSFailDebug(@"%@ Invalid object1 %@ in collection1: %@ with key1: %@\n\tobject2 %@ in collection2: %@ with key2: %@",
+                         self.logTag, [object1 class], collection1, key1, [object2 class], collection2, key2);
+            return NSOrderedSame;
+        }
+
         if (![object1 isKindOfClass:[TSMessage class]]) {
             OWSFailDebug(@"%@ Unexpected object while sorting: %@", self.logTag, [object1 class]);
             return NSOrderedSame;
@@ -142,6 +148,11 @@ static NSString *const OWSMediaGalleryFinderExtensionName = @"OWSMediaGalleryFin
     }];
     
     YapDatabaseViewGrouping *grouping = [YapDatabaseViewGrouping withObjectBlock:^NSString * _Nullable(YapDatabaseReadTransaction * _Nonnull transaction, NSString * _Nonnull collection, NSString * _Nonnull key, id  _Nonnull object) {
+        // Sanity check
+        if (object == nil || key == nil || collection == nil) {
+            OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+            return nil;
+        }
         
         if (![object isKindOfClass:[TSMessage class]]) {
             return nil;

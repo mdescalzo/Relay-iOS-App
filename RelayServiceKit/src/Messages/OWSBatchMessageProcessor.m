@@ -185,6 +185,13 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
             NSString *key2,
             id object2) {
 
+            // Sanity check
+            if (object1 == nil || key1 == nil || collection1 == nil || object2 == nil || key2 == nil || collection2 == nil) {
+                OWSFailDebug(@"%@ Invalid object1 %@ in collection1: %@ with key1: %@\n\tobject2 %@ in collection2: %@ with key2: %@",
+                             self.logTag, [object1 class], collection1, key1, [object2 class], collection2, key2);
+                return NSOrderedSame;
+            }
+
             if (![object1 isKindOfClass:[OWSMessageContentJob class]]) {
                 OWSFailDebug(@"Unexpected object: %@ in collection: %@", [object1 class], collection1);
                 return NSOrderedSame;
@@ -205,6 +212,12 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
             NSString *_Nonnull collection,
             NSString *_Nonnull key,
             id _Nonnull object) {
+            // Sanity check
+            if (object == nil || key == nil || collection == nil) {
+                OWSFailDebug(@"%@ Invalid entity %@ in collection: %@ with key: %@", self.logTag, [object class], collection, key);
+                return nil;
+            }
+
             if (![object isKindOfClass:[OWSMessageContentJob class]]) {
                 OWSFailDebug(@"Unexpected object: %@ in collection: %@", object, collection);
                 return nil;
