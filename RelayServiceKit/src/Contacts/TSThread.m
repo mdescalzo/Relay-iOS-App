@@ -620,7 +620,9 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
         NSString *threadExpression = [(NSDictionary *)[payload objectForKey:FLDistributionKey] objectForKey:FLExpressionKey];
         NSString *threadType = [payload objectForKey:FLThreadTypeKey];
         NSString *threadTitle = [payload objectForKey:FLThreadTitleKey];
-        thread.title = ((threadTitle.length > 0) ? threadTitle : @"" );
+        if (threadTitle != nil) {
+            thread.title = threadTitle;
+        }
         thread.type = ((threadType.length > 0) ? threadType : nil );
         
         NSArray *members = [(NSDictionary *)[payload objectForKey:@"data"] objectForKey:@"members"];
