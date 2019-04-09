@@ -131,13 +131,15 @@
                                                             NSHTTPURLResponse *HTTPresponse = (NSHTTPURLResponse *)response;
                                                             DDLogDebug(@"Verify Login - Server response code: %ld", (long)HTTPresponse.statusCode);
                                                             DDLogDebug(@"%@",[NSHTTPURLResponse localizedStringForStatusCode:HTTPresponse.statusCode]);
-                                                            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data
-                                                                                                                   options:0
-                                                                                                                     error:NULL];
                                                             if (connectionError != nil)  // Failed connection
                                                             {
                                                                 completionBlock(NO, connectionError);
                                                             }
+//                                                            if (data != nil) {
+//                                                                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data
+//                                                                                                                       options:0
+//                                                                                                                         error:NULL];
+//                                                            }
                                                             else if (HTTPresponse.statusCode == 200) // SUCCESS!
                                                             {
                                                                 
@@ -193,14 +195,17 @@
                                                             NSHTTPURLResponse *HTTPresponse = (NSHTTPURLResponse *)response;
                                                             DDLogDebug(@"Verify Login - Server response code: %ld", (long)HTTPresponse.statusCode);
                                                             DDLogDebug(@"%@",[NSHTTPURLResponse localizedStringForStatusCode:HTTPresponse.statusCode]);
-                                                            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data
-                                                                                                                   options:0
-                                                                                                                     error:NULL];
                                                             if (connectionError != nil)  // Failed connection
                                                             {
                                                                 completionBlock(NO, connectionError);
                                                             }
-                                                            else if (HTTPresponse.statusCode == 200) // SUCCESS!
+                                                            NSDictionary *result = nil;
+                                                            if (data) {
+                                                                result =[NSJSONSerialization JSONObjectWithData:data
+                                                                                                        options:0
+                                                                                                          error:NULL];
+                                                            }
+                                                            else if (HTTPresponse.statusCode == 200 && result != nil) // SUCCESS!
                                                             {
                                                                 [self storeLocalUserDataWithPayload:result];
                                                                 
@@ -243,17 +248,15 @@
                                        NSHTTPURLResponse *HTTPresponse = (NSHTTPURLResponse *)response;
                                        DDLogDebug(@"Refresh Session Token - Server response code: %ld", (long)HTTPresponse.statusCode);
                                        DDLogDebug(@"%@",[NSHTTPURLResponse localizedStringForStatusCode:HTTPresponse.statusCode]);
-                                       
-                                       NSDictionary *result = nil;
-                                       if (data) {
-                                           result = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-                                       }
-                                       
                                        if (connectionError != nil)  // Failed connection
                                        {
                                            failureBlock(connectionError);
                                        }
-                                       else if (HTTPresponse.statusCode == 200) // SUCCESS!
+                                       NSDictionary *result = nil;
+                                       if (data) {
+                                           result = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                                       }
+                                       if (HTTPresponse.statusCode == 200) // SUCCESS!
                                        {
                                            [self storeLocalUserDataWithPayload:result];
                                            
@@ -492,15 +495,17 @@
                                        NSHTTPURLResponse *HTTPresponse = (NSHTTPURLResponse *)response;
                                        DDLogDebug(@"Register device with TSS - Server response code: %ld", (long)HTTPresponse.statusCode);
                                        DDLogDebug(@"%@",[NSHTTPURLResponse localizedStringForStatusCode:HTTPresponse.statusCode]);
-                                       NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data
+                                       NSDictionary *result = nil;
+                                       if (data != nil) {
+                                           result = [NSJSONSerialization JSONObjectWithData:data
                                                                                               options:0
                                                                                                 error:NULL];
-                                       
+                                       }
                                        if (connectionError != nil)  // Failed connection
                                        {
                                            completionBlock(result, connectionError);
                                        }
-                                       else if (HTTPresponse.statusCode == 200) // SUCCESS!
+                                       else if (HTTPresponse.statusCode == 200 && result != nil) // SUCCESS!
                                        {
                                            if (data.length > 0 && connectionError == nil)
                                            {
@@ -571,14 +576,17 @@
                                        NSHTTPURLResponse *HTTPresponse = (NSHTTPURLResponse *)response;
                                        DDLogDebug(@"Register with TSS - Server response code: %ld", (long)HTTPresponse.statusCode);
                                        DDLogDebug(@"%@",[NSHTTPURLResponse localizedStringForStatusCode:HTTPresponse.statusCode]);
-                                       NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data
-                                                                                              options:0
-                                                                                                error:NULL];
+                                       NSDictionary *result = nil;
+                                       if (data != nil) {
+                                           result = [NSJSONSerialization JSONObjectWithData:data
+                                                                                    options:0
+                                                                                      error:NULL];
+                                       }
                                        if (connectionError != nil)  // Failed connection
                                        {
                                            completionBlock(result, connectionError);
                                        }
-                                       else if (HTTPresponse.statusCode == 200) // SUCCESS!
+                                       else if (HTTPresponse.statusCode == 200 && result != nil) // SUCCESS!
                                        {
                                            if (data.length > 0 && connectionError == nil)
                                            {
@@ -617,9 +625,12 @@
                                        NSHTTPURLResponse *HTTPresponse = (NSHTTPURLResponse *)response;
                                        DDLogDebug(@"Device Provision Request - Server response code: %ld", (long)HTTPresponse.statusCode);
                                        DDLogDebug(@"%@",[NSHTTPURLResponse localizedStringForStatusCode:HTTPresponse.statusCode]);
-                                       NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data
-                                                                                options:0
-                                                                                  error:NULL];
+                                       NSDictionary *result = nil;
+                                       if (data != nil) {
+                                           result = [NSJSONSerialization JSONObjectWithData:data
+                                                                                    options:0
+                                                                                      error:NULL];
+                                       }
 
                                        if (error != nil)  // Failed connection
                                        {
@@ -627,13 +638,6 @@
                                        }
                                        else if (HTTPresponse.statusCode >= 200 && HTTPresponse.statusCode <= 204) // SUCCESS!
                                        {
-//                                           NSDictionary *result = nil;
-                                           if (data.length > 0 && error == nil)
-                                           {
-//                                               result = [NSJSONSerialization JSONObjectWithData:data
-//                                                                                        options:0
-//                                                                                          error:NULL];
-                                           }
                                            DDLogInfo(@"Device Provision Request sucessully sent.  Response: %@", result);
                                        }
                                        else  // Connection good, error from server
@@ -877,7 +881,7 @@
                                            DDLogDebug(@"Tag Math.  Error: %@", connectionError);
                                            failureBlock(connectionError);
                                        }
-                                       else if (HTTPresponse.statusCode == 200) // SUCCESS!
+                                       else if (HTTPresponse.statusCode == 200 && data != nil) // SUCCESS!
                                        {
                                            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data
                                                                                                   options:0
