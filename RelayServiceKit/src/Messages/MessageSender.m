@@ -281,7 +281,12 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         // unorthodox.
         [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
             // make sure the body is JSON
-            if (!(message.body && [NSJSONSerialization JSONObjectWithData:[message.body dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil])) {
+            NSData *bodyData = [message.body dataUsingEncoding:NSUTF8StringEncoding];
+            if (!(message.body &&
+                  bodyData != nil &&
+                  [NSJSONSerialization JSONObjectWithData:bodyData
+                                                  options:0
+                                                    error:nil] != nil)) {
                 NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
                 message.body = messageBlob;
             }
@@ -685,18 +690,19 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         successHandler();
     } else {
         dispatch_async([OWSDispatch sendingQueue], ^{
-            // Check to see if blob is already JSON
-            // Convert message body to JSON blob if necessary
-            if (!(message.body && [NSJSONSerialization JSONObjectWithData:[message.body dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil])) {
-                NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
-                message.body = messageBlob;
-            }
-
+            // make sure the body is JSON
+            NSData *bodyData = [message.body dataUsingEncoding:NSUTF8StringEncoding];
+            if (!(message.body &&
+                  bodyData != nil &&
+                  [NSJSONSerialization JSONObjectWithData:bodyData
+                                                  options:0
+                                                    error:nil] != nil)) {
+                      NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
+                      message.body = messageBlob;
+                  }
             if (message.body.length == 0) {
                 OWSFailDebug(@"Unexpected empty body on outbound control message of class: %@", [message class]);
             }
-
-            
             for (NSString *recipientId in recipientIds) {
                 if ([recipientId isEqualToString:[TSAccountManager localUID]]) {
                     // TODO: sendSync
@@ -1517,11 +1523,16 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
     remainingAttempts -= 1;
     
     // make sure the body is JSON
-    if (!(message.body && [NSJSONSerialization JSONObjectWithData:[message.body dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil])) {
-        NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
-        message.body = messageBlob;
-    }
-    
+    NSData *bodyData = [message.body dataUsingEncoding:NSUTF8StringEncoding];
+    if (!(message.body &&
+          bodyData != nil &&
+          [NSJSONSerialization JSONObjectWithData:bodyData
+                                          options:0
+                                            error:nil] != nil)) {
+              NSString *messageBlob = [FLCCSMJSONService blobFromMessage:message];
+              message.body = messageBlob;
+          }
+
     __block RelayRecipient *recipient =  nil;
     [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction * _Nonnull transaction) {
         recipient = [RelayRecipient getOrBuildUnsavedRecipientForRecipientId:recipientId transaction:transaction];
@@ -1556,8 +1567,11 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                                      long statuscode = response.statusCode;
                                      NSData *responseData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
                                      
+                                     NSDictionary *serializedResponse = nil;
                                      NSError *err = nil;
-                                     NSDictionary *serializedResponse = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&err];
+                                     if (responseData != nil) {
+                                         serializedResponse = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&err];
+                                     }
 
                                      void (^retrySend)(void) = ^void() {
                                          if (remainingAttempts <= 0) {

@@ -154,7 +154,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     self.localRelativeFilePath = localRelativeFilePath;
-    OWSAssert(self.filePath);
+    OWSAssertDebug(self.filePath);
 }
 
 #pragma mark - File Management
@@ -172,7 +172,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)writeData:(NSData *)data error:(NSError **)error
 {
-    OWSAssert(data);
+    OWSAssertDebug(data);
 
     *error = nil;
     NSString *_Nullable filePath = self.filePath;
@@ -186,7 +186,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)writeDataSource:(DataSource *)dataSource
 {
-    OWSAssert(dataSource);
+    OWSAssertDebug(dataSource);
 
     NSString *_Nullable filePath = self.filePath;
     if (!filePath) {
@@ -317,15 +317,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isValidImageWithData:(NSData *)data
 {
-    OWSAssert(self.isImage || self.isAnimated);
-    OWSAssert(data);
+    OWSAssertDebug(self.isImage || self.isAnimated);
+    OWSAssertDebug(data);
 
     return [data ows_isValidImageWithMimeType:self.contentType];
 }
 
 - (BOOL)isValidImage
 {
-    OWSAssert(self.isImage || self.isAnimated);
+    OWSAssertDebug(self.isImage || self.isAnimated);
 
     return [NSData ows_isValidImageAtPath:self.filePath mimeType:self.contentType];
 }
@@ -385,7 +385,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSString *thumbnailPath = self.thumbnailPath;
     if (!thumbnailPath) {
-        OWSAssert(!self.isImage && !self.isVideo && !self.isAnimated);
+        OWSAssertDebug(!self.isImage && !self.isVideo && !self.isAnimated);
 
         return nil;
     }
@@ -404,7 +404,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSString *thumbnailPath = self.thumbnailPath;
     if (!thumbnailPath) {
-        OWSAssert(!self.isImage && !self.isVideo && !self.isAnimated);
+        OWSAssertDebug(!self.isImage && !self.isVideo && !self.isAnimated);
 
         return nil;
     }
@@ -433,7 +433,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.mediaURL.path]) {
         DDLogError(@"%@ while generating thumbnail, source file doesn't exist: %@", self.logTag, self.mediaURL);
         // If we're not lazy-restoring this message, the attachment should exist on disk.
-        OWSAssert(self.lazyRestoreFragmentId);
+        OWSAssertDebug(self.lazyRestoreFragmentId);
         return;
     }
 
@@ -448,7 +448,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
 
         CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)self.mediaURL, NULL);
-        OWSAssert(imageSource != NULL);
+        OWSAssertDebug(imageSource != NULL);
         NSDictionary *imageOptions = @{
             (NSString const *)kCGImageSourceCreateThumbnailFromImageIfAbsent : (NSNumber const *)kCFBooleanTrue,
             (NSString const *)kCGImageSourceThumbnailMaxPixelSize : @(thumbnailSize),
@@ -477,7 +477,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSData *thumbnailData = UIImageJPEGRepresentation(result, 0.9);
 
-    OWSAssert(thumbnailData.length > 0);
+    OWSAssertDebug(thumbnailData.length > 0);
     DDLogDebug(@"%@ generated thumbnail with size: %lu", self.logTag, (unsigned long)thumbnailData.length);
     [thumbnailData writeToFile:thumbnailPath atomically:YES];
 }
@@ -602,7 +602,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGSize)imageSize
 {
-    OWSAssert(self.shouldHaveImageSize);
+    OWSAssertDebug(self.shouldHaveImageSize);
 
     @synchronized(self)
     {
@@ -640,7 +640,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat)calculateAudioDurationSeconds
 {
     OWSAssertIsOnMainThread();
-    OWSAssert([self isAudio]);
+    OWSAssertDebug([self isAudio]);
 
     NSError *error;
     AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:self.mediaURL error:&error];
@@ -719,14 +719,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)markForLazyRestoreWithFragment:(OWSBackupFragment *)lazyRestoreFragment
                            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(lazyRestoreFragment);
-    OWSAssert(transaction);
+    OWSAssertDebug(lazyRestoreFragment);
+    OWSAssertDebug(transaction);
 
     if (!lazyRestoreFragment.uniqueId) {
         // If metadata hasn't been saved yet, save now.
         [lazyRestoreFragment saveWithTransaction:transaction];
 
-        OWSAssert(lazyRestoreFragment.uniqueId);
+        OWSAssertDebug(lazyRestoreFragment.uniqueId);
     }
     [self applyChangeToSelfAndLatestCopy:transaction
                              changeBlock:^(TSAttachmentStream *attachment) {
@@ -773,7 +773,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable OWSSignalServiceProtosAttachmentPointer *)buildProtoForAttachmentId:(nullable NSString *)attachmentId
 {
-    OWSAssert(attachmentId.length > 0);
+    OWSAssertDebug(attachmentId.length > 0);
 
     // TODO we should past in a transaction, rather than sneakily generate one in `fetch...` to make sure we're
     // getting a consistent view in the message sending process. A brief glance shows it touches quite a bit of code,
@@ -795,7 +795,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     builder.id = self.serverId;
 
-    OWSAssert(self.contentType.length > 0);
+    OWSAssertDebug(self.contentType.length > 0);
     builder.contentType = self.contentType;
 
     DDLogVerbose(@"%@ Sending attachment with filename: '%@'", self.logTag, self.sourceFilename);

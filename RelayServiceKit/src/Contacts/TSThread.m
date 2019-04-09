@@ -620,7 +620,9 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
         NSString *threadExpression = [(NSDictionary *)[payload objectForKey:FLDistributionKey] objectForKey:FLExpressionKey];
         NSString *threadType = [payload objectForKey:FLThreadTypeKey];
         NSString *threadTitle = [payload objectForKey:FLThreadTitleKey];
-        thread.title = ((threadTitle.length > 0) ? threadTitle : @"" );
+        if (threadTitle != nil) {
+            thread.title = threadTitle;
+        }
         thread.type = ((threadType.length > 0) ? threadType : nil );
         
         NSArray *members = [(NSDictionary *)[payload objectForKey:@"data"] objectForKey:@"members"];
@@ -667,12 +669,14 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 -(void)updateImageWithAttachmentStream:(nonnull TSAttachmentStream *)attachmentStream
                            transaction:(nonnull YapDatabaseReadWriteTransaction *)transaction
 {
-    if ([self.image isEqual:[attachmentStream image]]) {
+    __block UIImage *newImage = [attachmentStream image];
+    
+    if ([self.image isEqual:newImage]) {
         return;
     }
     
     [self applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *thread) {
-        [thread setImage:[attachmentStream image]];
+        [thread setImage:newImage];
         
         // Avatars are stored directly in the database, so there's no need
         // to keep the attachment around after assigning the image.

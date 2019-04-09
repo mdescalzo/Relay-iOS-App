@@ -183,7 +183,7 @@
     NSString *userAgent = UIDevice.currentDevice.localizedModel;
     NSString *messageId = message.uniqueId;
     NSString *threadId = message.thread.uniqueId;
-    NSString *threadTitle = (message.thread.title ? message.thread.title : @"");
+    NSString *threadTitle = (message.thread.title ? message.thread.title : nil);
     NSString *sendTime = [self formattedStringFromDate:[NSDate date]];
     NSString *messageType = message.messageType;
     NSString *threadType = (message.thread.type.length > 0 ? message.thread.type : @"");
@@ -212,20 +212,18 @@
     
     [data setObject:controlMessageType forKey:FLMessageTypeControlKey];
     
-    if ([controlMessageType isEqualToString:FLControlMessageThreadUpdateKey]) {
-        [data setObject:@{  FLThreadIDKey : threadId,
-                            FLThreadTitleKey : threadTitle,
-                            FLExpressionKey : presentation,
-                            }
-                 forKey:@"threadUpdates"];
-    } else if ([controlMessageType isEqualToString:FLControlMessageThreadCloseKey] ||
-               [controlMessageType isEqualToString:FLControlMessageThreadArchiveKey] ||
-               [controlMessageType isEqualToString:FLControlMessageThreadRestoreKey]) {
-        [data setObject:@{  FLThreadIDKey : threadId,
-                            FLThreadTitleKey : threadTitle,
-                            FLExpressionKey : presentation,
-                            }
-                 forKey:@"threadUpdates"];
+    if ([controlMessageType isEqualToString:FLControlMessageThreadUpdateKey] ||
+        [controlMessageType isEqualToString:FLControlMessageThreadCloseKey] ||
+        [controlMessageType isEqualToString:FLControlMessageThreadArchiveKey] ||
+        [controlMessageType isEqualToString:FLControlMessageThreadRestoreKey]) {
+        
+        NSMutableDictionary *threadUpdateBlob = NSMutableDictionary.new;
+        [threadUpdateBlob setObject:threadId forKey:FLThreadIDKey];
+        [threadUpdateBlob setObject:presentation forKey:FLExpressionKey];
+        if (threadTitle != nil) {
+            [threadUpdateBlob setObject:threadTitle forKey:FLThreadTitleKey];
+        }
+        [data setObject:threadUpdateBlob forKey:@"threadUpdates"];
     }
     
     NSMutableDictionary *tmpDict = [NSMutableDictionary dictionaryWithDictionary:
