@@ -918,12 +918,15 @@ NS_ASSUME_NONNULL_BEGIN
     // We need to specify a contentMode since the size of the image
     // might not match the aspect ratio of the view.
     giphyImageView.contentMode =  UIViewContentModeScaleAspectFit; //  UIViewContentModeScaleAspectFill;
-    giphyImageView.backgroundColor = [UIColor whiteColor];
+    giphyImageView.backgroundColor = [UIColor grayColor];
     
     __weak OWSMessageBubbleView *weakSelf = self;
     self.loadCellContentBlock = ^{
         OWSMessageBubbleView *strongSelf = weakSelf;
-        
+        if (!strongSelf) {
+            return;
+        }
+
         YYImage *giphyImage = [strongSelf.cellMediaCache objectForKey:strongSelf.viewItem.interaction.uniqueId];
         if (giphyImage == nil) {
             TSMessage *message = (TSMessage *)strongSelf.viewItem.interaction;
@@ -932,14 +935,12 @@ NS_ASSUME_NONNULL_BEGIN
                 giphyImage = [[YYImage alloc] initWithData:giphyData];
                 if (giphyImage != nil) {
                     [strongSelf.cellMediaCache setObject:giphyImage forKey:strongSelf.viewItem.interaction.uniqueId];
-                    giphyImageView.image = giphyImage;
-                } else {
-                    giphyImageView.image = [YYImage imageNamed:@"giphy_logo"];
                 }
             } else {
-                giphyImageView.image = [YYImage imageNamed:@"giphy_logo"];
+                giphyImage = [YYImage imageNamed:@"giphy_logo"];
             }
         }
+        giphyImageView.image = giphyImage;
     };
     
     self.unloadCellContentBlock = ^{
@@ -1144,14 +1145,16 @@ NS_ASSUME_NONNULL_BEGIN
             break;
         case MessageCellType_WebGiphy: {
             YYImage *image = [self.cellMediaCache objectForKey:self.viewItem.interaction.uniqueId];
-            if (image != nil) {
-                if (image.size.width < maxMessageWidth) {
-                    result = CGSizeRound(image.size);
-                } else {
-                    result = CGSizeRound(CGSizeMake(maxMessageWidth, image.size.height*(maxMessageWidth/image.size.width)));
-                }
-            } else {
+            if (image == nil) {
+                TSMessage *message = (TSMessage *)self.viewItem.interaction;
+                image = [YYImage imageWithData:message.giphyImageData];
+            }
+            if (image == nil) {
                 result = CGSizeRound([UIImage imageNamed:@"giphy_logo"].size);
+            } else if (image.size.width < maxMessageWidth) {
+                result = CGSizeRound(image.size);
+            } else {
+                result = CGSizeRound(CGSizeMake(maxMessageWidth, image.size.height*(maxMessageWidth/image.size.width)));
             }
             break;
         }

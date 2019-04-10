@@ -508,12 +508,16 @@ NSString *const FLMessageNeedsGiphyRetrievalNotification = @"FLMessageNeedsGiphy
 }
 
 -(nullable NSData *)giphyImageData {
-    if (_giphyImageData == nil) {
-        [NSNotificationCenter.defaultCenter postNotificationName:FLMessageNeedsGiphyRetrievalNotification
-                                                          object:nil
-                                                        userInfo:@{ @"messageId" : self.uniqueId }];
+    if (self.isGiphy) {
+        if (_giphyImageData == nil) {
+            [NSNotificationCenter.defaultCenter postNotificationName:FLMessageNeedsGiphyRetrievalNotification
+                                                              object:nil
+                                                            userInfo:@{ @"messageId" : self.uniqueId }];
+        } else {
+            return _giphyImageData;
+        }
     }
-    return _giphyImageData;
+    return nil;
 }
 
 -(nullable NSString *)urlString
