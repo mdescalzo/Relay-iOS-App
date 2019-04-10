@@ -652,14 +652,10 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_Video:
+        case MessageCellType_WebGiphy:
         case OWSMessageCellType_GenericAttachment: {
             OWSAssertDebug(self.displayableBodyText);
             [UIPasteboard.generalPasteboard setString:self.displayableBodyText.fullText];
-            break;
-        }
-        case MessageCellType_WebGiphy: {
-            TSMessage *message = (TSMessage *)self.interaction;
-            [UIPasteboard.generalPasteboard setString:message.urlString];
             break;
         }
         case OWSMessageCellType_DownloadingAttachment: {
@@ -719,9 +715,9 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_Video:
-        case OWSMessageCellType_GenericAttachment: {
+        case OWSMessageCellType_GenericAttachment:
         case MessageCellType_WebPreview:
-        case MessageCellType_WebGiphy:
+        case MessageCellType_WebGiphy: {
             OWSAssert(self.displayableBodyText);
             [AttachmentSharing showShareUIForText:self.displayableBodyText.fullText];
             break;
@@ -741,11 +737,16 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 {
     switch (self.messageCellType) {
         case MessageCellType_WebPreview:
-        case MessageCellType_WebGiphy:
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
             break;
+        case MessageCellType_WebGiphy: {
+            TSMessage *message = (TSMessage *)self.interaction;
+            [AttachmentSharing showShareUIForText:message.urlString];
+
+            break;
+        }
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
@@ -879,10 +880,11 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (BOOL)hasMediaActionContent
 {
     switch (self.messageCellType) {
+        case MessageCellType_WebGiphy:
+            return YES;
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case MessageCellType_WebPreview:
-        case MessageCellType_WebGiphy:
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
