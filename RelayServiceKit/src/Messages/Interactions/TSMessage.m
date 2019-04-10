@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 static const NSUInteger OWSMessageSchemaVersion = 4;
 
+NSString *const FLMessageNeedsGiphyRetrievalNotification = @"FLMessageNeedsGiphyRetrievalNotification";
+
 #pragma mark -
 
 @interface TSMessage ()
@@ -498,6 +500,49 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
 
     [self.quotedMessage setThumbnailAttachmentStream:attachmentStream];
 }
+
+// MARK: - Web/Giphy stuff
+-(BOOL)isGiphy {
+    NSString *messageString = [self htmlTextBody];
+    return [messageString containsString:@"f-type=\"giphy\""];
+}
+
+-(nullable NSData *)giphyImageData {
+    if (_giphyImageData == nil) {
+        [NSNotificationCenter.defaultCenter postNotificationName:FLMessageNeedsGiphyRetrievalNotification
+                                                          object:nil
+                                                        userInfo:@{ @"messageId" : self.uniqueId }];
+    }
+    return _giphyImageData;
+}
+
+-(nullable NSString *)urlString
+{
+    if (_urlString == nil) {
+        _urlString = @"";
+        NSString *messageString = [self htmlTextBody];
+        if (messageString.length == 0) {
+            messageString = [self plainTextBody];
+        }
+        if (messageString.length > 0) {
+            NSDataDetector *linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+            NSArray *matches = [linkDetector matchesInString:messageString options:0 range:NSMakeRange(0, messageString.length)];
+            
+            for (NSTextCheckingResult *match in matches) {
+                
+                if ([match resultType] == NSTextCheckingTypeLink) {
+                    NSString *aString = match.URL.absoluteString;
+                    if ([aString containsString:@"http://"] || [aString containsString:@"https://"]) {
+                        _urlString = [aString stringByReplacingOccurrencesOfString:@"http://" withString:@"https://"];
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return _urlString;
+}
+
 
 #pragma mark - Update With... Methods
 

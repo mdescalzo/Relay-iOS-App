@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class TSQuotedMessage;
 @class YapDatabaseReadWriteTransaction;
 
+extern NSString *const FLMessageNeedsGiphyRetrievalNotification;
+
 @interface TSMessage : TSInteraction <OWSPreviewText>
 
 @property (nonatomic) NSArray<NSString *> *attachmentIds;
@@ -57,7 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *messageType;
 @property BOOL hasAnnotation;
 @property (nonatomic, readonly) BOOL isGiphy;
-@property (nonatomic, copy) NSString *giphyURLString;
+@property (nonatomic, nullable) NSData *giphyImageData;
+@property (nonatomic, nullable) NSString *urlString;
 
 // Used for supplemental data for support things like webRTC
 @property (nullable, nonatomic) NSDictionary *moreData;

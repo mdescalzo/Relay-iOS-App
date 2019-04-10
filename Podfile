@@ -23,7 +23,7 @@ def shared_pods
     pod 'Mantle', '~> 2.1.0', :inhibit_warnings => true
     pod 'PureLayout', '~> 3.1.4',:inhibit_warnings => true
     pod 'Reachability', '~> 3.2',:inhibit_warnings => true
-    pod 'YYImage', '~> 1.0.4', :inhibit_warnings => true
+    pod 'YYImage/WebP', '~> 1.0.4', :inhibit_warnings => true
     pod 'GoogleWebRTC', '~> 1.1', :inhibit_warnings => true
     pod 'UIImageView+Extension', '~> 0.2', :inhibit_warnings => true
     pod 'ZXingObjC', '~> 3.5', :inhibit_warnings => true

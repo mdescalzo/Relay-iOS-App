@@ -2011,8 +2011,8 @@ typedef enum : NSUInteger {
 {
     OWSAssert(conversationItem);
     OWSAssert(conversationItem.hasUrl);
-    
-    [UIApplication.sharedApplication openURL:[NSURL URLWithString:conversationItem.urlString]
+    TSMessage *message = (TSMessage *)conversationItem.interaction;
+    [UIApplication.sharedApplication openURL:[NSURL URLWithString:message.urlString]
                                      options:@{}
                            completionHandler:nil];
 }

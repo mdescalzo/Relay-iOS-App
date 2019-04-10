@@ -592,8 +592,10 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
     // MARK: OWSMessageBubbleViewDelegate
     func didTapWebPreviewViewItem(_ conversationItem: ConversationViewItem) {
-        if let aurl = URL(string: conversationItem.urlString! as String) {
-            UIApplication.shared.open(aurl, options: [:], completionHandler:nil)
+        if let message = conversationItem.interaction as? TSMessage {
+            if let aurl = URL(string: message.urlString! as String) {
+                UIApplication.shared.open(aurl, options: [:], completionHandler:nil)
+            }
         }
     }
     
