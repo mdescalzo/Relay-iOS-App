@@ -205,14 +205,10 @@
                                                                                                         options:0
                                                                                                           error:NULL];
                                                             }
-                                                            else if (HTTPresponse.statusCode == 200 && result != nil) // SUCCESS!
-                                                            {
-                                                                [self storeLocalUserDataWithPayload:result];
-                                                                
+                                                            if (HTTPresponse.statusCode == 200 && result != nil) { // SUCCESS!
+                                                                [self storeLocalUserDataWithPayload:result];                                                            
                                                                 completionBlock(YES, nil);
-                                                            }
-                                                            else  // Connection good, error from server
-                                                            {
+                                                            } else { // Connection good, error from server
                                                                 NSError *serverError = [NSError errorWithDomain:NSURLErrorDomain
                                                                                                      code:HTTPresponse.statusCode
                                                                                                  userInfo:@{NSLocalizedDescriptionKey:[NSHTTPURLResponse localizedStringForStatusCode:HTTPresponse.statusCode]}];
