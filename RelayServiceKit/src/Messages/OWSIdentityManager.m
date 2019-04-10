@@ -386,6 +386,11 @@ NSString *const kNSNotificationName_IdentityStateDidChange = @"kNSNotificationNa
         return OWSVerificationStateDefault;
     }
     
+    if (![currentIdentity isKindOfClass:[OWSRecipientIdentity class]]) {
+        OWSFailDebug(@"%@ unexpectd object(%@) returned by db fetch!", self.logTag, [currentIdentity class]);
+        return OWSVerificationStateDefault;
+    }
+    
     return currentIdentity.verificationState;
 }
 
