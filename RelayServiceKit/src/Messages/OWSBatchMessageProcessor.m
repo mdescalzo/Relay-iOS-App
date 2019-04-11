@@ -403,7 +403,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
 {
     AssertOnDispatchQueue(self.serialQueue);
 
-    NSMutableArray<OWSMessageContentJob *> *processedJobs = [NSMutableArray new];
+    __block NSMutableArray<OWSMessageContentJob *> *processedJobs = [NSMutableArray new];
     [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
         for (OWSMessageContentJob *job in jobs) {
 

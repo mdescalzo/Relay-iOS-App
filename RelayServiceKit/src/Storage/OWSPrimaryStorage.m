@@ -52,13 +52,13 @@ void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t compl
 
     [TSDatabaseView registerTagDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadInteractionsDatabaseView:storage];
+    [TSDatabaseView asyncRegisterThreadDatabaseView:storage];
+    [TSDatabaseView asyncRegisterUnreadDatabaseView:storage];
     [storage asyncRegisterExtension:[TSDatabaseSecondaryIndexes registerTimeStampIndex]
                            withName:[TSDatabaseSecondaryIndexes registerTimeStampIndexExtensionName]];
     [OWSMessageReceiver asyncRegisterDatabaseExtension:storage];
     [OWSBatchMessageProcessor asyncRegisterDatabaseExtension:storage];
 
-    [TSDatabaseView asyncRegisterThreadDatabaseView:storage];
-    [TSDatabaseView asyncRegisterUnreadDatabaseView:storage];
     [TSDatabaseView asyncRegisterUnseenDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadOutgoingMessagesDatabaseView:storage];
     [TSDatabaseView asyncRegisterThreadSpecialMessagesDatabaseView:storage];
