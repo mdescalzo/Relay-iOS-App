@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                 isOutgoing:(BOOL)isOutgoing
                                               sharpCorners:(OWSDirectionalRectCorner)sharpCorners
 {
-    OWSAssert(quotedMessage);
+    OWSAssertDebug(quotedMessage);
 
     return [[OWSQuotedMessageView alloc] initWithQuotedMessage:quotedMessage
                                          displayableQuotedText:displayableQuotedText
@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OWSQuotedMessageView *)quotedMessageViewForPreview:(OWSQuotedReplyModel *)quotedMessage
                                     conversationStyle:(ConversationStyle *)conversationStyle
 {
-    OWSAssert(quotedMessage);
+    OWSAssertDebug(quotedMessage);
 
     DisplayableText *_Nullable displayableQuotedText = nil;
     if (quotedMessage.body.length > 0) {
@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
         return self;
     }
 
-    OWSAssert(quotedMessage);
+    OWSAssertDebug(quotedMessage);
 
     _quotedMessage = quotedMessage;
     _displayableQuotedText = displayableQuotedText;
@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)createContents
 {
     // Ensure only called once.
-    OWSAssert(self.subviews.count < 1);
+    OWSAssertDebug(self.subviews.count < 1);
 
     self.userInteractionEnabled = YES;
     self.layoutMargins = UIEdgeInsetsZero;
@@ -308,7 +308,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIImageView *)imageViewForImage:(UIImage *)image
 {
-    OWSAssert(image);
+    OWSAssertDebug(image);
 
     UIImageView *imageView = [UIImageView new];
     imageView.image = image;
@@ -324,7 +324,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UILabel *)configureQuotedTextLabel
 {
-    OWSAssert(self.quotedTextLabel);
+    OWSAssertDebug(self.quotedTextLabel);
 
     UIColor *textColor = self.quotedTextColor;
     SUPPRESS_DEADSTORE_WARNING(textColor);
@@ -411,7 +411,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UILabel *)configureQuotedAuthorLabel
 {
-    OWSAssert(self.quotedAuthorLabel);
+    OWSAssertDebug(self.quotedAuthorLabel);
 
     NSString *_Nullable localUID = [TSAccountManager localUID];
     NSString *quotedAuthorText;

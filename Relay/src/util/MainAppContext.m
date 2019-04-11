@@ -210,7 +210,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)doMultiDeviceUpdateWithProfileKey:(OWSAES256Key *)profileKey
 {
-    OWSAssert(profileKey);
+    OWSAssertDebug(profileKey);
 
     [MultiDeviceProfileKeyUpdateJob runWithProfileKey:profileKey
                                       identityManager:OWSIdentityManager.sharedManager

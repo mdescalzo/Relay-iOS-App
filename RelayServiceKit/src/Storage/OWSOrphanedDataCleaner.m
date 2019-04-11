@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                       = (TSAttachmentStream *)attachment;
                                                   attachmentStreamCount++;
                                                   NSString *_Nullable filePath = [attachmentStream filePath];
-                                                  OWSAssert(filePath);
+                                                  OWSAssertDebug(filePath);
                                                   [attachmentFilePaths addObject:filePath];
 
                                                   NSString *_Nullable thumbnailPath = [attachmentStream thumbnailPath];

@@ -71,7 +71,7 @@ NSString *const kFLCurrentDeviceIdKey = @"kFLCurrentDeviceIdKey";
 
 - (BOOL)mayHaveLinkedDevices:(YapDatabaseConnection *)dbConnection
 {
-    OWSAssert(dbConnection);
+    OWSAssertDebug(dbConnection);
 
     return [dbConnection boolForKey:kOWSPrimaryStorage_MayHaveLinkedDevices
                        inCollection:kOWSPrimaryStorage_OWSDeviceCollection

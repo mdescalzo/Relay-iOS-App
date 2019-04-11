@@ -38,7 +38,7 @@ static NSString *const OWSIncompleteCallsJobCallTypeIndex = @"index_calls_on_cal
 
 - (NSArray<NSString *> *)fetchIncompleteCallIdsWithTransaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     NSMutableArray<NSString *> *messageIds = [NSMutableArray new];
 
@@ -60,7 +60,7 @@ static NSString *const OWSIncompleteCallsJobCallTypeIndex = @"index_calls_on_cal
 - (void)enumerateIncompleteCallsWithBlock:(void (^)(TSCall *call))block
                               transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     // Since we can't directly mutate the enumerated "incomplete" calls, we store only their ids in hopes
     // of saving a little memory and then enumerate the (larger) TSCall objects one at a time.
@@ -84,11 +84,11 @@ static NSString *const OWSIncompleteCallsJobCallTypeIndex = @"index_calls_on_cal
                 if (call.callType == RPRecentCallTypeOutgoingIncomplete) {
                     DDLogDebug(@"%@ marking call as missed: %@", self.logTag, call.uniqueId);
                     [call updateCallType:RPRecentCallTypeOutgoingMissed transaction:transaction];
-                    OWSAssert(call.callType == RPRecentCallTypeOutgoingMissed);
+                    OWSAssertDebug(call.callType == RPRecentCallTypeOutgoingMissed);
                 } else if (call.callType == RPRecentCallTypeIncomingIncomplete) {
                     DDLogDebug(@"%@ marking call as missed: %@", self.logTag, call.uniqueId);
                     [call updateCallType:RPRecentCallTypeIncomingMissed transaction:transaction];
-                    OWSAssert(call.callType == RPRecentCallTypeIncomingMissed);
+                    OWSAssertDebug(call.callType == RPRecentCallTypeIncomingMissed);
                 } else {
                     OWSFailDebug(
                         @"%@ call has unexpected call type: %@", self.logTag, NSStringFromCallType(call.callType));

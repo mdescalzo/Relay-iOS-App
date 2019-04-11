@@ -45,7 +45,7 @@ NSString *const kLocalProfileUniqueId = @"kLocalProfileUniqueId";
 + (OWSUserProfile *)getOrBuildUserProfileForRecipientId:(NSString *)recipientId
                                            dbConnection:(YapDatabaseConnection *)dbConnection
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
 
     __block OWSUserProfile *userProfile;
     [dbConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
@@ -62,7 +62,7 @@ NSString *const kLocalProfileUniqueId = @"kLocalProfileUniqueId";
         }
     }
 
-    OWSAssert(userProfile);
+    OWSAssertDebug(userProfile);
 
     return userProfile;
 }
@@ -85,7 +85,7 @@ NSString *const kLocalProfileUniqueId = @"kLocalProfileUniqueId";
         return self;
     }
 
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
     _recipientId = recipientId;
 
     return self;
@@ -313,7 +313,7 @@ NSString *const kLocalProfileUniqueId = @"kLocalProfileUniqueId";
                 dbConnection:(YapDatabaseConnection *)dbConnection
                   completion:(nullable OWSUserProfileCompletion)completion
 {
-    OWSAssert(profileKey);
+    OWSAssertDebug(profileKey);
 
     [self applyChanges:^(OWSUserProfile *userProfile) {
         [userProfile setProfileKey:profileKey];
@@ -386,7 +386,7 @@ NSString *const kLocalProfileUniqueId = @"kLocalProfileUniqueId";
 
 + (NSString *)profileAvatarFilepathWithFilename:(NSString *)filename
 {
-    OWSAssert(filename.length > 0);
+    OWSAssertDebug(filename.length > 0);
 
     return [self.profileAvatarsDirPath stringByAppendingPathComponent:filename];
 }

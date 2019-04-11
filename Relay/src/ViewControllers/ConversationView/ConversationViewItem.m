@@ -78,9 +78,9 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
                         transaction:(YapDatabaseReadTransaction *)transaction
                   conversationStyle:(ConversationStyle *)conversationStyle
 {
-    OWSAssert(interaction);
-    OWSAssert(transaction);
-    OWSAssert(conversationStyle);
+    OWSAssertDebug(interaction);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(conversationStyle);
 
     self = [super init];
 
@@ -99,7 +99,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 
 - (void)replaceInteraction:(TSInteraction *)interaction transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(interaction);
+    OWSAssertDebug(interaction);
 
     _interaction = interaction;
 
@@ -263,9 +263,9 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 
 - (CGSize)cellSizeWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
     OWSAssertIsOnMainThread();
-    OWSAssert(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle);
 
     if (!self.cachedCellSize) {
         ConversationViewCell *_Nullable measurementCell = [self measurementCell];
@@ -281,7 +281,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (nullable ConversationViewCell *)measurementCell
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(self.interaction);
+    OWSAssertDebug(self.interaction);
 
     // For performance reasons, we cache one instance of each kind of
     // cell and uses these cells for measurement.
@@ -309,7 +309,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
                 break;
         }
 
-        OWSAssert(measurementCell);
+        OWSAssertDebug(measurementCell);
         measurementCellCache[cellCacheKey] = measurementCell;
     }
 
@@ -318,7 +318,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 
 - (CGFloat)vSpacingWithPreviousLayoutItem:(ConversationViewItem *)previousLayoutItem
 {
-    OWSAssert(previousLayoutItem);
+    OWSAssertDebug(previousLayoutItem);
 
     if (self.hasCellHeader) {
         return OWSMessageHeaderViewDateHeaderVMargin;
@@ -344,9 +344,9 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
                                              indexPath:(NSIndexPath *)indexPath
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(collectionView);
-    OWSAssert(indexPath);
-    OWSAssert(self.interaction);
+    OWSAssertDebug(collectionView);
+    OWSAssertDebug(indexPath);
+    OWSAssertDebug(self.interaction);
 
     switch (self.interaction.interactionType) {
         case OWSInteractionType_Unknown:
@@ -400,8 +400,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 
 - (DisplayableText *)displayableBodyTextForText:(NSString *)text interactionId:(NSString *)interactionId
 {
-    OWSAssert(text);
-    OWSAssert(interactionId.length > 0);
+    OWSAssertDebug(text);
+    OWSAssertDebug(interactionId.length > 0);
 
     NSString *displayableTextCacheKey = [@"body-" stringByAppendingString:interactionId];
 
@@ -414,8 +414,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (DisplayableText *)displayableBodyTextForOversizeTextAttachment:(TSAttachmentStream *)attachmentStream
                                                     interactionId:(NSString *)interactionId
 {
-    OWSAssert(attachmentStream);
-    OWSAssert(interactionId.length > 0);
+    OWSAssertDebug(attachmentStream);
+    OWSAssertDebug(interactionId.length > 0);
 
     NSString *displayableTextCacheKey = [@"oversize-body-" stringByAppendingString:interactionId];
 
@@ -430,8 +430,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 
 - (DisplayableText *)displayableQuotedTextForText:(NSString *)text interactionId:(NSString *)interactionId
 {
-    OWSAssert(text);
-    OWSAssert(interactionId.length > 0);
+    OWSAssertDebug(text);
+    OWSAssertDebug(interactionId.length > 0);
 
     NSString *displayableTextCacheKey = [@"quoted-" stringByAppendingString:interactionId];
 
@@ -444,7 +444,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (DisplayableText *)displayableTextForCacheKey:(NSString *)displayableTextCacheKey
                                       textBlock:(NSString * (^_Nonnull)(void))textBlock
 {
-    OWSAssert(displayableTextCacheKey.length > 0);
+    OWSAssertDebug(displayableTextCacheKey.length > 0);
 
     DisplayableText *_Nullable displayableText = [[self displayableTextCache] objectForKey:displayableTextCacheKey];
     if (!displayableText) {
@@ -460,7 +460,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (nullable TSAttachment *)firstAttachmentIfAnyOfMessage:(TSMessage *)message
                                              transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     if (message.attachmentIds.count == 0) {
         return nil;
@@ -475,8 +475,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (void)ensureViewState:(YapDatabaseReadTransaction *)transaction
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(transaction);
-    OWSAssert(!self.hasViewState);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(!self.hasViewState);
 
     if (![self.interaction isKindOfClass:[TSOutgoingMessage class]]
         && ![self.interaction isKindOfClass:[TSIncomingMessage class]]) {
@@ -543,11 +543,11 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         // If we haven't already assigned an attachment type at this point, message.body isn't a caption,
         // it's a stand-alone text message.
         if (self.messageCellType == OWSMessageCellType_Unknown) {
-//            OWSAssert(message.attachmentIds.count == 0);
+//            OWSAssertDebug(message.attachmentIds.count == 0);
             self.messageCellType = OWSMessageCellType_TextMessage;
         }
         self.displayableBodyText = [self displayableBodyTextForText:message.plainTextBody interactionId:message.uniqueId];
-        OWSAssert(self.displayableBodyText);
+        OWSAssertDebug(self.displayableBodyText);
     }
 
     if (self.messageCellType == OWSMessageCellType_Unknown) {
@@ -589,11 +589,11 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (nullable DisplayableText *)displayableBodyText
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(self.hasViewState);
+    OWSAssertDebug(self.hasViewState);
 
-    OWSAssert(_displayableBodyText);
-    OWSAssert(_displayableBodyText.displayText);
-    OWSAssert(_displayableBodyText.fullText);
+    OWSAssertDebug(_displayableBodyText);
+    OWSAssertDebug(_displayableBodyText.displayText);
+    OWSAssertDebug(_displayableBodyText.fullText);
 
     return _displayableBodyText;
 }
@@ -601,7 +601,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (nullable TSAttachmentStream *)attachmentStream
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(self.hasViewState);
+    OWSAssertDebug(self.hasViewState);
 
     return _attachmentStream;
 }
@@ -609,7 +609,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (nullable TSAttachmentPointer *)attachmentPointer
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(self.hasViewState);
+    OWSAssertDebug(self.hasViewState);
 
     return _attachmentPointer;
 }
@@ -617,7 +617,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (CGSize)mediaSize
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(self.hasViewState);
+    OWSAssertDebug(self.hasViewState);
 
     return _mediaSize;
 }
@@ -625,11 +625,11 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (nullable DisplayableText *)displayableQuotedText
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(self.hasViewState);
+    OWSAssertDebug(self.hasViewState);
 
-    OWSAssert(_displayableQuotedText);
-    OWSAssert(_displayableQuotedText.displayText);
-    OWSAssert(_displayableQuotedText.fullText);
+    OWSAssertDebug(_displayableQuotedText);
+    OWSAssertDebug(_displayableQuotedText.displayText);
+    OWSAssertDebug(_displayableQuotedText.fullText);
 
     return _displayableQuotedText;
 }
@@ -644,7 +644,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_Video:
         case OWSMessageCellType_GenericAttachment: {
-            OWSAssert(self.displayableBodyText);
+            OWSAssertDebug(self.displayableBodyText);
             [UIPasteboard.generalPasteboard setString:self.displayableBodyText.fullText];
             break;
         }
@@ -701,7 +701,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Video:
         case OWSMessageCellType_GenericAttachment: {
         case MessageCellType_WebPreview:
-            OWSAssert(self.displayableBodyText);
+            OWSAssertDebug(self.displayableBodyText);
             [AttachmentSharing showShareUIForText:self.displayableBodyText.fullText];
             break;
         }

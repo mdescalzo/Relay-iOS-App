@@ -602,7 +602,6 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
 {
     extension = [self updateExtensionVersion:extension withName:extensionName];
 
-//    OWSAssertDebug(![self.extensionNames containsObject:extensionName]);
     if (![self.extensionNames containsObject:extensionName]){
         [self.extensionNames addObject:extensionName];
     }

@@ -135,7 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     CGSize viewSize = self.scrollView.bounds.size;
     UIImage *image = self.image;
-    OWSAssert(image);
+    OWSAssertDebug(image);
 
     if (image.size.width == 0 || image.size.height == 0) {
         OWSFailDebug(@"%@ Invalid image dimensions. %@", self.logTag, NSStringFromCGSize(image.size));
@@ -199,7 +199,7 @@ NS_ASSUME_NONNULL_BEGIN
         self.mediaView = imageView;
     }
 
-    OWSAssert(self.mediaView);
+    OWSAssertDebug(self.mediaView);
 
     // We add these gestures to mediaView rather than
     // the root view so that interacting with the video player
@@ -354,15 +354,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)didPressPlayBarButton:(id)sender
 {
-    OWSAssert(self.isVideo);
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.isVideo);
+    OWSAssertDebug(self.videoPlayer);
     [self playVideo];
 }
 
 - (void)didPressPauseBarButton:(id)sender
 {
-    OWSAssert(self.isVideo);
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.isVideo);
+    OWSAssertDebug(self.videoPlayer);
     [self pauseVideo];
 }
 
@@ -375,7 +375,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)centerMediaViewConstraints
 {
-    OWSAssert(self.scrollView);
+    OWSAssertDebug(self.scrollView);
 
     CGSize scrollViewSize = self.scrollView.bounds.size;
     CGSize imageViewSize = self.mediaView.frame.size;
@@ -410,7 +410,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)playVideo
 {
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.videoPlayer);
 
     self.playVideoButton.hidden = YES;
 
@@ -421,8 +421,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)pauseVideo
 {
-    OWSAssert(self.isVideo);
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.isVideo);
+    OWSAssertDebug(self.videoPlayer);
 
     [self.videoPlayer pause];
 
@@ -438,8 +438,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)stopVideo
 {
-    OWSAssert(self.isVideo);
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.isVideo);
+    OWSAssertDebug(self.videoPlayer);
 
     [self.videoPlayer stop];
 
@@ -452,8 +452,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)videoPlayerDidPlayToCompletion:(OWSVideoPlayer *)videoPlayer
 {
-    OWSAssert(self.isVideo);
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.isVideo);
+    OWSAssertDebug(self.videoPlayer);
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     [self stopVideo];
@@ -463,13 +463,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)playerProgressBarDidStartScrubbing:(PlayerProgressBar *)playerProgressBar
 {
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.videoPlayer);
     [self.videoPlayer pause];
 }
 
 - (void)playerProgressBar:(PlayerProgressBar *)playerProgressBar scrubbedToTime:(CMTime)time
 {
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.videoPlayer);
     [self.videoPlayer seekToTime:time];
 }
 
@@ -477,7 +477,7 @@ NS_ASSUME_NONNULL_BEGIN
     didFinishScrubbingAtTime:(CMTime)time
         shouldResumePlayback:(BOOL)shouldResumePlayback
 {
-    OWSAssert(self.videoPlayer);
+    OWSAssertDebug(self.videoPlayer);
     [self.videoPlayer seekToTime:time];
 
     if (shouldResumePlayback) {

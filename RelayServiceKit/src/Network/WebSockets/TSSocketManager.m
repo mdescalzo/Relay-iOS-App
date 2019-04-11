@@ -67,8 +67,8 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
                           failure:(TSSocketMessageFailure)failure
 {
     if (self = [super init]) {
-        OWSAssert(success);
-        OWSAssert(failure);
+        OWSAssertDebug(success);
+        OWSAssertDebug(failure);
 
         _requestId = requestId;
         _success = success;
@@ -89,8 +89,8 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
         self.hasCompleted = YES;
     }
 
-    OWSAssert(self.success);
-    OWSAssert(self.failure);
+    OWSAssertDebug(self.success);
+    OWSAssertDebug(self.failure);
 
     TSSocketMessageSuccess success = self.success;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -120,7 +120,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
 - (void)didFailWithStatusCode:(NSInteger)statusCode responseData:(nullable NSData *)responseData error:(NSError *)error
 {
-    OWSAssert(error);
+    OWSAssertDebug(error);
 
     @synchronized(self)
     {
@@ -132,8 +132,8 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
     DDLogError(@"%@ %s didFailWithStatusCode: %zd, %@", self.logTag, __PRETTY_FUNCTION__, statusCode, error);
 
-    OWSAssert(self.success);
-    OWSAssert(self.failure);
+    OWSAssertDebug(self.success);
+    OWSAssertDebug(self.failure);
 
     TSSocketMessageFailure failure = self.failure;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -346,13 +346,13 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
     if (_state == state) {
         switch (state) {
             case SocketManagerStateClosed:
-                OWSAssert(!self.websocket);
+                OWSAssertDebug(!self.websocket);
                 break;
             case SocketManagerStateOpen:
-                OWSAssert(self.websocket);
+                OWSAssertDebug(self.websocket);
                 break;
             case SocketManagerStateConnecting:
-                OWSAssert(self.websocket);
+                OWSAssertDebug(self.websocket);
                 break;
         }
         return;
@@ -371,7 +371,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
             break;
         }
         case SocketManagerStateOpen: {
-            OWSAssert(self.state == SocketManagerStateConnecting);
+            OWSAssertDebug(self.state == SocketManagerStateConnecting);
 
             self.heartbeatTimer = [NSTimer timerWithTimeInterval:kSocketHeartbeatPeriodSeconds
                                                           target:self
@@ -472,10 +472,10 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
 - (void)makeRequest:(TSRequest *)request success:(TSSocketMessageSuccess)success failure:(TSSocketMessageFailure)failure
 {
-    OWSAssert(request);
-    OWSAssert(request.HTTPMethod.length > 0);
-    OWSAssert(success);
-    OWSAssert(failure);
+    OWSAssertDebug(request);
+    OWSAssertDebug(request.HTTPMethod.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
 
     TSSocketMessage *socketMessage =
         [[TSSocketMessage alloc] initWithRequestId:[Cryptography randomUInt64] success:success failure:failure];
@@ -558,7 +558,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 - (void)processWebSocketResponseMessage:(WebSocketResourcesWebSocketResponseMessage *)message
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(message);
+    OWSAssertDebug(message);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self processWebSocketResponseMessageAsync:message];
@@ -567,7 +567,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
 - (void)processWebSocketResponseMessageAsync:(WebSocketResourcesWebSocketResponseMessage *)message
 {
-    OWSAssert(message);
+    OWSAssertDebug(message);
 
     DDLogInfo(@"%@ received WebSocket response.", self.logTag);
 
@@ -666,7 +666,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
     OWSAssertIsOnMainThread();
-    OWSAssert(webSocket);
+    OWSAssertDebug(webSocket);
     if (webSocket != self.websocket) {
         // Ignore events from obsolete web sockets.
         return;
@@ -682,7 +682,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     OWSAssertIsOnMainThread();
-    OWSAssert(webSocket);
+    OWSAssertDebug(webSocket);
     if (webSocket != self.websocket) {
         // Ignore events from obsolete web sockets.
         return;
@@ -702,7 +702,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(NSData *)data {
     OWSAssertIsOnMainThread();
-    OWSAssert(webSocket);
+    OWSAssertDebug(webSocket);
 
     if (webSocket != self.websocket) {
         // Ignore events from obsolete web sockets.
@@ -841,7 +841,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
             wasClean:(BOOL)wasClean
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(webSocket);
+    OWSAssertDebug(webSocket);
     if (webSocket != self.websocket) {
         // Ignore events from obsolete web sockets.
         return;
@@ -899,7 +899,7 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
         // If app is active, keep web socket alive.
         return YES;
     } else if (self.backgroundKeepAliveUntilDate && [self.backgroundKeepAliveUntilDate timeIntervalSinceNow] > 0.f) {
-        OWSAssert(self.backgroundKeepAliveTimer);
+        OWSAssertDebug(self.backgroundKeepAliveTimer);
         // If app is doing any work in the background, keep web socket alive.
         return YES;
     } else {
@@ -910,14 +910,14 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 - (void)requestSocketAliveForAtLeastSeconds:(CGFloat)durationSeconds
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(durationSeconds > 0.f);
+    OWSAssertDebug(durationSeconds > 0.f);
 
     if (self.appIsActive) {
         // If app is active, clean up state used to keep socket alive in background.
         [self clearBackgroundState];
     } else if (!self.backgroundKeepAliveUntilDate) {
-        OWSAssert(!self.backgroundKeepAliveUntilDate);
-        OWSAssert(!self.backgroundKeepAliveTimer);
+        OWSAssertDebug(!self.backgroundKeepAliveUntilDate);
+        OWSAssertDebug(!self.backgroundKeepAliveTimer);
 
         DDLogInfo(@"%s activating socket in the background", __PRETTY_FUNCTION__);
 
@@ -952,9 +952,9 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
                                               [strongSelf applyDesiredSocketState];
                                           }];
     } else {
-        OWSAssert(self.backgroundKeepAliveUntilDate);
-        OWSAssert(self.backgroundKeepAliveTimer);
-        OWSAssert([self.backgroundKeepAliveTimer isValid]);
+        OWSAssertDebug(self.backgroundKeepAliveUntilDate);
+        OWSAssertDebug(self.backgroundKeepAliveTimer);
+        OWSAssertDebug([self.backgroundKeepAliveTimer isValid]);
 
         if ([self.backgroundKeepAliveUntilDate timeIntervalSinceNow] < durationSeconds) {
             // Update state used to keep socket alive in background.
@@ -1032,10 +1032,10 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
 - (void)ensureReconnect
 {
     OWSAssertIsOnMainThread();
-    OWSAssert([self shouldSocketBeOpen]);
+    OWSAssertDebug([self shouldSocketBeOpen]);
 
     if (self.reconnectTimer) {
-        OWSAssert([self.reconnectTimer isValid]);
+        OWSAssertDebug([self.reconnectTimer isValid]);
     } else {
         // TODO: It'd be nice to do exponential backoff.
         self.reconnectTimer = [NSTimer timerWithTimeInterval:kSocketReconnectDelaySeconds

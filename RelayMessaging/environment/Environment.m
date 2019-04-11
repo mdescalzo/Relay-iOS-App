@@ -30,7 +30,7 @@ static Environment *sharedEnvironment = nil;
 
 + (Environment *)current
 {
-    OWSAssert(sharedEnvironment);
+    OWSAssertDebug(sharedEnvironment);
 
     return sharedEnvironment;
 }
@@ -41,8 +41,8 @@ static Environment *sharedEnvironment = nil;
     //
     // App extensions may be opened multiple times in the same process,
     // so statics will persist.
-    OWSAssert(!sharedEnvironment || !CurrentAppContext().isMainApp);
-    OWSAssert(environment);
+    OWSAssertDebug(!sharedEnvironment || !CurrentAppContext().isMainApp);
+    OWSAssertDebug(environment);
 
     sharedEnvironment = environment;
 }
@@ -73,28 +73,28 @@ static Environment *sharedEnvironment = nil;
 
 - (FLContactsManager *)contactsManager
 {
-    OWSAssert(_contactsManager);
+    OWSAssertDebug(_contactsManager);
 
     return _contactsManager;
 }
 
 - (TSNetworkManager *)networkManager
 {
-    OWSAssert(_networkManager);
+    OWSAssertDebug(_networkManager);
 
     return _networkManager;
 }
 
 - (MessageSender *)messageSender
 {
-    OWSAssert(_messageSender);
+    OWSAssertDebug(_messageSender);
 
     return _messageSender;
 }
 
 + (OWSPreferences *)preferences
 {
-    OWSAssert([Environment current].preferences);
+    OWSAssertDebug([Environment current].preferences);
 
     return [Environment current].preferences;
 }

@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)prepareLayoutWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     const CGFloat viewWidth = self.conversationStyle.viewWidth;
 
@@ -124,7 +124,7 @@ NS_ASSUME_NONNULL_BEGIN
         CGSize layoutSize = CGSizeCeil([layoutItem cellSizeWithTransaction:transaction]);
 
         // Ensure cell fits within view.
-        OWSAssert(layoutSize.width <= viewWidth);
+        OWSAssertDebug(layoutSize.width <= viewWidth);
         layoutSize.width = MIN(viewWidth, layoutSize.width);
 
         // All cells are "full width" and are responsible for aligning their own content.

@@ -218,20 +218,20 @@ void VerifyRegistrationsForPrimaryStorage(OWSStorage *storage)
     // seeing, this issue only seems to affect sync and not async registrations.  We've always
     // been opening write transactions before the async registrations complete without negative
     // consequences.
-    OWSAssert(!self.areSyncRegistrationsComplete);
+    OWSAssertDebug(!self.areSyncRegistrationsComplete);
     self.areSyncRegistrationsComplete = YES;
 }
 
 - (void)runAsyncRegistrationsWithCompletion:(void (^_Nonnull)(void))completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     DDLogVerbose(@"%@ async registrations enqueuing.", self.logTag);
 
     RunAsyncRegistrationsForStorage(self, ^{
         OWSAssertIsOnMainThread();
 
-        OWSAssert(!self.areAsyncRegistrationsComplete);
+        OWSAssertDebug(!self.areAsyncRegistrationsComplete);
 
         DDLogVerbose(@"%@ async registrations complete.", self.logTag);
 

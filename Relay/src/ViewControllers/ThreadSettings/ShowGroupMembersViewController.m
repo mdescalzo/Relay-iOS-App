@@ -78,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     _thread = thread;
 
-    OWSAssert(self.thread);
+    OWSAssertDebug(self.thread);
  
     self.memberRecipientIds = [NSSet setWithArray:self.thread.participantIds];
 }
@@ -87,7 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     [super viewDidLoad];
 
-    OWSAssert([self.navigationController isKindOfClass:[OWSNavigationController class]]);
+    OWSAssertDebug([self.navigationController isKindOfClass:[OWSNavigationController class]]);
 
     self.title = _thread.displayName;
 
@@ -101,7 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateTableContents
 {
-    OWSAssert(self.thread);
+    OWSAssertDebug(self.thread);
 
     OWSTableContents *contents = [OWSTableContents new];
 
@@ -144,8 +144,8 @@ NS_ASSUME_NONNULL_BEGIN
           toSection:(OWSTableSection *)section
     useVerifyAction:(BOOL)useVerifyAction
 {
-    OWSAssert(recipientIds);
-    OWSAssert(section);
+    OWSAssertDebug(recipientIds);
+    OWSAssertDebug(section);
 
     __weak ShowGroupMembersViewController *weakSelf = self;
     ContactsViewHelper *helper = self.contactsViewHelper;
@@ -255,7 +255,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)didSelectRecipientId:(NSString *)recipientId
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
 
     // TODO:  Investigate this
     UIAlertController *actionSheetController = [UIAlertController alertControllerWithTitle:nil
@@ -268,7 +268,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showContactInfoViewForRecipientId:(NSString *)recipientId
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
 
     [self.contactsViewHelper presentContactViewControllerForRecipientId:recipientId
                                                      fromViewController:self
@@ -277,7 +277,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showConversationViewForRecipientId:(NSString *)recipientId
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
 
     [SignalApp.sharedApp presentConversationForRecipientId:recipientId action:ConversationViewActionCompose];
 }
@@ -289,7 +289,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showSafetyNumberView:(NSString *)recipientId
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
 
     [FingerprintViewController presentFromViewController:self recipientId:recipientId];
 }

@@ -77,7 +77,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
 
 - (nullable UIView *)createHeaderWithSearchBar:(UISearchBar *)searchBar
 {
-    OWSAssert(searchBar);
+    OWSAssertDebug(searchBar);
 
     const CGFloat contentVMargin = 0;
 
@@ -130,7 +130,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
         return nil;
     }
     NSData *data = self.attachment.data;
-    OWSAssert(data.length < kOversizeTextMessageSizeThreshold);
+    OWSAssertDebug(data.length < kOversizeTextMessageSizeThreshold);
     NSString *_Nullable messageText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     DDLogVerbose(@"%@ messageTextForAttachment: %@", self.logTag, messageText);
     return [messageText filterStringForDisplay];
@@ -138,8 +138,8 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
 
 - (void)threadWasSelected:(TSThread *)thread
 {
-    OWSAssert(self.attachment);
-    OWSAssert(thread);
+    OWSAssertDebug(self.attachment);
+    OWSAssertDebug(thread);
 
     self.thread = thread;
 
@@ -213,7 +213,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
 - (void)messageApproval:(MessageApprovalViewController *)approvalViewController
       didApproveMessage:(NSString *)messageText
 {
-    OWSAssert(messageText.length > 0);
+    OWSAssertDebug(messageText.length > 0);
 
     [self tryToSendMessageWithBlock:^(SendCompletionBlock sendCompletion) {
         OWSAssertIsOnMainThread();
@@ -301,9 +301,9 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
                    fromViewController:(UIViewController *)fromViewController
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(error);
-    OWSAssert(message);
-    OWSAssert(fromViewController);
+    OWSAssertDebug(error);
+    OWSAssertDebug(message);
+    OWSAssertDebug(fromViewController);
 
     NSString *failureTitle = NSLocalizedString(@"SHARE_EXTENSION_SENDING_FAILURE_TITLE", @"Alert title");
 
@@ -376,9 +376,9 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
                      fromViewController:(UIViewController *)fromViewController
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(message);
-    OWSAssert(recipientId.length > 0);
-    OWSAssert(fromViewController);
+    OWSAssertDebug(message);
+    OWSAssertDebug(recipientId.length > 0);
+    OWSAssertDebug(fromViewController);
 
     DDLogDebug(@"%@ Confirming identity for recipient: %@", self.logTag, recipientId);
 
@@ -404,7 +404,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
                 DDLogInfo(@"%@ marked recipient: %@ as default verification status.", self.logTag, recipientId);
                 NSData *identityKey =
                     [[OWSIdentityManager sharedManager] identityKeyForRecipientId:recipientId transaction:transaction];
-                OWSAssert(identityKey);
+                OWSAssertDebug(identityKey);
                 [[OWSIdentityManager sharedManager] setVerificationState:OWSVerificationStateDefault
                                                              identityKey:identityKey
                                                              recipientId:recipientId
@@ -423,8 +423,8 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
 - (void)resendMessage:(TSOutgoingMessage *)message fromViewController:(UIViewController *)fromViewController
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(message);
-    OWSAssert(fromViewController);
+    OWSAssertDebug(message);
+    OWSAssertDebug(fromViewController);
 
     NSString *progressTitle = NSLocalizedString(@"SHARE_EXTENSION_SENDING_IN_PROGRESS_TITLE", @"Alert title");
     UIAlertController *progressAlert = [UIAlertController alertControllerWithTitle:progressTitle
@@ -470,7 +470,7 @@ typedef void (^SendMessageBlock)(SendCompletionBlock completion);
 {
     DDLogDebug(@"%@ upload progress.", self.logTag);
     OWSAssertIsOnMainThread();
-    OWSAssert(self.progressView);
+    OWSAssertDebug(self.progressView);
 
     if (!self.outgoingMessage) {
         DDLogDebug(@"%@ Ignoring upload progress until there is an outgoing message.", self.logTag);

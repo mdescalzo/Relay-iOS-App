@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UnicodeCodeRange *)rangeWithStart:(unichar)first last:(unichar)last
 {
-    OWSAssert(first <= last);
+    OWSAssertDebug(first <= last);
 
     UnicodeCodeRange *range = [UnicodeCodeRange new];
     range.first = first;
@@ -370,7 +370,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)rtlSafeAppend:(NSString *)string
 {
-    OWSAssert(string);
+    OWSAssertDebug(string);
     
     if (CurrentAppContext().isRTL) {
         return [string stringByAppendingString:self];

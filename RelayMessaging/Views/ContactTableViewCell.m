@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configure
 {
-    OWSAssert(!self.cellView);
+    OWSAssertDebug(!self.cellView);
 
     self.preservesSuperviewLayoutMargins = YES;
     self.contentView.preservesSuperviewLayoutMargins = YES;
@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureWithThread:(TSThread *)thread contactsManager:(FLContactsManager *)contactsManager
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     [OWSTableItem configureCell:self];
 
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setAccessoryMessage:(nullable NSString *)accessoryMessage
 {
-    OWSAssert(self.cellView);
+    OWSAssertDebug(self.cellView);
 
     self.cellView.accessoryMessage = accessoryMessage;
 }

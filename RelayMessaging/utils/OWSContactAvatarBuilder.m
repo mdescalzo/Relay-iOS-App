@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
                       contactsManager:(FLContactsManager *)contactsManager
 {
     UIColor *color = [Theme conversationColorForString:colorSeed];
-    OWSAssert(color);
+    OWSAssertDebug(color);
     return [self initWithContactId:colorSeed
                               name:nonSignalName
                              color:color

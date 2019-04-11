@@ -12,7 +12,7 @@
 @synthesize authPassword = _authPassword;
 
 - (id)initWithURL:(NSURL *)URL {
-    OWSAssert(URL);
+    OWSAssertDebug(URL);
     self = [super initWithURL:URL
                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
               timeoutInterval:textSecureHTTPTimeOut];
@@ -47,9 +47,9 @@
                      method:(NSString *)method
                  parameters:(nullable NSDictionary<NSString *, id> *)parameters
 {
-    OWSAssert(URL);
-    OWSAssert(method.length > 0);
-    OWSAssert(parameters);
+    OWSAssertDebug(URL);
+    OWSAssertDebug(method.length > 0);
+    OWSAssertDebug(parameters);
 
     self = [super initWithURL:URL
                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
@@ -76,7 +76,7 @@
 
 - (void)setAuthUsername:(nullable NSString *)authUsername
 {
-    OWSAssert(self.shouldHaveAuthorizationHeaders);
+    OWSAssertDebug(self.shouldHaveAuthorizationHeaders);
 
     @synchronized(self) {
         _authUsername = authUsername;
@@ -85,7 +85,7 @@
 
 - (void)setAuthPassword:(nullable NSString *)authPassword
 {
-    OWSAssert(self.shouldHaveAuthorizationHeaders);
+    OWSAssertDebug(self.shouldHaveAuthorizationHeaders);
 
     @synchronized(self) {
         _authPassword = authPassword;
@@ -94,7 +94,7 @@
 
 - (NSString *)authUsername
 {
-    OWSAssert(self.shouldHaveAuthorizationHeaders);
+    OWSAssertDebug(self.shouldHaveAuthorizationHeaders);
 
     @synchronized(self) {
         if (_authUsername == nil) {
@@ -106,7 +106,7 @@
 
 - (NSString *)authPassword
 {
-    OWSAssert(self.shouldHaveAuthorizationHeaders);
+    OWSAssertDebug(self.shouldHaveAuthorizationHeaders);
 
     @synchronized(self) {
         if (_authPassword == nil) {

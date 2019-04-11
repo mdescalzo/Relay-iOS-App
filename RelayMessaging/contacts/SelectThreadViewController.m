@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)createViews
 {
-    OWSAssert(self.selectThreadViewDelegate);
+    OWSAssertDebug(self.selectThreadViewDelegate);
 
     // Search
     UISearchBar *searchBar = [UISearchBar new];
@@ -260,8 +260,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)relayTagWasSelected:(FLTag *)relayTag
 {
-    OWSAssert(relayTag);
-    OWSAssert(self.selectThreadViewDelegate);
+    OWSAssertDebug(relayTag);
+    OWSAssertDebug(self.selectThreadViewDelegate);
     
     __block TSThread *thread = nil;
     __block NSCountedSet<NSString *> *participants = [relayTag recipientIds];
@@ -269,7 +269,7 @@ NS_ASSUME_NONNULL_BEGIN
     [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
         thread = [TSThread getOrCreateThreadWithParticipants:[participants allObjects] transaction:transaction];
     }];
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
     
     [self.selectThreadViewDelegate threadWasSelected:thread];
 }

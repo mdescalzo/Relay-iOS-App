@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable OWSTableSection *)sectionForThread:(nullable TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSMutableArray<OWSTableItem *> *items = [NSMutableArray new];
 
@@ -307,7 +307,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendTextMessagesActionInThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesSingleAction actionWithLabel:@"Send Text Message"
                                    staggeredActionBlock:^(NSUInteger index,
@@ -329,8 +329,8 @@ NS_ASSUME_NONNULL_BEGIN
                success:(nullable void (^)(void))success
                failure:(nullable void (^)(void))failure
 {
-    OWSAssert(filePath);
-    OWSAssert(thread);
+    OWSAssertDebug(filePath);
+    OWSAssertDebug(thread);
 
     MessageSender *messageSender = [Environment current].messageSender;
     NSString *filename = [filePath lastPathComponent];
@@ -352,12 +352,12 @@ NS_ASSUME_NONNULL_BEGIN
     }
     attachment.captionText = messageBody;
 
-    OWSAssert(attachment);
+    OWSAssertDebug(attachment);
     if ([attachment hasError]) {
         DDLogError(@"attachment[%@]: %@", [attachment sourceFilename], [attachment errorName]);
         [DDLog flushLog];
     }
-    OWSAssert(![attachment hasError]);
+    OWSAssertDebug(![attachment hasError]);
     [ThreadUtil sendMessageWithAttachment:attachment
                                  inThread:thread
                          quotedReplyModel:nil
@@ -371,7 +371,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)performActionNTimes:(DebugUIMessagesAction *)action
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(action);
+    OWSAssertDebug(action);
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"How many?"
                                                                    message:nil
@@ -399,7 +399,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<DebugUIMessagesAction *> *)allSendMediaActions:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSArray<DebugUIMessagesAction *> *actions = @[
         [self sendJpegAction:thread hasCaption:NO],
@@ -418,7 +418,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendJpegAction:(TSThread *)thread hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self sendMediaAction:@"Send Jpeg"
                       hasCaption:hasCaption
@@ -428,7 +428,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendGifAction:(TSThread *)thread hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self sendMediaAction:@"Send Gif"
                       hasCaption:hasCaption
@@ -438,7 +438,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendLargeGifAction:(TSThread *)thread hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self sendMediaAction:@"Send Large Gif"
                       hasCaption:hasCaption
@@ -448,7 +448,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendMp3Action:(TSThread *)thread hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self sendMediaAction:@"Send Mp3"
                       hasCaption:hasCaption
@@ -458,7 +458,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendMp4Action:(TSThread *)thread hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self sendMediaAction:@"Send Mp4"
                       hasCaption:hasCaption
@@ -471,9 +471,9 @@ NS_ASSUME_NONNULL_BEGIN
                            fakeAssetLoader:(DebugUIMessagesAssetLoader *)fakeAssetLoader
                                     thread:(TSThread *)thread
 {
-    OWSAssert(labelParam.length > 0);
-    OWSAssert(fakeAssetLoader);
-    OWSAssert(thread);
+    OWSAssertDebug(labelParam.length > 0);
+    OWSAssertDebug(fakeAssetLoader);
+    OWSAssertDebug(thread);
 
     NSString *label = labelParam;
     if (hasCaption) {
@@ -487,7 +487,7 @@ NS_ASSUME_NONNULL_BEGIN
             ActionSuccessBlock success,
             ActionFailureBlock failure) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                OWSAssert(fakeAssetLoader.filePath.length > 0);
+                OWSAssertDebug(fakeAssetLoader.filePath.length > 0);
                 [self sendAttachment:fakeAssetLoader.filePath
                               thread:thread
                                label:label
@@ -501,7 +501,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendAllMediaAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction allGroupActionWithLabel:@"All Send Media"
                                                     subactions:[self allSendMediaActions:thread]];
@@ -509,7 +509,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendRandomMediaAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction randomGroupActionWithLabel:@"Random Send Media"
                                                        subactions:[self allSendMediaActions:thread]];
@@ -517,7 +517,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)selectSendMediaAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     [self selectActionUI:[self allSendMediaActions:thread] label:@"Select Send Media"];
 }
@@ -528,7 +528,7 @@ NS_ASSUME_NONNULL_BEGIN
                                      messageState:(TSOutgoingMessageState)messageState
                                        hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Jpeg"
                             messageState:messageState
@@ -541,7 +541,7 @@ NS_ASSUME_NONNULL_BEGIN
                                     messageState:(TSOutgoingMessageState)messageState
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Gif"
                             messageState:messageState
@@ -554,7 +554,7 @@ NS_ASSUME_NONNULL_BEGIN
                                          messageState:(TSOutgoingMessageState)messageState
                                            hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Large Gif"
                             messageState:messageState
@@ -567,7 +567,7 @@ NS_ASSUME_NONNULL_BEGIN
                                     messageState:(TSOutgoingMessageState)messageState
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Mp3"
                             messageState:messageState
@@ -580,7 +580,7 @@ NS_ASSUME_NONNULL_BEGIN
                                     messageState:(TSOutgoingMessageState)messageState
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Mp4"
                             messageState:messageState
@@ -593,7 +593,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                    messageState:(TSOutgoingMessageState)messageState
                                                      hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Portrait Png"
                             messageState:messageState
@@ -606,7 +606,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                     messageState:(TSOutgoingMessageState)messageState
                                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Landscape Png"
                             messageState:messageState
@@ -619,7 +619,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                 messageState:(TSOutgoingMessageState)messageState
                                                   hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Tall Portrait Png"
                             messageState:messageState
@@ -632,7 +632,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                  messageState:(TSOutgoingMessageState)messageState
                                                    hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Wide Landscape Png"
                             messageState:messageState
@@ -645,7 +645,7 @@ NS_ASSUME_NONNULL_BEGIN
                                          messageState:(TSOutgoingMessageState)messageState
                                            hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Large Png"
                             messageState:messageState
@@ -658,7 +658,7 @@ NS_ASSUME_NONNULL_BEGIN
                                         messageState:(TSOutgoingMessageState)messageState
                                           hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Tiny Png"
                             messageState:messageState
@@ -676,7 +676,7 @@ NS_ASSUME_NONNULL_BEGIN
                                     messageState:(TSOutgoingMessageState)messageState
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:actionLabel
                             messageState:messageState
@@ -692,7 +692,7 @@ NS_ASSUME_NONNULL_BEGIN
                                         messageState:(TSOutgoingMessageState)messageState
                                           hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Tiny Pdf"
                             messageState:messageState
@@ -705,7 +705,7 @@ NS_ASSUME_NONNULL_BEGIN
                                          messageState:(TSOutgoingMessageState)messageState
                                            hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Large Pdf"
                             messageState:messageState
@@ -718,7 +718,7 @@ NS_ASSUME_NONNULL_BEGIN
                                            messageState:(TSOutgoingMessageState)messageState
                                              hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Missing Png"
                             messageState:messageState
@@ -731,7 +731,7 @@ NS_ASSUME_NONNULL_BEGIN
                                            messageState:(TSOutgoingMessageState)messageState
                                              hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Missing Pdf"
                             messageState:messageState
@@ -744,7 +744,7 @@ NS_ASSUME_NONNULL_BEGIN
                                              messageState:(TSOutgoingMessageState)messageState
                                                hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeOutgoingMediaAction:@"Fake Outgoing Oversize Text"
                             messageState:messageState
@@ -759,9 +759,9 @@ NS_ASSUME_NONNULL_BEGIN
                                    fakeAssetLoader:(DebugUIMessagesAssetLoader *)fakeAssetLoader
                                             thread:(TSThread *)thread
 {
-    OWSAssert(labelParam.length > 0);
-    OWSAssert(fakeAssetLoader);
-    OWSAssert(thread);
+    OWSAssertDebug(labelParam.length > 0);
+    OWSAssertDebug(fakeAssetLoader);
+    OWSAssertDebug(thread);
 
     NSString *label = [labelParam stringByAppendingString:[self actionLabelForHasCaption:hasCaption
                                                                     outgoingMessageState:messageState
@@ -771,7 +771,7 @@ NS_ASSUME_NONNULL_BEGIN
     return
         [DebugUIMessagesSingleAction actionWithLabel:label
                               unstaggeredActionBlock:^(NSUInteger index, YapDatabaseReadWriteTransaction *transaction) {
-                                  OWSAssert(fakeAssetLoader.filePath.length > 0);
+                                  OWSAssertDebug(fakeAssetLoader.filePath.length > 0);
                                   [self createFakeOutgoingMedia:index
                                                    messageState:messageState
                                                      hasCaption:hasCaption
@@ -789,9 +789,9 @@ NS_ASSUME_NONNULL_BEGIN
                          thread:(TSThread *)thread
                     transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
-    OWSAssert(fakeAssetLoader.filePath);
-    OWSAssert(transaction);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(fakeAssetLoader.filePath);
+    OWSAssertDebug(transaction);
 
     // Random time within last n years. Helpful for filling out a media gallery over time.
     //    double yearsMillis = 4.0 * kYearsInMs;
@@ -833,7 +833,7 @@ NS_ASSUME_NONNULL_BEGIN
                            isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                        hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Jpeg"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -846,7 +846,7 @@ NS_ASSUME_NONNULL_BEGIN
                           isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Gif"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -859,7 +859,7 @@ NS_ASSUME_NONNULL_BEGIN
                                isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                            hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Large Gif"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -872,7 +872,7 @@ NS_ASSUME_NONNULL_BEGIN
                           isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Mp3"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -885,7 +885,7 @@ NS_ASSUME_NONNULL_BEGIN
                           isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Mp4"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -898,7 +898,7 @@ NS_ASSUME_NONNULL_BEGIN
                                          isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                                      hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Portrait Png"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -911,7 +911,7 @@ NS_ASSUME_NONNULL_BEGIN
                                           isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Landscape Png"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -924,7 +924,7 @@ NS_ASSUME_NONNULL_BEGIN
                                       isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                                   hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Tall Portrait Png"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -937,7 +937,7 @@ NS_ASSUME_NONNULL_BEGIN
                                        isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                                    hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Wide Landscape Png"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -950,7 +950,7 @@ NS_ASSUME_NONNULL_BEGIN
                                isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                            hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Large Png"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -963,7 +963,7 @@ NS_ASSUME_NONNULL_BEGIN
                               isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                           hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Tiny Incoming Large Png"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -981,7 +981,7 @@ NS_ASSUME_NONNULL_BEGIN
                           isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                       hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:actionLabel
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -997,7 +997,7 @@ NS_ASSUME_NONNULL_BEGIN
                               isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                           hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Tiny Pdf"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -1010,7 +1010,7 @@ NS_ASSUME_NONNULL_BEGIN
                                isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                            hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Large Pdf"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -1023,7 +1023,7 @@ NS_ASSUME_NONNULL_BEGIN
                                  isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                              hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Missing Png"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -1036,7 +1036,7 @@ NS_ASSUME_NONNULL_BEGIN
                                  isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                              hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Missing Pdf"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -1049,7 +1049,7 @@ NS_ASSUME_NONNULL_BEGIN
                                    isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                                                hasCaption:(BOOL)hasCaption
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [self fakeIncomingMediaAction:@"Fake Incoming Oversize Text"
                   isAttachmentDownloaded:isAttachmentDownloaded
@@ -1064,9 +1064,9 @@ NS_ASSUME_NONNULL_BEGIN
                                    fakeAssetLoader:(DebugUIMessagesAssetLoader *)fakeAssetLoader
                                             thread:(TSThread *)thread
 {
-    OWSAssert(labelParam.length > 0);
-    OWSAssert(fakeAssetLoader);
-    OWSAssert(thread);
+    OWSAssertDebug(labelParam.length > 0);
+    OWSAssertDebug(fakeAssetLoader);
+    OWSAssertDebug(thread);
 
     NSString *label = labelParam;
     if (hasCaption) {
@@ -1080,7 +1080,7 @@ NS_ASSUME_NONNULL_BEGIN
     return
         [DebugUIMessagesSingleAction actionWithLabel:label
                               unstaggeredActionBlock:^(NSUInteger index, YapDatabaseReadWriteTransaction *transaction) {
-                                  OWSAssert(fakeAssetLoader.filePath.length > 0);
+                                  OWSAssertDebug(fakeAssetLoader.filePath.length > 0);
                                   [self createFakeIncomingMedia:index
                                          isAttachmentDownloaded:isAttachmentDownloaded
                                                      hasCaption:hasCaption
@@ -1120,9 +1120,9 @@ NS_ASSUME_NONNULL_BEGIN
                                         thread:(TSThread *)thread
                                    transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
-    OWSAssert(fakeAssetLoader.filePath);
-    OWSAssert(transaction);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(fakeAssetLoader.filePath);
+    OWSAssertDebug(transaction);
 
     //    // Random time within last n years. Helpful for filling out a media gallery over time.
     //    double yearsMillis = 4.0 * kYearsInMs;
@@ -1152,7 +1152,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<DebugUIMessagesAction *> *)allFakeMediaActions:(TSThread *)thread includeLabels:(BOOL)includeLabels
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSMutableArray<DebugUIMessagesAction *> *actions = [NSMutableArray new];
 
@@ -1600,7 +1600,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)fakeAllMediaAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction allGroupActionWithLabel:@"All Fake Media"
                                                     subactions:[self allFakeMediaActions:thread includeLabels:YES]];
@@ -1608,7 +1608,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)fakeRandomMediaAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction randomGroupActionWithLabel:@"Random Fake Media"
                                                        subactions:[self allFakeMediaActions:thread includeLabels:NO]];
@@ -1618,7 +1618,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendShortTextMessageAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesSingleAction actionWithLabel:@"Send Short Text Message"
                                    staggeredActionBlock:^(NSUInteger index,
@@ -1633,7 +1633,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendOversizeTextMessageAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesSingleAction actionWithLabel:@"Send Oversize Text Message"
                                    staggeredActionBlock:^(NSUInteger index,
@@ -1648,7 +1648,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)sendMessageVariationsAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSArray<DebugUIMessagesAction *> *actions = @[
         [self sendShortTextMessageAction:thread],
@@ -1662,7 +1662,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)fakeShortIncomingTextMessageAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesSingleAction
                actionWithLabel:@"Fake Short Incoming Text Message"
@@ -1680,7 +1680,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (SignalAttachment *)signalAttachmentForFilePath:(NSString *)filePath
 {
-    OWSAssert(filePath);
+    OWSAssertDebug(filePath);
 
     NSString *filename = [filePath lastPathComponent];
     NSString *utiType = [MIMETypeUtil utiTypeForFileExtension:filename.pathExtension];
@@ -1692,12 +1692,12 @@ NS_ASSUME_NONNULL_BEGIN
         attachment.captionText = [self randomCaptionText];
     }
 
-    OWSAssert(attachment);
+    OWSAssertDebug(attachment);
     if ([attachment hasError]) {
         DDLogError(@"attachment[%@]: %@", [attachment sourceFilename], [attachment errorName]);
         [DDLog flushLog];
     }
-    OWSAssert(![attachment hasError]);
+    OWSAssertDebug(![attachment hasError]);
     return attachment;
 }
 
@@ -1706,8 +1706,8 @@ NS_ASSUME_NONNULL_BEGIN
                success:(nullable void (^)(void))success
                failure:(nullable void (^)(void))failure
 {
-    OWSAssert(filePath);
-    OWSAssert(thread);
+    OWSAssertDebug(filePath);
+    OWSAssertDebug(thread);
 
     SignalAttachment *attachment = [self signalAttachmentForFilePath:filePath];
     MessageSender *messageSender = [Environment current].messageSender;
@@ -1721,7 +1721,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)fakeIncomingTextMessageAction:(TSThread *)thread text:(NSString *)text
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesSingleAction
                actionWithLabel:[NSString stringWithFormat:@"Fake Incoming Text Message (%@)", text]
@@ -1740,7 +1740,7 @@ NS_ASSUME_NONNULL_BEGIN
                                             messageState:(TSOutgoingMessageState)messageState
                                                     text:(NSString *)text
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesSingleAction
                actionWithLabel:[NSString stringWithFormat:@"Fake Incoming Text Message (%@)", text]
@@ -1781,7 +1781,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                   isDelivered:(BOOL)isDelivered
                                                        isRead:(BOOL)isRead
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSString *label = @"Fake Short Incoming Text Message";
     label = [label stringByAppendingString:[self actionLabelForHasCaption:YES
@@ -1806,7 +1806,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<DebugUIMessagesAction *> *)allFakeTextActions:(TSThread *)thread includeLabels:(BOOL)includeLabels
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSArray<NSString *> *messageBodies = @[
         @"Hi",
@@ -1861,7 +1861,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)fakeAllTextAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction allGroupActionWithLabel:@"All Fake Text"
                                                     subactions:[self allFakeTextActions:thread includeLabels:YES]];
@@ -1869,7 +1869,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)fakeRandomTextAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction randomGroupActionWithLabel:@"Random Fake Text"
                                                        subactions:[self allFakeTextActions:thread includeLabels:NO]];
@@ -1892,7 +1892,7 @@ NS_ASSUME_NONNULL_BEGIN
                   // Only applies if !isReplyIncoming.
                   replyMessageState:(TSOutgoingMessageState)replyMessageState
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     // Used fixed values for properties that shouldn't matter much.
     BOOL quotedMessageIsDelivered = NO;
@@ -1903,13 +1903,13 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Seamlessly convert oversize text messages to oversize text attachments.
     if ([quotedMessageBody lengthOfBytesUsingEncoding:NSUTF8StringEncoding] >= kOversizeTextMessageSizeThreshold) {
-        OWSAssert(!quotedMessageAssetLoader);
+        OWSAssertDebug(!quotedMessageAssetLoader);
         quotedMessageAssetLoader = [DebugUIMessagesAssetLoader oversizeTextInstanceWithText:quotedMessageBody];
         quotedMessageBody = nil;
     }
     if (replyMessageBody &&
         [replyMessageBody lengthOfBytesUsingEncoding:NSUTF8StringEncoding] >= kOversizeTextMessageSizeThreshold) {
-        OWSAssert(!replyAssetLoader);
+        OWSAssertDebug(!replyAssetLoader);
         replyAssetLoader = [DebugUIMessagesAssetLoader oversizeTextInstanceWithText:replyMessageBody];
         replyMessageBody = nil;
     }
@@ -1963,7 +1963,7 @@ NS_ASSUME_NONNULL_BEGIN
                                           isAttachmentDownloaded:YES
                                                    quotedMessage:nil
                                                      transaction:transaction];
-                OWSAssert(messageToQuote);
+                OWSAssertDebug(messageToQuote);
                 DDLogVerbose(@"%@ %@", self.logTag, label);
                 [DDLog flushLog];
                 ConversationViewItem *viewItem = [[ConversationViewItem alloc] initWithInteraction:messageToQuote
@@ -1980,7 +1980,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                        isRead:quotedMessageIsRead
                                                                                 quotedMessage:nil
                                                                                   transaction:transaction];
-                OWSAssert(messageToQuote);
+                OWSAssertDebug(messageToQuote);
 
                 ConversationViewItem *viewItem = [[ConversationViewItem alloc] initWithInteraction:messageToQuote
                                                                                      isGroupThread:!thread.isOneOnOne
@@ -1988,7 +1988,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                  conversationStyle:conversationStyle];
                 quotedMessage = [[OWSQuotedReplyModel quotedReplyForConversationViewItem:viewItem transaction:transaction] buildQuotedMessage];
             }
-            OWSAssert(quotedMessage);
+            OWSAssertDebug(quotedMessage);
 
             NSString *_Nullable replyMessageBodyWIndex
                 = (replyMessageBody ? [NSString stringWithFormat:@"%zd %@", index, replyMessageBody] : nil);
@@ -2042,7 +2042,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<DebugUIMessagesAction *> *)allFakeQuotedReplyActions:(TSThread *)thread includeLabels:(BOOL)includeLabels
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSString *shortText = @"Lorem ipsum";
     NSString *mediumText = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, "
@@ -2628,7 +2628,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)allQuotedReplyAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return
         [DebugUIMessagesGroupAction allGroupActionWithLabel:@"All Quoted Reply"
@@ -2638,14 +2638,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)selectQuotedReplyAction:(TSThread *)thread
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     [self selectActionUI:[self allFakeQuotedReplyActions:thread includeLabels:NO] label:@"Select QuotedReply"];
 }
 
 + (DebugUIMessagesAction *)randomQuotedReplyAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction
         randomGroupActionWithLabel:@"Random Quoted Reply"
@@ -2656,7 +2656,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<DebugUIMessagesAction *> *)allFakeActions:(TSThread *)thread includeLabels:(BOOL)includeLabels
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSMutableArray<DebugUIMessagesAction *> *actions = [NSMutableArray new];
     [actions addObjectsFromArray:[self allFakeMediaActions:thread includeLabels:includeLabels]];
@@ -2669,7 +2669,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)allFakeAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction allGroupActionWithLabel:@"All Fake"
                                                     subactions:[self allFakeActions:thread includeLabels:YES]];
@@ -2678,7 +2678,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)selectFakeAction:(TSThread *)thread
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     [self selectActionUI:[self allFakeActions:thread includeLabels:NO] label:@"Select Fake"];
 }
@@ -2706,7 +2706,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<DebugUIMessagesAction *> *)allFakeSequenceActions:(TSThread *)thread includeLabels:(BOOL)includeLabels
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSMutableArray<DebugUIMessagesAction *> *actions = [NSMutableArray new];
 
@@ -2828,7 +2828,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)allFakeSequencesAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction allGroupActionWithLabel:@"All Fake Sequences"
                                                     subactions:[self allFakeSequenceActions:thread includeLabels:YES]];
@@ -2840,7 +2840,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                 label:(NSString *)label
                                            dateOffset:(int64_t)dateOffset
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesSingleAction
                actionWithLabel:[NSString stringWithFormat:@"Fake Back-Date Message (%@)", label]
@@ -2862,7 +2862,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<DebugUIMessagesAction *> *)allFakeBackDatedActions:(TSThread *)thread includeLabels:(BOOL)includeLabels
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSMutableArray<DebugUIMessagesAction *> *actions = [NSMutableArray new];
 
@@ -2888,7 +2888,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAction *)allFakeBackDatedAction:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     return [DebugUIMessagesGroupAction allGroupActionWithLabel:@"All Fake Back-Dated"
                                                     subactions:[self allFakeBackDatedActions:thread includeLabels:YES]];
@@ -2897,7 +2897,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)selectBackDatedAction:(TSThread *)thread
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     [self selectActionUI:[self allFakeBackDatedActions:thread includeLabels:NO] label:@"Select Back-Dated"];
 }
@@ -2939,7 +2939,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSData *)createRandomNSDataOfSize:(size_t)size
 {
-    OWSAssert(size % 4 == 0);
+    OWSAssertDebug(size % 4 == 0);
 
     return [Randomness generateRandomBytes:(int)size];
 }
@@ -2977,7 +2977,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (SSKEnvelope *)createEnvelopeForThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     uint64_t timestamp = [NSDate ows_millisecondTimeStamp];
     NSString *source = ^{
@@ -2997,7 +2997,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<TSInteraction *> *)unsavedSystemMessagesInThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSMutableArray<TSInteraction *> *result = [NSMutableArray new];
 
@@ -3153,7 +3153,7 @@ NS_ASSUME_NONNULL_BEGIN
         TSInvalidIdentityKeyReceivingErrorMessage *_Nullable blockingSNChangeMessage =
             [TSInvalidIdentityKeyReceivingErrorMessage untrustedKeyWithEnvelope:[self createEnvelopeForThread:thread]
                                                                 withTransaction:transaction];
-        OWSAssert(blockingSNChangeMessage);
+        OWSAssertDebug(blockingSNChangeMessage);
         [result addObject:blockingSNChangeMessage];
         [result addObject:[[TSErrorMessage alloc] initWithTimestamp:[NSDate ows_millisecondTimeStamp]
                                                            inThread:thread
@@ -3166,7 +3166,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)createSystemMessagesInThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSArray<TSInteraction *> *messages = [self unsavedSystemMessagesInThread:thread];
     [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
@@ -3178,7 +3178,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)createSystemMessageInThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     NSArray<TSInteraction *> *messages = [self unsavedSystemMessagesInThread:thread];
     TSInteraction *message = messages[(NSUInteger)arc4random_uniform((uint32_t)messages.count)];
@@ -3247,10 +3247,10 @@ NS_ASSUME_NONNULL_BEGIN
 //        createRandomContacts:threadCount
 //              contactHandler:^(CNContact *_Nonnull contact, NSUInteger idx, BOOL *_Nonnull stop) {
 //                  NSString *phoneNumberText = contact.phoneNumbers.firstObject.value.stringValue;
-//                  OWSAssert(phoneNumberText);
+//                  OWSAssertDebug(phoneNumberText);
 //                  PhoneNumber *phoneNumber = [PhoneNumber tryParsePhoneNumberFromUserSpecifiedText:phoneNumberText];
-//                  OWSAssert(phoneNumber);
-//                  OWSAssert(phoneNumber.toE164);
+//                  OWSAssertDebug(phoneNumber);
+//                  OWSAssertDebug(phoneNumber.toE164);
 //
 //                  TSThread *contactThread = [TSThread getOrCreateThreadWithId:phoneNumber.toE164];
 //                  [self sendFakeMessages:messageCount thread:contactThread];
@@ -3364,7 +3364,7 @@ NS_ASSUME_NONNULL_BEGIN
 
                 NSError *error;
                 BOOL success = [attachmentStream writeData:[self createRandomNSDataOfSize:filesize] error:&error];
-                OWSAssert(success && !error);
+                OWSAssertDebug(success && !error);
                 [attachmentStream saveWithTransaction:transaction];
 
                 [self createFakeOutgoingMessage:thread
@@ -3401,7 +3401,7 @@ NS_ASSUME_NONNULL_BEGIN
         readWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
             thread = [TSThread getOrCreateThreadWithParticipants:recipientIds transaction:transaction];
         }];
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     TSOutgoingMessage *message =
         [TSOutgoingMessage outgoingMessageInThread:thread groupMetaMessage:TSGroupMessageNew expiresInSeconds:0];
@@ -3441,7 +3441,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)injectIncomingMessageInThread:(TSThread *)thread counter:(NSUInteger)counter
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     DDLogInfo(@"%@ injectIncomingMessageInThread: %lu", self.logTag, (unsigned long)counter);
 
@@ -3488,7 +3488,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSError *error;
     NSData *_Nullable envelopeData = [envelope serializedDataAndReturnError:&error];
-    OWSAssert(!error && envelopeData);
+    OWSAssertDebug(!error && envelopeData);
 
     [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
         [[OWSBatchMessageProcessor sharedInstance] enqueueEnvelopeData:envelopeData
@@ -3584,7 +3584,7 @@ NS_ASSUME_NONNULL_BEGIN
 
         TSInteraction *_Nullable interaction =
             [interactionsByThread objectAtIndex:messageIdx.unsignedIntegerValue inGroup:thread.uniqueId];
-        OWSAssert(interaction);
+        OWSAssertDebug(interaction);
         [interactions addObject:interaction];
     }
 
@@ -3611,7 +3611,7 @@ NS_ASSUME_NONNULL_BEGIN
     for (NSNumber *messageIdx in messageIndices) {
         TSInteraction *_Nullable interaction =
             [interactionsByThread objectAtIndex:messageIdx.unsignedIntegerValue inGroup:thread.uniqueId];
-        OWSAssert(interaction);
+        OWSAssertDebug(interaction);
         [interactions addObject:interaction];
     }
     for (TSInteraction *interaction in interactions) {
@@ -3644,7 +3644,7 @@ NS_ASSUME_NONNULL_BEGIN
 
         TSInteraction *_Nullable interaction =
             [interactionsByThread objectAtIndex:messageIdx.unsignedIntegerValue inGroup:thread.uniqueId];
-        OWSAssert(interaction);
+        OWSAssertDebug(interaction);
         [interactions addObject:interaction];
     }
     for (TSInteraction *interaction in interactions) {
@@ -3771,7 +3771,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)createTimestampMessagesInThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     long long now = (long long)[NSDate ows_millisecondTimeStamp];
     NSArray<NSNumber *> *timestamps = @[
@@ -3882,7 +3882,7 @@ NS_ASSUME_NONNULL_BEGIN
 
                     TSThread *groupThread =
                         [TSThread getOrCreateThreadWithParticipants:recipientIds transaction:transaction];
-                    OWSAssert(groupThread);
+                    OWSAssertDebug(groupThread);
                 }
             }
         }];
@@ -3917,7 +3917,7 @@ NS_ASSUME_NONNULL_BEGIN
                     ] mutableCopy];
                     TSThread *groupThread =
                     [TSThread getOrCreateThreadWithParticipants:recipientIds transaction:transaction];
-                    OWSAssert(groupThread);
+                    OWSAssertDebug(groupThread);
                 }
             }
         }];
@@ -3946,12 +3946,12 @@ NS_ASSUME_NONNULL_BEGIN
         SignalAttachment *attachment =
             [SignalAttachment attachmentWithDataSource:dataSource dataUTI:utiType imageQuality:TSImageQualityOriginal];
 
-        OWSAssert(attachment);
+        OWSAssertDebug(attachment);
         if ([attachment hasError]) {
             DDLogError(@"attachment[%@]: %@", [attachment sourceFilename], [attachment errorName]);
             [DDLog flushLog];
         }
-        OWSAssert(![attachment hasError]);
+        OWSAssertDebug(![attachment hasError]);
         [ThreadUtil sendMessageWithAttachment:attachment
                                      inThread:thread
                              quotedReplyModel:nil
@@ -4011,11 +4011,11 @@ NS_ASSUME_NONNULL_BEGIN
                                    quotedMessage:(nullable TSQuotedMessage *)quotedMessage
                                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     // Seamlessly convert oversize text messages to oversize text attachments.
     if ([messageBody lengthOfBytesUsingEncoding:NSUTF8StringEncoding] >= kOversizeTextMessageSizeThreshold) {
-        OWSAssert(!fakeAssetLoader);
+        OWSAssertDebug(!fakeAssetLoader);
         fakeAssetLoader = [DebugUIMessagesAssetLoader oversizeTextInstanceWithText:messageBody];
         messageBody = nil;
     }
@@ -4048,9 +4048,9 @@ NS_ASSUME_NONNULL_BEGIN
                                    quotedMessage:(nullable TSQuotedMessage *)quotedMessage
                                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
-    OWSAssert(transaction);
-    OWSAssert(messageBody.length > 0 || attachmentId.length > 0);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(messageBody.length > 0 || attachmentId.length > 0);
 
     NSMutableArray<NSString *> *attachmentIds = [NSMutableArray new];
     if (attachmentId) {
@@ -4080,14 +4080,14 @@ NS_ASSUME_NONNULL_BEGIN
     [message updateWithFakeMessageState:messageState transaction:transaction];
     if (isDelivered) {
         NSString *_Nullable recipientId = thread.participantIds.lastObject;
-        OWSAssert(recipientId.length > 0);
+        OWSAssertDebug(recipientId.length > 0);
         [message updateWithDeliveredRecipient:recipientId
                             deliveryTimestamp:@([NSDate ows_millisecondTimeStamp])
                                   transaction:transaction];
     }
     if (isRead) {
         NSString *_Nullable recipientId = thread.participantIds.lastObject;
-        OWSAssert(recipientId.length > 0);
+        OWSAssertDebug(recipientId.length > 0);
         [message updateWithReadRecipientId:recipientId
                              readTimestamp:[NSDate ows_millisecondTimeStamp]
                                transaction:transaction];
@@ -4102,11 +4102,11 @@ NS_ASSUME_NONNULL_BEGIN
                                    quotedMessage:(nullable TSQuotedMessage *)quotedMessage
                                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     // Seamlessly convert oversize text messages to oversize text attachments.
     if ([messageBody lengthOfBytesUsingEncoding:NSUTF8StringEncoding] >= kOversizeTextMessageSizeThreshold) {
-        OWSAssert(!fakeAssetLoader);
+        OWSAssertDebug(!fakeAssetLoader);
         fakeAssetLoader = [DebugUIMessagesAssetLoader oversizeTextInstanceWithText:messageBody];
         messageBody = nil;
     }
@@ -4135,9 +4135,9 @@ NS_ASSUME_NONNULL_BEGIN
                                    quotedMessage:(nullable TSQuotedMessage *)quotedMessage
                                      transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
-    OWSAssert(transaction);
-    OWSAssert(messageBody.length > 0 || attachmentId.length > 0);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(messageBody.length > 0 || attachmentId.length > 0);
 
     NSMutableArray<NSString *> *attachmentIds = [NSMutableArray new];
     if (attachmentId) {
@@ -4167,9 +4167,9 @@ NS_ASSUME_NONNULL_BEGIN
                 isAttachmentDownloaded:(BOOL)isAttachmentDownloaded
                            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(fakeAssetLoader);
-    OWSAssert(fakeAssetLoader.filePath);
-    OWSAssert(transaction);
+    OWSAssertDebug(fakeAssetLoader);
+    OWSAssertDebug(fakeAssetLoader.filePath);
+    OWSAssertDebug(transaction);
 
     if (isAttachmentDownloaded) {
         DataSource *dataSource =
@@ -4183,7 +4183,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                 sourceFilename:filename];
         NSError *error;
         BOOL success = [attachmentStream writeData:dataSource.data error:&error];
-        OWSAssert(success && !error);
+        OWSAssertDebug(success && !error);
         [attachmentStream saveWithTransaction:transaction];
         return attachmentStream;
     } else {
