@@ -50,7 +50,7 @@
 - (instancetype)initWithQuotedMessage:(TSQuotedMessage *)quotedMessage
                           transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(quotedMessage.quotedAttachments.count <= 1);
+    OWSAssertDebug(quotedMessage.quotedAttachments.count <= 1);
     OWSAttachmentInfo *attachmentInfo = quotedMessage.quotedAttachments.firstObject;
 
     BOOL thumbnailDownloadFailed = NO;
@@ -134,8 +134,8 @@
 + (nullable instancetype)quotedReplyForConversationViewItem:(ConversationViewItem *)conversationItem
                                                 transaction:(YapDatabaseReadTransaction *)transaction;
 {
-    OWSAssert(conversationItem);
-    OWSAssert(transaction);
+    OWSAssertDebug(conversationItem);
+    OWSAssertDebug(transaction);
 
     TSMessage *message = (TSMessage *)conversationItem.interaction;
     if (![message isKindOfClass:[TSMessage class]]) {
@@ -146,7 +146,7 @@
     NSString *messageId = message.uniqueId;
     
     TSThread *thread = [message threadWithTransaction:transaction];
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
     uint64_t timestamp = message.timestamp;
 
@@ -160,7 +160,7 @@
             return (NSString * _Nullable) nil;
         }
     }();
-    OWSAssert(authorId.length > 0);
+    OWSAssertDebug(authorId.length > 0);
     
     NSString *_Nullable quotedText = message.plainTextBody;
     BOOL hasText = quotedText.length > 0;

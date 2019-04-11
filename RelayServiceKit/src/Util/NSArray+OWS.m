@@ -13,9 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSMutableArray<NSString *> *result = [NSMutableArray new];
     for (id object in self) {
-        OWSAssert([object isKindOfClass:[TSYapDatabaseObject class]]);
-        TSYapDatabaseObject *dbObject = object;
-        [result addObject:dbObject.uniqueId];
+        OWSAssertDebug([object isKindOfClass:[TSYapDatabaseObject class]]);
+        if ([object isKindOfClass:[TSYapDatabaseObject class]]) {
+            TSYapDatabaseObject *dbObject = object;
+            [result addObject:dbObject.uniqueId];
+        }
     }
     return result;
 }

@@ -102,8 +102,8 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
 
 - (void)downloadAndProcessImport
 {
-    OWSAssert(self.databaseItems);
-    OWSAssert(self.attachmentsItems);
+    OWSAssertDebug(self.databaseItems);
+    OWSAssertDebug(self.attachmentsItems);
 
     NSMutableArray<OWSBackupFragment *> *allItems = [NSMutableArray new];
     [allItems addObjectsFromArray:self.databaseItems];
@@ -187,8 +187,8 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
 - (void)downloadFilesFromCloud:(NSMutableArray<OWSBackupFragment *> *)items
                     completion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(items.count > 0);
-    OWSAssert(completion);
+    OWSAssertDebug(items.count > 0);
+    OWSAssertDebug(completion);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
@@ -199,8 +199,8 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
                       recordCount:(NSUInteger)recordCount
                        completion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(items);
-    OWSAssert(completion);
+    OWSAssertDebug(items);
+    OWSAssertDebug(completion);
 
     if (self.isComplete) {
         // Job was aborted.
@@ -300,7 +300,7 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
 
 - (void)restoreDatabaseWithCompletion:(OWSBackupJobBoolCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
@@ -456,7 +456,7 @@ NSString *const kOWSBackup_ImportDatabaseKeySpec = @"kOWSBackup_ImportDatabaseKe
 
 - (void)ensureMigrationsWithCompletion:(OWSBackupJobBoolCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 

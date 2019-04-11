@@ -46,7 +46,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 
 - (void)configure
 {
-    OWSAssert(!self.nameLabel);
+    OWSAssertDebug(!self.nameLabel);
 
     self.layoutMargins = UIEdgeInsetsZero;
 
@@ -103,8 +103,8 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 
 - (void)configureWithTagId:(NSString *)tagId contactsManager:(FLContactsManager *)contactsManager
 {
-    OWSAssert(tagId.length > 0);
-    OWSAssert(contactsManager);
+    OWSAssertDebug(tagId.length > 0);
+    OWSAssertDebug(contactsManager);
     
     // Update fonts to reflect changes to dynamic type.
     [self configureFontsAndColors];
@@ -133,8 +133,8 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 
 - (void)configureWithRecipientId:(NSString *)recipientId contactsManager:(FLContactsManager *)contactsManager
 {
-    OWSAssert(recipientId.length > 0);
-    OWSAssert(contactsManager);
+    OWSAssertDebug(recipientId.length > 0);
+    OWSAssertDebug(contactsManager);
 
     // Update fonts to reflect changes to dynamic type.
     [self configureFontsAndColors];
@@ -168,7 +168,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 
 - (void)configureWithThread:(TSThread *)thread contactsManager:(FLContactsManager *)contactsManager
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
     self.thread = thread;
     
     // Update fonts to reflect changes to dynamic type.
@@ -274,7 +274,7 @@ const CGFloat kContactCellAvatarTextMargin = 12;
     OWSAssertIsOnMainThread();
 
     NSString *recipientId = notification.userInfo[kNSNotificationKey_ProfileRecipientId];
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
 
     if (recipientId.length > 0 && [self.recipientId isEqualToString:recipientId]) {
         [self updateProfileName];
@@ -310,9 +310,9 @@ const CGFloat kContactCellAvatarTextMargin = 12;
 
 - (void)setAccessoryView:(UIView *)accessoryView
 {
-    OWSAssert(accessoryView);
-    OWSAssert(self.accessoryViewContainer);
-    OWSAssert(self.accessoryViewContainer.subviews.count < 1);
+    OWSAssertDebug(accessoryView);
+    OWSAssertDebug(self.accessoryViewContainer);
+    OWSAssertDebug(self.accessoryViewContainer.subviews.count < 1);
 
     [self.accessoryViewContainer addSubview:accessoryView];
 

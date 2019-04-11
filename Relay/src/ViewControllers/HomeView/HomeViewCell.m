@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)commontInit
 {
-    OWSAssert(!self.avatarView);
+    OWSAssertDebug(!self.avatarView);
 
     self.backgroundColor = Theme.backgroundColor;
 
@@ -188,8 +188,8 @@ NS_ASSUME_NONNULL_BEGIN
                overrideDate:(nullable NSDate *)overrideDate
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(thread);
-    OWSAssert(contactsManager);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(contactsManager);
 
     [OWSTableItem configureCell:self];
 
@@ -251,7 +251,7 @@ NS_ASSUME_NONNULL_BEGIN
                                  CGFloat minMargin = CeilEven(unreadBadgeHeight * .5f);
 
                                  // Spec check. Should be 12pts (6pt on each side) when using default font size.
-                                 OWSAssert(UIFont.ows_dynamicTypeBodyFont.pointSize != 17 || minMargin == 12);
+                                 OWSAssertDebug(UIFont.ows_dynamicTypeBodyFont.pointSize != 17 || minMargin == 12);
 
                                  [self.viewConstraints addObjectsFromArray:@[
                                      [self.unreadBadge autoMatchDimension:ALDimensionWidth
@@ -338,7 +338,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSAttributedString *)attributedSnippetForThread:(ThreadViewModel *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
     
     BOOL hasUnreadMessages = thread.hasUnreadMessages;
     

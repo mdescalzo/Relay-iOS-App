@@ -53,8 +53,8 @@ NSString *const kOWSBackup_KeychainService = @"kOWSBackup_KeychainService";
         return self;
     }
 
-    OWSAssert(primaryStorage);
-    OWSAssert([OWSStorage isStorageReady]);
+    OWSAssertDebug(primaryStorage);
+    OWSAssertDebug([OWSStorage isStorageReady]);
 
     self.delegate = delegate;
     self.primaryStorage = primaryStorage;
@@ -106,14 +106,14 @@ NSString *const kOWSBackup_KeychainService = @"kOWSBackup_KeychainService";
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.isComplete) {
-            OWSAssert(!self.hasSucceeded);
+            OWSAssertDebug(!self.hasSucceeded);
             return;
         }
         self.isComplete = YES;
 
         // There's a lot of asynchrony in these backup jobs;
         // ensure we only end up finishing these jobs once.
-        OWSAssert(!self.hasSucceeded);
+        OWSAssertDebug(!self.hasSucceeded);
         self.hasSucceeded = YES;
 
         [self.delegate backupJobDidSucceed:self];
@@ -130,7 +130,7 @@ NSString *const kOWSBackup_KeychainService = @"kOWSBackup_KeychainService";
     OWSFailDebug(@"%@ %s %@", self.logTag, __PRETTY_FUNCTION__, error);
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        OWSAssert(!self.hasSucceeded);
+        OWSAssertDebug(!self.hasSucceeded);
         if (self.isComplete) {
             return;
         }
@@ -157,9 +157,9 @@ NSString *const kOWSBackup_KeychainService = @"kOWSBackup_KeychainService";
                                       failure:(OWSBackupJobManifestFailure)failure
                                      backupIO:(OWSBackupIO *)backupIO
 {
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(backupIO);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(backupIO);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
@@ -190,10 +190,10 @@ NSString *const kOWSBackup_KeychainService = @"kOWSBackup_KeychainService";
                 failure:(dispatch_block_t)failure
                backupIO:(OWSBackupIO *)backupIO
 {
-    OWSAssert(manifestDataEncrypted.length > 0);
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(backupIO);
+    OWSAssertDebug(manifestDataEncrypted.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(backupIO);
 
     if (self.isComplete) {
         return;
@@ -238,8 +238,8 @@ NSString *const kOWSBackup_KeychainService = @"kOWSBackup_KeychainService";
 
 - (nullable NSArray<OWSBackupFragment *> *)parseItems:(id)json key:(NSString *)key
 {
-    OWSAssert(json);
-    OWSAssert(key.length);
+    OWSAssertDebug(json);
+    OWSAssertDebug(key.length);
 
     if (![json isKindOfClass:[NSDictionary class]]) {
         OWSFailDebug(@"%@ manifest has invalid data: %@.", self.logTag, key);

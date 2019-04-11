@@ -135,7 +135,7 @@ NSUInteger TSCallCurrentSchemaVersion = 1;
                   transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
 
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     if (_read) {
         return;
@@ -161,7 +161,7 @@ NSUInteger TSCallCurrentSchemaVersion = 1;
 
 - (void)updateCallType:(RPRecentCallType)callType transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     DDLogInfo(@"%@ updating call type of call: %@ -> %@ with uniqueId: %@ which has timestamp: %llu",
         self.logTag,

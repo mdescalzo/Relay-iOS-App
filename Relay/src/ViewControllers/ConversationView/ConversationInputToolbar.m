@@ -131,7 +131,7 @@ const CGFloat kMaxTextViewHeight = 98;
     [self.sendButton addTarget:self action:@selector(sendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
     UIImage *voiceMemoIcon = [UIImage imageNamed:@"voice-memo-button"];
-    OWSAssert(voiceMemoIcon);
+    OWSAssertDebug(voiceMemoIcon);
     _voiceMemoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.voiceMemoButton setImage:[voiceMemoIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
                           forState:UIControlStateNormal];
@@ -171,22 +171,22 @@ const CGFloat kMaxTextViewHeight = 98;
 
 - (void)setInputTextViewDelegate:(id<ConversationInputTextViewDelegate>)value
 {
-    OWSAssert(self.inputTextView);
-    OWSAssert(value);
+    OWSAssertDebug(self.inputTextView);
+    OWSAssertDebug(value);
 
     self.inputTextView.inputTextViewDelegate = value;
 }
 
 - (NSString *)messageText
 {
-    OWSAssert(self.inputTextView);
+    OWSAssertDebug(self.inputTextView);
 
     return self.inputTextView.trimmedText;
 }
 
 - (void)setMessageText:(NSString *_Nullable)value animated:(BOOL)isAnimated
 {
-    OWSAssert(self.inputTextView);
+    OWSAssertDebug(self.inputTextView);
 
     self.inputTextView.text = value;
 
@@ -229,7 +229,7 @@ const CGFloat kMaxTextViewHeight = 98;
     if (self.quotedMessagePreview) {
         [self clearQuotedMessagePreview];
     }
-    OWSAssert(self.quotedMessagePreview == nil);
+    OWSAssertDebug(self.quotedMessagePreview == nil);
 
     _quotedReply = quotedReply;
 
@@ -392,7 +392,7 @@ const CGFloat kMaxTextViewHeight = 98;
     [self updateVoiceMemo];
 
     UIImage *icon = [UIImage imageNamed:@"voice-memo-button"];
-    OWSAssert(icon);
+    OWSAssertDebug(icon);
     UIImageView *imageView =
         [[UIImageView alloc] initWithImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     imageView.tintColor = [UIColor FL_darkRed];
@@ -457,7 +457,7 @@ const CGFloat kMaxTextViewHeight = 98;
     [redCircleView autoAlignAxis:ALAxisVertical toSameAxisOfView:self.voiceMemoButton];
 
     UIImage *whiteIcon = [UIImage imageNamed:@"voice-message-large-white"];
-    OWSAssert(whiteIcon);
+    OWSAssertDebug(whiteIcon);
     UIImageView *whiteIconView = [[UIImageView alloc] initWithImage:whiteIcon];
     [redCircleView addSubview:whiteIconView];
     [whiteIconView autoCenterInSuperview];
@@ -573,14 +573,14 @@ const CGFloat kMaxTextViewHeight = 98;
 
 - (void)sendButtonPressed
 {
-    OWSAssert(self.inputToolbarDelegate);
+    OWSAssertDebug(self.inputToolbarDelegate);
 
     [self.inputToolbarDelegate sendButtonPressed];
 }
 
 - (void)attachmentButtonPressed
 {
-    OWSAssert(self.inputToolbarDelegate);
+    OWSAssertDebug(self.inputToolbarDelegate);
 
     [self.inputToolbarDelegate attachmentButtonPressed];
 }
@@ -589,7 +589,7 @@ const CGFloat kMaxTextViewHeight = 98;
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    OWSAssert(self.inputToolbarDelegate);
+    OWSAssertDebug(self.inputToolbarDelegate);
     [self ensureShouldShowVoiceMemoButtonAnimated:YES];
     [self updateHeightWithTextView:textView];
 }
@@ -602,7 +602,7 @@ const CGFloat kMaxTextViewHeight = 98;
 
     if (newHeight != self.textViewHeight) {
         self.textViewHeight = newHeight;
-        OWSAssert(self.textViewHeightConstraint);
+        OWSAssertDebug(self.textViewHeightConstraint);
         self.textViewHeightConstraint.constant = newHeight;
         [self invalidateIntrinsicContentSize];
     }

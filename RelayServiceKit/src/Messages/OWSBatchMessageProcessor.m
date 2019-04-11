@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithEnvelopeData:(NSData *)envelopeData plaintextData:(NSData *_Nullable)plaintextData
 {
-    OWSAssert(envelopeData);
+    OWSAssertDebug(envelopeData);
 
     self = [super initWithUniqueId:[NSUUID new].UUIDString];
     if (!self) {
@@ -127,7 +127,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
     NSMutableArray<OWSMessageContentJob *> *jobs = [NSMutableArray new];
     [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction *_Nonnull transaction) {
         YapDatabaseViewTransaction *viewTransaction = [transaction ext:OWSMessageContentJobFinderExtensionName];
-        OWSAssert(viewTransaction != nil);
+        OWSAssertDebug(viewTransaction != nil);
         [viewTransaction enumerateKeysAndObjectsInGroup:OWSMessageContentJobFinderExtensionGroup
                                              usingBlock:^(NSString *_Nonnull collection,
                                                           NSString *_Nonnull key,
@@ -153,8 +153,8 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
                  plaintextData:(NSData *_Nullable)plaintextData
                    transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelopeData);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelopeData);
+    OWSAssertDebug(transaction);
 
     OWSMessageContentJob *job =
         [[OWSMessageContentJob alloc] initWithEnvelopeData:envelopeData plaintextData:plaintextData];
@@ -335,8 +335,8 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
               plaintextData:(NSData *_Nullable)plaintextData
                 transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelopeData);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelopeData);
+    OWSAssertDebug(transaction);
 
     // We need to persist the decrypted envelope data ASAP to prevent data loss.
     [self.finder addJobWithEnvelopeData:envelopeData plaintextData:plaintextData transaction:transaction];
@@ -344,7 +344,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
 
 - (void)drainQueue
 {
-    OWSAssert(AppReadiness.isAppReady);
+    OWSAssertDebug(AppReadiness.isAppReady);
 
     // Don't process incoming messages in app extensions.
     if (!CurrentAppContext().isMainApp) {
@@ -369,7 +369,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
     const NSUInteger kIncomingMessageBatchSize = 32;
 
     NSArray<OWSMessageContentJob *> *batchJobs = [self.finder nextJobsForBatchSize:kIncomingMessageBatchSize];
-    OWSAssert(batchJobs);
+    OWSAssertDebug(batchJobs);
     if (batchJobs.count < 1) {
         self.isDrainingQueue = NO;
         DDLogVerbose(@"%@ Queue is drained", self.logTag);
@@ -528,8 +528,8 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
               plaintextData:(NSData *_Nullable)plaintextData
                 transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelopeData);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelopeData);
+    OWSAssertDebug(transaction);
 
     // We need to persist the decrypted envelope data ASAP to prevent data loss.
     [self.processingQueue enqueueEnvelopeData:envelopeData plaintextData:plaintextData transaction:transaction];

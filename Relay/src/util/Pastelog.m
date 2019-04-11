@@ -47,10 +47,10 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
                   success:(DebugLogUploadSuccess)success
                   failure:(DebugLogUploadFailure)failure
 {
-    OWSAssert(fileUrl);
-    OWSAssert(mimeType.length > 0);
-    OWSAssert(success);
-    OWSAssert(failure);
+    OWSAssertDebug(fileUrl);
+    OWSAssertDebug(mimeType.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
 
     self.fileUrl = fileUrl;
     self.mimeType = mimeType;
@@ -139,9 +139,9 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
 
 - (void)uploadFileWithUploadUrl:(NSString *)uploadUrl fields:(NSDictionary *)fields uploadKey:(NSString *)uploadKey
 {
-    OWSAssert(uploadUrl.length > 0);
-    OWSAssert(fields);
-    OWSAssert(uploadKey.length > 0);
+    OWSAssertDebug(uploadUrl.length > 0);
+    OWSAssertDebug(fields);
+    OWSAssertDebug(uploadKey.length > 0);
 
     __weak DebugLogUploader *weakSelf = self;
     NSURLSessionConfiguration *sessionConf = NSURLSessionConfiguration.ephemeralSessionConfiguration;
@@ -207,7 +207,7 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
 
 - (void)failWithError:(NSError *)error
 {
-    OWSAssert(error);
+    OWSAssertDebug(error);
 
     DDLogError(@"%@ %s %@", self.logTag, __PRETTY_FUNCTION__, error);
 
@@ -223,7 +223,7 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
 
 - (void)succeedWithUrl:(NSURL *)url
 {
-    OWSAssert(url);
+    OWSAssertDebug(url);
 
     DDLogVerbose(@"%@ %s %@", self.logTag, __PRETTY_FUNCTION__, url);
 
@@ -353,7 +353,7 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
 
 + (void)uploadLogsWithSuccess:(nullable UploadDebugLogsSuccess)success
 {
-    OWSAssert(success);
+    OWSAssertDebug(success);
 
     [[self sharedManager] uploadLogsWithSuccess:success
                                         failure:^(NSString *localizedErrorMessage) {
@@ -363,8 +363,8 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
 
 - (void)uploadLogsWithSuccess:(nullable UploadDebugLogsSuccess)successParam failure:(UploadDebugLogsFailure)failureParam
 {
-    OWSAssert(successParam);
-    OWSAssert(failureParam);
+    OWSAssertDebug(successParam);
+    OWSAssertDebug(failureParam);
 
     // Ensure that we call the completions on the main thread.
     UploadDebugLogsSuccess success = ^(NSURL *url) {
@@ -483,7 +483,7 @@ typedef void (^DebugLogUploadFailure)(DebugLogUploader *uploader, NSError *error
 
 - (void)prepareRedirection:(NSURL *)url completion:(SubmitDebugLogsCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     UIPasteboard *pb = [UIPasteboard generalPasteboard];
     [pb setString:url.absoluteString];

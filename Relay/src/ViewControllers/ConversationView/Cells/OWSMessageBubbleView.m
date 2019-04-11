@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)commontInit
 {
     // Ensure only called once.
-    OWSAssert(!self.bodyTextView);
+    OWSAssertDebug(!self.bodyTextView);
 
     _viewConstraints = [NSMutableArray new];
 
@@ -114,7 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIFont *)textMessageFont
 {
-    OWSAssert(DisplayableText.kMaxJumbomojiCount == 5);
+    OWSAssertDebug(DisplayableText.kMaxJumbomojiCount == 5);
 
     CGFloat basePointSize = UIFont.ows_dynamicTypeBodyFont.pointSize;
     switch (self.displayableBodyText.jumbomojiCount) {
@@ -146,7 +146,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)hasBodyText
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssert(self.viewItem);
+    OWSAssertDebug(self.viewItem);
 
     return self.viewItem.hasBodyText;
 }
@@ -154,7 +154,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable DisplayableText *)displayableBodyText
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssert(self.viewItem.displayableBodyText);
+    OWSAssertDebug(self.viewItem.displayableBodyText);
 
     return self.viewItem.displayableBodyText;
 }
@@ -162,7 +162,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable TSAttachmentStream *)attachmentStream
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssert(self.viewItem.attachmentStream);
+    OWSAssertDebug(self.viewItem.attachmentStream);
 
     return self.viewItem.attachmentStream;
 }
@@ -170,14 +170,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable TSAttachmentPointer *)attachmentPointer
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssert(self.viewItem.attachmentPointer);
+    OWSAssertDebug(self.viewItem.attachmentPointer);
 
     return self.viewItem.attachmentPointer;
 }
 
 - (TSMessage *)message
 {
-    OWSAssert([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
+    OWSAssertDebug([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
 
     return (TSMessage *)self.viewItem.interaction;
 }
@@ -185,7 +185,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGSize)mediaSize
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssert(self.viewItem.mediaSize.width > 0 && self.viewItem.mediaSize.height > 0);
+    OWSAssertDebug(self.viewItem.mediaSize.width > 0 && self.viewItem.mediaSize.height > 0);
 
     return self.viewItem.mediaSize;
 }
@@ -193,7 +193,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isQuotedReply
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssert(self.viewItem);
+    OWSAssertDebug(self.viewItem);
 
     return self.viewItem.isQuotedReply;
 }
@@ -201,7 +201,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)hasQuotedText
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssert(self.viewItem);
+    OWSAssertDebug(self.viewItem);
 
     return self.viewItem.hasQuotedText;
 }
@@ -246,10 +246,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureViews
 {
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.viewItem);
-    OWSAssert(self.viewItem.interaction);
-    OWSAssert([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.viewItem);
+    OWSAssertDebug(self.viewItem.interaction);
+    OWSAssertDebug([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
 
     NSValue *_Nullable quotedMessageSize = [self quotedMessageSize];
     NSValue *_Nullable bodyMediaSize = [self bodyMediaSize];
@@ -290,7 +290,7 @@ NS_ASSUME_NONNULL_BEGIN
         self.quotedMessageView = quotedMessageView;
         [quotedMessageView createContents];
         [self.stackView addArrangedSubview:quotedMessageView];
-        OWSAssert(quotedMessageSize);
+        OWSAssertDebug(quotedMessageSize);
         [self.viewConstraints addObject:[quotedMessageView autoSetDimension:ALDimensionHeight
                                                                      toSize:quotedMessageSize.CGSizeValue.height]];
     }
@@ -302,19 +302,19 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_OversizeTextMessage:
             break;
         case OWSMessageCellType_StillImage:
-            OWSAssert(self.viewItem.attachmentStream);
+            OWSAssertDebug(self.viewItem.attachmentStream);
             bodyMediaView = [self loadViewForStillImage];
             break;
         case OWSMessageCellType_AnimatedImage:
-            OWSAssert(self.viewItem.attachmentStream);
+            OWSAssertDebug(self.viewItem.attachmentStream);
             bodyMediaView = [self loadViewForAnimatedImage];
             break;
         case OWSMessageCellType_Video:
-            OWSAssert(self.viewItem.attachmentStream);
+            OWSAssertDebug(self.viewItem.attachmentStream);
             bodyMediaView = [self loadViewForVideo];
             break;
         case OWSMessageCellType_Audio:
-            OWSAssert(self.viewItem.attachmentStream);
+            OWSAssertDebug(self.viewItem.attachmentStream);
             bodyMediaView = [self loadViewForAudio];
             break;
         case OWSMessageCellType_GenericAttachment:
@@ -329,8 +329,8 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     if (bodyMediaView) {
-        OWSAssert(self.loadCellContentBlock);
-        OWSAssert(self.unloadCellContentBlock);
+        OWSAssertDebug(self.loadCellContentBlock);
+        OWSAssertDebug(self.unloadCellContentBlock);
 
         bodyMediaView.clipsToBounds = YES;
 
@@ -369,7 +369,7 @@ NS_ASSUME_NONNULL_BEGIN
         [self configureBodyTextView];
         [textViews addObject:self.bodyTextView];
 
-        OWSAssert(bodyTextSize);
+        OWSAssertDebug(bodyTextSize);
         [self.viewConstraints addObjectsFromArray:@[
             [self.bodyTextView autoSetDimension:ALDimensionHeight toSize:bodyTextSize.CGSizeValue.height],
         ]];
@@ -387,7 +387,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (self.viewItem.shouldHideFooter) {
         // Do nothing.
     } else if (shouldFooterOverlayMedia) {
-        OWSAssert(bodyMediaView);
+        OWSAssertDebug(bodyMediaView);
 
         CGFloat maxGradientHeight = 40.f;
         CAGradientLayer *gradientLayer = [CAGradientLayer new];
@@ -435,7 +435,7 @@ NS_ASSUME_NONNULL_BEGIN
         [self autoSetDimension:ALDimensionWidth toSize:bubbleSize.width],
     ]];
     if (bodyMediaView) {
-        OWSAssert(bodyMediaSize);
+        OWSAssertDebug(bodyMediaSize);
         [self.viewConstraints
             addObject:[bodyMediaView autoSetDimension:ALDimensionHeight toSize:bodyMediaSize.CGSizeValue.height]];
     }
@@ -495,7 +495,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIColor *)bubbleColor
 {
-    OWSAssert([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
+    OWSAssertDebug([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
 
     TSMessage *message = (TSMessage *)self.viewItem.interaction;
     return [self.conversationStyle bubbleColorWithMessage:message];
@@ -563,10 +563,10 @@ NS_ASSUME_NONNULL_BEGIN
                          cacheKey:(NSString *)cacheKey
                   shouldSkipCache:(BOOL)shouldSkipCache
 {
-    OWSAssert(self.attachmentStream);
-    OWSAssert(mediaView);
-    OWSAssert(cacheKey);
-    OWSAssert(self.cellMediaCache);
+    OWSAssertDebug(self.attachmentStream);
+    OWSAssertDebug(mediaView);
+    OWSAssertDebug(cacheKey);
+    OWSAssertDebug(self.cellMediaCache);
 
     if (self.viewItem.didCellMediaFailToLoad) {
         return nil;
@@ -626,7 +626,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureBodyTextView
 {
-    OWSAssert(self.hasBodyText);
+    OWSAssertDebug(self.hasBodyText);
 
     BOOL shouldIgnoreEvents = NO;
     if (self.viewItem.interaction.interactionType == OWSInteractionType_OutgoingMessage) {
@@ -670,8 +670,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureSenderNameLabel
 {
-    OWSAssert(self.senderNameLabel);
-    OWSAssert(self.shouldShowSenderName);
+    OWSAssertDebug(self.senderNameLabel);
+    OWSAssertDebug(self.shouldShowSenderName);
 
     self.senderNameLabel.textColor = self.bodyTextColor;
     self.senderNameLabel.font = OWSMessageBubbleView.senderNameFont;
@@ -729,8 +729,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIView *)loadViewForStillImage
 {
-    OWSAssert(self.attachmentStream);
-    OWSAssert([self.attachmentStream isImage]);
+    OWSAssertDebug(self.attachmentStream);
+    OWSAssertDebug([self.attachmentStream isImage]);
 
     UIImageView *stillImageView = [UIImageView new];
     // We need to specify a contentMode since the size of the image
@@ -781,8 +781,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIView *)loadViewForAnimatedImage
 {
-    OWSAssert(self.attachmentStream);
-    OWSAssert([self.attachmentStream isAnimated]);
+    OWSAssertDebug(self.attachmentStream);
+    OWSAssertDebug([self.attachmentStream isAnimated]);
 
     YYAnimatedImageView *animatedImageView = [[YYAnimatedImageView alloc] init];
     // We need to specify a contentMode since the size of the image
@@ -829,8 +829,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIView *)loadViewForAudio
 {
-    OWSAssert(self.attachmentStream);
-    OWSAssert([self.attachmentStream isAudio]);
+    OWSAssertDebug(self.attachmentStream);
+    OWSAssertDebug([self.attachmentStream isAudio]);
 
     OWSAudioMessageView *audioMessageView = [[OWSAudioMessageView alloc] initWithAttachment:self.attachmentStream
                                                                                  isIncoming:self.isIncoming
@@ -852,8 +852,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIView *)loadViewForVideo
 {
-    OWSAssert(self.attachmentStream);
-    OWSAssert([self.attachmentStream isVideo]);
+    OWSAssertDebug(self.attachmentStream);
+    OWSAssertDebug([self.attachmentStream isVideo]);
 
     UIImageView *stillImageView = [UIImageView new];
     // We need to specify a contentMode since the size of the image
@@ -905,7 +905,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(UIView *)loadViewForWebPreview
 {
-    OWSAssert(self.viewItem.hasUrl);
+    OWSAssertDebug(self.viewItem.hasUrl);
     
     URLEmbeddedView *webView = URLEmbeddedView.new;
     [webView loadWithURLString:self.viewItem.urlString completion:nil];
@@ -930,7 +930,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIView *)loadViewForGenericAttachment
 {
-    OWSAssert(self.viewItem.attachmentStream);
+    OWSAssertDebug(self.viewItem.attachmentStream);
     OWSGenericAttachmentView *attachmentView =
         [[OWSGenericAttachmentView alloc] initWithAttachment:self.attachmentStream isIncoming:self.isIncoming];
     [attachmentView createContentsWithConversationStyle:self.conversationStyle];
@@ -948,7 +948,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIView *)loadViewForDownloadingAttachment
 {
-    OWSAssert(self.attachmentPointer);
+    OWSAssertDebug(self.attachmentPointer);
 
     AttachmentPointerView *downloadView =
         [[AttachmentPointerView alloc] initWithAttachmentPointer:self.attachmentPointer
@@ -977,7 +977,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addAttachmentUploadViewIfNecessaryWithAttachmentStateCallback:
     (nullable AttachmentStateBlock)attachmentStateCallback
 {
-    OWSAssert(self.attachmentStream);
+    OWSAssertDebug(self.attachmentStream);
 
     if (!attachmentStateCallback) {
         attachmentStateCallback = ^(BOOL isAttachmentReady) {
@@ -997,7 +997,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showAttachmentErrorViewWithMediaView:(UIView *)mediaView
 {
-    OWSAssert(mediaView);
+    OWSAssertDebug(mediaView);
 
     // TODO: We could do a better job of indicating that the media could not be loaded.
     UIView *errorView = [UIView new];
@@ -1012,8 +1012,8 @@ NS_ASSUME_NONNULL_BEGIN
 // Size of "message body" text, not quoted reply text.
 - (nullable NSValue *)bodyTextSize
 {
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.conversationStyle.maxMessageWidth > 0);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle.maxMessageWidth > 0);
 
     if (!self.hasBodyText) {
         return nil;
@@ -1031,8 +1031,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSValue *)bodyMediaSize
 {
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.conversationStyle.maxMessageWidth > 0);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle.maxMessageWidth > 0);
 
     CGFloat maxMessageWidth = self.conversationStyle.maxMessageWidth;
     if (!self.hasFullWidthMediaView) {
@@ -1050,8 +1050,8 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Video: {
-            OWSAssert(self.mediaSize.width > 0);
-            OWSAssert(self.mediaSize.height > 0);
+            OWSAssertDebug(self.mediaSize.width > 0);
+            OWSAssertDebug(self.mediaSize.height > 0);
 
             // TODO: Adjust this behavior.
 
@@ -1088,7 +1088,7 @@ NS_ASSUME_NONNULL_BEGIN
             result = CGSizeMake(maxMessageWidth, OWSAudioMessageView.bubbleHeight);
             break;
         case OWSMessageCellType_GenericAttachment: {
-            OWSAssert(self.viewItem.attachmentStream);
+            OWSAssertDebug(self.viewItem.attachmentStream);
             OWSGenericAttachmentView *attachmentView =
                 [[OWSGenericAttachmentView alloc] initWithAttachment:self.attachmentStream isIncoming:self.isIncoming];
             [attachmentView createContentsWithConversationStyle:self.conversationStyle];
@@ -1103,7 +1103,7 @@ NS_ASSUME_NONNULL_BEGIN
             break;
     }
 
-    OWSAssert(result.width <= maxMessageWidth);
+    OWSAssertDebug(result.width <= maxMessageWidth);
     result.width = MIN(result.width, maxMessageWidth);
 
     return [NSValue valueWithCGSize:CGSizeCeil(result)];
@@ -1111,10 +1111,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSValue *)quotedMessageSize
 {
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.conversationStyle.maxMessageWidth > 0);
-    OWSAssert(self.viewItem);
-    OWSAssert([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle.maxMessageWidth > 0);
+    OWSAssertDebug(self.viewItem);
+    OWSAssertDebug([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
 
     if (!self.isQuotedReply) {
         return nil;
@@ -1135,8 +1135,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSValue *)senderNameSize
 {
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.conversationStyle.maxMessageWidth > 0);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle.maxMessageWidth > 0);
 
     if (!self.shouldShowSenderName) {
         return nil;
@@ -1153,18 +1153,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSValue *)actionButtonsSize
 {
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.conversationStyle.maxMessageWidth > 0);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle.maxMessageWidth > 0);
 
     return nil;
 }
 
 - (CGSize)measureSize
 {
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.conversationStyle.viewWidth > 0);
-    OWSAssert(self.viewItem);
-    OWSAssert([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle.viewWidth > 0);
+    OWSAssertDebug(self.viewItem);
+    OWSAssertDebug([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
 
     CGSize cellSize = CGSizeZero;
 
@@ -1230,7 +1230,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Make sure the bubble is always wide enough to complete it's bubble shape.
     cellSize.width = MAX(cellSize.width, self.bubbleView.minWidth);
 
-    OWSAssert(cellSize.width > 0 && cellSize.height > 0);
+    OWSAssertDebug(cellSize.width > 0 && cellSize.height > 0);
 
     if (self.hasTapForMore) {
         cellSize.height += self.tapForMoreHeight + self.textViewVSpacing;
@@ -1244,7 +1244,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     cellSize = CGSizeCeil(cellSize);
 
-    OWSAssert(cellSize.width <= self.conversationStyle.maxMessageWidth);
+    OWSAssertDebug(cellSize.width <= self.conversationStyle.maxMessageWidth);
     cellSize.width = MIN(cellSize.width, self.conversationStyle.maxMessageWidth);
 
     return cellSize;
@@ -1252,10 +1252,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGSize)sizeForTextViewGroup:(NSArray<NSValue *> *)textViewSizes
 {
-    OWSAssert(textViewSizes);
-    OWSAssert(textViewSizes.count > 0);
-    OWSAssert(self.conversationStyle);
-    OWSAssert(self.conversationStyle.maxMessageWidth > 0);
+    OWSAssertDebug(textViewSizes);
+    OWSAssertDebug(textViewSizes.count > 0);
+    OWSAssertDebug(self.conversationStyle);
+    OWSAssertDebug(self.conversationStyle.maxMessageWidth > 0);
 
     CGSize result = CGSizeZero;
     for (NSValue *size in textViewSizes) {
@@ -1283,7 +1283,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIColor *)bodyTextColor
 {
-    OWSAssert([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
+    OWSAssertDebug([self.viewItem.interaction isKindOfClass:[TSMessage class]]);
 
     TSMessage *message = (TSMessage *)self.viewItem.interaction;
     return [self.conversationStyle bubbleTextColorWithMessage:message];
@@ -1361,7 +1361,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender
 {
-    OWSAssert(self.delegate);
+    OWSAssertDebug(self.delegate);
 
     if (sender.state != UIGestureRecognizerStateRecognized) {
         DDLogVerbose(@"%@ Ignoring tap on message: %@", self.logTag, self.viewItem.interaction.debugDescription);
@@ -1401,7 +1401,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)handleMediaTapGesture
 {
-    OWSAssert(self.delegate);
+    OWSAssertDebug(self.delegate);
 
     TSAttachmentStream *_Nullable attachmentStream = self.viewItem.attachmentStream;
 
@@ -1411,42 +1411,42 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_OversizeTextMessage:
             break;
         case OWSMessageCellType_StillImage:
-            OWSAssert(self.bodyMediaView);
-            OWSAssert(attachmentStream);
+            OWSAssertDebug(self.bodyMediaView);
+            OWSAssertDebug(attachmentStream);
 
             [self.delegate didTapImageViewItem:self.viewItem
                               attachmentStream:attachmentStream
                                      imageView:self.bodyMediaView];
             break;
         case OWSMessageCellType_AnimatedImage:
-            OWSAssert(self.bodyMediaView);
-            OWSAssert(attachmentStream);
+            OWSAssertDebug(self.bodyMediaView);
+            OWSAssertDebug(attachmentStream);
 
             [self.delegate didTapImageViewItem:self.viewItem
                               attachmentStream:attachmentStream
                                      imageView:self.bodyMediaView];
             break;
         case OWSMessageCellType_Audio:
-            OWSAssert(attachmentStream);
+            OWSAssertDebug(attachmentStream);
 
             [self.delegate didTapAudioViewItem:self.viewItem attachmentStream:attachmentStream];
             return;
         case OWSMessageCellType_Video:
-            OWSAssert(self.bodyMediaView);
-            OWSAssert(attachmentStream);
+            OWSAssertDebug(self.bodyMediaView);
+            OWSAssertDebug(attachmentStream);
 
             [self.delegate didTapVideoViewItem:self.viewItem
                               attachmentStream:attachmentStream
                                      imageView:self.bodyMediaView];
             return;
         case OWSMessageCellType_GenericAttachment:
-            OWSAssert(attachmentStream);
+            OWSAssertDebug(attachmentStream);
 
             [AttachmentSharing showShareUIForAttachment:attachmentStream];
             break;
         case OWSMessageCellType_DownloadingAttachment: {
             TSAttachmentPointer *_Nullable attachmentPointer = self.viewItem.attachmentPointer;
-            OWSAssert(attachmentPointer);
+            OWSAssertDebug(attachmentPointer);
 
             if (attachmentPointer.state == TSAttachmentPointerStateFailed) {
                 [self.delegate didTapFailedIncomingAttachment:self.viewItem attachmentPointer:attachmentPointer];
@@ -1454,7 +1454,7 @@ NS_ASSUME_NONNULL_BEGIN
             break;
         }
         case MessageCellType_WebPreview:
-            OWSAssert(self.viewItem.hasUrl);
+            OWSAssertDebug(self.viewItem.hasUrl);
             
             [self.delegate didTapWebPreviewViewItem:self.viewItem];
             break;

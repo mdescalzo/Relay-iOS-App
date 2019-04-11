@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addRecipientToGroup:(NSString *)recipientId
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
 
     [self.addToGroupDelegate recipientIdWasAdded:recipientId];
     [self.navigationController popViewControllerAnimated:YES];

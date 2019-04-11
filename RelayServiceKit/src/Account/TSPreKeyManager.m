@@ -94,7 +94,7 @@ static const NSUInteger kMaxPrekeyUpdateFailureCount = 5;
     if (!CurrentAppContext().isMainApp) {
         return;
     }
-    OWSAssert(CurrentAppContext().isMainApp);
+    OWSAssertDebug(CurrentAppContext().isMainApp);
 
     // Update the prekey check timestamp.
     dispatch_async(TSPreKeyManager.prekeyQueue, ^{
@@ -300,7 +300,7 @@ static const NSUInteger kMaxPrekeyUpdateFailureCount = 5;
                     success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
                         NSString *keyIdDictKey = @"keyId";
                         NSNumber *keyId = [responseObject objectForKey:keyIdDictKey];
-                        OWSAssert(keyId);
+                        OWSAssertDebug(keyId);
 
                         OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
                         NSNumber *currentSignedPrekeyId = [primaryStorage currentSignedPrekeyId];

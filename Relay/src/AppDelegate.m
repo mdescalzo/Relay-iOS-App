@@ -796,7 +796,7 @@ static NSTimeInterval launchStartedAt;
 
              // TODO Implement this
             OutboundCallInitiator *outboundCallInitiator = SignalApp.sharedApp.outboundCallInitiator;
-            OWSAssert(outboundCallInitiator);
+            OWSAssertDebug(outboundCallInitiator);
             [outboundCallInitiator initiateCallWithHandle:phoneNumber];
              */
         }];
@@ -833,7 +833,7 @@ static NSTimeInterval launchStartedAt;
             }
 
             OutboundCallInitiator *outboundCallInitiator = SignalApp.sharedApp.outboundCallInitiator;
-            OWSAssert(outboundCallInitiator);
+            OWSAssertDebug(outboundCallInitiator);
             [outboundCallInitiator initiateCallWithHandle:phoneNumber];
              */
         }];
