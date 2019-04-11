@@ -65,6 +65,17 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 //    [storage registerExtension:extension withName:@"SignalCrossProcessNotifier"];
 //}
 
++(void)reregisterMessageDatabaseViewWithName:(nonnull NSString *)viewName
+                                     storage:(nonnull OWSStorage *)storage
+{
+    YapDatabaseView *existingView = [storage registeredExtension:viewName];
+    if (!existingView) {
+        OWSFailDebug(@"Reregistering an unregistered view: %@", viewName);
+        return;
+    }
+    [storage registerExtension:existingView withName:viewName];
+}
+
 + (void)registerMessageDatabaseViewWithName:(NSString *)viewName
                                viewGrouping:(YapDatabaseViewGrouping *)viewGrouping
                                     version:(NSString *)version

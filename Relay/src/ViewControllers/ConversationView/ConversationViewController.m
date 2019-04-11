@@ -2987,6 +2987,10 @@ typedef enum : NSUInteger {
                 } else {
                     hasMalformedRowChange = YES;
                 }
+                // Sanity check for indexes out of bounds
+                if (rowChange.indexPath.row >= [self.collectionView numberOfItemsInSection:rowChange.indexPath.section]) {
+                    hasMalformedRowChange = YES;
+                }
                 break;
             }
             default:
@@ -3001,6 +3005,12 @@ typedef enum : NSUInteger {
         // These errors seems to be very rare; they can only be reproduced
         // using the more extreme actions in the debug UI.
         OWSFailDebug(@"%@ hasMalformedRowChange", self.logTag);
+        // Reregister the view extension which produced the malformed change.
+        [TSDatabaseView reregisterMessageDatabaseViewWithName:TSMessageDatabaseViewExtensionName
+                                                      storage:OWSPrimaryStorage.sharedManager];
+        [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+            [self.messageMappings updateWithTransaction:transaction];
+        }];
         [self reloadViewItems];
         [self.collectionView reloadData];
         self.lastReloadDate = [NSDate new];
