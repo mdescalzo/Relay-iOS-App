@@ -259,7 +259,7 @@ static NSString *const DATE_FORMAT_WEEKDAY = @"EEEE";
 
 + (NSString *)formatDateShort:(NSDate *)date
 {
-    OWSAssert(date);
+    OWSAssertDebug(date);
 
     NSString *dateTimeString;
     if (![DateUtil dateIsThisYear:date]) {
@@ -277,7 +277,7 @@ static NSString *const DATE_FORMAT_WEEKDAY = @"EEEE";
 
 + (NSString *)formatDateForConversationDateBreaks:(NSDate *)date
 {
-    OWSAssert(date);
+    OWSAssertDebug(date);
 
     if (![self dateIsThisYear:date]) {
         // last year formatter: Nov 11, 2017
@@ -301,7 +301,7 @@ static NSString *const DATE_FORMAT_WEEKDAY = @"EEEE";
 
 + (NSString *)formatDateAsTime:(NSDate *)date
 {
-    OWSAssert(date);
+    OWSAssertDebug(date);
 
     NSString *dateTimeString = [[DateUtil timeFormatter] stringFromDate:date];
     return dateTimeString.localizedUppercaseString;

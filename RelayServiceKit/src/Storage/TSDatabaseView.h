@@ -73,5 +73,7 @@ extern NSString *const TSLazyRestoreAttachmentsDatabaseViewExtensionName;
 
 // Forsta Additions
 +(void)registerTagDatabaseView:(nonnull OWSStorage *)storage;
++(void)reregisterMessageDatabaseViewWithName:(nonnull NSString *)viewName
+                                     storage:(nonnull OWSStorage *)storage;
 
 @end

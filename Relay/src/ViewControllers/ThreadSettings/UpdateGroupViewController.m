@@ -83,7 +83,7 @@ OWSNavigationView>
 {
     [super loadView];
     
-    OWSAssert(self.thread);
+    OWSAssertDebug(self.thread);
     
     self.view.backgroundColor = Theme.backgroundColor;
     
@@ -152,7 +152,7 @@ OWSNavigationView>
 
 - (UIView *)firstSectionHeader
 {
-    OWSAssert(self.thread);
+    OWSAssertDebug(self.thread);
     
     UIView *firstSectionHeader = [UIView new];
     firstSectionHeader.userInteractionEnabled = YES;
@@ -217,7 +217,7 @@ OWSNavigationView>
 
 - (void)updateTableContents
 {
-//    OWSAssert(self.thread);
+//    OWSAssertDebug(self.thread);
 //    
 //    OWSTableContents *contents = [OWSTableContents new];
 //    
@@ -302,7 +302,7 @@ OWSNavigationView>
 
 - (void)removeRecipientId:(NSString *)recipientId
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
     
     [self.memberRecipientIds removeObject:recipientId];
     [self updateTableContents];
@@ -312,7 +312,7 @@ OWSNavigationView>
 
 - (void)updateGroup
 {
-    OWSAssert(self.conversationSettingsViewDelegate);
+    OWSAssertDebug(self.conversationSettingsViewDelegate);
     
     [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
         [self.thread updateTitle:[self.groupNameTextField.text ows_stripped] transaction:transaction];
@@ -400,7 +400,7 @@ OWSNavigationView>
                                                                 @"The label for the 'save' button in action sheets.")
                                         style:UIAlertActionStyleDefault
                                       handler:^(UIAlertAction *action) {
-                                          OWSAssert(self.conversationSettingsViewDelegate);
+                                          OWSAssertDebug(self.conversationSettingsViewDelegate);
                                           
                                           [self updateGroup];
                                           
@@ -417,7 +417,7 @@ OWSNavigationView>
 
 - (void)updateGroupPressed
 {
-    OWSAssert(self.conversationSettingsViewDelegate);
+    OWSAssertDebug(self.conversationSettingsViewDelegate);
     
     [self updateGroup];
     
@@ -467,7 +467,7 @@ OWSNavigationView>
 - (void)avatarDidChange:(UIImage *)image
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(image);
+    OWSAssertDebug(image);
     
     self.groupAvatar = image;
 }
@@ -493,7 +493,7 @@ OWSNavigationView>
 
 - (BOOL)isRecipientGroupMember:(NSString *)recipientId
 {
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
     
     return [self.memberRecipientIds containsObject:recipientId];
 }

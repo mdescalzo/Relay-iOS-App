@@ -21,9 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
                          notificationsProtocolBlock:(NotificationsManagerBlock)notificationsManagerBlock
                                 migrationCompletion:(dispatch_block_t)migrationCompletion
 {
-    OWSAssert(callMessageHandlerBlock);
-    OWSAssert(notificationsManagerBlock);
-    OWSAssert(migrationCompletion);
+    OWSAssertDebug(callMessageHandlerBlock);
+    OWSAssertDebug(notificationsManagerBlock);
+    OWSAssertDebug(migrationCompletion);
 
     __block OWSBackgroundTask *_Nullable backgroundTask =
         [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];

@@ -52,9 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (TSAttachmentPointer *)attachmentPointerFromProto:(OWSSignalServiceProtosAttachmentPointer *)attachmentProto
 {
-    OWSAssert(attachmentProto.id != 0);
-    OWSAssert(attachmentProto.key != nil);
-    OWSAssert(attachmentProto.contentType != nil);
+    OWSAssertDebug(attachmentProto.id != 0);
+    OWSAssertDebug(attachmentProto.key != nil);
+    OWSAssertDebug(attachmentProto.contentType != nil);
 
     // digest will be empty for old clients.
     NSData *digest = attachmentProto.hasDigest ? attachmentProto.digest : nil;
@@ -87,7 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Legacy instances of TSAttachmentPointer apparently used the serverId as their
     // uniqueId.
     if (attachmentSchemaVersion < 2 && self.serverId == 0) {
-        OWSAssert([self isDecimalNumberText:self.uniqueId]);
+        OWSAssertDebug([self isDecimalNumberText:self.uniqueId]);
         if ([self isDecimalNumberText:self.uniqueId]) {
             // For legacy instances, try to parse the serverId from the uniqueId.
             self.serverId = [self.uniqueId integerValue];

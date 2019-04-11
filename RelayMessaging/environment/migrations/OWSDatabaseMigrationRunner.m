@@ -69,8 +69,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)runMigrations:(NSMutableArray<OWSDatabaseMigration *> *)migrations
            completion:(OWSDatabaseMigrationCompletion)completion
 {
-    OWSAssert(migrations);
-    OWSAssert(completion);
+    OWSAssertDebug(migrations);
+    OWSAssertDebug(completion);
 
     // If there are no more migrations to run, complete.
     if (migrations.count < 1) {

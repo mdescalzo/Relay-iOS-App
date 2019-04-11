@@ -121,7 +121,7 @@ ColorPickerDelegate>
 
 - (void)configureWithThread:(TSThread *)thread uiDatabaseConnection:(YapDatabaseConnection *)uiDatabaseConnection
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
     self.thread = thread;
     self.uiDatabaseConnection = uiDatabaseConnection;
     
@@ -132,7 +132,7 @@ ColorPickerDelegate>
 
 - (void)updateEditButton
 {
-    //    OWSAssert(self.thread);
+    //    OWSAssertDebug(self.thread);
     //
     //    if ([self.thread isKindOfClass:[TSThread class]] && self.contactsManager.supportsContactEditing
     //        && self.hasExistingContact) {
@@ -147,7 +147,7 @@ ColorPickerDelegate>
 - (BOOL)hasExistingContact
 {
     return false;
-    //    OWSAssert([self.thread isKindOfClass:[TSThread class]]);
+    //    OWSAssertDebug([self.thread isKindOfClass:[TSThread class]]);
     //    NSString *recipientId = self.thread.otherParticipantId;
     //    return [self.contactsManager hasSignalAccountForRecipientId:recipientId];
 }
@@ -614,7 +614,7 @@ ColorPickerDelegate>
 
 - (UITableViewCell *)disclosureCellWithName:(NSString *)name iconColor:(UIColor *)iconColor
 {
-    OWSAssert(name.length > 0);
+    OWSAssertDebug(name.length > 0);
     
     UIView *iconView = [UIView containerView];
     [iconView autoSetDimensionsToSize:CGSizeMake(kIconViewLength, kIconViewLength)];
@@ -632,14 +632,14 @@ ColorPickerDelegate>
 
 - (UITableViewCell *)cellWithName:(NSString *)name iconName:(NSString *)iconName
 {
-    OWSAssert(iconName.length > 0);
+    OWSAssertDebug(iconName.length > 0);
     UIImageView *iconView = [self viewForIconWithName:iconName];
     return [self cellWithName:name iconView:iconView];
 }
 
 - (UITableViewCell *)cellWithName:(NSString *)name iconView:(UIView *)iconView
 {
-    OWSAssert(name.length > 0);
+    OWSAssertDebug(name.length > 0);
     
     UITableViewCell *cell = [OWSTableItem newCell];
     cell.preservesSuperviewLayoutMargins = YES;
@@ -788,7 +788,7 @@ ColorPickerDelegate>
 {
     UIImage *icon = [UIImage imageNamed:iconName];
     
-    OWSAssert(icon);
+    OWSAssertDebug(icon);
     UIImageView *iconView = [UIImageView new];
     iconView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     iconView.tintColor = [Theme secondaryColor];
@@ -858,7 +858,7 @@ ColorPickerDelegate>
 - (void)showVerificationView
 {
     NSString *recipientId = self.thread.otherParticipantId;
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
     
     [FingerprintViewController presentFromViewController:self recipientId:recipientId];
 }
@@ -872,7 +872,7 @@ ColorPickerDelegate>
 
 - (void)showUpdateGroupView:(UpdateGroupMode)mode
 {
-    OWSAssert(self.conversationSettingsViewDelegate);
+    OWSAssertDebug(self.conversationSettingsViewDelegate);
     
     UpdateGroupViewController *updateGroupViewController = [UpdateGroupViewController new];
     updateGroupViewController.conversationSettingsViewDelegate = self.conversationSettingsViewDelegate;
@@ -1127,7 +1127,7 @@ ColorPickerDelegate>
     // reference to it until we're dismissed.
     self.mediaGalleryViewController = vc;
     
-    OWSAssert([self.navigationController isKindOfClass:[OWSNavigationController class]]);
+    OWSAssertDebug([self.navigationController isKindOfClass:[OWSNavigationController class]]);
     [vc pushTileViewFromNavController:(OWSNavigationController *)self.navigationController];
 }
 #pragma mark - Notifications
@@ -1144,7 +1144,7 @@ ColorPickerDelegate>
     OWSAssertIsOnMainThread();
     
     NSString *recipientId = notification.userInfo[kNSNotificationKey_ProfileRecipientId];
-    OWSAssert(recipientId.length > 0);
+    OWSAssertDebug(recipientId.length > 0);
     
     if (recipientId.length > 0 && [self.thread isKindOfClass:[TSThread class]] &&
         [self.thread.otherParticipantId isEqualToString:recipientId]) {
@@ -1177,7 +1177,7 @@ ColorPickerDelegate>
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         ConversationConfigurationSyncOperation *operation =
         [[ConversationConfigurationSyncOperation alloc] initWithThread:self.thread];
-        OWSAssert(operation.isReady);
+        OWSAssertDebug(operation.isReady);
         [operation start];
     });
     

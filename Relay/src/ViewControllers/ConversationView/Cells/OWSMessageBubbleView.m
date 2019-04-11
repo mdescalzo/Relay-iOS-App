@@ -788,8 +788,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIView *)loadViewForAnimatedImage
 {
-    OWSAssert(self.attachmentStream);
-    OWSAssert([self.attachmentStream isAnimated]);
+    OWSAssertDebug(self.attachmentStream);
+    OWSAssertDebug([self.attachmentStream isAnimated]);
 
     YYAnimatedImageView *animatedImageView = [[YYAnimatedImageView alloc] init];
     // We need to specify a contentMode since the size of the image

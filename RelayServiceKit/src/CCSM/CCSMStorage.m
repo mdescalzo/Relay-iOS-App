@@ -52,7 +52,7 @@ NSString *const CCSMStorageKeyTSServerURL = @"TSServerURL";
 {
     if (self = [super init]) {
         _readConnection = [OWSPrimaryStorage.sharedManager dbReadConnection];
-        _writeConnection =  [OWSPrimaryStorage.sharedManager newDatabaseConnection];
+        _writeConnection =  [OWSPrimaryStorage.sharedManager dbReadWriteConnection];
     }
     return self;
 }

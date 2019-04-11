@@ -223,8 +223,8 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (void)applyTheme
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(self.tableView);
-    OWSAssert(self.searchBar);
+    OWSAssertDebug(self.tableView);
+    OWSAssertDebug(self.searchBar);
 
     self.view.backgroundColor = Theme.backgroundColor;
     self.tableView.backgroundColor = Theme.backgroundColor;
@@ -820,7 +820,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForConversationAtIndexPath:(NSIndexPath *)indexPath
 {
     HomeViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:HomeViewCell.cellReuseIdentifier];
-    OWSAssert(cell);
+    OWSAssertDebug(cell);
 
     ThreadViewModel *thread = [self threadViewModelForIndexPath:indexPath];
     if (thread != nil) {
@@ -834,7 +834,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (UITableViewCell *)cellForArchivedConversationsRow:(UITableView *)tableView
 {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kArchivedConversationsReuseIdentifier];
-    OWSAssert(cell);
+    OWSAssertDebug(cell);
     [OWSTableItem configureCell:cell];
 
     for (UIView *subview in cell.contentView.subviews) {
@@ -1063,7 +1063,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     self.searchBar.text = nil;
 
     [self.searchBar resignFirstResponder];
-    OWSAssert(!self.searchBar.isFirstResponder);
+    OWSAssertDebug(!self.searchBar.isFirstResponder);
 
     [self updateSearchResultsVisibility];
 
@@ -1103,7 +1103,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [self.searchBar resignFirstResponder];
-    OWSAssert(!self.searchBar.isFirstResponder);
+    OWSAssertDebug(!self.searchBar.isFirstResponder);
 }
 
 #pragma mark - ConversationSearchViewDelegate
@@ -1111,7 +1111,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (void)conversationSearchViewWillBeginDragging
 {
     [self.searchBar resignFirstResponder];
-    OWSAssert(!self.searchBar.isFirstResponder);
+    OWSAssertDebug(!self.searchBar.isFirstResponder);
 }
 
 #pragma mark - HomeFeedTableViewCellDelegate
@@ -1287,7 +1287,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                        animatePresentation:(BOOL)animatePresentation
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(viewController);
+    OWSAssertDebug(viewController);
 
     [self presentViewControllerWithBlock:^{
         [self presentViewController:viewController animated:animatePresentation completion:nil];
@@ -1300,7 +1300,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                animatePresentation:(BOOL)animatePresentation
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(viewController);
+    OWSAssertDebug(viewController);
 
     [self presentViewControllerWithBlock:^{
         [self.navigationController pushViewController:viewController animated:animatePresentation];
@@ -1311,7 +1311,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (void)presentViewControllerWithBlock:(void (^)(void))presentationBlock animateDismissal:(BOOL)animateDismissal
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(presentationBlock);
+    OWSAssertDebug(presentationBlock);
 
     // Presenting a "top level" view controller has three steps:
     //
@@ -1353,20 +1353,20 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (YapDatabaseViewMappings *)threadMappings
 {
-    OWSAssert(_threadMappings != nil);
+    OWSAssertDebug(_threadMappings != nil);
     return _threadMappings;
 }
 
 - (void)showInboxGrouping
 {
-    OWSAssert(self.homeViewMode == HomeViewMode_Archive);
+    OWSAssertDebug(self.homeViewMode == HomeViewMode_Archive);
 
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)showArchivedConversations
 {
-    OWSAssert(self.homeViewMode == HomeViewMode_Inbox);
+    OWSAssertDebug(self.homeViewMode == HomeViewMode_Inbox);
 
     // When showing archived conversations, we want to use a conventional "back" button
     // to return to the "inbox" home view.

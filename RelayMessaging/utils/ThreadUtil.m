@@ -64,9 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
                                    failure:(void (^)(NSError *error))failureHandler
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(text.length > 0);
-    OWSAssert(thread);
-    OWSAssert(messageSender);
+    OWSAssertDebug(text.length > 0);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(messageSender);
 
     OWSDisappearingMessagesConfiguration *configuration =
         [OWSDisappearingMessagesConfiguration fetchObjectWithUniqueID:thread.uniqueId];
@@ -107,11 +107,11 @@ NS_ASSUME_NONNULL_BEGIN
                                       completion:(void (^_Nullable)(NSError *_Nullable error))completion
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(attachment);
-    OWSAssert(ignoreErrors || ![attachment hasError]);
-    OWSAssert([attachment mimeType].length > 0);
-    OWSAssert(thread);
-    OWSAssert(messageSender);
+    OWSAssertDebug(attachment);
+    OWSAssertDebug(ignoreErrors || ![attachment hasError]);
+    OWSAssertDebug([attachment mimeType].length > 0);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(messageSender);
 
     OWSDisappearingMessagesConfiguration *configuration =
         [OWSDisappearingMessagesConfiguration fetchObjectWithUniqueID:thread.uniqueId];
@@ -162,13 +162,13 @@ NS_ASSUME_NONNULL_BEGIN
                                                    focusMessageId:(nullable NSString *)focusMessageId
                                                      maxRangeSize:(int)maxRangeSize
 {
-    OWSAssert(thread);
-    OWSAssert(dbConnection);
-    OWSAssert(contactsManager);
-    OWSAssert(maxRangeSize > 0);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(dbConnection);
+    OWSAssertDebug(contactsManager);
+    OWSAssertDebug(maxRangeSize > 0);
 
     NSString *localNumber = [TSAccountManager localUID];
-    OWSAssert(localNumber.length > 0);
+    OWSAssertDebug(localNumber.length > 0);
 
     // Many OWSProfileManager methods aren't safe to call from inside a database
     // transaction, so do this work now.
@@ -403,11 +403,11 @@ NS_ASSUME_NONNULL_BEGIN
         hideUnreadMessagesIndicator:(BOOL)hideUnreadMessagesIndicator
     firstUnseenInteractionTimestamp:(nullable NSNumber *)firstUnseenInteractionTimestamp
 {
-    OWSAssert(dynamicInteractions);
-    OWSAssert(thread);
-    OWSAssert(transaction);
-    OWSAssert(blockingSafetyNumberChanges);
-    OWSAssert(nonBlockingSafetyNumberChanges);
+    OWSAssertDebug(dynamicInteractions);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(blockingSafetyNumberChanges);
+    OWSAssertDebug(nonBlockingSafetyNumberChanges);
 
     if (hideUnreadMessagesIndicator) {
         return;
@@ -418,7 +418,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     YapDatabaseViewTransaction *threadMessagesTransaction = [transaction ext:TSMessageDatabaseViewExtensionName];
-    OWSAssert([threadMessagesTransaction isKindOfClass:[YapDatabaseViewTransaction class]]);
+    OWSAssertDebug([threadMessagesTransaction isKindOfClass:[YapDatabaseViewTransaction class]]);
 
     // Determine unread indicator position, if necessary.
     //
@@ -524,9 +524,9 @@ NS_ASSUME_NONNULL_BEGIN
                                          transaction:(YapDatabaseReadWriteTransaction *)transaction
                                       focusMessageId:(NSString *)focusMessageId
 {
-    OWSAssert(thread);
-    OWSAssert(transaction);
-    OWSAssert(focusMessageId);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(focusMessageId);
 
     YapDatabaseViewTransaction *databaseView = [transaction ext:TSMessageDatabaseViewExtensionName];
 
@@ -586,7 +586,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)addThreadToProfileWhitelistIfEmptyContactThread:(TSThread *)thread
 {
-    OWSAssert(thread);
+    OWSAssertDebug(thread);
 
 //    if (thread.isGroupThread) {
 //        return NO;
@@ -627,9 +627,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)removeAllObjectsInCollection:(NSString *)collection
                                class:(Class) class
                          transaction:(YapDatabaseReadWriteTransaction *)transaction {
-    OWSAssert(collection.length > 0);
-    OWSAssert(class);
-    OWSAssert(transaction);
+    OWSAssertDebug(collection.length > 0);
+    OWSAssertDebug(class);
+    OWSAssertDebug(transaction);
 
     NSArray<NSString *> *_Nullable uniqueIds = [transaction allKeysInCollection:collection];
     if (!uniqueIds) {
@@ -659,8 +659,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                 threadUniqueId:(NSString *)threadUniqueId
                                                    transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(timestamp > 0);
-    OWSAssert(authorId.length > 0);
+    OWSAssertDebug(timestamp > 0);
+    OWSAssertDebug(authorId.length > 0);
 
     NSString *localUID = [TSAccountManager localUID];
     if (localUID.length < 1) {

@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
         return self;
     }
 
-    OWSAssert(delegate);
+    OWSAssertDebug(delegate);
     _delegate = delegate;
 
     _conversationSearcher = ConversationSearcher.shared;
@@ -113,14 +113,14 @@ NS_ASSUME_NONNULL_BEGIN
 //- (nullable SignalAccount *)fetchSignalAccountForRecipientId:(NSString *)recipientId
 //{
 //    OWSAssertIsOnMainThread();
-//    OWSAssert(recipientId.length > 0);
+//    OWSAssertDebug(recipientId.length > 0);
 //
 //    return self.signalAccountMap[recipientId];
 //}
 
 //- (SignalAccount *)fetchOrBuildSignalAccountForRecipientId:(NSString *)recipientId
 //{
-//    OWSAssert(recipientId.length > 0);
+//    OWSAssertDebug(recipientId.length > 0);
 //
 //    SignalAccount *_Nullable signalAccount = [self fetchSignalAccountForRecipientId:recipientId];
 //    return (signalAccount ?: [[SignalAccount alloc] initWithRecipientId:recipientId]);

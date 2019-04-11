@@ -440,7 +440,7 @@ NSString *const kProfileView_LastPresentedDate = @"kProfileView_LastPresentedDat
         [[SignalsNavigationController alloc] initWithRootViewController:homeView];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.window.rootViewController = navigationController;
-    OWSAssert([navigationController.topViewController isKindOfClass:[HomeViewController class]]);
+    OWSAssertDebug([navigationController.topViewController isKindOfClass:[HomeViewController class]]);
 }
 
 #pragma mark - UITextFieldDelegate
@@ -538,8 +538,8 @@ NSString *const kProfileView_LastPresentedDate = @"kProfileView_LastPresentedDat
 
 + (void)presentForAppSettings:(UINavigationController *)navigationController
 {
-    OWSAssert(navigationController);
-    OWSAssert([navigationController isKindOfClass:[OWSNavigationController class]]);
+    OWSAssertDebug(navigationController);
+    OWSAssertDebug([navigationController isKindOfClass:[OWSNavigationController class]]);
 
     ProfileViewController *vc = [[ProfileViewController alloc] initWithMode:ProfileViewMode_AppSettings];
     [navigationController pushViewController:vc animated:YES];
@@ -547,8 +547,8 @@ NSString *const kProfileView_LastPresentedDate = @"kProfileView_LastPresentedDat
 
 + (void)presentForRegistration:(UINavigationController *)navigationController
 {
-    OWSAssert(navigationController);
-    OWSAssert([navigationController isKindOfClass:[OWSNavigationController class]]);
+    OWSAssertDebug(navigationController);
+    OWSAssertDebug([navigationController isKindOfClass:[OWSNavigationController class]]);
 
     ProfileViewController *vc = [[ProfileViewController alloc] initWithMode:ProfileViewMode_Registration];
     [navigationController pushViewController:vc animated:YES];
@@ -556,7 +556,7 @@ NSString *const kProfileView_LastPresentedDate = @"kProfileView_LastPresentedDat
 
 + (void)presentForUpgradeOrNag:(HomeViewController *)presentingController
 {
-    OWSAssert(presentingController);
+    OWSAssertDebug(presentingController);
 
     ProfileViewController *vc = [[ProfileViewController alloc] initWithMode:ProfileViewMode_UpgradeOrNag];
     OWSNavigationController *navigationController = [[OWSNavigationController alloc] initWithRootViewController:vc];
@@ -576,7 +576,7 @@ NSString *const kProfileView_LastPresentedDate = @"kProfileView_LastPresentedDat
 - (void)avatarDidChange:(UIImage *)image
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(image);
+    OWSAssertDebug(image);
 
     self.avatar = [image resizedImageToFillPixelSize:CGSizeMake(kOWSProfileManager_MaxAvatarDiameter,
                                                          kOWSProfileManager_MaxAvatarDiameter)];

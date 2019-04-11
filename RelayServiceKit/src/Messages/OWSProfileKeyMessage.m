@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (OWSSignalServiceProtosDataMessage *)buildDataMessage:(NSString *_Nullable)recipientId
 {
-    OWSAssert(self.thread);
+    OWSAssertDebug(self.thread);
     
     OWSSignalServiceProtosDataMessageBuilder *builder = [self dataMessageBuilder];
     [builder setTimestamp:self.timestamp];

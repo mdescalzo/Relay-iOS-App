@@ -408,7 +408,7 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
     TSAccountManager *manager = [self sharedInstance];
     NSString *number          = manager.uidAwaitingVerification;
 
-    OWSAssert(number);
+    OWSAssertDebug(number);
 
     [self registerWithPhoneNumber:number success:successBlock failure:failureBlock smsVerification:YES];
 }
@@ -418,7 +418,7 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
     TSAccountManager *manager = [self sharedInstance];
     NSString *number          = manager.uidAwaitingVerification;
 
-    OWSAssert(number);
+    OWSAssertDebug(number);
 
     [self registerWithPhoneNumber:number success:successBlock failure:failureBlock smsVerification:NO];
 }
@@ -447,9 +447,9 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
     NSString *signalingKey = [[self class] generateNewSignalingKeyToken];
     NSString *phoneNumber = self.uidAwaitingVerification;
 
-    OWSAssert(signalingKey);
-    OWSAssert(authToken);
-    OWSAssert(phoneNumber);
+    OWSAssertDebug(signalingKey);
+    OWSAssertDebug(authToken);
+    OWSAssertDebug(phoneNumber);
 
     TSVerifyCodeRequest *request = [[TSVerifyCodeRequest alloc] initWithVerificationCode:verificationCode
                                                                                forNumber:phoneNumber
@@ -481,7 +481,7 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
             }
         }
         failure:^(NSURLSessionDataTask *task, NSError *error) {
-            OWSAssert([error.domain isEqualToString:TSNetworkManagerDomain]);
+            OWSAssertDebug([error.domain isEqualToString:TSNetworkManagerDomain]);
 
             DDLogWarn(@"%@ Error verifying code: %@", self.logTag, error.debugDescription);
 
@@ -628,7 +628,7 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
                                                            defaultValue:NO]);
         }
 
-        OWSAssert(self.cachedIsDeregistered);
+        OWSAssertDebug(self.cachedIsDeregistered);
         return self.cachedIsDeregistered.boolValue;
     }
 }
@@ -686,11 +686,11 @@ NSString *const TSAccountManager_ServerSignalingKey = @"TSStorageServerSignaling
 
 - (NSString *)reregisterationPhoneNumber
 {
-    OWSAssert([self isReregistering]);
+    OWSAssertDebug([self isReregistering]);
 
     NSString *_Nullable result = [self.dbConnection stringForKey:TSAccountManager_ReregisteringPhoneNumberKey
                                                     inCollection:TSAccountManager_UserAccountCollection];
-    OWSAssert(result);
+    OWSAssertDebug(result);
     return result;
 }
 

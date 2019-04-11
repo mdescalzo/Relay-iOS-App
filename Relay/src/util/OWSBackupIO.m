@@ -64,7 +64,7 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 
 - (nullable OWSBackupEncryptedItem *)encryptFileAsTempFile:(NSString *)srcFilePath
 {
-    OWSAssert(srcFilePath.length > 0);
+    OWSAssertDebug(srcFilePath.length > 0);
 
     NSData *encryptionKey = [Randomness generateRandomBytes:(int)kOWSBackupKeyLength];
 
@@ -73,8 +73,8 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 
 - (nullable OWSBackupEncryptedItem *)encryptFileAsTempFile:(NSString *)srcFilePath encryptionKey:(NSData *)encryptionKey
 {
-    OWSAssert(srcFilePath.length > 0);
-    OWSAssert(encryptionKey.length > 0);
+    OWSAssertDebug(srcFilePath.length > 0);
+    OWSAssertDebug(encryptionKey.length > 0);
 
     @autoreleasepool {
 
@@ -90,7 +90,7 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 
 - (nullable OWSBackupEncryptedItem *)encryptDataAsTempFile:(NSData *)srcData
 {
-    OWSAssert(srcData);
+    OWSAssertDebug(srcData);
 
     NSData *encryptionKey = [Randomness generateRandomBytes:(int)kOWSBackupKeyLength];
 
@@ -100,8 +100,8 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 - (nullable OWSBackupEncryptedItem *)encryptDataAsTempFile:(NSData *)unencryptedData
                                              encryptionKey:(NSData *)encryptionKey
 {
-    OWSAssert(unencryptedData);
-    OWSAssert(encryptionKey.length > 0);
+    OWSAssertDebug(unencryptedData);
+    OWSAssertDebug(encryptionKey.length > 0);
 
     @autoreleasepool {
 
@@ -132,8 +132,8 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
               dstFilePath:(NSString *)dstFilePath
             encryptionKey:(NSData *)encryptionKey
 {
-    OWSAssert(srcFilePath.length > 0);
-    OWSAssert(encryptionKey.length > 0);
+    OWSAssertDebug(srcFilePath.length > 0);
+    OWSAssertDebug(encryptionKey.length > 0);
 
     @autoreleasepool {
 
@@ -158,8 +158,8 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 
 - (nullable NSData *)decryptFileAsData:(NSString *)srcFilePath encryptionKey:(NSData *)encryptionKey
 {
-    OWSAssert(srcFilePath.length > 0);
-    OWSAssert(encryptionKey.length > 0);
+    OWSAssertDebug(srcFilePath.length > 0);
+    OWSAssertDebug(encryptionKey.length > 0);
 
     @autoreleasepool {
 
@@ -181,8 +181,8 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 
 - (nullable NSData *)decryptDataAsData:(NSData *)encryptedData encryptionKey:(NSData *)encryptionKey
 {
-    OWSAssert(encryptedData);
-    OWSAssert(encryptionKey.length > 0);
+    OWSAssertDebug(encryptedData);
+    OWSAssertDebug(encryptionKey.length > 0);
 
     @autoreleasepool {
 
@@ -197,7 +197,7 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 
 - (nullable NSData *)compressData:(NSData *)srcData
 {
-    OWSAssert(srcData);
+    OWSAssertDebug(srcData);
 
     @autoreleasepool {
 
@@ -235,7 +235,7 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
 
 - (nullable NSData *)decompressData:(NSData *)srcData uncompressedDataLength:(NSUInteger)uncompressedDataLength
 {
-    OWSAssert(srcData);
+    OWSAssertDebug(srcData);
 
     @autoreleasepool {
 
@@ -258,7 +258,7 @@ static const compression_algorithm SignalCompressionAlgorithm = COMPRESSION_LZMA
         size_t dstLength = compression_decode_buffer(
             dstBuffer, dstBufferLength, srcBuffer, srcLength, NULL, SignalCompressionAlgorithm);
         NSData *decompressedData = [NSData dataWithBytesNoCopy:dstBuffer length:dstLength freeWhenDone:YES];
-        OWSAssert(decompressedData.length == uncompressedDataLength);
+        OWSAssertDebug(decompressedData.length == uncompressedDataLength);
         DDLogVerbose(@"%@ decompressed %zd -> %zd = %0.2f",
             self.logTag,
             srcLength,

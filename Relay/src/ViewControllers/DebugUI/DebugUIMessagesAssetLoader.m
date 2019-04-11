@@ -19,8 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAssetLoader *)fakeAssetLoaderWithUrl:(NSString *)fileUrl mimeType:(NSString *)mimeType
 {
-    OWSAssert(fileUrl.length > 0);
-    OWSAssert(mimeType.length > 0);
+    OWSAssertDebug(fileUrl.length > 0);
+    OWSAssertDebug(mimeType.length > 0);
 
     DebugUIMessagesAssetLoader *instance = [DebugUIMessagesAssetLoader new];
     instance.mimeType = mimeType;
@@ -34,10 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)ensureURLAssetLoaded:(NSString *)fileUrl success:(ActionSuccessBlock)success failure:(ActionFailureBlock)failure
 {
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(self.filename.length > 0);
-    OWSAssert(self.mimeType.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(self.filename.length > 0);
+    OWSAssertDebug(self.mimeType.length > 0);
 
     if (self.filePath) {
         success();
@@ -57,14 +57,14 @@ NS_ASSUME_NONNULL_BEGIN
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFHTTPSessionManager *sessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
     sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    OWSAssert(sessionManager.responseSerializer);
+    OWSAssertDebug(sessionManager.responseSerializer);
     [sessionManager GET:fileUrl
         parameters:nil
         progress:nil
         success:^(NSURLSessionDataTask *task, NSData *_Nullable responseObject) {
             if ([responseObject writeToFile:filePath atomically:YES]) {
                 self.filePath = filePath;
-                OWSAssert([NSFileManager.defaultManager fileExistsAtPath:filePath]);
+                OWSAssertDebug([NSFileManager.defaultManager fileExistsAtPath:filePath]);
                 success();
             } else {
                 OWSFailDebug(@"Error write url response [%@]: %@", fileUrl, filePath);
@@ -84,11 +84,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                       textColor:(UIColor *)textColor
                                                           label:(NSString *)label
 {
-    OWSAssert(imageSize.width > 0);
-    OWSAssert(imageSize.height > 0);
-    OWSAssert(backgroundColor);
-    OWSAssert(textColor);
-    OWSAssert(label.length > 0);
+    OWSAssertDebug(imageSize.width > 0);
+    OWSAssertDebug(imageSize.height > 0);
+    OWSAssertDebug(backgroundColor);
+    OWSAssertDebug(textColor);
+    OWSAssertDebug(label.length > 0);
 
     DebugUIMessagesAssetLoader *instance = [DebugUIMessagesAssetLoader new];
     instance.mimeType = OWSMimeTypeImagePng;
@@ -112,14 +112,14 @@ NS_ASSUME_NONNULL_BEGIN
                      success:(ActionSuccessBlock)success
                      failure:(ActionFailureBlock)failure
 {
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(self.filename.length > 0);
-    OWSAssert(self.mimeType.length > 0);
-    OWSAssert(imageSize.width > 0 && imageSize.height > 0);
-    OWSAssert(backgroundColor);
-    OWSAssert(textColor);
-    OWSAssert(label.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(self.filename.length > 0);
+    OWSAssertDebug(self.mimeType.length > 0);
+    OWSAssertDebug(imageSize.width > 0 && imageSize.height > 0);
+    OWSAssertDebug(backgroundColor);
+    OWSAssertDebug(textColor);
+    OWSAssertDebug(label.length > 0);
 
     if (self.filePath) {
         success();
@@ -133,7 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
         NSData *pngData = UIImagePNGRepresentation(image);
         [pngData writeToFile:filePath atomically:YES];
         self.filePath = filePath;
-        OWSAssert([NSFileManager.defaultManager fileExistsAtPath:filePath]);
+        OWSAssertDebug([NSFileManager.defaultManager fileExistsAtPath:filePath]);
         success();
     }
 }
@@ -143,10 +143,10 @@ NS_ASSUME_NONNULL_BEGIN
                                     textColor:(UIColor *)textColor
                                         label:(NSString *)label
 {
-    OWSAssert(imageSize.width > 0 && imageSize.height > 0);
-    OWSAssert(backgroundColor);
-    OWSAssert(textColor);
-    OWSAssert(label.length > 0);
+    OWSAssertDebug(imageSize.width > 0 && imageSize.height > 0);
+    OWSAssertDebug(backgroundColor);
+    OWSAssertDebug(textColor);
+    OWSAssertDebug(label.length > 0);
 
     @autoreleasepool {
         CGRect frame = CGRectZero;
@@ -181,13 +181,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAssetLoader *)fakeRandomAssetLoaderWithLength:(NSUInteger)dataLength mimeType:(NSString *)mimeType
 {
-    OWSAssert(dataLength > 0);
-    OWSAssert(mimeType.length > 0);
+    OWSAssertDebug(dataLength > 0);
+    OWSAssertDebug(mimeType.length > 0);
 
     DebugUIMessagesAssetLoader *instance = [DebugUIMessagesAssetLoader new];
     instance.mimeType = mimeType;
     NSString *fileExtension = [MIMETypeUtil fileExtensionForMIMEType:mimeType];
-    OWSAssert(fileExtension.length > 0);
+    OWSAssertDebug(fileExtension.length > 0);
     instance.filename = [@"attachment" stringByAppendingPathExtension:fileExtension];
     __weak DebugUIMessagesAssetLoader *weakSelf = instance;
     instance.prepareBlock = ^(ActionSuccessBlock success, ActionFailureBlock failure) {
@@ -200,11 +200,11 @@ NS_ASSUME_NONNULL_BEGIN
                         success:(ActionSuccessBlock)success
                         failure:(ActionFailureBlock)failure
 {
-    OWSAssert(dataLength > 0);
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(self.filename.length > 0);
-    OWSAssert(self.mimeType.length > 0);
+    OWSAssertDebug(dataLength > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(self.filename.length > 0);
+    OWSAssertDebug(self.mimeType.length > 0);
 
     if (self.filePath) {
         success();
@@ -213,14 +213,14 @@ NS_ASSUME_NONNULL_BEGIN
 
     @autoreleasepool {
         NSString *fileExtension = [MIMETypeUtil fileExtensionForMIMEType:self.mimeType];
-        OWSAssert(fileExtension.length > 0);
+        OWSAssertDebug(fileExtension.length > 0);
         NSData *data = [Randomness generateRandomBytes:(int)dataLength];
-        OWSAssert(data);
+        OWSAssertDebug(data);
         NSString *filePath = [OWSFileSystem temporaryFilePathWithFileExtension:fileExtension];
         BOOL didWrite = [data writeToFile:filePath atomically:YES];
-        OWSAssert(didWrite);
+        OWSAssertDebug(didWrite);
         self.filePath = filePath;
-        OWSAssert([NSFileManager.defaultManager fileExistsAtPath:filePath]);
+        OWSAssertDebug([NSFileManager.defaultManager fileExistsAtPath:filePath]);
     }
 
     success();
@@ -230,12 +230,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DebugUIMessagesAssetLoader *)fakeMissingAssetLoaderWithMimeType:(NSString *)mimeType
 {
-    OWSAssert(mimeType.length > 0);
+    OWSAssertDebug(mimeType.length > 0);
 
     DebugUIMessagesAssetLoader *instance = [DebugUIMessagesAssetLoader new];
     instance.mimeType = mimeType;
     NSString *fileExtension = [MIMETypeUtil fileExtensionForMIMEType:mimeType];
-    OWSAssert(fileExtension.length > 0);
+    OWSAssertDebug(fileExtension.length > 0);
     instance.filename = [@"attachment" stringByAppendingPathExtension:fileExtension];
     __weak DebugUIMessagesAssetLoader *weakSelf = instance;
     instance.prepareBlock = ^(ActionSuccessBlock success, ActionFailureBlock failure) {
@@ -246,10 +246,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)ensureMissingAssetLoaded:(ActionSuccessBlock)success failure:(ActionFailureBlock)failure
 {
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(self.filename.length > 0);
-    OWSAssert(self.mimeType.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(self.filename.length > 0);
+    OWSAssertDebug(self.mimeType.length > 0);
 
     if (self.filePath) {
         success();
@@ -257,12 +257,12 @@ NS_ASSUME_NONNULL_BEGIN
     }
 
     NSString *fileExtension = [MIMETypeUtil fileExtensionForMIMEType:self.mimeType];
-    OWSAssert(fileExtension.length > 0);
+    OWSAssertDebug(fileExtension.length > 0);
     NSString *filePath = [OWSFileSystem temporaryFilePathWithFileExtension:fileExtension];
     BOOL didCreate = [NSFileManager.defaultManager createFileAtPath:filePath contents:nil attributes:nil];
-    OWSAssert(didCreate);
+    OWSAssertDebug(didCreate);
     self.filePath = filePath;
-    OWSAssert([NSFileManager.defaultManager fileExistsAtPath:filePath]);
+    OWSAssertDebug([NSFileManager.defaultManager fileExistsAtPath:filePath]);
 
     success();
 }
@@ -283,10 +283,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)ensureOversizeTextAssetLoaded:(ActionSuccessBlock)success failure:(ActionFailureBlock)failure
 {
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(self.filename.length > 0);
-    OWSAssert(self.mimeType.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(self.filename.length > 0);
+    OWSAssertDebug(self.mimeType.length > 0);
 
     if (self.filePath) {
         success();
@@ -311,11 +311,11 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *fileExtension = @"txt";
     NSString *filePath = [OWSFileSystem temporaryFilePathWithFileExtension:fileExtension];
     NSData *data = [message dataUsingEncoding:NSUTF8StringEncoding];
-    OWSAssert(data);
+    OWSAssertDebug(data);
     BOOL didWrite = [data writeToFile:filePath atomically:YES];
-    OWSAssert(didWrite);
+    OWSAssertDebug(didWrite);
     self.filePath = filePath;
-    OWSAssert([NSFileManager.defaultManager fileExistsAtPath:filePath]);
+    OWSAssertDebug([NSFileManager.defaultManager fileExistsAtPath:filePath]);
 
     success();
 }
@@ -338,10 +338,10 @@ NS_ASSUME_NONNULL_BEGIN
                                       success:(ActionSuccessBlock)success
                                       failure:(ActionFailureBlock)failure
 {
-    OWSAssert(success);
-    OWSAssert(failure);
-    OWSAssert(self.filename.length > 0);
-    OWSAssert(self.mimeType.length > 0);
+    OWSAssertDebug(success);
+    OWSAssertDebug(failure);
+    OWSAssertDebug(self.filename.length > 0);
+    OWSAssertDebug(self.mimeType.length > 0);
 
     if (self.filePath) {
         success();
@@ -351,11 +351,11 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *fileExtension = @"txt";
     NSString *filePath = [OWSFileSystem temporaryFilePathWithFileExtension:fileExtension];
     NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
-    OWSAssert(data);
+    OWSAssertDebug(data);
     BOOL didWrite = [data writeToFile:filePath atomically:YES];
-    OWSAssert(didWrite);
+    OWSAssertDebug(didWrite);
     self.filePath = filePath;
-    OWSAssert([NSFileManager.defaultManager fileExistsAtPath:filePath]);
+    OWSAssertDebug([NSFileManager.defaultManager fileExistsAtPath:filePath]);
 
     success();
 }

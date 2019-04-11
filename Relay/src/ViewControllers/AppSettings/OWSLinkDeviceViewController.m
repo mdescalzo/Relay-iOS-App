@@ -145,7 +145,7 @@ NS_ASSUME_NONNULL_BEGIN
     [OWSDeviceManager.sharedManager setMayHaveLinkedDevices];
 
     ECKeyPair *_Nullable identityKeyPair = [[OWSIdentityManager sharedManager] identityKeyPair];
-    OWSAssert(identityKeyPair);
+    OWSAssertDebug(identityKeyPair);
     NSData *myPublicKey = identityKeyPair.publicKey;
     NSData *myPrivateKey = identityKeyPair.ows_privateKey;
     NSString *accountIdentifier = [TSAccountManager localUID];

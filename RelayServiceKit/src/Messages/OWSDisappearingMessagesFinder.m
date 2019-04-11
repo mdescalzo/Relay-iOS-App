@@ -24,7 +24,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
 - (NSArray<NSString *> *)fetchUnstartedExpiringMessageIdsInThread:(TSThread *)thread
                                                       transaction:(YapDatabaseReadTransaction *_Nonnull)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     NSMutableArray<NSString *> *messageIds = [NSMutableArray new];
     NSString *formattedString = [NSString stringWithFormat:@"WHERE %@ = 0 AND %@ = \"%@\"",
@@ -44,7 +44,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
 
 - (NSArray<NSString *> *)fetchMessageIdsWhichFailedToStartExpiring:(YapDatabaseReadTransaction *_Nonnull)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     NSMutableArray<NSString *> *messageIds = [NSMutableArray new];
     NSString *formattedString =
@@ -63,7 +63,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
                                       }
                                       
                                       // We'll need to update if we ever support expiring other message types
-                                      OWSAssert([object isKindOfClass:[TSOutgoingMessage class]] || [object isKindOfClass:[TSIncomingMessage class]]);
+                                      OWSAssertDebug([object isKindOfClass:[TSOutgoingMessage class]] || [object isKindOfClass:[TSIncomingMessage class]]);
                                       
                                       TSMessage *message = (TSMessage *)object;
                                       if ([message shouldStartExpireTimerWithTransaction:transaction]) {
@@ -82,7 +82,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
 
 - (NSArray<NSString *> *)fetchExpiredMessageIdsWithTransaction:(YapDatabaseReadTransaction *_Nonnull)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     NSMutableArray<NSString *> *messageIds = [NSMutableArray new];
 
@@ -104,7 +104,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
 
 - (nullable NSNumber *)nextExpirationTimestampWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     NSString *formattedString = [NSString stringWithFormat:@"WHERE %@ > 0 ORDER BY %@ ASC",
                                           OWSDisappearingMessageFinderExpiresAtColumn,
@@ -130,7 +130,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
                                              block:(void (^_Nonnull)(TSMessage *message))block
                                        transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     for (NSString *expiringMessageId in
         [self fetchUnstartedExpiringMessageIdsInThread:thread transaction:transaction]) {
@@ -146,7 +146,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
 - (void)enumerateMessagesWhichFailedToStartExpiringWithBlock:(void (^_Nonnull)(TSMessage *message))block
                                                  transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     for (NSString *expiringMessageId in [self fetchMessageIdsWhichFailedToStartExpiring:transaction]) {
 
@@ -172,7 +172,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
 - (NSArray<TSMessage *> *)fetchUnstartedExpiringMessagesInThread:(TSThread *)thread
                                                      transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     NSMutableArray<TSMessage *> *messages = [NSMutableArray new];
     [self enumerateUnstartedExpiringMessagesInThread:thread
@@ -188,7 +188,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
 - (void)enumerateExpiredMessagesWithBlock:(void (^_Nonnull)(TSMessage *message))block
                               transaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     // Since we can't directly mutate the enumerated expired messages, we store only their ids in hopes of saving a
     // little memory and then enumerate the (larger) TSMessage objects one at a time.
@@ -208,7 +208,7 @@ static NSString *const OWSDisappearingMessageFinderExpiresAtIndex = @"index_mess
  */
 - (NSArray<TSMessage *> *)fetchExpiredMessagesWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     NSMutableArray<TSMessage *> *messages = [NSMutableArray new];
     [self enumerateExpiredMessagesWithBlock:^(TSMessage *message) {
