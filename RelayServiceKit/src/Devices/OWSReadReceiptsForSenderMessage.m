@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSData *)buildPlainTextData:(RelayRecipient *)recipient
 {
-    OWSAssert(recipient);
+    OWSAssertDebug(recipient);
 
     OWSSignalServiceProtosContentBuilder *contentBuilder = [OWSSignalServiceProtosContentBuilder new];
     [contentBuilder setReceiptMessage:[self buildReceiptMessage:recipient.uniqueId]];
@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
     OWSSignalServiceProtosReceiptMessageBuilder *builder = [OWSSignalServiceProtosReceiptMessageBuilder new];
 
     [builder setType:OWSSignalServiceProtosReceiptMessageTypeRead];
-    OWSAssert(self.messageTimestamps.count > 0);
+    OWSAssertDebug(self.messageTimestamps.count > 0);
     for (NSNumber *messageTimestamp in self.messageTimestamps) {
         [builder addTimestamp:[messageTimestamp unsignedLongLongValue]];
     }

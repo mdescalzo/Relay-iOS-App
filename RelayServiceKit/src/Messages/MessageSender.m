@@ -137,10 +137,10 @@ void AssertIsOnSendingQueue()
         [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction * transaction) {
             TSAttachmentStream *attachmentStream
             = (TSAttachmentStream *)[self.message attachmentWithTransaction:transaction];
-            OWSAssert(attachmentStream);
-            OWSAssert([attachmentStream isKindOfClass:[TSAttachmentStream class]]);
-            OWSAssert(attachmentStream.serverId);
-            OWSAssert(attachmentStream.isUploaded);
+            OWSAssertDebug(attachmentStream);
+            OWSAssertDebug([attachmentStream isKindOfClass:[TSAttachmentStream class]]);
+            OWSAssertDebug(attachmentStream.serverId);
+            OWSAssertDebug(attachmentStream.isUploaded);
         }];
     }
     
@@ -225,12 +225,12 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
 
 - (NSOperationQueue *)sendingQueueForMessage:(TSOutgoingMessage *)message
 {
-    OWSAssert(message);
+    OWSAssertDebug(message);
     
     
     NSString *kDefaultQueueKey = @"kDefaultQueueKey";
     NSString *queueKey = message.uniqueThreadId ?: kDefaultQueueKey;
-    OWSAssert(queueKey.length > 0);
+    OWSAssertDebug(queueKey.length > 0);
     
     if ([kDefaultQueueKey isEqualToString:queueKey]) {
         // when do we get here?
@@ -257,9 +257,9 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                success:(void (^)(void))successHandler
                failure:(void (^)(NSError *error))failureHandler
 {
-    OWSAssert(message);
+    OWSAssertDebug(message);
 //    if (message.body.length > 0) {
-//        OWSAssert([message.body lengthOfBytesUsingEncoding:NSUTF8StringEncoding] <= kOversizeTextMessageSizeThreshold);
+//        OWSAssertDebug([message.body lengthOfBytesUsingEncoding:NSUTF8StringEncoding] <= kOversizeTextMessageSizeThreshold);
 //    }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -326,9 +326,9 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         // Though we currently only ever expect at most one thumbnail, the proto data model
         // suggests this could change. The logic is intended to work with multiple, but
         // if we ever actually want to send multiple, we should do more testing.
-        OWSAssert(quotedThumbnailAttachments.count <= 1);
+        OWSAssertDebug(quotedThumbnailAttachments.count <= 1);
         for (TSAttachmentStream *thumbnailAttachment in quotedThumbnailAttachments) {
-            OWSAssert(message.quotedMessage);
+            OWSAssertDebug(message.quotedMessage);
             
             OWSUploadOperation *uploadQuoteThumbnailOperation =
             [[OWSUploadOperation alloc] initWithAttachmentId:thumbnailAttachment.uniqueId
@@ -340,7 +340,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         }
         
         if (contactShareAvatarAttachment != nil) {
-            OWSAssert(message.contactShare);
+            OWSAssertDebug(message.contactShare);
             OWSUploadOperation *uploadAvatarOperation =
             [[OWSUploadOperation alloc] initWithAttachmentId:contactShareAvatarAttachment.uniqueId
                                                 dbConnection:self.dbConnection];
@@ -360,7 +360,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                            success:(void (^)(void))successHandler
                            failure:(void (^)(NSError *error))failureHandler
 {
-    OWSAssert(dataSource);
+    OWSAssertDebug(dataSource);
     
     void (^successWithDeleteHandler)(void) = ^() {
         successHandler();
@@ -395,7 +395,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                   success:(void (^)(void))successHandler
                   failure:(void (^)(NSError *error))failureHandler
 {
-    OWSAssert(dataSource);
+    OWSAssertDebug(dataSource);
     
     dispatch_async([OWSDispatch attachmentsQueue], ^{
         TSAttachmentStream *attachmentStream =
@@ -433,7 +433,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
 
 - (NSArray<RelayRecipient *> *)relayRecipientsForRecipientIds:(NSArray<NSString *> *)recipientIds
 {
-    OWSAssert(recipientIds);
+    OWSAssertDebug(recipientIds);
     
     NSMutableArray<RelayRecipient *> *recipients = [NSMutableArray new];
     [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
@@ -477,11 +477,11 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             // should prevent this from occurring, but in some edge cases
             // you might, for example, have a pending outgoing message when
             // you block them.
-            OWSAssert(recipientContactId.length > 0);
+            OWSAssertDebug(recipientContactId.length > 0);
             
             NSArray<RelayRecipient *> *recipients =
             [self relayRecipientsForRecipientIds:@[recipientContactId]];
-            OWSAssert(recipients.count == 1);
+            OWSAssertDebug(recipients.count == 1);
             RelayRecipient *recipient = recipients.firstObject;
             
             if (!recipient) {
@@ -542,7 +542,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
             
             NSArray<RelayRecipient *> *recipients =
             [self relayRecipientsForRecipientIds:sendingRecipientIds.allObjects];
-            OWSAssert(recipients.count == sendingRecipientIds.count);
+            OWSAssertDebug(recipients.count == sendingRecipientIds.count);
             
             [self groupSend:recipients message:message thread:thread success:^{
                 // Send to any assigned thread monitors
@@ -758,9 +758,9 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                      success:(void (^)(void))successHandler
                      failure:(RetryableFailureHandler)failureHandler
 {
-    OWSAssert(message);
-    OWSAssert(recipient);
-    OWSAssert(thread || [message isKindOfClass:[OWSOutgoingSyncMessage class]]);
+    OWSAssertDebug(message);
+    OWSAssertDebug(recipient);
+    OWSAssertDebug(thread || [message isKindOfClass:[OWSOutgoingSyncMessage class]]);
     
     DDLogInfo(@"%@ attempting to send message: %@, timestamp: %llu, recipient: %@",
               self.logTag,
@@ -887,7 +887,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
     NSString *localNumber = [TSAccountManager localUID];
     BOOL isLocalNumber = [localNumber isEqualToString:recipient.uniqueId];
     if (isLocalNumber) {
-        OWSAssert([message isKindOfClass:[OWSOutgoingSyncMessage class]]);
+        OWSAssertDebug([message isKindOfClass:[OWSOutgoingSyncMessage class]]);
         // Messages sent to the "local number" should be sync messages.
         //
         // We can skip sending sync messages if we know that we have no linked
@@ -916,7 +916,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         
         if (!mayHaveLinkedDevices && !hasDeviceMessages) {
             DDLogInfo(@"%@ Ignoring sync message without secondary devices: %@", self.logTag, [message class]);
-            OWSAssert([message isKindOfClass:[OWSOutgoingSyncMessage class]]);
+            OWSAssertDebug([message isKindOfClass:[OWSOutgoingSyncMessage class]]);
             
             dispatch_async([OWSDispatch sendingQueue], ^{
                 // This emulates the completion logic of an actual successful save (see below).
@@ -937,7 +937,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
         }
         // TODO: Investigate other places where device query may be taking place.
         //    } else {
-        //        OWSAssert(deviceMessages.count > 0);
+        //        OWSAssertDebug(deviceMessages.count > 0);
     }
     
     if (deviceMessages.count == 0) {
@@ -1021,10 +1021,10 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                deviceMessages:(NSArray<NSDictionary *> *)deviceMessages
                       success:(void (^)(void))successHandler
 {
-    OWSAssert(message);
-    OWSAssert(recipient);
-    OWSAssert(deviceMessages);
-    OWSAssert(successHandler);
+    OWSAssertDebug(message);
+    OWSAssertDebug(recipient);
+    OWSAssertDebug(deviceMessages);
+    OWSAssertDebug(successHandler);
     
     DDLogInfo(@"%@ Message send succeeded.", self.logTag);
     
@@ -1066,13 +1066,13 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                    success:(void (^)(void))successHandler
                    failure:(RetryableFailureHandler)failureHandler
 {
-    OWSAssert(message);
-    OWSAssert(recipient);
-    OWSAssert(thread || [message isKindOfClass:[OWSOutgoingSyncMessage class]]);
-    OWSAssert(deviceMessages);
-    OWSAssert(responseError);
-    OWSAssert(successHandler);
-    OWSAssert(failureHandler);
+    OWSAssertDebug(message);
+    OWSAssertDebug(recipient);
+    OWSAssertDebug(thread || [message isKindOfClass:[OWSOutgoingSyncMessage class]]);
+    OWSAssertDebug(deviceMessages);
+    OWSAssertDebug(responseError);
+    OWSAssertDebug(successHandler);
+    OWSAssertDebug(failureHandler);
     
     DDLogInfo(@"%@ sending to recipient: %@, failed with error.", self.logTag, recipient.uniqueId);
     
@@ -1099,7 +1099,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
     void (^handle404)(void) = ^{
         DDLogWarn(@"%@ Unregistered recipient: %@", self.logTag, recipient.uniqueId);
         
-        OWSAssert(thread);
+        OWSAssertDebug(thread);
         
         dispatch_async([OWSDispatch sendingQueue], ^{
             [self unregisteredRecipient:recipient message:message thread:thread];
@@ -1187,9 +1187,9 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                                       recipient:(RelayRecipient *)recipient
                                      completion:(void (^)(void))completionHandler
 {
-    OWSAssert(responseJson);
-    OWSAssert(recipient);
-    OWSAssert(completionHandler);
+    OWSAssertDebug(responseJson);
+    OWSAssertDebug(recipient);
+    OWSAssertDebug(completionHandler);
     
     NSArray *extraDevices = responseJson[@"extraDevices"];
     NSArray *missingDevices = responseJson[@"missingDevices"];
@@ -1273,8 +1273,8 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
 
 - (NSArray<NSDictionary *> *)deviceMessages:(TSOutgoingMessage *)message recipient:(RelayRecipient *)recipient onlyDeviceId:(nullable NSNumber *)onlyDeviceId
 {
-    OWSAssert(message);
-    OWSAssert(recipient);
+    OWSAssertDebug(message);
+    OWSAssertDebug(recipient);
     
     NSMutableArray *messagesArray = [NSMutableArray arrayWithCapacity:(onlyDeviceId != nil ? 1 : recipient.devices.count)];
     
@@ -1334,14 +1334,14 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
                                        isSilent:(BOOL)isSilent
                                     transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(plainText);
-    OWSAssert(recipient);
-    OWSAssert(deviceNumber);
-    OWSAssert(storage);
-    OWSAssert(transaction);
+    OWSAssertDebug(plainText);
+    OWSAssertDebug(recipient);
+    OWSAssertDebug(deviceNumber);
+    OWSAssertDebug(storage);
+    OWSAssertDebug(transaction);
     
     NSString *identifier = recipient.uniqueId;
-    OWSAssert(identifier.length > 0);
+    OWSAssertDebug(identifier.length > 0);
     
     if (![storage containsSession:identifier deviceId:[deviceNumber intValue] protocolContext:transaction]) {
         __block dispatch_semaphore_t sema = dispatch_semaphore_create(0);

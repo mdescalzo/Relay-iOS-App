@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
         return self;
     }
 
-    OWSAssert(encryptedItem);
+    OWSAssertDebug(encryptedItem);
 
     self.encryptedItem = encryptedItem;
 
@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
         return self;
     }
 
-    OWSAssert(backupIO);
+    OWSAssertDebug(backupIO);
 
     self.exportItems = [NSMutableArray new];
     self.backupIO = backupIO;
@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)writeObject:(TSYapDatabaseObject *)object
          entityType:(OWSSignaliOSProtosBackupSnapshotBackupEntityType)entityType
 {
-    OWSAssert(object);
+    OWSAssertDebug(object);
 
     NSData *_Nullable data = [NSKeyedArchiver archivedDataWithRootObject:object];
     if (!data) {
@@ -211,9 +211,9 @@ NS_ASSUME_NONNULL_BEGIN
         return self;
     }
 
-    OWSAssert(backupIO);
-    OWSAssert(attachmentId.length > 0);
-    OWSAssert(attachmentFilePath.length > 0);
+    OWSAssertDebug(backupIO);
+    OWSAssertDebug(attachmentId.length > 0);
+    OWSAssertDebug(attachmentFilePath.length > 0);
 
     self.backupIO = backupIO;
     self.attachmentId = attachmentId;
@@ -235,8 +235,8 @@ NS_ASSUME_NONNULL_BEGIN
 // Returns YES on success.
 - (BOOL)prepareForUpload
 {
-    OWSAssert(self.attachmentId.length > 0);
-    OWSAssert(self.attachmentFilePath.length > 0);
+    OWSAssertDebug(self.attachmentId.length > 0);
+    OWSAssertDebug(self.attachmentFilePath.length > 0);
 
     NSString *attachmentsDirPath = [TSAttachmentStream attachmentsFolder];
     if (![self.attachmentFilePath hasPrefix:attachmentsDirPath]) {
@@ -380,7 +380,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureExportWithCompletion:(OWSBackupJobBoolCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
@@ -416,7 +416,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)fetchAllRecordsWithCompletion:(OWSBackupJobBoolCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     if (self.isComplete) {
         return;
@@ -447,7 +447,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)exportDatabase
 {
-    OWSAssert(self.backupIO);
+    OWSAssertDebug(self.backupIO);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
@@ -529,7 +529,7 @@ NS_ASSUME_NONNULL_BEGIN
                 if (!filePath) {
                     DDLogError(@"%@ attachment is missing file.", self.logTag);
                     return NO;
-                    OWSAssert(attachmentStream.uniqueId.length > 0);
+                    OWSAssertDebug(attachmentStream.uniqueId.length > 0);
                 }
 
                 // OWSAttachmentExport is used to lazily write an encrypted copy of the
@@ -604,7 +604,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)saveToCloudWithCompletion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
@@ -650,7 +650,7 @@ NS_ASSUME_NONNULL_BEGIN
 // until the last (the manifest file).
 - (void)saveNextFileToCloudWithCompletion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     if (self.isComplete) {
         return;
@@ -677,7 +677,7 @@ NS_ASSUME_NONNULL_BEGIN
 // This method returns YES IFF "work was done and there might be more work to do".
 - (BOOL)saveNextDatabaseFileToCloudWithCompletion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     __weak OWSBackupExportJob *weakSelf = self;
     if (self.unsavedDatabaseItems.count < 1) {
@@ -688,7 +688,7 @@ NS_ASSUME_NONNULL_BEGIN
     OWSBackupExportItem *item = self.unsavedDatabaseItems.firstObject;
     [self.unsavedDatabaseItems removeObjectAtIndex:0];
 
-    OWSAssert(item.encryptedItem.filePath.length > 0);
+    OWSAssertDebug(item.encryptedItem.filePath.length > 0);
 
     [OWSBackupAPI saveEphemeralDatabaseFileToCloudWithFileUrl:[NSURL fileURLWithPath:item.encryptedItem.filePath]
         success:^(NSString *recordName) {
@@ -713,7 +713,7 @@ NS_ASSUME_NONNULL_BEGIN
 // This method returns YES IFF "work was done and there might be more work to do".
 - (BOOL)saveNextAttachmentFileToCloudWithCompletion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     __weak OWSBackupExportJob *weakSelf = self;
     if (self.unsavedAttachmentExports.count < 1) {
@@ -739,8 +739,8 @@ NS_ASSUME_NONNULL_BEGIN
         NSString *lastRecordName = [OWSBackupAPI recordNameForPersistentFileWithFileId:attachmentExport.attachmentId];
         OWSBackupFragment *_Nullable lastBackupFragment = [OWSBackupFragment fetchObjectWithUniqueID:lastRecordName];
         if (lastBackupFragment && [self.lastValidRecordNames containsObject:lastRecordName]) {
-            OWSAssert(lastBackupFragment.encryptionKey.length > 0);
-            OWSAssert(lastBackupFragment.relativeFilePath.length > 0);
+            OWSAssertDebug(lastBackupFragment.encryptionKey.length > 0);
+            OWSAssertDebug(lastBackupFragment.relativeFilePath.length > 0);
 
             // Recycle the metadata from the last backup's manifest.
             OWSBackupEncryptedItem *encryptedItem = [OWSBackupEncryptedItem new];
@@ -771,8 +771,8 @@ NS_ASSUME_NONNULL_BEGIN
             [weakSelf saveNextFileToCloudWithCompletion:completion];
             return YES;
         }
-        OWSAssert(attachmentExport.relativeFilePath.length > 0);
-        OWSAssert(attachmentExport.encryptedItem);
+        OWSAssertDebug(attachmentExport.relativeFilePath.length > 0);
+        OWSAssertDebug(attachmentExport.encryptedItem);
     }
 
     [OWSBackupAPI savePersistentFileOnceToCloudWithFileId:attachmentExport.attachmentId
@@ -840,7 +840,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)saveManifestFileToCloudWithCompletion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     OWSBackupEncryptedItem *_Nullable encryptedItem = [self writeManifestFile];
     if (!encryptedItem) {
@@ -882,10 +882,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable OWSBackupEncryptedItem *)writeManifestFile
 {
-    OWSAssert(self.savedDatabaseItems.count > 0);
-    OWSAssert(self.savedAttachmentItems);
-    OWSAssert(self.jobTempDirPath.length > 0);
-    OWSAssert(self.backupIO);
+    OWSAssertDebug(self.savedDatabaseItems.count > 0);
+    OWSAssertDebug(self.savedAttachmentItems);
+    OWSAssertDebug(self.jobTempDirPath.length > 0);
+    OWSAssertDebug(self.backupIO);
 
     NSDictionary *json = @{
         kOWSBackup_ManifestKey_DatabaseFiles : [self jsonForItems:self.savedDatabaseItems],
@@ -909,17 +909,17 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableArray *result = [NSMutableArray new];
     for (OWSBackupExportItem *item in items) {
         NSMutableDictionary<NSString *, id> *itemJson = [NSMutableDictionary new];
-        OWSAssert(item.recordName.length > 0);
+        OWSAssertDebug(item.recordName.length > 0);
 
         itemJson[kOWSBackup_ManifestKey_RecordName] = item.recordName;
-        OWSAssert(item.encryptedItem.encryptionKey.length > 0);
+        OWSAssertDebug(item.encryptedItem.encryptionKey.length > 0);
         itemJson[kOWSBackup_ManifestKey_EncryptionKey] = item.encryptedItem.encryptionKey.base64EncodedString;
         if (item.attachmentExport) {
-            OWSAssert(item.attachmentExport.relativeFilePath.length > 0);
+            OWSAssertDebug(item.attachmentExport.relativeFilePath.length > 0);
             itemJson[kOWSBackup_ManifestKey_RelativeFilePath] = item.attachmentExport.relativeFilePath;
         }
         if (item.attachmentExport.attachmentId) {
-            OWSAssert(item.attachmentExport.attachmentId.length > 0);
+            OWSAssertDebug(item.attachmentExport.attachmentId.length > 0);
             itemJson[kOWSBackup_ManifestKey_AttachmentId] = item.attachmentExport.attachmentId;
         }
         if (item.uncompressedDataLength) {
@@ -933,7 +933,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)cleanUpWithCompletion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(completion);
+    OWSAssertDebug(completion);
 
     if (self.isComplete) {
         // Job was aborted.
@@ -951,19 +951,19 @@ NS_ASSUME_NONNULL_BEGIN
     // records not involved in this backup export.
     NSMutableSet<NSString *> *activeRecordNames = [NSMutableSet new];
 
-    OWSAssert(self.savedDatabaseItems.count > 0);
+    OWSAssertDebug(self.savedDatabaseItems.count > 0);
     for (OWSBackupExportItem *item in self.savedDatabaseItems) {
-        OWSAssert(item.recordName.length > 0);
-        OWSAssert(![activeRecordNames containsObject:item.recordName]);
+        OWSAssertDebug(item.recordName.length > 0);
+        OWSAssertDebug(![activeRecordNames containsObject:item.recordName]);
         [activeRecordNames addObject:item.recordName];
     }
     for (OWSBackupExportItem *item in self.savedAttachmentItems) {
-        OWSAssert(item.recordName.length > 0);
-        OWSAssert(![activeRecordNames containsObject:item.recordName]);
+        OWSAssertDebug(item.recordName.length > 0);
+        OWSAssertDebug(![activeRecordNames containsObject:item.recordName]);
         [activeRecordNames addObject:item.recordName];
     }
-    OWSAssert(self.manifestItem.recordName.length > 0);
-    OWSAssert(![activeRecordNames containsObject:self.manifestItem.recordName]);
+    OWSAssertDebug(self.manifestItem.recordName.length > 0);
+    OWSAssertDebug(![activeRecordNames containsObject:self.manifestItem.recordName]);
     [activeRecordNames addObject:self.manifestItem.recordName];
 
     // Because we do "lazy attachment restores", we need to include the record names for all
@@ -978,7 +978,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)cleanUpMetadataCacheWithActiveRecordNames:(NSSet<NSString *> *)activeRecordNames
 {
-    OWSAssert(activeRecordNames.count > 0);
+    OWSAssertDebug(activeRecordNames.count > 0);
 
     if (self.isComplete) {
         // Job was aborted.
@@ -1000,8 +1000,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cleanUpCloudWithActiveRecordNames:(NSSet<NSString *> *)activeRecordNames
                                completion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(activeRecordNames.count > 0);
-    OWSAssert(completion);
+    OWSAssertDebug(activeRecordNames.count > 0);
+    OWSAssertDebug(completion);
 
     if (self.isComplete) {
         // Job was aborted.
@@ -1040,8 +1040,8 @@ NS_ASSUME_NONNULL_BEGIN
                   deletedCount:(NSUInteger)deletedCount
                     completion:(OWSBackupJobCompletion)completion
 {
-    OWSAssert(obsoleteRecordNames);
-    OWSAssert(completion);
+    OWSAssertDebug(obsoleteRecordNames);
+    OWSAssertDebug(completion);
 
     DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 

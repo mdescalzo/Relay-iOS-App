@@ -83,7 +83,7 @@ OWSSignalServiceProtosVerifiedState OWSVerificationStateToProtoState(OWSVerifica
 - (void)updateWithVerificationState:(OWSVerificationState)verificationState
                         transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     // Ensure changes are persisted without clobbering any work done on another thread or instance.
     [self updateWithChangeBlock:^(OWSRecipientIdentity *_Nonnull obj) {
@@ -95,7 +95,7 @@ OWSSignalServiceProtosVerifiedState OWSVerificationStateToProtoState(OWSVerifica
 - (void)updateWithChangeBlock:(void (^)(OWSRecipientIdentity *obj))changeBlock
                   transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     changeBlock(self);
 

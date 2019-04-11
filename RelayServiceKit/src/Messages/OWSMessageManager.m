@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
     _incomingMessageFinder = [[OWSIncomingMessageFinder alloc] initWithPrimaryStorage:primaryStorage];
     
     OWSSingletonAssert();
-    OWSAssert(CurrentAppContext().isMainApp);
+    OWSAssertDebug(CurrentAppContext().isMainApp);
     
     [self startObserving];
     
@@ -155,10 +155,10 @@ NS_ASSUME_NONNULL_BEGIN
           plaintextData:(NSData *_Nullable)plaintextData
             transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(transaction);
-    OWSAssert([TSAccountManager isRegistered]);
-    OWSAssert(CurrentAppContext().isMainApp);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug([TSAccountManager isRegistered]);
+    OWSAssertDebug(CurrentAppContext().isMainApp);
     
     DDLogInfo(@"%@ handling decrypted envelope: %@", self.logTag, [self descriptionForEnvelope:envelope]);
     
@@ -169,7 +169,7 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
     
-    OWSAssert(envelope.source.length > 0);
+    OWSAssertDebug(envelope.source.length > 0);
     
     switch (envelope.type) {
         case SSKEnvelopeTypeCiphertext:
@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
             }
             break;
         case SSKEnvelopeTypeReceipt:
-            OWSAssert(!plaintextData);
+            OWSAssertDebug(!plaintextData);
             [self handleDeliveryReceipt:envelope transaction:transaction];
             break;
             // Other messages are just dismissed for now.
@@ -201,8 +201,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)handleDeliveryReceipt:(SSKEnvelope *)envelope
                   transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(transaction);
     
     // Old-style delivery notices don't include a "delivery timestamp".
     [self processDeliveryReceiptsFromRecipientId:envelope.source
@@ -222,9 +222,9 @@ NS_ASSUME_NONNULL_BEGIN
                              deliveryTimestamp:(NSNumber *_Nullable)deliveryTimestamp
                                    transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(recipientId);
-    OWSAssert(sentTimestamps);
-    OWSAssert(transaction);
+    OWSAssertDebug(recipientId);
+    OWSAssertDebug(sentTimestamps);
+    OWSAssertDebug(transaction);
     
     for (NSNumber *nsTimestamp in sentTimestamps) {
         uint64_t timestamp = [nsTimestamp unsignedLongLongValue];
@@ -259,12 +259,12 @@ NS_ASSUME_NONNULL_BEGIN
          plaintextData:(NSData *)plaintextData
            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(plaintextData);
-    OWSAssert(transaction);
-    OWSAssert(envelope.timestamp > 0);
-    OWSAssert(envelope.source.length > 0);
-    OWSAssert(envelope.sourceDevice > 0);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(plaintextData);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug(envelope.timestamp > 0);
+    OWSAssertDebug(envelope.source.length > 0);
+    OWSAssertDebug(envelope.sourceDevice > 0);
     
     BOOL duplicateEnvelope = [self.incomingMessageFinder existsMessageWithTimestamp:envelope.timestamp
                                                                            sourceId:envelope.source
@@ -313,9 +313,9 @@ NS_ASSUME_NONNULL_BEGIN
                withDataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
                    transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(dataMessage);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(dataMessage);
+    OWSAssertDebug(transaction);
     
     if (dataMessage.hasTimestamp) {
         if (dataMessage.timestamp <= 0) {
@@ -368,9 +368,9 @@ NS_ASSUME_NONNULL_BEGIN
             withReceiptMessage:(OWSSignalServiceProtosReceiptMessage *)receiptMessage
                    transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(receiptMessage);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(receiptMessage);
+    OWSAssertDebug(transaction);
     
     PBArray *messageTimestamps = receiptMessage.timestamp;
     NSMutableArray<NSNumber *> *sentTimestamps = [NSMutableArray new];
@@ -412,9 +412,9 @@ NS_ASSUME_NONNULL_BEGIN
 //                                        dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
 //                                        transaction:(YapDatabaseReadWriteTransaction *)transaction
 //{
-//    OWSAssert(envelope);
-//    OWSAssert(dataMessage);
-//    OWSAssert(transaction);
+//    OWSAssertDebug(envelope);
+//    OWSAssertDebug(dataMessage);
+//    OWSAssertDebug(transaction);
 //
 //    TSGroupThread *_Nullable groupThread =
 //        [TSGroupThread threadWithGroupId:dataMessage.group.id transaction:transaction];
@@ -423,7 +423,7 @@ NS_ASSUME_NONNULL_BEGIN
 //        return;
 //    }
 //
-//    OWSAssert(groupThread);
+//    OWSAssertDebug(groupThread);
 //    OWSAttachmentsProcessor *attachmentsProcessor =
 //        [[OWSAttachmentsProcessor alloc] initWithAttachmentProtos:@[ dataMessage.group.avatar ]
 //                                                   networkManager:self.networkManager
@@ -450,9 +450,9 @@ NS_ASSUME_NONNULL_BEGIN
                             dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
                             transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(dataMessage);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(dataMessage);
+    OWSAssertDebug(transaction);
     
     OWSAttachmentsProcessor *attachmentsProcessor =
     [[OWSAttachmentsProcessor alloc] initWithAttachmentProtos:dataMessage.attachments
@@ -492,10 +492,10 @@ NS_ASSUME_NONNULL_BEGIN
                withSyncMessage:(OWSSignalServiceProtosSyncMessage *)syncMessage
                    transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(syncMessage);
-    OWSAssert(transaction);
-    OWSAssert([TSAccountManager isRegistered]);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(syncMessage);
+    OWSAssertDebug(transaction);
+    OWSAssertDebug([TSAccountManager isRegistered]);
     
     NSString *localNumber = [TSAccountManager localUID];
     if (![localNumber isEqualToString:envelope.source]) {
@@ -551,9 +551,9 @@ NS_ASSUME_NONNULL_BEGIN
                                 dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
                                 transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(dataMessage);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(dataMessage);
+    OWSAssertDebug(transaction);
     
     NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:dataMessage.body];
     TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
@@ -580,9 +580,9 @@ NS_ASSUME_NONNULL_BEGIN
                                            dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
                                            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(dataMessage);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(dataMessage);
+    OWSAssertDebug(transaction);
     
     NSDictionary *jsonPayload = [FLCCSMJSONService payloadDictionaryFromMessageBody:dataMessage.body];
     TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
@@ -609,7 +609,7 @@ NS_ASSUME_NONNULL_BEGIN
                                              enabled:NO
                                              durationSeconds:OWSDisappearingMessagesConfigurationDefaultExpirationDuration];
     }
-    OWSAssert(disappearingMessagesConfiguration);
+    OWSAssertDebug(disappearingMessagesConfiguration);
     [disappearingMessagesConfiguration saveWithTransaction:transaction];
     NSString *name = [self.contactsManager displayNameForRecipientId:envelope.source];
     OWSDisappearingConfigurationUpdateInfoMessage *message =
@@ -624,8 +624,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)handleProfileKeyMessageWithEnvelope:(SSKEnvelope *)envelope
                                 dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
 {
-    OWSAssert(envelope);
-    OWSAssert(dataMessage);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(dataMessage);
     
     NSString *recipientId = envelope.source;
     if (!dataMessage.hasProfileKey) {
@@ -650,9 +650,9 @@ NS_ASSUME_NONNULL_BEGIN
                                   dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
                                   transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(envelope);
-    OWSAssert(dataMessage);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(dataMessage);
+    OWSAssertDebug(transaction);
     
     [self handleReceivedEnvelope:envelope withDataMessage:dataMessage attachmentIds:@[] transaction:transaction];
 }
@@ -661,9 +661,9 @@ NS_ASSUME_NONNULL_BEGIN
 // TODO:  Handled by control message
 //- (void)sendGroupUpdateForThread:(TSGroupThread *)gThread message:(TSOutgoingMessage *)message
 //{
-//    OWSAssert(gThread);
-//    OWSAssert(gThread.groupModel);
-//    OWSAssert(message);
+//    OWSAssertDebug(gThread);
+//    OWSAssertDebug(gThread.groupModel);
+//    OWSAssertDebug(message);
 //
 //    if (gThread.groupModel.groupImage) {
 //        NSData *data = UIImagePNGRepresentation(gThread.groupModel.groupImage);
@@ -693,10 +693,10 @@ NS_ASSUME_NONNULL_BEGIN
 //                   dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
 //                   transaction:(YapDatabaseReadWriteTransaction *)transaction
 //{
-//    OWSAssert(envelope);
-//    OWSAssert(dataMessage);
-//    OWSAssert(transaction);
-//    OWSAssert(dataMessage.group.type == OWSSignalServiceProtosGroupContextTypeRequestInfo);
+//    OWSAssertDebug(envelope);
+//    OWSAssertDebug(dataMessage);
+//    OWSAssertDebug(transaction);
+//    OWSAssertDebug(dataMessage.group.type == OWSSignalServiceProtosGroupContextTypeRequestInfo);
 //
 //    NSData *groupId = dataMessage.hasGroup ? dataMessage.group.id : nil;
 //    if (!groupId) {
@@ -723,7 +723,7 @@ NS_ASSUME_NONNULL_BEGIN
 //    }
 //
 //    // Ensure we are in the group.
-//    OWSAssert([TSAccountManager isRegistered]);
+//    OWSAssertDebug([TSAccountManager isRegistered]);
 //    NSString *localNumber = [TSAccountManager localUID];
 //    if (![gThread.groupModel.groupMemberIds containsObject:localNumber]) {
 //        DDLogWarn(@"%@ Ignoring 'Request Group Info' message for group we no longer belong to.", self.logTag);
@@ -751,9 +751,9 @@ NS_ASSUME_NONNULL_BEGIN
                                            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
     ////////////////////
-    OWSAssert(envelope);
-    OWSAssert(dataMessage);
-    OWSAssert(transaction);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(dataMessage);
+    OWSAssertDebug(transaction);
     
     
     //  Catch incoming messages and process the new way.
@@ -868,12 +868,12 @@ NS_ASSUME_NONNULL_BEGIN
                        envelope:(SSKEnvelope *)envelope
                     transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(thread);
-    OWSAssert(incomingMessage);
-    OWSAssert(envelope);
-    OWSAssert(transaction);
+    OWSAssertDebug(thread);
+    OWSAssertDebug(incomingMessage);
+    OWSAssertDebug(envelope);
+    OWSAssertDebug(transaction);
     
-    OWSAssert([TSAccountManager isRegistered]);
+    OWSAssertDebug([TSAccountManager isRegistered]);
     
     if (!thread) {
         OWSFailDebug(@"%@ Can't finalize without thread", self.logTag);

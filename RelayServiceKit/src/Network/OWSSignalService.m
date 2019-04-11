@@ -85,7 +85,7 @@ NSString *const kFLTSSURLKey = @"FLTSSURLKey";
 - (AFHTTPSessionManager *)defaultSignalServiceSessionManager
 {
     NSURL *baseURL = [[NSURL alloc] initWithString:CCSMStorage.sharedInstance.textSecureURLString];
-    OWSAssert(baseURL);
+    OWSAssertDebug(baseURL);
     NSURLSessionConfiguration *sessionConf = NSURLSessionConfiguration.ephemeralSessionConfiguration;
     AFHTTPSessionManager *sessionManager =
         [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL sessionConfiguration:sessionConf];

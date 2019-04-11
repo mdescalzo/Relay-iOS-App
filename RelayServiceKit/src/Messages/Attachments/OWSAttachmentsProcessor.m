@@ -103,7 +103,7 @@ static const CGFloat kAttachmentDownloadProgressTheta = 0.001f;
                            success:(void (^)(TSAttachmentStream *attachmentStream))successHandler
                            failure:(void (^)(NSError *error))failureHandler
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     for (TSAttachmentPointer *attachmentPointer in self.attachmentPointers) {
         [self retrieveAttachment:attachmentPointer
@@ -120,7 +120,7 @@ static const CGFloat kAttachmentDownloadProgressTheta = 0.001f;
                    success:(void (^)(TSAttachmentStream *attachmentStream))successHandler
                    failure:(void (^)(NSError *error))failureHandler
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     __block OWSBackgroundTask *backgroundTask = [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];
 
@@ -269,7 +269,7 @@ static const CGFloat kAttachmentDownloadProgressTheta = 0.001f;
     task = [manager GET:location
         parameters:nil
         progress:^(NSProgress *progress) {
-            OWSAssert(progress != nil);
+            OWSAssertDebug(progress != nil);
             
             // Don't do anything until we've received at least one byte of data.
             if (progress.completedUnitCount < 1) {
@@ -383,7 +383,7 @@ static const CGFloat kAttachmentDownloadProgressTheta = 0.001f;
     isDownloadingInMessage:(nullable TSMessage *)message
                transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
 
     pointer.state = TSAttachmentPointerStateDownloading;
     [pointer saveWithTransaction:transaction];

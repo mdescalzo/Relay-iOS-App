@@ -151,7 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)presentConversationForThreadId:(NSString *)threadId action:(ConversationViewAction)action
 {
-    OWSAssert(threadId.length > 0);
+    OWSAssertDebug(threadId.length > 0);
     
     DispatchMainThreadSafe(^{
         __block TSThread *thread = nil;

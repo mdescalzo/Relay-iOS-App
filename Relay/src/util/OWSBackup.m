@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
         return self;
     }
 
-    OWSAssert(primaryStorage);
+    OWSAssertDebug(primaryStorage);
 
     _dbConnection = primaryStorage.newDatabaseConnection;
 
@@ -113,7 +113,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tryToExportBackup
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(!self.backupExportJob);
+    OWSAssertDebug(!self.backupExportJob);
 
     if (!self.canBackupExport) {
         // TODO: Offer a reason in the UI.
@@ -145,7 +145,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setLastExportSuccessDate:(NSDate *)value
 {
-    OWSAssert(value);
+    OWSAssertDebug(value);
 
     [self.dbConnection setDate:value
                         forKey:OWSBackup_LastExportSuccessDateKey
@@ -160,7 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setLastExportFailureDate:(NSDate *)value
 {
-    OWSAssert(value);
+    OWSAssertDebug(value);
 
     [self.dbConnection setDate:value
                         forKey:OWSBackup_LastExportFailureDateKey
@@ -315,7 +315,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tryToImportBackup
 {
     OWSAssertIsOnMainThread();
-    OWSAssert(!self.backupImportJob);
+    OWSAssertDebug(!self.backupImportJob);
 
     // In development, make sure there's no export or import in progress.
     [self.backupExportJob cancel];
@@ -545,9 +545,9 @@ NS_ASSUME_NONNULL_BEGIN
                      backupIO:(OWSBackupIO *)backupIO
                    completion:(OWSBackupBoolBlock)completion
 {
-    OWSAssert(attachment);
-    OWSAssert(backupIO);
-    OWSAssert(completion);
+    OWSAssertDebug(attachment);
+    OWSAssertDebug(backupIO);
+    OWSAssertDebug(completion);
 
     NSString *_Nullable attachmentFilePath = [attachment filePath];
     if (attachmentFilePath.length < 1) {
@@ -599,11 +599,11 @@ NS_ASSUME_NONNULL_BEGIN
                 encryptionKey:(NSData *)encryptionKey
                    completion:(OWSBackupBoolBlock)completion
 {
-    OWSAssert(attachment);
-    OWSAssert(backupIO);
-    OWSAssert(encryptedFilePath.length > 0);
-    OWSAssert(encryptionKey.length > 0);
-    OWSAssert(completion);
+    OWSAssertDebug(attachment);
+    OWSAssertDebug(backupIO);
+    OWSAssertDebug(encryptedFilePath.length > 0);
+    OWSAssertDebug(encryptionKey.length > 0);
+    OWSAssertDebug(completion);
 
     NSData *_Nullable data = [NSData dataWithContentsOfFile:encryptedFilePath];
     if (!data) {

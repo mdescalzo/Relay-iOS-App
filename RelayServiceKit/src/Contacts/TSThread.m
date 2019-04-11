@@ -142,7 +142,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
     // or when deleting them.
     NSMutableArray<NSString *> *interactionIds = [NSMutableArray new];
     YapDatabaseViewTransaction *interactionsByThread = [transaction ext:TSMessageDatabaseViewExtensionName];
-    OWSAssert(interactionsByThread);
+    OWSAssertDebug(interactionsByThread);
     __block BOOL didDetectCorruption = NO;
     [interactionsByThread enumerateKeysInGroup:self.uniqueId
                                     usingBlock:^(NSString *collection, NSString *key, NSUInteger index, BOOL *stop) {
@@ -300,7 +300,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 
 - (nullable TSInteraction *)lastInteractionForInboxWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
-    OWSAssert(transaction);
+    OWSAssertDebug(transaction);
     
     __block NSUInteger missedCount = 0;
     __block TSInteraction *last = nil;
@@ -355,7 +355,7 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
 // Returns YES IFF the interaction should show up in the inbox as the last message.
 + (BOOL)shouldInteractionAppearInInbox:(TSInteraction *)interaction
 {
-    OWSAssert(interaction);
+    OWSAssertDebug(interaction);
     
     if (interaction.isDynamicInteraction) {
         return NO;

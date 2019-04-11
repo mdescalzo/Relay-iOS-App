@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)commontInit
 {
     // Ensure only called once.
-    OWSAssert(!self.timestampLabel);
+    OWSAssertDebug(!self.timestampLabel);
 
     self.layoutMargins = UIEdgeInsetsZero;
 
@@ -89,8 +89,8 @@ NS_ASSUME_NONNULL_BEGIN
                         conversationStyle:(ConversationStyle *)conversationStyle
                                isIncoming:(BOOL)isIncoming
 {
-    OWSAssert(viewItem);
-    OWSAssert(conversationStyle);
+    OWSAssertDebug(viewItem);
+    OWSAssertDebug(conversationStyle);
 
     [self configureLabelsWithConversationViewItem:viewItem];
 
@@ -153,7 +153,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showStatusIndicatorWithIcon:(UIImage *)icon textColor:(UIColor *)textColor
 {
-    OWSAssert(icon.size.width <= self.maxImageWidth);
+    OWSAssertDebug(icon.size.width <= self.maxImageWidth);
     self.statusIndicatorImageView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.statusIndicatorImageView.tintColor = textColor;
     [self.statusIndicatorImageView setContentHuggingHigh];
@@ -187,7 +187,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isFailedOutgoingMessage:(ConversationViewItem *)viewItem
 {
-    OWSAssert(viewItem);
+    OWSAssertDebug(viewItem);
 
     if (viewItem.interaction.interactionType != OWSInteractionType_OutgoingMessage) {
         return NO;
@@ -201,7 +201,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureLabelsWithConversationViewItem:(ConversationViewItem *)viewItem
 {
-    OWSAssert(viewItem);
+    OWSAssertDebug(viewItem);
 
     [self configureFonts];
 
@@ -218,7 +218,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGSize)measureWithConversationViewItem:(ConversationViewItem *)viewItem
 {
-    OWSAssert(viewItem);
+    OWSAssertDebug(viewItem);
 
     [self configureLabelsWithConversationViewItem:viewItem];
 
@@ -267,7 +267,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)messageStatusTextForConversationViewItem:(ConversationViewItem *)viewItem
 {
-    OWSAssert(viewItem);
+    OWSAssertDebug(viewItem);
     if (viewItem.interaction.interactionType != OWSInteractionType_OutgoingMessage) {
         return nil;
     }

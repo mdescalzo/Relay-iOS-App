@@ -671,8 +671,17 @@ import RelayServiceKit
             }
             let cacheKey = "gravatar:\(recipientId)" as NSString
             self.avatarCache.setObject(gravatarImage, forKey: cacheKey)
-            recipient.gravatarImage = gravatarImage
-            self.save(recipient: recipient)
+            
+            OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
+                recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
+                    if let theRecipient = obj as? RelayRecipient {
+                        theRecipient.gravatarImage = gravatarImage
+                    }
+                })
+            });
+            
+//            recipient.gravatarImage = gravatarImage
+//            self.save(recipient: recipient)
         }
     }
     
