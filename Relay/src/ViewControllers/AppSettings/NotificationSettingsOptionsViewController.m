@@ -4,7 +4,7 @@
 
 #import "NotificationSettingsOptionsViewController.h"
 #import "Relay-Swift.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import <RelayMessaging/Environment.h>
 
 @implementation NotificationSettingsOptionsViewController

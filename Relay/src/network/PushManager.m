@@ -5,7 +5,7 @@
 #import "PushManager.h"
 #import "AppDelegate.h"
 #import "Relay-Swift.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import "ThreadUtil.h"
 
 @import RelayServiceKit;
@@ -43,10 +43,10 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
 
 - (instancetype)initDefault
 {
-    return [self initWithMessageFetcherJob:SignalApp.sharedApp.messageFetcherJob
+    return [self initWithMessageFetcherJob:RelayApp.sharedApp.messageFetcherJob
                             primaryStorage:[OWSPrimaryStorage sharedManager]
                              messageSender:[Environment current].messageSender
-                      notificationsManager:SignalApp.sharedApp.notificationsManager];
+                      notificationsManager:RelayApp.sharedApp.notificationsManager];
 }
 
 - (instancetype)initWithMessageFetcherJob:(OWSMessageFetcherJob *)messageFetcherJob
@@ -142,7 +142,7 @@ NSString *const Signal_Message_MarkAsRead_Identifier = @"Signal_Message_MarkAsRe
     }
 
     self.hasPresentedConversationSinceLastDeactivation = YES;
-    [SignalApp.sharedApp presentConversationForThreadId:threadId];
+    [RelayApp.sharedApp presentConversationForThreadId:threadId];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification

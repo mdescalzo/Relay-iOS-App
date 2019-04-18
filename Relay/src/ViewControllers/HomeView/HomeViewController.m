@@ -13,7 +13,7 @@
 #import "PushManager.h"
 #import "RegistrationUtils.h"
 #import "Relay-Swift.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import "TSAccountManager.h"
 #import "TSDatabaseView.h"
 #import "TSThread.h"
@@ -137,7 +137,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (void)commonInit
 {
-    _accountManager = SignalApp.sharedApp.accountManager;
+    _accountManager = RelayApp.sharedApp.accountManager;
     _contactsManager = [Environment current].contactsManager;
     _messageSender = [Environment current].messageSender;
     _threadViewModelCache = [NSCache new];
@@ -385,7 +385,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
     [self applyTheme];
     
-    SignalApp.sharedApp.homeViewController = self;
+    RelayApp.sharedApp.homeViewController = self;
 }
 
 - (void)applyDefaultBackButton
@@ -888,7 +888,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 {
     OWSAssertIsOnMainThread();
     DDLogInfo(@"%@ beggining refreshing.", self.logTag);
-    [SignalApp.sharedApp.messageFetcherJob run].ensure(^{
+    [RelayApp.sharedApp.messageFetcherJob run].ensure(^{
         DDLogInfo(@"%@ ending refreshing.", self.logTag);
         [refreshControl endRefreshing];
     });

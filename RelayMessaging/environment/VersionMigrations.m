@@ -4,7 +4,7 @@
 
 #import "VersionMigrations.h"
 #import "Environment.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import "LockInteractionController.h"
 #import "OWSDatabaseMigrationRunner.h"
 #import "SignalKeyingStorage.h"

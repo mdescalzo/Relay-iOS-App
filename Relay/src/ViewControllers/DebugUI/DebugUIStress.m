@@ -5,7 +5,7 @@
 #import "DebugUIStress.h"
 #import "MessageSender.h"
 #import "OWSTableViewController.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import "ThreadUtil.h"
 #import <RelayMessaging/Environment.h>
 
@@ -475,7 +475,7 @@ NS_ASSUME_NONNULL_BEGIN
         }];
     OWSAssertDebug(newthread);
 
-    [SignalApp.sharedApp presentConversationForThread:newthread];
+    [RelayApp.sharedApp presentConversationForThread:newthread];
 }
 
 @end

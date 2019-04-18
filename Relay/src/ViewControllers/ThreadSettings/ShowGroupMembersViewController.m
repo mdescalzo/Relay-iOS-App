@@ -4,7 +4,7 @@
 
 #import "ShowGroupMembersViewController.h"
 #import "Relay-Swift.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 
 @import RelayMessaging;
 @import RelayServiceKit;
@@ -279,12 +279,12 @@ NS_ASSUME_NONNULL_BEGIN
 {
     OWSAssertDebug(recipientId.length > 0);
 
-    [SignalApp.sharedApp presentConversationForRecipientId:recipientId action:ConversationViewActionCompose];
+    [RelayApp.sharedApp presentConversationForRecipientId:recipientId action:ConversationViewActionCompose];
 }
 
 - (void)callMember:(NSString *)recipientId
 {
-    [SignalApp.sharedApp presentConversationForRecipientId:recipientId action:ConversationViewActionAudioCall];
+    [RelayApp.sharedApp presentConversationForRecipientId:recipientId action:ConversationViewActionAudioCall];
 }
 
 - (void)showSafetyNumberView:(NSString *)recipientId

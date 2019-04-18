@@ -431,7 +431,7 @@
                       backgroundBlock:^(ModalActivityIndicatorViewController *modalActivityIndicator) {
                           [TSAccountManager
                               unregisterTextSecureWithSuccess:^{
-                                  [SignalApp resetAppData];
+                                  [RelayApp resetAppData];
                               }
                               failure:^(NSError *error) {
                                   dispatch_async(dispatch_get_main_queue(), ^{
@@ -443,7 +443,7 @@
                               }];
                       }];
     } else {
-        [SignalApp resetAppData];
+        [RelayApp resetAppData];
     }
 }
 

@@ -36,7 +36,7 @@
 #import "ProfileViewController.h"
 #import "PushManager.h"
 #import "RemoteVideoView.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import "UIViewController+Permissions.h"
 #import <AxolotlKit/NSData+keyVersionByte.h>
 #import <PureLayout/PureLayout.h>

@@ -5,7 +5,7 @@
 #import "DebugUIContacts.h"
 #import "OWSTableViewController.h"
 #import "Relay-Swift.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import <Contacts/Contacts.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -1327,7 +1327,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSString *recipientId = [self unregisteredRecipientId];
     TSThread *thread = [TSThread getOrCreateThreadWithParticipants:@[TSAccountManager.localUID, recipientId]];
-    [SignalApp.sharedApp presentConversationForThread:thread];
+    [RelayApp.sharedApp presentConversationForThread:thread];
 }
 
 + (void)createUnregisteredGroupThread
@@ -1349,7 +1349,7 @@ NS_ASSUME_NONNULL_BEGIN
 //    TSGroupModel *model =
 //        [[TSGroupModel alloc] initWithTitle:groupName memberIds:recipientIds image:nil groupId:groupId];
 //    TSGroupThread *thread = [TSGroupThread getOrCreateThreadWithGroupModel:model];
-    [SignalApp.sharedApp presentConversationForThread:thread];
+    [RelayApp.sharedApp presentConversationForThread:thread];
 }
 
 @end

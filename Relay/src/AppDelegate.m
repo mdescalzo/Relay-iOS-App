@@ -12,7 +12,7 @@
 #import "Pastelog.h"
 #import "PushManager.h"
 #import "Relay-Swift.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import "SignalsNavigationController.h"
 #import <sys/sysctl.h>
 
@@ -102,17 +102,8 @@ static NSTimeInterval launchStartedAt;
 
     // We need to do this _after_ we set up logging, when the keychain is unlocked,
     // but before we access YapDatabase, files on disk, or NSUserDefaults
-    if (![self ensureIsReadyForAppExtensions]) {
-        // If this method has failed; do nothing.
-        //
-        // ensureIsReadyForAppExtensions will show a failure mode UI that
-        // lets users report this error.
-        DDLogInfo(@"%@ application: didFinishLaunchingWithOptions failed.", self.logTag);
 
-        return YES;
-    }
-
-    [AppVersion sharedInstance];
+    (void)[AppVersion sharedInstance];
 
     [self startupLogging];
 
@@ -123,11 +114,11 @@ static NSTimeInterval launchStartedAt;
     [DeviceSleepManager.sharedInstance addBlockWithBlockObject:self];
 
     [AppSetup setupEnvironmentWithCallMessageHandlerBlock:^{
-        [CallUIService shared];
+        (void)[CallUIService shared];
         return ConferenceCallService.shared;
     }
         notificationsProtocolBlock:^{
-            return SignalApp.sharedApp.notificationsManager;
+            return RelayApp.sharedApp.notificationsManager;
         }
         migrationCompletion:^{
             OWSAssertIsOnMainThread();
@@ -187,96 +178,33 @@ static NSTimeInterval launchStartedAt;
         return;
     }
 
-    if (![OWSPrimaryStorage isDatabasePasswordAccessible]) {
-        DDLogInfo(
-            @"%@ exiting because we are in the background and the database password is not accessible.", self.logTag);
-
-        UILocalNotification *notification = [UILocalNotification new];
-        NSString *messageFormat = NSLocalizedString(@"NOTIFICATION_BODY_PHONE_LOCKED_FORMAT",
-            @"Lock screen notification text presented after user powers on their device without unlocking. Embeds "
-            @"{{device model}} (either 'iPad' or 'iPhone')");
-        notification.alertBody = [NSString stringWithFormat:messageFormat, UIDevice.currentDevice.localizedModel];
-
-        // Make sure we clear any existing notifications so that they don't start stacking up
-        // if the user receives multiple pushes.
-        [UIApplication.sharedApplication cancelAllLocalNotifications];
-        [UIApplication.sharedApplication setApplicationIconBadgeNumber:0];
-
-        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-        [UIApplication.sharedApplication setApplicationIconBadgeNumber:1];
-
-        [DDLog flushLog];
-        exit(0);
-    }
+    
+    // TODO: Insert CoreData sanity check here
+    
+//    if (![OWSPrimaryStorage isDatabasePasswordAccessible]) {
+//        DDLogInfo(
+//            @"%@ exiting because we are in the background and the database password is not accessible.", self.logTag);
+//
+//        UILocalNotification *notification = [UILocalNotification new];
+//        NSString *messageFormat = NSLocalizedString(@"NOTIFICATION_BODY_PHONE_LOCKED_FORMAT",
+//            @"Lock screen notification text presented after user powers on their device without unlocking. Embeds "
+//            @"{{device model}} (either 'iPad' or 'iPhone')");
+//        notification.alertBody = [NSString stringWithFormat:messageFormat, UIDevice.currentDevice.localizedModel];
+//
+//        // Make sure we clear any existing notifications so that they don't start stacking up
+//        // if the user receives multiple pushes.
+//        [UIApplication.sharedApplication cancelAllLocalNotifications];
+//        [UIApplication.sharedApplication setApplicationIconBadgeNumber:0];
+//
+//        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+//        [UIApplication.sharedApplication setApplicationIconBadgeNumber:1];
+//
+//        [DDLog flushLog];
+//        exit(0);
+//    }
 }
 
-- (BOOL)ensureIsReadyForAppExtensions
-{
-    // Given how sensitive this migration is, we verbosely
-    // log the contents of all involved paths before and after.
-    //
-    // TODO: Remove this logging once we have high confidence
-    // in our migration logic.
-    NSArray<NSString *> *paths = @[
-//        OWSPrimaryStorage.legacyDatabaseFilePath,
-//        OWSPrimaryStorage.legacyDatabaseFilePath_SHM,
-//        OWSPrimaryStorage.legacyDatabaseFilePath_WAL,
-        OWSPrimaryStorage.sharedDataDatabaseFilePath,
-        OWSPrimaryStorage.sharedDataDatabaseFilePath_SHM,
-        OWSPrimaryStorage.sharedDataDatabaseFilePath_WAL,
-    ];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    for (NSString *path in paths) {
-        if ([fileManager fileExistsAtPath:path]) {
-            DDLogInfo(@"%@ storage file: %@, %@", self.logTag, path, [OWSFileSystem fileSizeOfPath:path]);
-        }
-    }
 
-    if ([OWSPreferences isReadyForAppExtensions]) {
-        return YES;
-    }
-
-    OWSBackgroundTask *_Nullable backgroundTask = [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];
-    SUPPRESS_DEADSTORE_WARNING(backgroundTask);
-
-//    if ([NSFileManager.defaultManager fileExistsAtPath:OWSPrimaryStorage.legacyDatabaseFilePath]) {
-//        DDLogInfo(@"%@ Legacy Database file size: %@",
-//            self.logTag,
-//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath]);
-//        DDLogInfo(@"%@ \t Legacy SHM file size: %@",
-//            self.logTag,
-//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_SHM]);
-//        DDLogInfo(@"%@ \t Legacy WAL file size: %@",
-//            self.logTag,
-//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_WAL]);
-//    }
-
-//    NSError *_Nullable error = [self convertDatabaseIfNecessary];
-//
-//    if (!error) {
-//        [NSUserDefaults migrateToSharedUserDefaults];
-//    }
-//
-//    if (!error) {
-//        error = [OWSPrimaryStorage migrateToSharedData];
-//    }
-//    if (!error) {
-//        error = [OWSUserProfile migrateToSharedData];
-//    }
-//    if (!error) {
-//        error = [TSAttachmentStream migrateToSharedData];
-//    }
-//
-//    if (error) {
-//        OWSFail(@"%@ database conversion failed: %@", self.logTag, error);
-//        [self showLaunchFailureUI:error];
-//        return NO;
-//    }
-
-    backgroundTask = nil;
-
-    return YES;
-}
 
 - (void)showLaunchFailureUI:(NSError *)error
 {
@@ -468,7 +396,7 @@ static NSTimeInterval launchStartedAt;
 
     if ([url.scheme isEqualToString:kURLSchemeSGNLKey]) {
         if ([url.host hasPrefix:kURLHostVerifyPrefix] && ![TSAccountManager isRegistered]) {
-            id signupController = SignalApp.sharedApp.signUpFlowNavigationController;
+            id signupController = RelayApp.sharedApp.signUpFlowNavigationController;
             if ([signupController isKindOfClass:[OWSNavigationController class]]) {
                 OWSNavigationController *navController = (OWSNavigationController *)signupController;
                 UIViewController *controller = [navController.childViewControllers lastObject];
@@ -580,7 +508,7 @@ static NSTimeInterval launchStartedAt;
             DDLogInfo(@"%@ running post launch block for unregistered user.", self.logTag);
 
             // Unregistered user should have no unread messages. e.g. if you delete your account.
-            [SignalApp clearAllNotifications];
+            [RelayApp clearAllNotifications];
 
             UITapGestureRecognizer *gesture =
                 [[UITapGestureRecognizer alloc] initWithTarget:[Pastelog class] action:@selector(submitLogs)];
@@ -605,7 +533,7 @@ static NSTimeInterval launchStartedAt;
                 // "Background App Refresh" will not be able to obtain an APN token. Enabling those settings does not
                 // restart the app, so we check every activation for users who haven't yet registered.
                 __unused AnyPromise *promise =
-                    [OWSSyncPushTokensJob runWithAccountManager:SignalApp.sharedApp.accountManager
+                    [OWSSyncPushTokensJob runWithAccountManager:RelayApp.sharedApp.accountManager
                                                     preferences:[Environment preferences]];
             }
         });
@@ -685,7 +613,7 @@ static NSTimeInterval launchStartedAt;
 {
     OWSAssertIsOnMainThread();
 
-    [SignalApp clearAllNotifications];
+    [RelayApp clearAllNotifications];
     [AppReadiness runNowOrWhenAppIsReady:^{
         [OWSMessageUtils.sharedManager updateApplicationBadgeCount];
     }];
@@ -722,7 +650,7 @@ static NSTimeInterval launchStartedAt;
             return;
         }
 
-        [SignalApp.sharedApp.homeViewController showNewConversationView];
+        [RelayApp.sharedApp.homeViewController showNewConversationView];
 
         completionHandler(YES);
     }];
@@ -977,7 +905,7 @@ static NSTimeInterval launchStartedAt;
 {
     DDLogInfo(@"%@ performing background fetch", self.logTag);
     [AppReadiness runNowOrWhenAppIsReady:^{
-        __block AnyPromise *job = [[SignalApp sharedApp].messageFetcherJob run].then(^{
+        __block AnyPromise *job = [[RelayApp sharedApp].messageFetcherJob run].then(^{
             // HACK: Call completion handler after n seconds.
             //
             // We don't currently have a convenient API to know when message fetching is *done* when
@@ -1044,11 +972,11 @@ static NSTimeInterval launchStartedAt;
         // Fetch messages as soon as possible after launching. In particular, when
         // launching from the background, without this, we end up waiting some extra
         // seconds before receiving an actionable push notification.
-        __unused AnyPromise *messagePromise = [SignalApp.sharedApp.messageFetcherJob run];
+        __unused AnyPromise *messagePromise = [RelayApp.sharedApp.messageFetcherJob run];
 
         // This should happen at any launch, background or foreground.
         __unused AnyPromise *pushTokenpromise =
-            [OWSSyncPushTokensJob runWithAccountManager:SignalApp.sharedApp.accountManager
+            [OWSSyncPushTokensJob runWithAccountManager:RelayApp.sharedApp.accountManager
                                             preferences:[Environment preferences]];
     }
 

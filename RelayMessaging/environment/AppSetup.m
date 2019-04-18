@@ -46,20 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
                                                   profileManager:OWSProfileManager.sharedManager];
         [TextSecureKitEnv setSharedEnv:sharedEnv];
 
-        // Register renamed classes.
-        [NSKeyedUnarchiver setClass:[OWSUserProfile class] forClassName:[OWSUserProfile collection]];
-        [NSKeyedUnarchiver setClass:[OWSDatabaseMigration class] forClassName:[OWSDatabaseMigration collection]];
-
-        [OWSStorage registerExtensionsWithMigrationBlock:^() {
-            // Don't start database migrations until storage is ready.
-            [VersionMigrations performUpdateCheckWithCompletion:^() {
-                OWSAssertIsOnMainThread();
-
-                migrationCompletion();
-
-                backgroundTask = nil;
-            }];
-        }];
     });
 }
 

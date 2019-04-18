@@ -4,7 +4,7 @@
 
 #import "SharingThreadPickerViewController.h"
 #import "Environment.h"
-#import "SignalApp.h"
+#import "RelayApp.h"
 #import "ThreadUtil.h"
 #import "UIFont+OWS.h"
 #import "UIView+OWS.h"
