@@ -43,13 +43,23 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7DC452A922666D9A00FC6CAB"
+               BuildableName = "RelayStorageTests.xctest"
+               BlueprintName = "RelayStorageTests"
+               ReferencedContainer = "container:Relay.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "453518671FC635DD00210559"
-            BuildableName = "RelayShareExtension.appex"
-            BlueprintName = "RelayShareExtension"
+            BlueprintIdentifier = "D221A088169C9E5E00537ABF"
+            BuildableName = "Forsta.app"
+            BlueprintName = "Relay"
             ReferencedContainer = "container:Relay.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

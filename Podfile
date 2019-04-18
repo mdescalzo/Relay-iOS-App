@@ -30,6 +30,7 @@ def shared_pods
     pod 'URLEmbeddedView', :inhibit_warnings => true
     pod 'Fabric', '~> 1.0', :inhibit_warnings => true
     pod 'Crashlytics', '~> 3.0', :inhibit_warnings => true
+    pod 'LibSignalProtocolSwift'
 end
 
 target 'RelayDev' do
@@ -61,6 +62,10 @@ end
 
 target 'RelayMessaging' do
     shared_pods
+end
+
+target 'RelayStorage' do
+  shared_pods
 end
 
 post_install do |installer|

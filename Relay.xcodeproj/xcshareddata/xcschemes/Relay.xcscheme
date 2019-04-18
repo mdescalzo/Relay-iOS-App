@@ -28,7 +28,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1AE185749A9682092A98EC144B798BFC"
+               BlueprintIdentifier = "AF6FBB1C66604C2D61F2D08FF64373BA"
                BuildableName = "RelayServiceKit.framework"
                BlueprintName = "RelayServiceKit"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
@@ -49,6 +49,16 @@
                BlueprintIdentifier = "D221A0A9169C9E5F00537ABF"
                BuildableName = "RelayTests.xctest"
                BlueprintName = "RelayTests"
+               ReferencedContainer = "container:Relay.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7DC452A922666D9A00FC6CAB"
+               BuildableName = "RelayStorageTests.xctest"
+               BlueprintName = "RelayStorageTests"
                ReferencedContainer = "container:Relay.xcodeproj">
             </BuildableReference>
          </TestableReference>
