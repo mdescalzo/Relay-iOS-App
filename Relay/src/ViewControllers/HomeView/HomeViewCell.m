@@ -3,7 +3,6 @@
 //
 
 #import "HomeViewCell.h"
-#import "OWSAvatarBuilder.h"
 #import "Relay-Swift.h"
 
 @import RelayServiceKit;

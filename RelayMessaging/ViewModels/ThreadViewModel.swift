@@ -3,38 +3,39 @@
 //
 
 import Foundation
+import RelayStorage
+import CoreData
 
 @objc
-public class ThreadViewModel: NSObject {
-    @objc public let hasUnreadMessages: Bool
-    @objc public let lastMessageDate: Date
-    @objc public let threadRecord: TSThread
-    @objc public let unreadCount: UInt
-    @objc public let title: String
-    @objc public let isMuted: Bool
+class ThreadViewModel: NSObject {
+    @objc let threadId: String
+    @objc let hasUnreadMessages: Bool
+    @objc let lastMessageDate: Date
+    @objc let unreadCount: UInt
+    @objc let title: String
+    @objc let isMuted: Bool
 
 
-    @objc public let lastMessageText: String?
-    @objc public let lastMessageForInbox: TSInteraction?
+    @objc let lastMessageText: String?
+    @objc let lastMessageForInbox: FLIMessage?
 
     @objc
-    public init(thread: TSThread, transaction: YapDatabaseReadTransaction) {
-        self.threadRecord = thread
-        self.lastMessageDate = thread.lastMessageDate()
+    init(thread: FLIThread) {
+        self.threadId = thread.uuid
+        self.lastMessageDate = thread.lastMessage().sentDate
         self.title = thread.displayName()
         self.isMuted = thread.isMuted
-        self.lastMessageText = thread.lastMessageText(transaction: transaction)
-        self.lastMessageForInbox = thread.lastInteractionForInbox(transaction: transaction)
+        self.lastMessageText = thread.lastMessage().plainText
+        self.lastMessageForInbox = thread.lastMessage()
         self.unreadCount = thread.unreadMessageCount(transaction: transaction)
         self.hasUnreadMessages = unreadCount > 0
     }
 
     @objc
-    override public func isEqual(_ object: Any?) -> Bool {
+    override func isEqual(_ object: Any?) -> Bool {
         guard let otherThread = object as? ThreadViewModel else {
             return super.isEqual(object)
         }
-
-        return threadRecord.isEqual(otherThread.threadRecord)
+        return threadId == otherThread.threadId
     }
 }

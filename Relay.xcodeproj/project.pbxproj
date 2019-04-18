@@ -614,6 +614,24 @@
 		7D2CD67C214C46BC004E957A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B66DBF4919D5BBC8006EA940 /* Images.xcassets */; };
 		7D2CD67D214C46BC004E957A /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
 		7D2CD687214C5A3F004E957A /* RelayDevShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7D6430C4226912390000DE32 /* FLIThread+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */; };
+		7D6430C5226912390000DE32 /* ProtocolObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */; };
+		7D6430C8226912410000DE32 /* FLIThread+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */; };
+		7D6430C9226912410000DE32 /* ProtocolObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C7226912410000DE32 /* ProtocolObject+CoreDataProperties.swift */; };
+		7D6430CB226912E90000DE32 /* BaseChatObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430CA226912E90000DE32 /* BaseChatObject+CoreDataProperties.swift */; };
+		7D6430CD226912F10000DE32 /* BaseChatObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430CC226912F00000DE32 /* BaseChatObject+CoreDataClass.swift */; };
+		7D6430CF226914F80000DE32 /* BigDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430CE226914F80000DE32 /* BigDummy.swift */; };
+		7D6430D0226914F80000DE32 /* BigDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430CE226914F80000DE32 /* BigDummy.swift */; };
+		7D6430D1226915340000DE32 /* BigDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430CE226914F80000DE32 /* BigDummy.swift */; };
+		7D6430D22269153A0000DE32 /* BigDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430CE226914F80000DE32 /* BigDummy.swift */; };
+		7D6430D5226915BF0000DE32 /* FLIUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430D4226915BF0000DE32 /* FLIUser+CoreDataClass.swift */; };
+		7D6430D6226915BF0000DE32 /* FLIUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430D3226915BF0000DE32 /* FLIUser+CoreDataProperties.swift */; };
+		7D6430D9226922BB0000DE32 /* FLIMessage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430D8226922BB0000DE32 /* FLIMessage+CoreDataClass.swift */; };
+		7D6430DA226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430D7226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift */; };
+		7D6430DC226923220000DE32 /* FLIAttachment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DB226923220000DE32 /* FLIAttachment+CoreDataClass.swift */; };
+		7D6430DE2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */; };
+		7D6430E1226926DB0000DE32 /* FLITag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430E0226926DB0000DE32 /* FLITag+CoreDataProperties.swift */; };
+		7D6430E2226926DB0000DE32 /* FLITag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */; };
 		7D6564F42113BD8B00365A19 /* SelectThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564E42113BD8900365A19 /* SelectThreadViewController.m */; };
 		7D6565002113BD8B00365A19 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */; };
 		7D6565022113BD8B00365A19 /* SelectThreadViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -666,8 +684,6 @@
 		7DC452C722666EF500FC6CAB /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC452C522666EF500FC6CAB /* StorageManager.swift */; };
 		7DC452C92266749D00FC6CAB /* AxolotlKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC452C82266749D00FC6CAB /* AxolotlKit.framework */; };
 		7DC452D52267AEB500FC6CAB /* SignalAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC452D42267AEB500FC6CAB /* SignalAddress.swift */; };
-		7DC452DD2267CDA800FC6CAB /* ProtocolObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC452DB2267CDA800FC6CAB /* ProtocolObject+CoreDataClass.swift */; };
-		7DC452DE2267CDA800FC6CAB /* ProtocolObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC452DC2267CDA800FC6CAB /* ProtocolObject+CoreDataProperties.swift */; };
 		7DCA3B3E21BB00F700733FF2 /* ThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCA3B3D21BB00F600733FF2 /* ThreadManager.swift */; };
 		7DCC43D02225A0900097EE0E /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */; };
 		7DCC43D12225A0900097EE0E /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */; };
@@ -1356,6 +1372,21 @@
 		7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RelayDevShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D2CD683214C491B004E957A /* RelayDevShareExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RelayDevShareExtension.entitlements; sourceTree = "<group>"; };
 		7D2CD688214C5F74004E957A /* RelayDevShareExtension-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RelayDevShareExtension-Info.plist"; sourceTree = "<group>"; };
+		7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FLIThread+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProtocolObject+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FLIThread+CoreDataProperties.swift"; path = "RelayStorage/ManagedObjects/FLIThread+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		7D6430C7226912410000DE32 /* ProtocolObject+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ProtocolObject+CoreDataProperties.swift"; path = "RelayStorage/ManagedObjects/ProtocolObject+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		7D6430CA226912E90000DE32 /* BaseChatObject+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "BaseChatObject+CoreDataProperties.swift"; path = "RelayStorage/ManagedObjects/BaseChatObject+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		7D6430CC226912F00000DE32 /* BaseChatObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BaseChatObject+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7D6430CE226914F80000DE32 /* BigDummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigDummy.swift; sourceTree = "<group>"; };
+		7D6430D3226915BF0000DE32 /* FLIUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLIUser+CoreDataProperties.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLIUser+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		7D6430D4226915BF0000DE32 /* FLIUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLIUser+CoreDataClass.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLIUser+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		7D6430D7226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLIMessage+CoreDataProperties.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLIMessage+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		7D6430D8226922BB0000DE32 /* FLIMessage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLIMessage+CoreDataClass.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLIMessage+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		7D6430DB226923220000DE32 /* FLIAttachment+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FLIAttachment+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FLIAttachment+CoreDataProperties.swift"; path = "RelayStorage/ManagedObjects/FLIAttachment+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLITag+CoreDataClass.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		7D6430E0226926DB0000DE32 /* FLITag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLITag+CoreDataProperties.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		7D6564C12113B1C200365A19 /* Relay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Relay.entitlements; sourceTree = "<group>"; };
 		7D6564C22113B74900365A19 /* RelayShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelayShareExtension.entitlements; sourceTree = "<group>"; };
 		7D6564E42113BD8900365A19 /* SelectThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectThreadViewController.m; sourceTree = "<group>"; };
@@ -1417,8 +1448,6 @@
 		7DC452C522666EF500FC6CAB /* StorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		7DC452C82266749D00FC6CAB /* AxolotlKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AxolotlKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DC452D42267AEB500FC6CAB /* SignalAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignalAddress.swift; sourceTree = "<group>"; };
-		7DC452DB2267CDA800FC6CAB /* ProtocolObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProtocolObject+CoreDataClass.swift"; sourceTree = "<group>"; };
-		7DC452DC2267CDA800FC6CAB /* ProtocolObject+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProtocolObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7DCA3B3D21BB00F600733FF2 /* ThreadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadManager.swift; sourceTree = "<group>"; };
 		7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManager.swift; sourceTree = "<group>"; };
 		7DD5A72B211B7B1000965478 /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
@@ -1969,6 +1998,7 @@
 				346129571FD1D74B00532771 /* Release.m */,
 				346129E01FD5C0BE00532771 /* VersionMigrations.h */,
 				346129E11FD5C0BE00532771 /* VersionMigrations.m */,
+				7D6430CE226914F80000DE32 /* BigDummy.swift */,
 			);
 			path = environment;
 			sourceTree = "<group>";
@@ -2492,6 +2522,21 @@
 			path = views;
 			sourceTree = "<group>";
 		};
+		7D6430C1226911E80000DE32 /* Do not edit */ = {
+			isa = PBXGroup;
+			children = (
+				7D6430E0226926DB0000DE32 /* FLITag+CoreDataProperties.swift */,
+				7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */,
+				7D6430D7226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift */,
+				7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */,
+				7D6430D3226915BF0000DE32 /* FLIUser+CoreDataProperties.swift */,
+				7D6430CA226912E90000DE32 /* BaseChatObject+CoreDataProperties.swift */,
+				7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */,
+				7D6430C7226912410000DE32 /* ProtocolObject+CoreDataProperties.swift */,
+			);
+			path = "Do not edit";
+			sourceTree = "<group>";
+		};
 		7D705D98214824CD00488180 /* New Conversation */ = {
 			isa = PBXGroup;
 			children = (
@@ -2563,8 +2608,13 @@
 		7DC452D62267CD2000FC6CAB /* ManagedObjects */ = {
 			isa = PBXGroup;
 			children = (
-				7DC452DB2267CDA800FC6CAB /* ProtocolObject+CoreDataClass.swift */,
-				7DC452DC2267CDA800FC6CAB /* ProtocolObject+CoreDataProperties.swift */,
+				7D6430C1226911E80000DE32 /* Do not edit */,
+				7D6430CC226912F00000DE32 /* BaseChatObject+CoreDataClass.swift */,
+				7D6430DB226923220000DE32 /* FLIAttachment+CoreDataClass.swift */,
+				7D6430D8226922BB0000DE32 /* FLIMessage+CoreDataClass.swift */,
+				7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */,
+				7D6430D4226915BF0000DE32 /* FLIUser+CoreDataClass.swift */,
+				7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */,
 			);
 			path = ManagedObjects;
 			sourceTree = "<group>";
@@ -3597,6 +3647,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Relay/Pods-Relay-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/25519/_25519.framework",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
@@ -3606,6 +3657,7 @@
 				"${PODS_ROOT}/GRKOpenSSLFramework/OpenSSL-iOS/bin/openssl.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/HKDFKit/HKDFKit.framework",
+				"${BUILT_PRODUCTS_DIR}/LetterAvatarKit/LetterAvatarKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework",
 				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
 				"${BUILT_PRODUCTS_DIR}/NSAttributedString-DDHTML/NSAttributedString_DDHTML.framework",
@@ -3629,6 +3681,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/_25519.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AxolotlKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
@@ -3638,6 +3691,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HKDFKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LetterAvatarKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalProtocol.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAttributedString_DDHTML.framework",
@@ -3743,6 +3797,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RelayDev/Pods-RelayDev-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/25519/_25519.framework",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
@@ -3752,6 +3807,7 @@
 				"${PODS_ROOT}/GRKOpenSSLFramework/OpenSSL-iOS/bin/openssl.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/HKDFKit/HKDFKit.framework",
+				"${BUILT_PRODUCTS_DIR}/LetterAvatarKit/LetterAvatarKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework",
 				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
 				"${BUILT_PRODUCTS_DIR}/NSAttributedString-DDHTML/NSAttributedString_DDHTML.framework",
@@ -3775,6 +3831,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/_25519.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AxolotlKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
@@ -3784,6 +3841,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HKDFKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LetterAvatarKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalProtocol.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAttributedString_DDHTML.framework",
@@ -3895,6 +3953,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RelayTests/Pods-RelayTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/25519/_25519.framework",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
@@ -3904,6 +3963,7 @@
 				"${PODS_ROOT}/GRKOpenSSLFramework/OpenSSL-iOS/bin/openssl.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/HKDFKit/HKDFKit.framework",
+				"${BUILT_PRODUCTS_DIR}/LetterAvatarKit/LetterAvatarKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework",
 				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
 				"${BUILT_PRODUCTS_DIR}/NSAttributedString-DDHTML/NSAttributedString_DDHTML.framework",
@@ -3925,6 +3985,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/_25519.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AxolotlKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
@@ -3934,6 +3995,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HKDFKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LetterAvatarKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalProtocol.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAttributedString_DDHTML.framework",
@@ -4076,6 +4138,7 @@
 				4551DB5A205C562300C8AE75 /* Collection+OWS.swift in Sources */,
 				450C800E20AD1A6500F3A091 /* OWSNavigationBar.swift in Sources */,
 				3461293C1FD1D46A00532771 /* OWSMath.m in Sources */,
+				7D6430D0226914F80000DE32 /* BigDummy.swift in Sources */,
 				451F8A391FD711D6005CB9DA /* ContactsViewHelper.m in Sources */,
 				451F8A411FD714B8005CB9DA /* ContactTableViewCell.m in Sources */,
 				346129C81FD2072E00532771 /* NSAttributedString+OWS.m in Sources */,
@@ -4189,6 +4252,7 @@
 				7D2CD59F214C3C9C004E957A /* OWSProgressView.m in Sources */,
 				7D2CD5A1214C3C9C004E957A /* LoadingViewController.swift in Sources */,
 				7D2CD5A2214C3C9C004E957A /* AvatarViewHelper.m in Sources */,
+				7D6430D22269153A0000DE32 /* BigDummy.swift in Sources */,
 				7D2CD5A3214C3C9C004E957A /* OWSGenericAttachmentView.m in Sources */,
 				7D2CD5A4214C3C9C004E957A /* OWSMessageFooterView.m in Sources */,
 				7D2CD5A6214C3C9C004E957A /* ValidationViewController.swift in Sources */,
@@ -4272,11 +4336,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D6430DE2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift in Sources */,
+				7D6430C5226912390000DE32 /* ProtocolObject+CoreDataClass.swift in Sources */,
+				7D6430D1226915340000DE32 /* BigDummy.swift in Sources */,
 				7DC452D52267AEB500FC6CAB /* SignalAddress.swift in Sources */,
-				7DC452DE2267CDA800FC6CAB /* ProtocolObject+CoreDataProperties.swift in Sources */,
 				7DC452C622666EF500FC6CAB /* ForstaRelay1.xcdatamodeld in Sources */,
-				7DC452DD2267CDA800FC6CAB /* ProtocolObject+CoreDataClass.swift in Sources */,
+				7D6430D6226915BF0000DE32 /* FLIUser+CoreDataProperties.swift in Sources */,
+				7D6430E2226926DB0000DE32 /* FLITag+CoreDataClass.swift in Sources */,
+				7D6430C9226912410000DE32 /* ProtocolObject+CoreDataProperties.swift in Sources */,
+				7D6430C8226912410000DE32 /* FLIThread+CoreDataProperties.swift in Sources */,
+				7D6430E1226926DB0000DE32 /* FLITag+CoreDataProperties.swift in Sources */,
 				7DC452C722666EF500FC6CAB /* StorageManager.swift in Sources */,
+				7D6430C4226912390000DE32 /* FLIThread+CoreDataClass.swift in Sources */,
+				7D6430DA226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift in Sources */,
+				7D6430D9226922BB0000DE32 /* FLIMessage+CoreDataClass.swift in Sources */,
+				7D6430DC226923220000DE32 /* FLIAttachment+CoreDataClass.swift in Sources */,
+				7D6430CB226912E90000DE32 /* BaseChatObject+CoreDataProperties.swift in Sources */,
+				7D6430D5226915BF0000DE32 /* FLIUser+CoreDataClass.swift in Sources */,
+				7D6430CD226912F10000DE32 /* BaseChatObject+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4395,6 +4472,7 @@
 				34330AA31E79686200DF2FB9 /* OWSProgressView.m in Sources */,
 				4542DF54208D40AC007B4E76 /* LoadingViewController.swift in Sources */,
 				34D5CCA91EAE3D30005515DB /* AvatarViewHelper.m in Sources */,
+				7D6430CF226914F80000DE32 /* BigDummy.swift in Sources */,
 				34D1F0B71F87F8850066283D /* OWSGenericAttachmentView.m in Sources */,
 				34D920E720E179C200D51158 /* OWSMessageFooterView.m in Sources */,
 				7D7705C42114D8E700B40BB9 /* ValidationViewController.swift in Sources */,

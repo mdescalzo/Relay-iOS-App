@@ -5,21 +5,13 @@ use_frameworks!
 
 def shared_pods
     # OWS Pods
-    pod 'AxolotlKit', git: 'https://github.com/signalapp/SignalProtocolKit.git', branch: 'master', inhibit_warnings: true
-    pod 'HKDFKit', git: 'https://github.com/signalapp/HKDFKit.git', inhibit_warnings: true
-    pod 'GRKOpenSSLFramework', git: 'https://github.com/signalapp/GRKOpenSSLFramework', inhibit_warnings: true
-    pod 'SocketRocket', :git => 'https://github.com/signalapp/SocketRocket.git', branch: 'mkirk/handle-sec-err', inhibit_warnings: true
 
     # Forsta pods
     pod 'RelayServiceKit', path: '.'
     pod 'SignalCoreKit', :git => 'https://github.com/ForstaLabs/SignalCoreKit.git', inhibit_warnings: true
-    pod 'Curve25519Kit', git: 'https://github.com/ForstaLabs/Curve25519Kit.git', branch: 'autoProvision', inhibit_warnings: true
     pod 'NSAttributedString-DDHTML', :git => 'https://github.com/ForstaLabs/NSAttributedString-DDHTML.git', :inhibit_warnings => true
 
     # third party pods
-    pod 'SQLCipher', '~> 4.0'
-    pod 'YapDatabase/SQLCipher', '= 3.1.1', inhibit_warnings: true
-    pod 'AFNetworking', inhibit_warnings: true
     pod 'Mantle', '~> 2.1.0', :inhibit_warnings => true
     pod 'PureLayout', '~> 3.1.4',:inhibit_warnings => true
     pod 'Reachability', '~> 3.2',:inhibit_warnings => true

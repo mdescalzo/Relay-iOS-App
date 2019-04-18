@@ -48,7 +48,7 @@
         <attribute name="type" attributeType="String" syncable="YES"/>
         <attribute name="visible" transient="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="currentMonitors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLIUser" syncable="YES"/>
-        <relationship name="currentParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLIUser" syncable="YES"/>
+        <relationship name="currentParticipants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLIUser" inverseName="threads" inverseEntity="FLIUser" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLIMessage" inverseName="thread" inverseEntity="FLIMessage" syncable="YES"/>
     </entity>
     <entity name="FLIUser" representedClassName="FLIUser" parentEntity="BaseChatObject" syncable="YES">
@@ -68,6 +68,7 @@
         <attribute name="primaryTagId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLIMessage" inverseName="sender" inverseEntity="FLIMessage" syncable="YES"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLITag" inverseName="users" inverseEntity="FLITag" syncable="YES"/>
+        <relationship name="threads" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FLIThread" inverseName="currentParticipants" inverseEntity="FLIThread" syncable="YES"/>
     </entity>
     <entity name="ProtocolObject" representedClassName="ProtocolObject" syncable="YES">
         <attribute name="data" attributeType="Binary" syncable="YES"/>
@@ -80,8 +81,8 @@
         <element name="FLIAttachment" positionX="-4393.85546875" positionY="-3205.61328125" width="128" height="88"/>
         <element name="FLIMessage" positionX="-4571.04296875" positionY="-3634.38671875" width="128" height="178"/>
         <element name="FLITag" positionX="-4694.796875" positionY="-3360.04296875" width="128" height="163"/>
-        <element name="FLIThread" positionX="-4367.50390625" positionY="-3620.12890625" width="128" height="223"/>
-        <element name="FLIUser" positionX="-4962.84375" positionY="-3667.6796875" width="128" height="283"/>
+        <element name="FLIThread" positionX="-4367.50390625" positionY="-3620.12890625" width="128" height="225"/>
+        <element name="FLIUser" positionX="-4962.84375" positionY="-3667.6796875" width="128" height="300"/>
         <element name="ProtocolObject" positionX="-4968.45703125" positionY="-3371.63671875" width="128" height="73"/>
     </elements>
 </model>
