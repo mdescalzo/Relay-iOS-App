@@ -17,9 +17,11 @@
         <relationship name="message" maxCount="1" deletionRule="Nullify" destinationEntity="FLIMessage" inverseName="attachments" inverseEntity="FLIMessage" syncable="YES"/>
     </entity>
     <entity name="FLIMessage" representedClassName="FLIMessage" parentEntity="BaseChatObject" syncable="YES">
+        <attribute name="deliveryStateMap" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="direction" attributeType="String" syncable="YES"/>
         <attribute name="plainText" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sentTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="sentDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
         <relationship name="attachments" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FLIAttachment" inverseName="message" inverseEntity="FLIAttachment" syncable="YES"/>
         <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FLIUser" inverseName="messages" inverseEntity="FLIUser" syncable="YES"/>
@@ -27,7 +29,7 @@
     </entity>
     <entity name="FLITag" representedClassName="FLITag" parentEntity="BaseChatObject" syncable="YES">
         <attribute name="avatar" optional="YES" attributeType="Binary" storedInTruthFile="YES" syncable="YES"/>
-        <attribute name="displaySlug" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hiddenDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="nameSlug" attributeType="String" syncable="YES"/>
         <attribute name="orgUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="slug" attributeType="String" syncable="YES"/>
@@ -40,7 +42,9 @@
         <attribute name="avatar" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="expression" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mutedUntilDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="pinPosition" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="pretty" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
         <attribute name="visible" transient="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="currentMonitors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLIUser" syncable="YES"/>
@@ -49,10 +53,20 @@
     </entity>
     <entity name="FLIUser" representedClassName="FLIUser" parentEntity="BaseChatObject" syncable="YES">
         <attribute name="avatar" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
-        <attribute name="displayName" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="devices" attributeType="Transformable" syncable="YES"/>
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gravtarHash" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hiddenDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isMonitor" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="orgId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="orgSlug" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="primaryTagId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLIMessage" inverseName="sender" inverseEntity="FLIMessage" syncable="YES"/>
-        <relationship name="primaryTag" maxCount="1" deletionRule="Nullify" destinationEntity="FLITag" syncable="YES"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FLITag" inverseName="users" inverseEntity="FLITag" syncable="YES"/>
     </entity>
     <entity name="ProtocolObject" representedClassName="ProtocolObject" syncable="YES">
@@ -60,14 +74,14 @@
         <attribute name="key" attributeType="Transformable" syncable="YES"/>
     </entity>
     <elements>
-        <element name="BaseChatObject" positionX="-4703.20703125" positionY="-3599.55859375" width="128" height="58"/>
-        <element name="DecryptedEnvelope" positionX="-4755.1640625" positionY="-3221.640625" width="128" height="73"/>
-        <element name="EncryptedEnvelope" positionX="-4753.38671875" positionY="-3126.27734375" width="128" height="73"/>
-        <element name="FLIAttachment" positionX="-4353.47265625" positionY="-3414.79296875" width="128" height="88"/>
-        <element name="FLIMessage" positionX="-4547.359375" positionY="-3446.8125" width="128" height="148"/>
-        <element name="FLITag" positionX="-4704.52734375" positionY="-3413.5625" width="128" height="163"/>
-        <element name="FLIThread" positionX="-4388.14453125" positionY="-3639.08984375" width="128" height="193"/>
-        <element name="FLIUser" positionX="-4890.8828125" positionY="-3522.828125" width="128" height="133"/>
-        <element name="ProtocolObject" positionX="-4884.4453125" positionY="-3356.08984375" width="128" height="73"/>
+        <element name="BaseChatObject" positionX="-4779.5546875" positionY="-3608.33203125" width="128" height="58"/>
+        <element name="DecryptedEnvelope" positionX="-4965.19921875" positionY="-3274.984375" width="128" height="73"/>
+        <element name="EncryptedEnvelope" positionX="-4962.3828125" positionY="-3186.578125" width="128" height="73"/>
+        <element name="FLIAttachment" positionX="-4393.85546875" positionY="-3205.61328125" width="128" height="88"/>
+        <element name="FLIMessage" positionX="-4571.04296875" positionY="-3634.38671875" width="128" height="178"/>
+        <element name="FLITag" positionX="-4694.796875" positionY="-3360.04296875" width="128" height="163"/>
+        <element name="FLIThread" positionX="-4367.50390625" positionY="-3620.12890625" width="128" height="223"/>
+        <element name="FLIUser" positionX="-4962.84375" positionY="-3667.6796875" width="128" height="283"/>
+        <element name="ProtocolObject" positionX="-4968.45703125" positionY="-3371.63671875" width="128" height="73"/>
     </elements>
 </model>
