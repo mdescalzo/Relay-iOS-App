@@ -31,6 +31,7 @@ def shared_pods
     pod 'Fabric', '~> 1.0', :inhibit_warnings => true
     pod 'Crashlytics', '~> 3.0', :inhibit_warnings => true
     pod 'LibSignalProtocolSwift'
+    pod 'LetterAvatarKit'
 end
 
 target 'RelayDev' do
