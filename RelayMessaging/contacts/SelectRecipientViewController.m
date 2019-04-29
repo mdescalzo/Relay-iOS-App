@@ -412,7 +412,7 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
                     addItem:[OWSTableItem
                                 itemWithCustomCellBlock:^{
                                     SelectRecipientViewController *strongSelf = weakSelf;
-                                    OWSCAssert(strongSelf);
+                                    OWSCAssertDebug(strongSelf);
 
                                     ContactTableViewCell *cell = [ContactTableViewCell new];
 //                                    BOOL isBlocked = [helper isRecipientIdBlocked:signalAccount.recipientId];
