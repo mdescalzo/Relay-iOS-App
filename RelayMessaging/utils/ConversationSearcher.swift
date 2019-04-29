@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import RelayServiceKit
+import RelayStorage
 
 public class ConversationSearchResult: Comparable {
     public let thread: ThreadViewModel
@@ -202,7 +202,7 @@ public class ConversationSearcher: NSObject {
 //        return self.indexingString(recipientId: recipientId)
 //    }
 
-    private var contactsManager: FLContactsManager {
+    private var contactsManager: FLIUserManager {
         return Environment.current()!.contactsManager
     }
 

@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
       location = "group:Relay.xcodeproj">
    </FileRef>
    <FileRef

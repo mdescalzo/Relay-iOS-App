@@ -2162,7 +2162,7 @@
 "UNKNOWN_CONTACT_BLOCK_OFFER" = "User not in your contacts. Would you like to block this user?";
 
 /* Displayed if for some reason we can't determine a contacts phone number *or* name */
-"UNKNOWN_CONTACT_NAME" = "Unknown Contact";
+"UNKNOWN_CONTACT_NAME" = "Unknown User";
 
 /* Indicates an unknown or unrecognizable value. */
 "UNKNOWN_VALUE" = "Unknown";

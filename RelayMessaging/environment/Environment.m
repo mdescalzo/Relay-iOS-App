@@ -4,13 +4,11 @@
 
 #import "Environment.h"
 #import "DebugLogger.h"
-#import "SignalKeyingStorage.h"
 
-#import <RelayMessaging/RelayMessaging-Swift.h>
 
 NSString *const FLRelayWipeAndReturnToRegistrationNotification = @"FLRelayWipeAndReturnToRegistrationNotification";
 
-@import RelayServiceKit;
+@import RelayStorage;
 
 static Environment *sharedEnvironment = nil;
 

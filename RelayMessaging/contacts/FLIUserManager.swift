@@ -7,88 +7,60 @@
 //
 
 import Foundation
-import YapDatabase
-import RelayServiceKit
+import RelayStorage
+import SignalCoreKit
+import CoreData
 
-@objc public class FLContactsManager: NSObject, ContactsManagerProtocol {
-  
-    // Shared singleton
-    @objc public static let shared = FLContactsManager()
+@objc public class FLIUserManager: NSObject {
 
-    @objc public var isSystemContactsDenied: Bool = false // for future use
-    
-    public func cachedDisplayName(forRecipientId recipientId: String) -> String? {
-        if let recipient:RelayRecipient = recipientCache.object(forKey: recipientId as NSString) {
-            if recipient.fullName().count > 0 {
-                return recipient.fullName()
-            } else if (recipient.flTag?.displaySlug.count)! > 0 {
-                return (recipient.flTag?.displaySlug)!
-            }
-        }
-        return ""
-    }
-    
-    public func displayName(forRecipientId recipientId: String, transaction: YapDatabaseReadTransaction) -> String? {
-        if let recipient: RelayRecipient = self.recipient(withId: recipientId, transaction: transaction) {
-            if recipient.fullName().count > 0 {
-                return recipient.fullName()
-            } else if (recipient.flTag?.displaySlug.count)! > 0 {
-                return (recipient.flTag?.displaySlug)!
-            }
-        }
-        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                             object: self,
-                                                             userInfo: ["userIds" : [ recipientId ]])
-        return NSLocalizedString("UNKNOWN_CONTACT_NAME", comment: "Displayed if for some reason we can't determine a contacts ID *or* name");
+    private static let shared = FLIUserManager()
 
-    }
+    private let avatarCache: NSCache<NSString, UIImage>
+    private let userCache: NSCache<NSString, FLIUser>
+    private let tagCache: NSCache<NSString, FLITag>
     
-    public func displayName(forRecipientId recipientId: String) -> String? {
-        var displayName: String?
-        self.readConnection.read { (transaction) in
-            displayName = self.displayName(forRecipientId: recipientId, transaction: transaction)
+    private lazy var localContext: NSManagedObjectContext = {
+        let aContext = StorageManager.shared.persistentContainer.newBackgroundContext()
+        aContext.automaticallyMergesChangesFromParent = true
+        return aContext
+    }()
+
+    @objc
+    public class func displayName(userId: String) -> String {
+        if let user: FLIUser = FLIUserManager.shared.user(uuid: userId, context: FLIUserManager.shared.localContext) {
+            return user.fullName()
+        } else {
+            return NSLocalizedString("UNKNOWN_CONTACT_NAME", comment: "")
         }
-        return displayName
     }
-    
-    public func isSystemContact(_ recipientId: String) -> Bool {
-        // Placeholder for possible future use
-        return false
-    }
-    
-    public func isSystemContact(withRecipientId recipientId: String) -> Bool {
-        // Placeholder for possible future use
-        return false
-    }
-    
-    public func compare(recipient left: RelayRecipient, with right: RelayRecipient) -> ComparisonResult {
+
+    public class func compare(user left: FLIUser, with right: FLIUser) -> ComparisonResult {
         
-        var comparisonResult: ComparisonResult = (left.lastName!.caseInsensitiveCompare(right.lastName!))
+        var comparisonResult: ComparisonResult = .orderedSame
         
-        if comparisonResult == .orderedSame {
+        if left.lastName != nil && right.lastName != nil {
+            comparisonResult = (left.lastName!.caseInsensitiveCompare(right.lastName!))
+        }
+        if comparisonResult == .orderedSame && left.firstName != nil && right.firstName != nil {
             comparisonResult = (left.firstName!.caseInsensitiveCompare(right.firstName!))
-            
-            if comparisonResult == .orderedSame {
-                comparisonResult = ((left.flTag!.slug.caseInsensitiveCompare(right.flTag!.slug)))
-            }
         }
         return comparisonResult
     }
     
-    public func avatarImageRecipientId(_ recipientId: String) -> UIImage? {
+    public class func avatarImage(userId: String) -> UIImage? {
         
         var cacheKey: NSString? = nil
         
         let useGravatars: Bool = Environment.preferences().useGravatars()
         
         if useGravatars {
-            cacheKey = "gravatar:\(recipientId)" as NSString
+            cacheKey = "gravatar:\(userId)" as NSString
         } else {
-            cacheKey = "avatar:\(recipientId)" as NSString
+            cacheKey = "avatar:\(userId)" as NSString
         }
         
         // Check the avatarCache...
-        if let image = self.avatarCache.object(forKey: cacheKey!) {
+        if let image = FLIUserManager.shared.avatarCache.object(forKey: cacheKey!) {
 //            Logger.debug("Avatar cache hit!")
             return image;
         }
@@ -133,13 +105,10 @@ import RelayServiceKit
     }()
     private let readWriteConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     private var latestRecipientsById: [AnyHashable : Any] = [:]
-    private var activeRecipientsBacker: [ RelayRecipient ] = []
+    private var activeRecipientsBacker: [ FLIUser ] = []
     private var visibleRecipientsPredicate: NSCompoundPredicate?
     private var pendingTagIds = Set<String>()
     private var pendingRecipientIds = Set<String>()
-    private let avatarCache: NSCache<NSString, UIImage>
-    private let recipientCache: NSCache<NSString, RelayRecipient>
-    private let tagCache: NSCache<NSString, FLTag>
     
     @objc public func flushAvatarCache() {
         avatarCache.removeAllObjects()
@@ -147,7 +116,7 @@ import RelayServiceKit
 
     override init() {
         avatarCache = NSCache<NSString, UIImage>()
-        recipientCache = NSCache<NSString, RelayRecipient>()
+        userCache = NSCache<NSString, FLIUser>()
         tagCache = NSCache<NSString, FLTag>()
 
         super.init()
@@ -177,7 +146,7 @@ import RelayServiceKit
                                                name: NSNotification.Name.YapDatabaseModified,
                                                object: nil)
         avatarCache.delegate = self
-        recipientCache.delegate = self
+        userCache.delegate = self
         tagCache.delegate = self
     }
     
@@ -189,20 +158,20 @@ import RelayServiceKit
         return FLTag.allObjectsInCollection() as! [FLTag]
     }
     
-    @objc public func allRecipients() -> [RelayRecipient] {
-        return RelayRecipient.allObjectsInCollection() as! [RelayRecipient]
+    @objc public func allRecipients() -> [FLIUser] {
+        return FLIUser.allObjectsInCollection() as! [FLIUser]
     }
 
-    @objc public func selfRecipient() -> RelayRecipient? {
+    @objc public func selfRecipient() -> FLIUser? {
         guard let selfId = TSAccountManager.localUID() else {
             Logger.debug("\(self.logTag): No stored localUID.")
             return nil
         }
         
-        if let recipient:RelayRecipient = recipientCache.object(forKey: selfId as NSString) {
+        if let recipient:FLIUser = userCache.object(forKey: selfId as NSString) {
             return recipient
-        } else if let recipient = RelayRecipient.fetch(uniqueId: selfId as String) {
-            recipientCache.setObject(recipient, forKey: selfId as NSString)
+        } else if let recipient = FLIUser.fetch(uniqueId: selfId as String) {
+            userCache.setObject(recipient, forKey: selfId as NSString)
             return recipient
         }
         return nil
@@ -210,8 +179,8 @@ import RelayServiceKit
     
     @objc public class func recipientComparator() -> Comparator {
         return { obj1, obj2 in
-            let contact1 = obj1 as? RelayRecipient
-            let contact2 = obj2 as? RelayRecipient
+            let contact1 = obj1 as? FLIUser
+            let contact2 = obj2 as? FLIUser
             
             // Use lastname sorting
             return (contact1?.lastName!.caseInsensitiveCompare(contact2?.lastName ?? ""))!
@@ -318,7 +287,7 @@ import RelayServiceKit
                                         if let resultsArray: Array = payload?["results"] as? Array<Dictionary<String, Any>> {
                                             self.readWriteConnection.asyncReadWrite({ (transaction) in
                                                 for userDict: Dictionary<String, Any> in resultsArray {
-                                                    if let recipient = RelayRecipient.getOrCreateRecipient(withUserDictionary: userDict as NSDictionary, transaction: transaction) {
+                                                    if let recipient = FLIUser.getOrCreateRecipient(withUserDictionary: userDict as NSDictionary, transaction: transaction) {
                                                         self.save(recipient: recipient, with: transaction)
                                                     }
                                                 }
@@ -367,103 +336,50 @@ import RelayServiceKit
         }
     }
 
-    @objc public func recipient(withId userId: String) -> RelayRecipient? {
-        if let recipient:RelayRecipient = recipientCache.object(forKey: userId as NSString) {
-            return recipient
-        } else if let recipient = RelayRecipient.fetch(uniqueId: userId) {
-            self.recipientCache.setObject(recipient, forKey: recipient.uniqueId as NSString);
-            return recipient
-        } else {
-            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                                 object: self,
-                                                                 userInfo: [ "userIds" : [userId] ])
-            return nil
-        }
-    }
-    
-    @objc public func recipient(withId userId: String, transaction: YapDatabaseReadTransaction) -> RelayRecipient? {
-        if let recipient:RelayRecipient = recipientCache.object(forKey: userId as NSString) {
-            return recipient
-        } else if let recipient: RelayRecipient = RelayRecipient.fetch(uniqueId: userId, transaction: transaction) {
-            recipientCache.setObject(recipient, forKey: userId as NSString)
-            return recipient
-        } else {
-            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                            object: self,
-                                            userInfo: [ "userIds" : [userId] ])
-            return nil
-        }
-    }
+    @objc public func user(uuid: String, context: NSManagedObjectContext) -> FLIUser? {
 
-//    @objc public func recipient(fromDictionary userDict: Dictionary<String, Any>) -> RelayRecipient? {
-//        var recipient: RelayRecipient? = nil
-//        self.readWriteConnection.readWrite({ transaction in
-//            recipient = self.recipient(fromDictionary: userDict, transaction: transaction)
-//        })
-//        return recipient
-//    }
+        let userFetch = FLIUser.fetchRequest()
+        userFetch.predicate = NSPredicate.init(format: "uuid == %@)", uuid)
+        
+        var result: [ FLIUser ]
+        do {
+            result = try (context.fetch(fetchRequest))
+        } catch {
+            // FIXME: Add error handling
+            return nil
+        }
+        
+        if result.count > 0 {
+            return result.last
+        } else {
+            return nil
+        }
+    }
     
-//    func recipient(fromDictionary userDict: Dictionary<String, Any>, transaction: YapDatabaseReadWriteTransaction) -> RelayRecipient? {
-//
-//        guard let uuid = NSUUID.init(uuidString:(userDict["id"] as? String)!) else {
-//           Logger.debug("Attempt to build recipient with malformed dictionary.")
-//            return nil
-//        }
-//
-//        guard let tagDict = userDict["tag"] as? [AnyHashable : Any] else {
-//            Logger.debug("Missing tagDictionary for Recipient: \(uuid.uuidString)")
-//            return nil
-//        }
-//
-//        let uidString = uuid.uuidString.lowercased()
-//
-//        let recipient = RelayRecipient.getOrBuildUnsavedRecipient(forRecipientId: uidString, transaction: transaction)
-//
-//        recipient.isActive = (Int(truncating: userDict["is_active"] as? NSNumber ?? 0)) == 1 ? true : false
-//        if !recipient.isActive {
-//            Logger.info("Removing inactive user: \(uidString)")
-//            self.remove(recipient: recipient, with: transaction)
-//            return nil
-//        }
-//
-//        recipient.firstName = userDict["first_name"] as? String
-//        recipient.lastName = userDict["last_name"] as? String
-//        recipient.email = userDict["email"] as? String
-//        recipient.phoneNumber = userDict["phone"] as? String
-//        recipient.gravatarHash = userDict["gravatar_hash"] as? String
-//        recipient.isMonitor = (Int(truncating: userDict["is_monitor"] as? NSNumber ?? 0)) == 1 ? true : false
-//
-//        let orgDict = userDict["org"] as? [AnyHashable : Any]
-//        if orgDict != nil {
-//            recipient.orgID = orgDict!["id"] as? String
-//            recipient.orgSlug = orgDict!["slug"] as? String
-//        } else {
-//            Logger.debug("Missing orgDictionary for Recipient: \(self.description)")
-//        }
-//        recipient.flTag = FLTag.getOrCreateTag(with: tagDict, transaction: transaction)
-//        recipient.flTag?.recipientIds = Set<AnyHashable>([recipient.uniqueId]) as? NSCountedSet
-//        if recipient.flTag?.tagDescription == nil || recipient.flTag?.tagDescription?.count == 0  {
-//            recipient.flTag?.tagDescription = recipient.fullName()
-//        }
-//        if recipient.flTag?.orgSlug == nil || recipient.flTag?.orgSlug.count == 0 {
-//            recipient.flTag?.orgSlug = recipient.orgSlug!
-//        }
-//        if recipient.flTag == nil {
-//            Logger.error("Attempt to create recipient with a nil tag!  Recipient: \(recipient.uniqueId)")
-//            self.remove(recipient: recipient, with: transaction)
-//            return nil
-//        } else {
-//            Logger.debug("Saving updated recipient: \(recipient.uniqueId)")
-//            self.save(recipient: recipient, with: transaction)
-//        }
-//
-//        return recipient
-//    }
+    @objc public func tag(uuid: String, context: NSManagedObjectContext) -> FLITag? {
+        
+        let userFetch = FLITag.fetchRequest()
+        userFetch.predicate = NSPredicate.init(format: "uuid == %@)", uuid)
+        
+        var result: [ FLITag ]
+        do {
+            result = try (context.fetch(fetchRequest))
+        } catch {
+            // FIXME: Add error handling
+            return nil
+        }
+        
+        if result.count > 0 {
+            return result.last
+        } else {
+            return nil
+        }
+    }
 
     
     @objc public func refreshCCSMRecipients() {
         DispatchQueue.global(qos: .background).async {
-            self.recipientCache.removeAllObjects()
+            self.userCache.removeAllObjects()
             self.tagCache.removeAllObjects()
             CCSMCommManager.refreshCCSMData()
             self.validateNonOrgRecipients()
@@ -471,15 +387,15 @@ import RelayServiceKit
     }
     
     private func validateNonOrgRecipients() {
-        let nonOrgRecipients = RelayRecipient.allObjectsInCollection().filter() {
-            if let recipient = ($0 as? RelayRecipient) {
+        let nonOrgRecipients = FLIUser.allObjectsInCollection().filter() {
+            if let recipient = ($0 as? FLIUser) {
                 return (recipient.orgID != TSAccountManager.selfRecipient().orgID ||
                     recipient.orgID == "public" ||
                     recipient.orgID == "forsta" )
             } else {
                 return false
             }
-            } as! [RelayRecipient]
+            } as! [FLIUser]
         
         if nonOrgRecipients.count > 0 {
             var recipientIds = [String]()
@@ -513,7 +429,7 @@ import RelayServiceKit
         DispatchQueue.global(qos: .background).async {
             for recipientDict in recipientsBlob.allValues {
                 self.readWriteConnection.asyncReadWrite({ (transaction) in
-                    if let recipient: RelayRecipient = RelayRecipient.getOrCreateRecipient(withUserDictionary: recipientDict as! NSDictionary, transaction: transaction) {
+                    if let recipient: FLIUser = FLIUser.getOrCreateRecipient(withUserDictionary: recipientDict as! NSDictionary, transaction: transaction) {
                         self.save(recipient: recipient, with: transaction)
                     }
                 })
@@ -521,28 +437,28 @@ import RelayServiceKit
         }
     }
 
-    @objc public func save(recipient: RelayRecipient) {
+    @objc public func save(recipient: FLIUser) {
         self.readWriteConnection.readWrite { (transaction) in
             self.save(recipient: recipient, with: transaction)
         }
     }
     
-    @objc public func save(recipient: RelayRecipient, with transaction: YapDatabaseReadWriteTransaction) {
+    @objc public func save(recipient: FLIUser, with transaction: YapDatabaseReadWriteTransaction) {
         recipient.save(with: transaction)
         if let aTag = recipient.flTag {
             aTag.save(with: transaction)
             self.tagCache.setObject(aTag, forKey: aTag.uniqueId as NSString)
         }
-        self.recipientCache.setObject(recipient, forKey: recipient.uniqueId as NSString)
+        self.userCache.setObject(recipient, forKey: recipient.uniqueId as NSString)
     }
     
-    @objc public func remove(recipient: RelayRecipient) {
+    @objc public func remove(recipient: FLIUser) {
         self.readWriteConnection .readWrite { (transaction) in
             self.remove(recipient: recipient, with: transaction)
         }
     }
     
-    @objc public func remove(recipient: RelayRecipient, with transaction: YapDatabaseReadWriteTransaction) {
+    @objc public func remove(recipient: FLIUser, with transaction: YapDatabaseReadWriteTransaction) {
         if let aTag = recipient.flTag {
             aTag.remove(with: transaction)
         }
@@ -591,8 +507,8 @@ import RelayServiceKit
 
     @objc public func nukeAndPave() {
         self.tagCache.removeAllObjects()
-        self.recipientCache.removeAllObjects()
-        RelayRecipient.removeAllObjectsInCollection()
+        self.userCache.removeAllObjects()
+        FLIUser.removeAllObjectsInCollection()
         FLTag.removeAllObjectsInCollection()
     }
     
@@ -656,7 +572,7 @@ import RelayServiceKit
                 Logger.debug("No gravatar hash for recipient: \(recipientId)")
                 return
             }
-            let gravatarURLString = String(format: FLContactsManager.kGravatarURLFormat, gravatarHash)
+            let gravatarURLString = String(format: FLIUserManager.kGravatarURLFormat, gravatarHash)
             guard let aURL = URL.init(string: gravatarURLString) else {
                 Logger.debug("Unable to form URL from gravatar string: \(gravatarURLString)")
                 return
@@ -674,7 +590,7 @@ import RelayServiceKit
             
             OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
                 recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
-                    if let theRecipient = obj as? RelayRecipient {
+                    if let theRecipient = obj as? FLIUser {
                         theRecipient.gravatarImage = gravatarImage
                     }
                 })
@@ -691,10 +607,10 @@ import RelayServiceKit
         DispatchQueue.global(qos: .background).async {
             let notifications = self.readConnection.beginLongLivedReadTransaction()
             
-            self.readConnection.enumerateChangedKeys(inCollection: RelayRecipient.collection(),
+            self.readConnection.enumerateChangedKeys(inCollection: FLIUser.collection(),
                                                      in: notifications) { (recipientId, stop) in
                                                         // Remove cached recipient
-                                                        self.recipientCache.removeObject(forKey: recipientId as NSString)
+                                                        self.userCache.removeObject(forKey: recipientId as NSString)
                                                         
                                                         // Touch any threads which contain the recipient
                                                         var threadsToTouch = [TSThread]()
@@ -726,7 +642,7 @@ import RelayServiceKit
 
 
 
-extension FLContactsManager : NSCacheDelegate {
+extension FLIUserManager : NSCacheDelegate {
 
     public func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any) {
         // called when objects evicted from any of the caches

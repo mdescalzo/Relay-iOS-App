@@ -7,7 +7,6 @@ def shared_pods
     # OWS Pods
 
     # Forsta pods
-    pod 'RelayServiceKit', path: '.'
     pod 'SignalCoreKit', :git => 'https://github.com/ForstaLabs/SignalCoreKit.git', inhibit_warnings: true
     pod 'NSAttributedString-DDHTML', :git => 'https://github.com/ForstaLabs/NSAttributedString-DDHTML.git', :inhibit_warnings => true
 
@@ -24,6 +23,7 @@ def shared_pods
     pod 'Crashlytics', '~> 3.0', :inhibit_warnings => true
     pod 'LibSignalProtocolSwift'
     pod 'LetterAvatarKit'
+    pod 'PromiseKit'
 end
 
 target 'RelayDev' do

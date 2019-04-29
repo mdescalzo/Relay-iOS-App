@@ -4,7 +4,8 @@
 
 import Foundation
 import MediaPlayer
-import RelayServiceKit
+import RelayStorage
+import SignalCoreKit
 
 // A modal view that be used during blocking interactions (e.g. waiting on response from
 // service or on the completion of a long-running local operation).
@@ -113,7 +114,8 @@ public class ModalActivityIndicatorViewController: OWSViewController {
         //       should.
         let kPresentationDelaySeconds = TimeInterval(1)
         self.presentTimer?.invalidate()
-        self.presentTimer = Timer.weakScheduledTimer(withTimeInterval: kPresentationDelaySeconds, target: self, selector: #selector(presentTimerFired), userInfo: nil, repeats: false)
+        weak var aTimer = Timer.scheduledTimer(timeInterval: kPresentationDelaySeconds, target: self, selector: #selector(presentTimerFired), userInfo: nil, repeats: false)
+        self.presentTimer = aTimer
     }
 
     public override func viewWillDisappear(_ animated: Bool) {

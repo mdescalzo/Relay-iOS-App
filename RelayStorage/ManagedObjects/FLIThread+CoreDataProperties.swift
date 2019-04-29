@@ -25,6 +25,7 @@ extension FLIThread {
     @NSManaged public var title: String?
     @NSManaged public var type: String?
     @NSManaged public var visible: Bool
+    @NSManaged public var pinned: Bool
     @NSManaged public var currentMonitors: NSSet?
     @NSManaged public var currentParticipants: NSSet?
     @NSManaged public var messages: NSSet?

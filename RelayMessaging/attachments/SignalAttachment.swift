@@ -4,7 +4,6 @@
 
 import Foundation
 import MobileCoreServices
-import RelayServiceKit
 import PromiseKit
 import AVFoundation
 

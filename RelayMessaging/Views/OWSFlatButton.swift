@@ -2,8 +2,7 @@
 //  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 
-import Foundation
-import RelayServiceKit
+import UIKit
 
 @objc
 public class OWSFlatButton: UIView {

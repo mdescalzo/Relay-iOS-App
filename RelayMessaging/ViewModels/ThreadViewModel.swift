@@ -10,7 +10,7 @@ import CoreData
 class ThreadViewModel: NSObject {
     @objc let threadId: String
     @objc let hasUnreadMessages: Bool
-    @objc let lastMessageDate: Date
+    @objc let lastMessageDate: Date?
     @objc let unreadCount: UInt
     @objc let title: String
     @objc let isMuted: Bool
@@ -21,14 +21,16 @@ class ThreadViewModel: NSObject {
 
     @objc
     init(thread: FLIThread) {
-        self.threadId = thread.uuid
-        self.lastMessageDate = thread.lastMessage().sentDate
-        self.title = thread.displayName()
-        self.isMuted = thread.isMuted
-        self.lastMessageText = thread.lastMessage().plainText
-        self.lastMessageForInbox = thread.lastMessage()
-        self.unreadCount = thread.unreadMessageCount(transaction: transaction)
-        self.hasUnreadMessages = unreadCount > 0
+        threadId = thread.uuid!
+        lastMessageDate = thread.lastMessage()?.sentDate as Date?
+        title = thread.displayName()
+        isMuted = (thread.mutedUntilDate != nil)
+        lastMessageText = thread.lastMessage()?.plainText
+        lastMessageForInbox = thread.lastMessage()
+        unreadCount = thread.unreadMessageCount()
+        hasUnreadMessages = unreadCount > 0
+        
+        super.init()
     }
 
     @objc

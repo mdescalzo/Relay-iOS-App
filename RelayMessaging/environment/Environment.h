@@ -3,7 +3,7 @@
 //
 
 #import "OWSPreferences.h"
-#import <RelayServiceKit/TSStorageHeaders.h>
+
 
 /**
  *
@@ -20,7 +20,6 @@ extern NSString *const FLRelayWipeAndReturnToRegistrationNotification;
 @class MessageSender;
 @class OWSNavigationController;
 @class TSNetworkManager;
-@class TSThread;
 @class ThreadManager;
 
 @interface Environment : NSObject

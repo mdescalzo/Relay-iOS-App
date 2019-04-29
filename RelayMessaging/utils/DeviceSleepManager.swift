@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import RelayServiceKit
+import RelayStorage
 
 // This entity has responsibility for blocking the device from sleeping if
 // certain behaviors (e.g. recording or playing voice messages) are in progress.

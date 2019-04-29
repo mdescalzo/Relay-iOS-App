@@ -9,25 +9,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSString *const OWSPreferencesSignalDatabaseCollection = @"SignalPreferences";
-NSString *const OWSPreferencesCallLoggingDidChangeNotification = @"OWSPreferencesCallLoggingDidChangeNotification";
-
-NSString *const OWSPreferencesKeyScreenSecurity = @"Screen Security Key";
-NSString *const OWSPreferencesKeyEnableDebugLog = @"Debugging Log Enabled Key";
-NSString *const OWSPreferencesKeyNotificationPreviewType = @"Notification Preview Type Key";
-NSString *const OWSPreferencesKeyHasSentAMessage = @"User has sent a message";
-NSString *const OWSPreferencesKeyHasArchivedAMessage = @"User archived a message";
-NSString *const OWSPreferencesKeyPlaySoundInForeground = @"NotificationSoundInForeground";
-NSString *const OWSPreferencesKeyLastRecordedPushToken = @"LastRecordedPushToken";
-NSString *const OWSPreferencesKeyLastRecordedVoipToken = @"LastRecordedVoipToken";
-NSString *const OWSPreferencesKeyCallKitEnabled = @"CallKitEnabled";
-NSString *const OWSPreferencesKeyCallKitPrivacyEnabled = @"CallKitPrivacyEnabled";
-NSString *const OWSPreferencesKeyCallsHideIPAddress = @"CallsHideIPAddress";
-NSString *const OWSPreferencesKeyHasDeclinedNoContactsView = @"hasDeclinedNoContactsView";
-NSString *const OWSPreferencesKeyHasGeneratedThumbnails = @"OWSPreferencesKeyHasGeneratedThumbnails";
-NSString *const OWSPreferencesKeyIOSUpgradeNagDate = @"iOSUpgradeNagDate";
-NSString *const OWSPreferencesKey_IsReadyForAppExtensions = @"isReadyForAppExtensions_5";
-NSString *const OWSPreferencesKeySystemCallLogEnabled = @"OWSPreferencesKeySystemCallLogEnabled";
+NSString *const PrefKeyScreenSecurity = @"Screen Security Key";
+NSString *const PrefKeyEnableDebugLog = @"Debugging Log Enabled Key";
+NSString *const PrefKeyNotificationPreviewType = @"Notification Preview Type Key";
+NSString *const PrefKeyHasSentAMessage = @"User has sent a message";
+NSString *const PrefKeyHasArchivedAMessage = @"User archived a message";
+NSString *const PrefKeyPlaySoundInForeground = @"NotificationSoundInForeground";
+NSString *const PrefKeyLastRecordedPushToken = @"LastRecordedPushToken";
+NSString *const PrefKeyLastRecordedVoipToken = @"LastRecordedVoipToken";
+NSString *const PrefKeyCallKitEnabled = @"CallKitEnabled";
+NSString *const PrefKeyCallKitPrivacyEnabled = @"CallKitPrivacyEnabled";
+NSString *const PrefKeyCallsHideIPAddress = @"CallsHideIPAddress";
+NSString *const PrefKeyHasDeclinedNoContactsView = @"hasDeclinedNoContactsView";
+NSString *const PrefKeyHasGeneratedThumbnails = @"PrefKeyHasGeneratedThumbnails";
+NSString *const PrefKeyIOSUpgradeNagDate = @"iOSUpgradeNagDate";
+NSString *const PrefKey_IsReadyForAppExtensions = @"isReadyForAppExtensions_5";
+NSString *const PrefKeySystemCallLogEnabled = @"PrefKeySystemCallLogEnabled";
 NSString *const PropertyListPreferencesKeyUseGravatars = @"UseGravatars";
 NSString *const PropertyListPreferencesKeyShowWebPreview = @"ShowWebPreview";
 
@@ -52,59 +49,18 @@ NSString *const PropertyListPreferencesKeyShowWebPreview = @"ShowWebPreview";
     [NSUserDefaults removeAll];
 }
 
-- (nullable id)tryGetValueForKey:(NSString *)key
+- (nullable id)getValueForKey:(NSString *)key
 {
-    OWSAssertDebug(key != nil);
-
-    __block id result;
-    [OWSPrimaryStorage.dbReadConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        result = [self tryGetValueForKey:key transaction:transaction];
-    }];
-    return result;
-}
-
-- (nullable id)tryGetValueForKey:(NSString *)key transaction:(YapDatabaseReadTransaction *)transaction
-{
-    OWSAssertDebug(key != nil);
-    return [transaction objectForKey:key inCollection:OWSPreferencesSignalDatabaseCollection];
+    // FIXME: Rebuild
+    return [NSUserDefaults.appUserDefaults objectForKey:key];
 }
 
 - (void)setValueForKey:(NSString *)key toValue:(nullable id)value
 {
-    [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-        [self setValueForKey:key toValue:value transaction:transaction];
-    }];
-}
-
-- (void)setValueForKey:(NSString *)key
-               toValue:(nullable id)value
-           transaction:(YapDatabaseReadWriteTransaction *)transaction
-{
-    OWSAssertDebug(key != nil);
-
-    [transaction setObject:value forKey:key inCollection:OWSPreferencesSignalDatabaseCollection];
+    // FIXME: Rebuild
 }
 
 #pragma mark - Specific Preferences
-
-+ (BOOL)isReadyForAppExtensions
-{
-    NSNumber *preference = [NSUserDefaults.appUserDefaults objectForKey:OWSPreferencesKey_IsReadyForAppExtensions];
-
-    if (preference) {
-        return [preference boolValue];
-    } else {
-        return NO;
-    }
-}
-
-+ (void)setIsReadyForAppExtensions
-{
-    OWSAssertDebug(CurrentAppContext().isMainApp);
-
-    [NSUserDefaults.appUserDefaults setObject:@(YES) forKey:OWSPreferencesKey_IsReadyForAppExtensions];
-    [NSUserDefaults.appUserDefaults synchronize];
-}
 
 - (BOOL)screenSecurityIsEnabled
 {

@@ -20,11 +20,10 @@
 #import "FLAnnouncementViewController.h"
 
 @import PromiseKit;
-@import RelayServiceKit;
 @import SignalCoreKit;
 @import RelayMessaging;
-
-@import YapDatabase;
+@import CoreData;
+@import RelayStorage;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -63,9 +62,10 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) UILabel *emptyBoxLabel;
 
-@property (nonatomic) YapDatabaseConnection *editingDbConnection;
-@property (nonatomic) YapDatabaseConnection *uiDatabaseConnection;
-@property (nonatomic) YapDatabaseViewMappings *threadMappings;
+@property (nonatomic) NSManagedObjectContext *context;
+@property (nonatomic) NSFetchedResultsController *currentResultsContoller;
+@property (nonatomic) NSFetchedResultsController *threadResultsController;
+@property (nonatomic) NSFetchedResultsController *archivedResultsController;
 @property (nonatomic) HomeViewMode homeViewMode;
 @property (nonatomic) id previewingContext;
 @property (nonatomic, readonly) NSCache<NSString *, ThreadViewModel *> *threadViewModelCache;
@@ -182,7 +182,52 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (void)dealloc
 {
+    self.currentResultsContoller = nil;
+    self.threadResultsController = nil;
+    self.archivedResultsController = nil;
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+// MARK: - Core Data pieces
+-(NSManagedObjectContext *)context {
+    if (_context) {
+        _context = StorageManager.shared.viewContext;
+    }
+    return _context;
+}
+
+-(NSFetchedResultsController *)threadResultsController {
+    if (_threadResultsController == nil) {
+        NSFetchRequest *fr = [FLIThread fetchRequest];
+        fr.fetchBatchSize = 20;
+        fr.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[ [NSPredicate predicateWithFormat:@"visible == true"],
+                                                                             [NSPredicate predicateWithFormat:@"pinned == false"],
+                                                                             [NSPredicate predicateWithFormat:@"archiveDate == nil"] ]];;
+        fr.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"pinPosition" ascending:YES],
+                                [NSSortDescriptor sortDescriptorWithKey:@"lastMessageDate" ascending:NO] ];
+        _threadResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fr
+                                                                           managedObjectContext:self.context
+                                                                             sectionNameKeyPath:@"type"
+                                                                                      cacheName:@"threadCache"];
+    }
+    return _threadResultsController;
+}
+
+-(NSFetchedResultsController *)archivedResultsController
+{
+    if (_archivedResultsController == nil) {
+        NSFetchRequest *fr = [FLIThread fetchRequest];
+        fr.fetchBatchSize = 20;
+        fr.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[ [NSPredicate predicateWithFormat:@"visible == true"],
+                                                                             [NSPredicate predicateWithFormat:@"archiveDate != nil"] ]];;
+        fr.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"archiveDate" ascending:NO] ];
+        _archivedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fr
+                                                                           managedObjectContext:self.context
+                                                                             sectionNameKeyPath:@"type"
+                                                                                      cacheName:@"threadCache"];
+    }
+    return _archivedResultsController;
 }
 
 #pragma mark - Notifications
@@ -688,21 +733,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 #pragma mark - Table View Data Source
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (!(indexPath.section == HomeViewControllerSectionArchiveButton ||
-        indexPath.section == HomeViewControllerSectionReminders)) {
-        
-        if ([self threadForIndexPath:indexPath] == nil) {
-            return 0.0;
-        } else {
-            return self.tableView.rowHeight;
-        }
-    } else {
-        return self.tableView.rowHeight;
-    }
-}
-
 -(nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (self.homeViewMode == HomeViewMode_Inbox) {
@@ -744,7 +774,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return (NSInteger)[self.threadMappings numberOfSections];
+    return self.threadResultsController.sections.count + (self.hasVisibleReminders ? 1 : 0) + (self.hasArchivedThreadsRow ? 1 : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)aSection
@@ -754,17 +784,12 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         case HomeViewControllerSectionReminders: {
             return self.hasVisibleReminders ? 1 : 0;
         }
-        case HomeViewControllerSectionAnnouncements: {
-            return (NSInteger)[self.threadMappings numberOfItemsInSection:(NSUInteger)section];
-        }
-        case HomeViewControllerSectionPinned: {
-            return (NSInteger)[self.threadMappings numberOfItemsInSection:(NSUInteger)section];
-        }
-        case HomeViewControllerSectionConversations: {
-            return (NSInteger)[self.threadMappings numberOfItemsInSection:(NSUInteger)section];
-        }
         case HomeViewControllerSectionArchiveButton: {
             return self.hasArchivedThreadsRow ? 1 : 0;
+        }
+        default: {
+            id sectionInfo = [[self.currentResultsContoller sections] objectAtIndex:aSection];
+            return [sectionInfo numberOfObjects];
         }
     }
 
@@ -774,22 +799,16 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (ThreadViewModel *)threadViewModelForIndexPath:(NSIndexPath *)indexPath
 {
-    TSThread *threadRecord = [self threadForIndexPath:indexPath];
-    OWSAssertDebug(threadRecord);
-
-    __block ThreadViewModel *_Nullable newThreadViewModel = nil;
-    if (threadRecord != nil) {
-    ThreadViewModel *_Nullable cachedThreadViewModel = [self.threadViewModelCache objectForKey:threadRecord.uniqueId];
-    if (cachedThreadViewModel) {
-        return cachedThreadViewModel;
+    FLIThread *thread = [self.currentResultsContoller objectAtIndexPath:indexPath];
+    
+    ThreadViewModel *threadModel = [self.threadViewModelCache objectForKey:thread.uuid];
+    
+    if (threadModel == nil) {
+        threadModel = [[ThreadViewModel alloc] initWithThread:thread];
+        [self.threadViewModelCache setObject:threadModel forKey:thread.uuid];
     }
-
-    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *_Nonnull transaction) {
-        newThreadViewModel = [[ThreadViewModel alloc] initWithThread:threadRecord transaction:transaction];
-    }];
-    [self.threadViewModelCache setObject:newThreadViewModel forKey:threadRecord.uniqueId];
-    }
-    return newThreadViewModel;
+    
+    return threadModel;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -799,12 +818,8 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         case HomeViewControllerSectionReminders: {
             return self.reminderViewCell;
         }
-        case HomeViewControllerSectionAnnouncements: {
-            return [self tableView:tableView cellForConversationAtIndexPath:indexPath];
-        }
-        case HomeViewControllerSectionPinned: {
-            return [self tableView:tableView cellForConversationAtIndexPath:indexPath];
-        }
+        case HomeViewControllerSectionAnnouncements:
+        case HomeViewControllerSectionPinned:
         case HomeViewControllerSectionConversations: {
             return [self tableView:tableView cellForConversationAtIndexPath:indexPath];
         }
@@ -820,11 +835,10 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForConversationAtIndexPath:(NSIndexPath *)indexPath
 {
     HomeViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:HomeViewCell.cellReuseIdentifier];
-    OWSAssertDebug(cell);
 
-    ThreadViewModel *thread = [self threadViewModelForIndexPath:indexPath];
-    if (thread != nil) {
-        [cell configureWithThread:thread contactsManager:self.contactsManager];
+    ThreadViewModel *threadModel = [self threadViewModelForIndexPath:indexPath];
+    if (threadModel != nil) {
+        [cell configureWithThread:threadModel contactsManager:self.contactsManager];
     return cell;
     } else {
         return UITableViewCell.new;
@@ -872,16 +886,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     [stackView autoPinEdgeToSuperviewMargin:ALEdgeBottom];
 
     return cell;
-}
-
-- (TSThread *)threadForIndexPath:(NSIndexPath *)indexPath
-{
-    __block TSThread *thread = nil;
-    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        thread = [[transaction extension:TSThreadDatabaseViewExtensionName] objectAtIndexPath:indexPath
-                                                                                 withMappings:self.threadMappings];
-    }];
-    return thread;
 }
 
 - (void)pullToRefreshPerformed:(UIRefreshControl *)refreshControl
@@ -1388,9 +1392,23 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     }
 }
 
-- (void)updateMappings
+- (void)updateFetchedResults
 {
     OWSAssertIsOnMainThread();
+    
+    switch (self.homeViewMode) {
+        case HomeViewMode_Inbox: {
+            self.currentResultsContoller = self.threadResultsController
+            break;
+        }
+        case HomeViewMode_Archive: {
+            self.currentResultsContoller = self.archivedResultsController
+            break;
+        }
+        default: {
+            break;
+        }
+    }
     
     if (self.homeViewMode == HomeViewMode_Inbox) {
         self.threadMappings = [[YapDatabaseViewMappings alloc]

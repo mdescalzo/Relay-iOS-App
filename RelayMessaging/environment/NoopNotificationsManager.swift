@@ -2,7 +2,8 @@
 //  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 
-import RelayServiceKit
+
+import RelayStorage
 
 @objc
 public class NoopNotificationsManager: NSObject, NotificationsProtocol {
@@ -10,15 +11,15 @@ public class NoopNotificationsManager: NSObject, NotificationsProtocol {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
 
-    public func notifyUser(for incomingMessage: TSIncomingMessage, in thread: TSThread, contactsManager: ContactsManagerProtocol, transaction: YapDatabaseReadTransaction) {
+    public func notifyUser(for incomingMessage: FLIMessage, in thread: FLIThread, contactsManager: ContactsManagerProtocol) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
 
-    public func notifyUser(for error: TSErrorMessage, thread: TSThread, transaction: YapDatabaseReadWriteTransaction) {
+    public func notifyUser(for error: FLIMessage, thread: FLIThread) {
         Logger.warn("\(self.logTag) in \(#function), skipping notification for: \(error.description)")
     }
 
-    public func notifyUser(forThreadlessErrorMessage error: TSErrorMessage, transaction: YapDatabaseReadWriteTransaction) {
+    public func notifyUser(forThreadlessErrorMessage error: FLIMessage) {
         Logger.warn("\(self.logTag) in \(#function), skipping notification for: \(error.description)")
     }
 }

@@ -12,7 +12,12 @@ import CoreData
 @objc(FLIThread)
 public class FLIThread: BaseChatObject {
     
-    @objc func displayName() -> String {
+    enum FLIThreadType : String {
+        case FLIThreadTypeAnnouncement = "announcement"
+        case FLIThreadTypeConversation = "conversation"
+    }
+    
+    @objc public func displayName() -> String {
         var returnString: String
         
         if title?.count ?? 0 > 0 {
@@ -29,7 +34,7 @@ public class FLIThread: BaseChatObject {
         return returnString.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    @objc func isOneOnOne() -> Bool {
+    @objc public func isOneOnOne() -> Bool {
         guard let participants = currentParticipants as? Set<FLIUser> else {
             return false
         }
@@ -40,7 +45,7 @@ public class FLIThread: BaseChatObject {
         }
     }
     
-    @objc func otherParticipant() -> FLIUser? {
+    @objc public func otherParticipant() -> FLIUser? {
         guard let participants = currentParticipants as? Set<FLIUser> else {
             return nil
         }
@@ -55,7 +60,7 @@ public class FLIThread: BaseChatObject {
         return nil
     }
 
-    @objc func lastMessage() -> FLIMessage? {
+    @objc public func lastMessage() -> FLIMessage? {
         guard messages?.count ?? 0 > 0 else {
             return nil
         }
@@ -67,9 +72,9 @@ public class FLIThread: BaseChatObject {
         return nil
     }
     
-    @objc func unreadMessageCount() -> UInt {
+    @objc public func unreadMessageCount() -> UInt {
         //  FIXME: Build fetch request of count return type and predicate that filters on unread.
-        //  TODO: Build into threadManager a FetchResultsController which tracks unread values for us.
+        //  TODO: Build into threadManager a FetchResultsController which tracks unread values for us. 
         
         return 42
     }

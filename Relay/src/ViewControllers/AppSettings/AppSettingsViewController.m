@@ -17,7 +17,7 @@
 #import "RegistrationUtils.h"
 #import "Relay-Swift.h"
 
-@import RelayServiceKit;
+@import RelayStorage;
 @import RelayMessaging;
 
 @interface AppSettingsViewController ()

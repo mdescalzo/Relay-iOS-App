@@ -11,23 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol SelectRecipientViewControllerDelegate <NSObject>
 
-//- (NSString *)phoneNumberSectionTitle;
-//- (NSString *)phoneNumberButtonText;
 - (NSString *)contactsSectionTitle;
-
-//- (void)phoneNumberWasSelected:(NSString *)phoneNumber;
-//- (BOOL)canSignalAccountBeSelected:(SignalAccount *)signalAccount;
 
 -(void)relayTagWasSelected:(FLTag *)relayTag;
 -(void)relayRecipientWasSelected:(RelayRecipient *)relayRecipient;
 
-//- (nullable NSString *)accessoryMessageForSignalAccount:(SignalAccount *)signalAccount;
-
 - (BOOL)shouldHideLocalNumber;
 
 - (BOOL)shouldHideContacts;
-
-//- (BOOL)shouldValidatePhoneNumbers;
 
 @end
 

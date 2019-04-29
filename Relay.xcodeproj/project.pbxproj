@@ -88,8 +88,6 @@
 		346129A91FD1F0E000532771 /* OWSFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129A81FD1F0DF00532771 /* OWSFormat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		346129AB1FD1F0EE00532771 /* OWSFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129AA1FD1F0EE00532771 /* OWSFormat.m */; };
 		346129AD1FD1F34E00532771 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346129AC1FD1F34E00532771 /* ImageCache.swift */; };
-		346129B41FD1F7E800532771 /* OWSProfileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129B11FD1F7E800532771 /* OWSProfileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		346129B51FD1F7E800532771 /* OWSProfileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129B21FD1F7E800532771 /* OWSProfileManager.m */; };
 		346129C81FD2072E00532771 /* NSAttributedString+OWS.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129C11FD2072D00532771 /* NSAttributedString+OWS.m */; };
 		346129CC1FD2072E00532771 /* NSAttributedString+OWS.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129C51FD2072D00532771 /* NSAttributedString+OWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		346129D01FD207F300532771 /* OWSAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346129CF1FD207F200532771 /* OWSAlerts.swift */; };
@@ -119,8 +117,6 @@
 		3478506A1FD9B78A007B8332 /* AppSetup.h in Headers */ = {isa = PBXBuildFile; fileRef = 347850661FD9B789007B8332 /* AppSetup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3478506B1FD9B78A007B8332 /* NoopCallMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347850671FD9B78A007B8332 /* NoopCallMessageHandler.swift */; };
 		3478506C1FD9B78A007B8332 /* NoopNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347850681FD9B78A007B8332 /* NoopNotificationsManager.swift */; };
-		347850711FDAEB17007B8332 /* OWSUserProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 3478506F1FDAEB16007B8332 /* OWSUserProfile.m */; };
-		347850721FDAEB17007B8332 /* OWSUserProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 347850701FDAEB16007B8332 /* OWSUserProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		348570A820F67575004FF32B /* OWSMessageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 348570A620F67574004FF32B /* OWSMessageHeaderView.m */; };
 		348BB25A209CF8E50047AEC2 /* TappableStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348BB258209CF8E40047AEC2 /* TappableStackView.swift */; };
 		348BB25B209CF8E50047AEC2 /* TappableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348BB259209CF8E50047AEC2 /* TappableView.swift */; };
@@ -210,10 +206,6 @@
 		451686AB1F520CDA00AC3D4B /* MultiDeviceProfileKeyUpdateJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451686AA1F520CDA00AC3D4B /* MultiDeviceProfileKeyUpdateJob.swift */; };
 		45194F8F1FD71FF500333B2C /* ThreadUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129BE1FD2068600532771 /* ThreadUtil.m */; };
 		45194F901FD7200000333B2C /* ThreadUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 346129BD1FD2068600532771 /* ThreadUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		45194F921FD7215600333B2C /* OWSContactOffersInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 34C42D621F4734ED0072EC04 /* OWSContactOffersInteraction.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		45194F931FD7215C00333B2C /* OWSContactOffersInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C42D631F4734ED0072EC04 /* OWSContactOffersInteraction.m */; };
-		45194F941FD7216000333B2C /* TSUnreadIndicatorInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 34C42D641F4734ED0072EC04 /* TSUnreadIndicatorInteraction.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		45194F951FD7216600333B2C /* TSUnreadIndicatorInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C42D651F4734ED0072EC04 /* TSUnreadIndicatorInteraction.m */; };
 		451A13B11E13DED2000A50FD /* CallNotificationsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A13B01E13DED2000A50FD /* CallNotificationsAdapter.swift */; };
 		451F8A341FD710C3005CB9DA /* ConversationSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451777C71FD61554001225FF /* ConversationSearcher.swift */; };
 		451F8A351FD710DE005CB9DA /* Searcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45360B8C1F9521F800FA666C /* Searcher.swift */; };
@@ -230,9 +222,7 @@
 		451F8A421FD714C7005CB9DA /* ContactTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 76EB052E18170B33006006FC /* ContactTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		451F8A431FD714FE005CB9DA /* AvatarImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F3AEB51DFDE7900080CE33 /* AvatarImageView.swift */; };
 		451F8A461FD715BA005CB9DA /* OWSGroupAvatarBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 45666EC81D994C0D008FE134 /* OWSGroupAvatarBuilder.m */; };
-		451F8A471FD715BA005CB9DA /* OWSAvatarBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 45666EC51D99483D008FE134 /* OWSAvatarBuilder.m */; };
 		451F8A481FD715BA005CB9DA /* OWSContactAvatarBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 45855F361D9498A40084F340 /* OWSContactAvatarBuilder.m */; };
-		451F8A491FD715CF005CB9DA /* OWSAvatarBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 45666EC41D99483D008FE134 /* OWSAvatarBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		451F8A4A1FD715D9005CB9DA /* OWSContactAvatarBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 45855F351D9498A40084F340 /* OWSContactAvatarBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		451F8A4B1FD715E1005CB9DA /* OWSGroupAvatarBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 45666EC71D994C0D008FE134 /* OWSGroupAvatarBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		452037D11EE84975004E4CDF /* DebugUISessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = 452037D01EE84975004E4CDF /* DebugUISessionState.m */; };
@@ -614,6 +604,7 @@
 		7D2CD67C214C46BC004E957A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B66DBF4919D5BBC8006EA940 /* Images.xcassets */; };
 		7D2CD67D214C46BC004E957A /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
 		7D2CD687214C5A3F004E957A /* RelayDevShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7D4438532277561900907033 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4438522277561900907033 /* UserViewModel.swift */; };
 		7D6430C4226912390000DE32 /* FLIThread+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */; };
 		7D6430C5226912390000DE32 /* ProtocolObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */; };
 		7D6430C8226912410000DE32 /* FLIThread+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */; };
@@ -630,7 +621,6 @@
 		7D6430DA226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430D7226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift */; };
 		7D6430DC226923220000DE32 /* FLIAttachment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DB226923220000DE32 /* FLIAttachment+CoreDataClass.swift */; };
 		7D6430DE2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */; };
-		7D6430E1226926DB0000DE32 /* FLITag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430E0226926DB0000DE32 /* FLITag+CoreDataProperties.swift */; };
 		7D6430E2226926DB0000DE32 /* FLITag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */; };
 		7D6564F42113BD8B00365A19 /* SelectThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564E42113BD8900365A19 /* SelectThreadViewController.m */; };
 		7D6565002113BD8B00365A19 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */; };
@@ -667,6 +657,7 @@
 		7D8517EC211CB19C00F9EF53 /* EvpMessageDigest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E7211CB19B00F9EF53 /* EvpMessageDigest.m */; };
 		7D8517ED211CB19C00F9EF53 /* EvpSymetricUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E8211CB19B00F9EF53 /* EvpSymetricUtil.m */; };
 		7D86A3EF223A1354004436A0 /* OWSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D99C8B1F27B13B00D284D6 /* OWSViewController.m */; };
+		7D8DE66F226E208900C35844 /* FLITag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8DE66E226E208900C35844 /* FLITag+CoreDataClass.swift */; };
 		7D92E4CE220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
 		7D92E4CF220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
 		7D92E4D0220E0A1600542694 /* PeerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CC220E0A1500542694 /* PeerViewCell.swift */; };
@@ -682,7 +673,6 @@
 		7DC452C022666DC000FC6CAB /* RelayStorage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC452A222666D9A00FC6CAB /* RelayStorage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DC452C622666EF500FC6CAB /* ForstaRelay1.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7DC452C322666EF500FC6CAB /* ForstaRelay1.xcdatamodeld */; };
 		7DC452C722666EF500FC6CAB /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC452C522666EF500FC6CAB /* StorageManager.swift */; };
-		7DC452C92266749D00FC6CAB /* AxolotlKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC452C82266749D00FC6CAB /* AxolotlKit.framework */; };
 		7DC452D52267AEB500FC6CAB /* SignalAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC452D42267AEB500FC6CAB /* SignalAddress.swift */; };
 		7DCA3B3E21BB00F700733FF2 /* ThreadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCA3B3D21BB00F600733FF2 /* ThreadManager.swift */; };
 		7DCC43D02225A0900097EE0E /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */; };
@@ -695,7 +685,7 @@
 		7DDCC24121F675C70053A5CA /* AppUpdateNag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDCC23F21F675C70053A5CA /* AppUpdateNag.swift */; };
 		7DDED1AE21AC977400CB7361 /* UIControl+Forsta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */; };
 		7DDED1AF21AC977400CB7361 /* UIControl+Forsta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */; };
-		7DF2E98F212360B400855424 /* FLContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF2E98E212360B400855424 /* FLContactsManager.swift */; };
+		7DF2E98F212360B400855424 /* FLIUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF2E98E212360B400855424 /* FLIUserManager.swift */; };
 		93B5A7A62605C8DB0E8C6399 /* Pods_RelayDev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B8661366C8D98511544433B /* Pods_RelayDev.framework */; };
 		954AEE6A1DF33E01002E5410 /* ContactsPickerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954AEE681DF33D32002E5410 /* ContactsPickerTest.swift */; };
 		A10FDF79184FB4BB007FF963 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76C87F18181EFCE600C4ACAB /* MediaPlayer.framework */; };
@@ -1058,8 +1048,6 @@
 		346129A81FD1F0DF00532771 /* OWSFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSFormat.h; sourceTree = "<group>"; };
 		346129AA1FD1F0EE00532771 /* OWSFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSFormat.m; sourceTree = "<group>"; };
 		346129AC1FD1F34E00532771 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
-		346129B11FD1F7E800532771 /* OWSProfileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSProfileManager.h; sourceTree = "<group>"; };
-		346129B21FD1F7E800532771 /* OWSProfileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSProfileManager.m; sourceTree = "<group>"; };
 		346129BD1FD2068600532771 /* ThreadUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadUtil.h; sourceTree = "<group>"; };
 		346129BE1FD2068600532771 /* ThreadUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadUtil.m; sourceTree = "<group>"; };
 		346129C11FD2072D00532771 /* NSAttributedString+OWS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+OWS.m"; sourceTree = "<group>"; };
@@ -1089,8 +1077,6 @@
 		347850661FD9B789007B8332 /* AppSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSetup.h; sourceTree = "<group>"; };
 		347850671FD9B78A007B8332 /* NoopCallMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoopCallMessageHandler.swift; sourceTree = "<group>"; };
 		347850681FD9B78A007B8332 /* NoopNotificationsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoopNotificationsManager.swift; sourceTree = "<group>"; };
-		3478506F1FDAEB16007B8332 /* OWSUserProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSUserProfile.m; sourceTree = "<group>"; };
-		347850701FDAEB16007B8332 /* OWSUserProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSUserProfile.h; sourceTree = "<group>"; };
 		348570A620F67574004FF32B /* OWSMessageHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSMessageHeaderView.m; sourceTree = "<group>"; };
 		348570A720F67574004FF32B /* OWSMessageHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSMessageHeaderView.h; sourceTree = "<group>"; };
 		348BB258209CF8E40047AEC2 /* TappableStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TappableStackView.swift; path = RelayMessaging/Views/TappableStackView.swift; sourceTree = SOURCE_ROOT; };
@@ -1122,10 +1108,6 @@
 		34C3C7912040B0DC0000134C /* OWSAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSAudioPlayer.m; sourceTree = "<group>"; };
 		34C42D591F45F7A80072EC04 /* OWSNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSNavigationController.h; sourceTree = "<group>"; };
 		34C42D5A1F45F7A80072EC04 /* OWSNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSNavigationController.m; sourceTree = "<group>"; };
-		34C42D621F4734ED0072EC04 /* OWSContactOffersInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSContactOffersInteraction.h; sourceTree = "<group>"; };
-		34C42D631F4734ED0072EC04 /* OWSContactOffersInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSContactOffersInteraction.m; sourceTree = "<group>"; };
-		34C42D641F4734ED0072EC04 /* TSUnreadIndicatorInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSUnreadIndicatorInteraction.h; sourceTree = "<group>"; };
-		34C42D651F4734ED0072EC04 /* TSUnreadIndicatorInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSUnreadIndicatorInteraction.m; sourceTree = "<group>"; };
 		34C6B0A51FA0E46F00D35993 /* test-gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "test-gif.gif"; sourceTree = "<group>"; };
 		34C6B0A71FA0E46F00D35993 /* test-mp3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "test-mp3.mp3"; sourceTree = "<group>"; };
 		34C6B0A81FA0E46F00D35993 /* test-mp4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test-mp4.mp4"; sourceTree = "<group>"; };
@@ -1261,8 +1243,6 @@
 		455A16DC1F1FEA0000F86704 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		455AC69D1F4F8B0300134004 /* ImageCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacheTest.swift; sourceTree = "<group>"; };
 		45638BDB1F3DD0D400128435 /* DebugUICalling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugUICalling.swift; sourceTree = "<group>"; };
-		45666EC41D99483D008FE134 /* OWSAvatarBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSAvatarBuilder.h; sourceTree = "<group>"; };
-		45666EC51D99483D008FE134 /* OWSAvatarBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSAvatarBuilder.m; sourceTree = "<group>"; };
 		45666EC71D994C0D008FE134 /* OWSGroupAvatarBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSGroupAvatarBuilder.h; sourceTree = "<group>"; };
 		45666EC81D994C0D008FE134 /* OWSGroupAvatarBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSGroupAvatarBuilder.m; sourceTree = "<group>"; };
 		45666F571D9B2880008FE134 /* OWSScrubbingLogFormatterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSScrubbingLogFormatterTest.m; sourceTree = "<group>"; };
@@ -1372,6 +1352,7 @@
 		7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RelayDevShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D2CD683214C491B004E957A /* RelayDevShareExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RelayDevShareExtension.entitlements; sourceTree = "<group>"; };
 		7D2CD688214C5F74004E957A /* RelayDevShareExtension-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RelayDevShareExtension-Info.plist"; sourceTree = "<group>"; };
+		7D4438522277561900907033 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FLIThread+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProtocolObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FLIThread+CoreDataProperties.swift"; path = "RelayStorage/ManagedObjects/FLIThread+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
@@ -1386,12 +1367,9 @@
 		7D6430DB226923220000DE32 /* FLIAttachment+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FLIAttachment+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FLIAttachment+CoreDataProperties.swift"; path = "RelayStorage/ManagedObjects/FLIAttachment+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLITag+CoreDataClass.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		7D6430E0226926DB0000DE32 /* FLITag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLITag+CoreDataProperties.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		7D6564C12113B1C200365A19 /* Relay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Relay.entitlements; sourceTree = "<group>"; };
 		7D6564C22113B74900365A19 /* RelayShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelayShareExtension.entitlements; sourceTree = "<group>"; };
 		7D6564E42113BD8900365A19 /* SelectThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectThreadViewController.m; sourceTree = "<group>"; };
-		7D6564E82113BD8900365A19 /* ViewControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewControllerUtils.m; sourceTree = "<group>"; };
-		7D6564EA2113BD8900365A19 /* ViewControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewControllerUtils.h; sourceTree = "<group>"; };
 		7D6564EE2113BD8A00365A19 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRecipientViewController.h; sourceTree = "<group>"; };
 		7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRecipientViewController.m; sourceTree = "<group>"; };
 		7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectThreadViewController.h; sourceTree = "<group>"; };
@@ -1433,6 +1411,7 @@
 		7D8517E9211CB19B00F9EF53 /* EvpMessageDigest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpMessageDigest.h; sourceTree = "<group>"; };
 		7D8517EA211CB19C00F9EF53 /* EvpUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpUtil.h; sourceTree = "<group>"; };
 		7D8517EB211CB19C00F9EF53 /* EvpSymetricUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpSymetricUtil.h; sourceTree = "<group>"; };
+		7D8DE66E226E208900C35844 /* FLITag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLITag+CoreDataClass.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConferenceCallViewController.swift; sourceTree = "<group>"; };
 		7D92E4CC220E0A1500542694 /* PeerViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerViewCell.swift; sourceTree = "<group>"; };
 		7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerViewsLayout.swift; sourceTree = "<group>"; };
@@ -1458,7 +1437,7 @@
 		7DD5A732211B7CA500965478 /* HttpResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpResponse.m; sourceTree = "<group>"; };
 		7DDCC23F21F675C70053A5CA /* AppUpdateNag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateNag.swift; sourceTree = "<group>"; };
 		7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Forsta.swift"; sourceTree = "<group>"; };
-		7DF2E98E212360B400855424 /* FLContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLContactsManager.swift; sourceTree = "<group>"; };
+		7DF2E98E212360B400855424 /* FLIUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLIUserManager.swift; sourceTree = "<group>"; };
 		7E75823A4CD0DBCCCA43D496 /* Pods-RelayStorage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayStorage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayStorage/Pods-RelayStorage.debug.xcconfig"; sourceTree = "<group>"; };
 		8300824C7D94C76E7FEA1BED /* Pods-Common-RelayMessaging.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayMessaging.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayMessaging/Pods-Common-RelayMessaging.app store release.xcconfig"; sourceTree = "<group>"; };
 		8BDF00953362DF77BCB051B3 /* Pods-Common-Relay-RelayShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-Relay-RelayShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-Relay-RelayShareExtension/Pods-Common-Relay-RelayShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
@@ -1633,7 +1612,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DC452C92266749D00FC6CAB /* AxolotlKit.framework in Frameworks */,
 				73E10EF619A1B6CA58EA8971 /* Pods_RelayStorage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1906,8 +1884,6 @@
 				4523D015206EDC2B00A2AB51 /* LRUCache.swift */,
 				34C3C7902040B0DC0000134C /* OWSAudioPlayer.h */,
 				34C3C7912040B0DC0000134C /* OWSAudioPlayer.m */,
-				45666EC41D99483D008FE134 /* OWSAvatarBuilder.h */,
-				45666EC51D99483D008FE134 /* OWSAvatarBuilder.m */,
 				45855F351D9498A40084F340 /* OWSContactAvatarBuilder.h */,
 				45855F361D9498A40084F340 /* OWSContactAvatarBuilder.m */,
 				346129A81FD1F0DF00532771 /* OWSFormat.h */,
@@ -2020,9 +1996,7 @@
 				7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */,
 				7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */,
 				7D6564E42113BD8900365A19 /* SelectThreadViewController.m */,
-				7D6564EA2113BD8900365A19 /* ViewControllerUtils.h */,
-				7D6564E82113BD8900365A19 /* ViewControllerUtils.m */,
-				7DF2E98E212360B400855424 /* FLContactsManager.swift */,
+				7DF2E98E212360B400855424 /* FLIUserManager.swift */,
 			);
 			path = contacts;
 			sourceTree = "<group>";
@@ -2030,10 +2004,6 @@
 		346129B01FD1F7E800532771 /* profiles */ = {
 			isa = PBXGroup;
 			children = (
-				346129B11FD1F7E800532771 /* OWSProfileManager.h */,
-				346129B21FD1F7E800532771 /* OWSProfileManager.m */,
-				347850701FDAEB16007B8332 /* OWSUserProfile.h */,
-				3478506F1FDAEB16007B8332 /* OWSUserProfile.m */,
 			);
 			path = profiles;
 			sourceTree = "<group>";
@@ -2257,10 +2227,6 @@
 		45194F911FD7214600333B2C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				34C42D621F4734ED0072EC04 /* OWSContactOffersInteraction.h */,
-				34C42D631F4734ED0072EC04 /* OWSContactOffersInteraction.m */,
-				34C42D641F4734ED0072EC04 /* TSUnreadIndicatorInteraction.h */,
-				34C42D651F4734ED0072EC04 /* TSUnreadIndicatorInteraction.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2325,6 +2291,7 @@
 				459B7759207BA3A80071D0AB /* OWSQuotedReplyModel.h */,
 				459B775A207BA3A80071D0AB /* OWSQuotedReplyModel.m */,
 				4542DF51208B82E9007B4E76 /* ThreadViewModel.swift */,
+				7D4438522277561900907033 /* UserViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2525,7 +2492,6 @@
 		7D6430C1226911E80000DE32 /* Do not edit */ = {
 			isa = PBXGroup;
 			children = (
-				7D6430E0226926DB0000DE32 /* FLITag+CoreDataProperties.swift */,
 				7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */,
 				7D6430D7226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift */,
 				7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */,
@@ -2611,6 +2577,7 @@
 				7D6430C1226911E80000DE32 /* Do not edit */,
 				7D6430CC226912F00000DE32 /* BaseChatObject+CoreDataClass.swift */,
 				7D6430DB226923220000DE32 /* FLIAttachment+CoreDataClass.swift */,
+				7D8DE66E226E208900C35844 /* FLITag+CoreDataClass.swift */,
 				7D6430D8226922BB0000DE32 /* FLIMessage+CoreDataClass.swift */,
 				7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */,
 				7D6430D4226915BF0000DE32 /* FLIUser+CoreDataClass.swift */,
@@ -2944,10 +2911,8 @@
 				3421981421061A0700C57195 /* JSQMessagesAvatarImage.h in Headers */,
 				3461296F1FD1D74C00532771 /* Release.h in Headers */,
 				34480B571FD0A7A400BC14EF /* OWSScrubbingLogFormatter.h in Headers */,
-				451F8A491FD715CF005CB9DA /* OWSAvatarBuilder.h in Headers */,
 				34B6D27420F664C900765BE2 /* OWSUnreadIndicator.h in Headers */,
 				3421981821061A0700C57195 /* JSQMessageAvatarImageDataSource.h in Headers */,
-				346129B41FD1F7E800532771 /* OWSProfileManager.h in Headers */,
 				3421981521061A0700C57195 /* UIColor+JSQMessages.h in Headers */,
 				34D2015120DC160E00A6FD3A /* ContactCellView.h in Headers */,
 				346129E21FD5C0BE00532771 /* VersionMigrations.h in Headers */,
@@ -2955,7 +2920,6 @@
 				450C801020AD1AE400F3A091 /* OWSWindowManager.h in Headers */,
 				34480B631FD0A98800BC14EF /* UIView+OWS.h in Headers */,
 				451F8A4B1FD715E1005CB9DA /* OWSGroupAvatarBuilder.h in Headers */,
-				347850721FDAEB17007B8332 /* OWSUserProfile.h in Headers */,
 				451F8A371FD71179005CB9DA /* OWSViewController.h in Headers */,
 				451F8A3E1FD713D2005CB9DA /* ThreadViewHelper.h in Headers */,
 				346129391FD1B47300532771 /* OWSPreferences.h in Headers */,
@@ -2963,11 +2927,9 @@
 				34C3C7922040B0DD0000134C /* OWSAudioPlayer.h in Headers */,
 				451F8A4A1FD715D9005CB9DA /* OWSContactAvatarBuilder.h in Headers */,
 				34480B5B1FD0A7E300BC14EF /* RelayMessaging-Prefix.pch in Headers */,
-				45194F921FD7215600333B2C /* OWSContactOffersInteraction.h in Headers */,
 				3478506A1FD9B78A007B8332 /* AppSetup.h in Headers */,
 				451F8A421FD714C7005CB9DA /* ContactTableViewCell.h in Headers */,
 				34480B681FD0AA9400BC14EF /* UIFont+OWS.h in Headers */,
-				45194F941FD7216000333B2C /* TSUnreadIndicatorInteraction.h in Headers */,
 				45194F901FD7200000333B2C /* ThreadUtil.h in Headers */,
 				346129CC1FD2072E00532771 /* NSAttributedString+OWS.h in Headers */,
 				34074F62203D0CBE004596AE /* OWSSounds.h in Headers */,
@@ -3647,70 +3609,48 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Relay/Pods-Relay-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/25519/_25519.framework",
-				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
-				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/CommonCryptoModule/CommonCryptoModule.framework",
 				"${BUILT_PRODUCTS_DIR}/Curve25519/Curve25519.framework",
-				"${BUILT_PRODUCTS_DIR}/Curve25519Kit/Curve25519Kit.framework",
 				"${PODS_ROOT}/GRKOpenSSLFramework/OpenSSL-iOS/bin/openssl.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
-				"${BUILT_PRODUCTS_DIR}/HKDFKit/HKDFKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LetterAvatarKit/LetterAvatarKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework",
 				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
 				"${BUILT_PRODUCTS_DIR}/NSAttributedString-DDHTML/NSAttributedString_DDHTML.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
-				"${BUILT_PRODUCTS_DIR}/ProtocolBuffers/ProtocolBuffers.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/ReCaptcha/ReCaptcha.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/RelayServiceKit/RelayServiceKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SAMKeychain/SAMKeychain.framework",
-				"${BUILT_PRODUCTS_DIR}/SQLCipher/SQLCipher.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SignalCoreKit/SignalCoreKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/UIImageView+Extension/UIImageView_Extension.framework",
 				"${BUILT_PRODUCTS_DIR}/URLEmbeddedView/URLEmbeddedView.framework",
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
-				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/_25519.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AxolotlKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CommonCryptoModule.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curve25519.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curve25519Kit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HKDFKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LetterAvatarKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalProtocol.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAttributedString_DDHTML.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtocolBuffers.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReCaptcha.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RelayServiceKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SAMKeychain.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLCipher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageView_Extension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLEmbeddedView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3797,70 +3737,48 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RelayDev/Pods-RelayDev-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/25519/_25519.framework",
-				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
-				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/CommonCryptoModule/CommonCryptoModule.framework",
 				"${BUILT_PRODUCTS_DIR}/Curve25519/Curve25519.framework",
-				"${BUILT_PRODUCTS_DIR}/Curve25519Kit/Curve25519Kit.framework",
 				"${PODS_ROOT}/GRKOpenSSLFramework/OpenSSL-iOS/bin/openssl.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
-				"${BUILT_PRODUCTS_DIR}/HKDFKit/HKDFKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LetterAvatarKit/LetterAvatarKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework",
 				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
 				"${BUILT_PRODUCTS_DIR}/NSAttributedString-DDHTML/NSAttributedString_DDHTML.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
-				"${BUILT_PRODUCTS_DIR}/ProtocolBuffers/ProtocolBuffers.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/ReCaptcha/ReCaptcha.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/RelayServiceKit/RelayServiceKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SAMKeychain/SAMKeychain.framework",
-				"${BUILT_PRODUCTS_DIR}/SQLCipher/SQLCipher.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SignalCoreKit/SignalCoreKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/UIImageView+Extension/UIImageView_Extension.framework",
 				"${BUILT_PRODUCTS_DIR}/URLEmbeddedView/URLEmbeddedView.framework",
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
-				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/_25519.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AxolotlKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CommonCryptoModule.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curve25519.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curve25519Kit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HKDFKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LetterAvatarKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalProtocol.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAttributedString_DDHTML.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtocolBuffers.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReCaptcha.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RelayServiceKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SAMKeychain.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLCipher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageView_Extension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLEmbeddedView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3953,66 +3871,44 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RelayTests/Pods-RelayTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/25519/_25519.framework",
-				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
-				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/CommonCryptoModule/CommonCryptoModule.framework",
 				"${BUILT_PRODUCTS_DIR}/Curve25519/Curve25519.framework",
-				"${BUILT_PRODUCTS_DIR}/Curve25519Kit/Curve25519Kit.framework",
 				"${PODS_ROOT}/GRKOpenSSLFramework/OpenSSL-iOS/bin/openssl.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
-				"${BUILT_PRODUCTS_DIR}/HKDFKit/HKDFKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LetterAvatarKit/LetterAvatarKit.framework",
 				"${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework",
 				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
 				"${BUILT_PRODUCTS_DIR}/NSAttributedString-DDHTML/NSAttributedString_DDHTML.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
-				"${BUILT_PRODUCTS_DIR}/ProtocolBuffers/ProtocolBuffers.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/RelayServiceKit/RelayServiceKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SAMKeychain/SAMKeychain.framework",
-				"${BUILT_PRODUCTS_DIR}/SQLCipher/SQLCipher.framework",
 				"${BUILT_PRODUCTS_DIR}/SignalCoreKit/SignalCoreKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/UIImageView+Extension/UIImageView_Extension.framework",
 				"${BUILT_PRODUCTS_DIR}/URLEmbeddedView/URLEmbeddedView.framework",
 				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
-				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/_25519.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AxolotlKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CommonCryptoModule.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curve25519.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curve25519Kit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HKDFKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LetterAvatarKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalProtocol.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAttributedString_DDHTML.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtocolBuffers.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RelayServiceKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SAMKeychain.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLCipher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageView_Extension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLEmbeddedView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4059,15 +3955,11 @@
 			files = (
 				45F59A0A2029140500E8D2B0 /* OWSVideoPlayer.swift in Sources */,
 				344F249B200FD03300CFB4F4 /* SharingThreadPickerViewController.m in Sources */,
-				45194F951FD7216600333B2C /* TSUnreadIndicatorInteraction.m in Sources */,
 				45BE4EA22012AD2000935E59 /* DisappearingTimerConfigurationView.swift in Sources */,
-				45194F931FD7215C00333B2C /* OWSContactOffersInteraction.m in Sources */,
 				3421980F21061A0700C57195 /* UIColor+JSQMessages.m in Sources */,
 				4523D016206EDC2B00A2AB51 /* LRUCache.swift in Sources */,
 				450998681FD8C0FF00D89EB3 /* AttachmentSharing.m in Sources */,
-				347850711FDAEB17007B8332 /* OWSUserProfile.m in Sources */,
 				34074F61203D0CBE004596AE /* OWSSounds.m in Sources */,
-				346129B51FD1F7E800532771 /* OWSProfileManager.m in Sources */,
 				346129701FD1D74C00532771 /* Release.m in Sources */,
 				3421981321061A0700C57195 /* JSQMessagesAvatarImageFactory.m in Sources */,
 				7D6564F42113BD8B00365A19 /* SelectThreadViewController.m in Sources */,
@@ -4085,7 +3977,7 @@
 				348BB25B209CF8E50047AEC2 /* TappableView.swift in Sources */,
 				348BB25A209CF8E50047AEC2 /* TappableStackView.swift in Sources */,
 				7D6565042113BDF500365A19 /* MessageApprovalViewController.swift in Sources */,
-				7DF2E98F212360B400855424 /* FLContactsManager.swift in Sources */,
+				7DF2E98F212360B400855424 /* FLIUserManager.swift in Sources */,
 				344F248D2007CCD600CFB4F4 /* DisplayableText.swift in Sources */,
 				450998651FD8A34D00D89EB3 /* DeviceSleepManager.swift in Sources */,
 				3466087220E550F400AFFE73 /* ConversationStyle.swift in Sources */,
@@ -4104,6 +3996,7 @@
 				45194F8F1FD71FF500333B2C /* ThreadUtil.m in Sources */,
 				451F8A3B1FD71297005CB9DA /* UIUtil.m in Sources */,
 				450C800F20AD1AB900F3A091 /* OWSWindowManager.m in Sources */,
+				7D4438532277561900907033 /* UserViewModel.swift in Sources */,
 				454A965A1FD6017E008D2A0E /* SignalAttachment.swift in Sources */,
 				454A965B1FD601BF008D2A0E /* MediaMessageView.swift in Sources */,
 				45BC829D1FD9C4B400011CF3 /* ShareViewDelegate.swift in Sources */,
@@ -4126,7 +4019,6 @@
 				45F59A082028E4FB00E8D2B0 /* OWSAudioSession.swift in Sources */,
 				346129DF1FD5C02A00532771 /* LockInteractionController.m in Sources */,
 				450C801220AD1D5B00F3A091 /* UIDevice+featureSupport.swift in Sources */,
-				451F8A471FD715BA005CB9DA /* OWSAvatarBuilder.m in Sources */,
 				34480B591FD0A7A400BC14EF /* OWSScrubbingLogFormatter.m in Sources */,
 				34641E182088D7E900E2EDE5 /* OWSScreenLock.swift in Sources */,
 				7D65650E2113C53C00365A19 /* AttachmentApprovalViewController.swift in Sources */,
@@ -4341,11 +4233,11 @@
 				7D6430D1226915340000DE32 /* BigDummy.swift in Sources */,
 				7DC452D52267AEB500FC6CAB /* SignalAddress.swift in Sources */,
 				7DC452C622666EF500FC6CAB /* ForstaRelay1.xcdatamodeld in Sources */,
+				7D8DE66F226E208900C35844 /* FLITag+CoreDataClass.swift in Sources */,
 				7D6430D6226915BF0000DE32 /* FLIUser+CoreDataProperties.swift in Sources */,
 				7D6430E2226926DB0000DE32 /* FLITag+CoreDataClass.swift in Sources */,
 				7D6430C9226912410000DE32 /* ProtocolObject+CoreDataProperties.swift in Sources */,
 				7D6430C8226912410000DE32 /* FLIThread+CoreDataProperties.swift in Sources */,
-				7D6430E1226926DB0000DE32 /* FLITag+CoreDataProperties.swift in Sources */,
 				7DC452C722666EF500FC6CAB /* StorageManager.swift in Sources */,
 				7D6430C4226912390000DE32 /* FLIThread+CoreDataClass.swift in Sources */,
 				7D6430DA226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift in Sources */,
@@ -5357,7 +5249,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Forsta.app/Forsta";
 			};
@@ -5420,7 +5312,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Forsta.app/Forsta";
 				VALIDATE_PRODUCT = YES;

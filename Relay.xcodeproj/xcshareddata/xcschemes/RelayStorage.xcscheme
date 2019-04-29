@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D221A088169C9E5E00537ABF"
-               BuildableName = "Forsta.app"
-               BlueprintName = "Relay"
+               BlueprintIdentifier = "7DC452A122666D9A00FC6CAB"
+               BuildableName = "RelayStorage.framework"
+               BlueprintName = "RelayStorage"
                ReferencedContainer = "container:Relay.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7DC452A922666D9A00FC6CAB"
-               BuildableName = "RelayStorageTests.xctest"
-               BlueprintName = "RelayStorageTests"
-               ReferencedContainer = "container:Relay.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D221A088169C9E5E00537ABF"
-            BuildableName = "Forsta.app"
-            BlueprintName = "Relay"
-            ReferencedContainer = "container:Relay.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -61,28 +42,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D221A088169C9E5E00537ABF"
-            BuildableName = "Forsta.app"
-            BlueprintName = "Relay"
+            BlueprintIdentifier = "7DC452A122666D9A00FC6CAB"
+            BuildableName = "RelayStorage.framework"
+            BlueprintName = "RelayStorage"
             ReferencedContainer = "container:Relay.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "INTERNAL"
-            value = ""
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "DEBUG"
-            value = ""
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -92,16 +60,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D221A088169C9E5E00537ABF"
-            BuildableName = "Forsta.app"
-            BlueprintName = "Relay"
+            BlueprintIdentifier = "7DC452A122666D9A00FC6CAB"
+            BuildableName = "RelayStorage.framework"
+            BlueprintName = "RelayStorage"
             ReferencedContainer = "container:Relay.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

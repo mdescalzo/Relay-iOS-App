@@ -4,6 +4,7 @@
 
 import Foundation
 import WebRTC
+import SignalCoreKit
 
 @objc
 public class AudioActivity: NSObject {

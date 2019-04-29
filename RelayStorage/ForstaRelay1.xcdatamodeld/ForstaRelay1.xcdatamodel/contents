@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18E226" minimumToolsVersion="Xcode 9.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18E226" minimumToolsVersion="Xcode 9.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BaseChatObject" representedClassName="BaseChatObject" isAbstract="YES" syncable="YES">
         <attribute name="uuid" attributeType="String" syncable="YES"/>
     </entity>
@@ -12,7 +12,7 @@
         <attribute name="data" attributeType="Binary" syncable="YES"/>
     </entity>
     <entity name="FLIAttachment" representedClassName="FLIAttachment" parentEntity="BaseChatObject" syncable="YES">
-        <attribute name="data" attributeType="Binary" storedInTruthFile="YES" syncable="YES"/>
+        <attribute name="data" attributeType="Binary" allowsExternalBinaryDataStorage="YES" storedInTruthFile="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="message" maxCount="1" deletionRule="Nullify" destinationEntity="FLIMessage" inverseName="attachments" inverseEntity="FLIMessage" syncable="YES"/>
     </entity>
@@ -41,7 +41,9 @@
         <attribute name="archiveDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="avatar" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="expression" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastMessageDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mutedUntilDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="pinned" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="pinPosition" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="pretty" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -76,13 +78,13 @@
     </entity>
     <elements>
         <element name="BaseChatObject" positionX="-4779.5546875" positionY="-3608.33203125" width="128" height="58"/>
-        <element name="DecryptedEnvelope" positionX="-4965.19921875" positionY="-3274.984375" width="128" height="73"/>
-        <element name="EncryptedEnvelope" positionX="-4962.3828125" positionY="-3186.578125" width="128" height="73"/>
-        <element name="FLIAttachment" positionX="-4393.85546875" positionY="-3205.61328125" width="128" height="88"/>
+        <element name="DecryptedEnvelope" positionX="-4444.02734375" positionY="-3205.90625" width="128" height="73"/>
+        <element name="EncryptedEnvelope" positionX="-4411.86328125" positionY="-3109.0703125" width="128" height="73"/>
+        <element name="FLIAttachment" positionX="-4391.4765625" positionY="-3326.70703125" width="128" height="88"/>
         <element name="FLIMessage" positionX="-4571.04296875" positionY="-3634.38671875" width="128" height="178"/>
-        <element name="FLITag" positionX="-4694.796875" positionY="-3360.04296875" width="128" height="163"/>
-        <element name="FLIThread" positionX="-4367.50390625" positionY="-3620.12890625" width="128" height="225"/>
+        <element name="FLITag" positionX="-4683.1953125" positionY="-3357.2421875" width="128" height="163"/>
+        <element name="FLIThread" positionX="-4367.50390625" positionY="-3620.12890625" width="128" height="255"/>
         <element name="FLIUser" positionX="-4962.84375" positionY="-3667.6796875" width="128" height="300"/>
-        <element name="ProtocolObject" positionX="-4968.45703125" positionY="-3371.63671875" width="128" height="73"/>
+        <element name="ProtocolObject" positionX="-4644.6171875" positionY="-3103.515625" width="128" height="73"/>
     </elements>
 </model>
