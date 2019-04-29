@@ -8,8 +8,6 @@ import RelayMessaging
 import PureLayout
 import RelayServiceKit
 import PromiseKit
-import Fabric
-import Crashlytics
 
 @objc
 public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailedViewDelegate {
@@ -32,8 +30,6 @@ public class ShareViewController: UIViewController, ShareViewDelegate, SAEFailed
 
     override open func loadView() {
         super.loadView()
-
-        Crashlytics.start(withAPIKey: self.fabricAPIKey()!)
         
         // This should be the first thing we do.
         let appContext = ShareAppExtensionContext(rootViewController: self)

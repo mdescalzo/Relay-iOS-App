@@ -28,15 +28,6 @@ def shared_pods
     pod 'UIImageView+Extension', '~> 0.2', :inhibit_warnings => true
     pod 'ZXingObjC', '~> 3.5', :inhibit_warnings => true
     pod 'URLEmbeddedView', :inhibit_warnings => true
-    pod 'Fabric', '~> 1.0', :inhibit_warnings => true
-    pod 'Crashlytics', '~> 3.0', :inhibit_warnings => true
-end
-
-target 'RelayDev' do
-    shared_pods
-    pod 'ReCaptcha', '1.4.2', :inhibit_warnings => true
-#    pod 'ATAppUpdater', :inhibit_warnings => true
-    pod 'SSZipArchive', :inhibit_warnings => true
 end
 
 target 'RelaySherpany' do
@@ -45,24 +36,6 @@ target 'RelaySherpany' do
   pod 'SSZipArchive', :inhibit_warnings => true
 end
 
-target 'Relay' do
-    shared_pods
-    pod 'ReCaptcha', '1.4.2', :inhibit_warnings => true
-#    pod 'ATAppUpdater', :inhibit_warnings => true
-    pod 'SSZipArchive', :inhibit_warnings => true
-
-    target 'RelayTests' do
-        inherit! :search_paths
-    end
-end
-
-target 'RelayDevShareExtension' do
-    shared_pods
-end
-
-target 'RelayShareExtension' do
-    shared_pods
-end
 
 target 'RelaySherpanyShareExtension' do
   shared_pods

@@ -23,8 +23,6 @@
 @import RelayMessaging;
 @import AxolotlKit;
 @import PromiseKit;
-@import Fabric;
-@import Crashlytics;
 @import SignalCoreKit;
 
 NSString *const AppDelegateStoryboardMain = @"Main";
@@ -73,8 +71,6 @@ static NSTimeInterval launchStartedAt;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Crashlytics startWithAPIKey:[self fabricAPIKey]];
-
     // This should be the first thing we do.
     SetCurrentAppContext([MainAppContext new]);
 
