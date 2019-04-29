@@ -58,6 +58,7 @@ class LoginViewController: UITableViewController {
         self.usernameTextField.placeholder = NSLocalizedString("ENTER_USERNAME_LABEL", comment: "")
         self.loginButton.titleLabel?.text = NSLocalizedString("SUBMIT", comment: "")
         self.createAccountButton.titleLabel?.text = NSLocalizedString("CREATE_ACCOUNT_BUTTON", comment: "")
+        self.createAccountButton.disable()
     }
     
     override func viewWillAppear(_ animated: Bool) {

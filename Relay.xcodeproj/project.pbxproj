@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		042AE02FEBA302AB373774E6 /* Pods_RelayShareExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B0C1C254310E207F4F8169 /* Pods_RelayShareExtension.framework */; };
+		267398C9F0A6C04B7D2C841D /* Pods_Relay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE34D2C7844709C73962401 /* Pods_Relay.framework */; };
 		34074F61203D0CBE004596AE /* OWSSounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 34074F5F203D0CBD004596AE /* OWSSounds.m */; };
 		34074F62203D0CBE004596AE /* OWSSounds.h in Headers */ = {isa = PBXBuildFile; fileRef = 34074F60203D0CBE004596AE /* OWSSounds.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		340B02BA1FA0D6C700F9CFEC /* ConversationViewItemTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 340B02B91FA0D6C700F9CFEC /* ConversationViewItemTest.m */; };
@@ -206,6 +207,7 @@
 		34E8A8D12085238A00B272B1 /* ProtoParsingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E8A8D02085238900B272B1 /* ProtoParsingTest.m */; };
 		34F308A21ECB469700BB7697 /* OWSBezierPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F308A11ECB469700BB7697 /* OWSBezierPathView.m */; };
 		34FD93701E3BD43A00109093 /* OWSAnyTouchGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD936F1E3BD43A00109093 /* OWSAnyTouchGestureRecognizer.m */; };
+		37F36DB75C443B9F130041FA /* Pods_RelayShareExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B0C1C254310E207F4F8169 /* Pods_RelayShareExtension.framework */; };
 		4070A49B3118F91857CED384 /* Pods_RelayMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 264242150E87D10A357DB07B /* Pods_RelayMessaging.framework */; };
 		41C4E0A535335A9B427A5840 /* Pods_RelayDevShareExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F7E17B4EFBB2600D9AEEA8E /* Pods_RelayDevShareExtension.framework */; };
 		4503F1BE20470A5B00CEE724 /* classic-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 4503F1BB20470A5B00CEE724 /* classic-quiet.aifc */; };
@@ -365,6 +367,7 @@
 		4CB5F26720F6E1E2004D1B42 /* MenuActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF4C0920F55BBA005DA313 /* MenuActionsViewController.swift */; };
 		4CB5F26920F7D060004D1B42 /* MessageActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5F26820F7D060004D1B42 /* MessageActions.swift */; };
 		4CC0B59C20EC5F2E00CF6EE0 /* ConversationConfigurationSyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC0B59B20EC5F2E00CF6EE0 /* ConversationConfigurationSyncOperation.swift */; };
+		4D8A5F28999062744F4AB774 /* Pods_RelaySherpanyShareExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF2F812C075328B50B16D5B /* Pods_RelaySherpanyShareExtension.framework */; };
 		70377AAB1918450100CAF501 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70377AAA1918450100CAF501 /* MobileCoreServices.framework */; };
 		768A1A2B17FC9CD300E00ED8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 768A1A2A17FC9CD300E00ED8 /* libz.dylib */; };
 		76C87F19181EFCE600C4ACAB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76C87F18181EFCE600C4ACAB /* MediaPlayer.framework */; };
@@ -551,7 +554,6 @@
 		7D2CD613214C3C9C004E957A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D221A08F169C9E5E00537ABF /* Foundation.framework */; };
 		7D2CD614214C3C9C004E957A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D221A0E7169DFFC500537ABF /* AVFoundation.framework */; };
 		7D2CD615214C3C9C004E957A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D24B5BD4169F568C00681372 /* AudioToolbox.framework */; };
-		7D2CD616214C3C9C004E957A /* Pods_Relay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE34D2C7844709C73962401 /* Pods_Relay.framework */; };
 		7D2CD618214C3C9C004E957A /* SignalTSan.supp in Resources */ = {isa = PBXBuildFile; fileRef = 4C63CBFF210A620B003AE45C /* SignalTSan.supp */; };
 		7D2CD619214C3C9C004E957A /* SignalUBSan.supp in Resources */ = {isa = PBXBuildFile; fileRef = 4C6F527B20FFE8400097DEEE /* SignalUBSan.supp */; };
 		7D2CD61A214C3C9C004E957A /* end_call_tone_cept.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0786203E6B78005C4D61 /* end_call_tone_cept.caf */; };
@@ -635,6 +637,283 @@
 		7D2CD67C214C46BC004E957A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B66DBF4919D5BBC8006EA940 /* Images.xcassets */; };
 		7D2CD67D214C46BC004E957A /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
 		7D2CD687214C5A3F004E957A /* RelayDevShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7D44385C22776BD900907033 /* Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E3211CB08400F9EF53 /* Conversions.m */; };
+		7D44385D22776BD900907033 /* TurnServerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */; };
+		7D44385E22776BD900907033 /* ConversationConfigurationSyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC0B59B20EC5F2E00CF6EE0 /* ConversationConfigurationSyncOperation.swift */; };
+		7D44385F22776BD900907033 /* AttachmentUploadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0BC1F8D108C0066283D /* AttachmentUploadView.m */; };
+		7D44386022776BD900907033 /* MediaGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452EC6DE205E9E30000E787C /* MediaGalleryViewController.swift */; };
+		7D44386122776BD900907033 /* HomeViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34386A50207D0C01009F5D9C /* HomeViewCell.m */; };
+		7D44386222776BD900907033 /* PeerViewsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */; };
+		7D44386322776BD900907033 /* ArrayUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517D9211CADDD00F9EF53 /* ArrayUtil.m */; };
+		7D44386422776BD900907033 /* OWSBubbleShapeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBF006206C3CB200025978 /* OWSBubbleShapeView.m */; };
+		7D44386522776BD900907033 /* OWSAudioMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0B91F8800D90066283D /* OWSAudioMessageView.m */; };
+		7D44386622776BD900907033 /* DebugUIContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D8C02A1ED3685800188D7C /* DebugUIContacts.m */; };
+		7D44386722776BD900907033 /* GifPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F04F1F7D45A60066283D /* GifPickerCell.swift */; };
+		7D44386822776BD900907033 /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72C211B7B1000965478 /* HttpRequest.m */; };
+		7D44386922776BD900907033 /* AddToGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89B204DAC8D007AEB0F /* AddToGroupViewController.m */; };
+		7D44386A22776BD900907033 /* DebugUIMisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 341F2C0E1F2B8AE700D07D6B /* DebugUIMisc.m */; };
+		7D44386B22776BD900907033 /* ConferenceCallService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */; };
+		7D44386C22776BD900907033 /* OWSLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC885204DAC8C007AEB0F /* OWSLinkDeviceViewController.m */; };
+		7D44386D22776BD900907033 /* DebugUIDiskUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E3EF0C1EFC235B007F6822 /* DebugUIDiskUsage.m */; };
+		7D44386E22776BD900907033 /* MediaTileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A84032059C787008B8C75 /* MediaTileViewController.swift */; };
+		7D44386F22776BD900907033 /* OWSBackupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88E204DAC8C007AEB0F /* OWSBackupSettingsViewController.m */; };
+		7D44387022776BD900907033 /* ConversationViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0701F8678AA0066283D /* ConversationViewItem.m */; };
+		7D44387122776BD900907033 /* AppStoreRating.m in Sources */ = {isa = PBXBuildFile; fileRef = B6DA6B061B8A2F9A00CA6F98 /* AppStoreRating.m */; };
+		7D44387222776BD900907033 /* CallNotificationsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A13B01E13DED2000A50FD /* CallNotificationsAdapter.swift */; };
+		7D44387322776BD900907033 /* OWSMessageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 348570A620F67574004FF32B /* OWSMessageHeaderView.m */; };
+		7D44387422776BD900907033 /* UserNotificationsAdaptee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450DF2081E0DD2C6003D14BE /* UserNotificationsAdaptee.swift */; };
+		7D44387522776BD900907033 /* OWSBackupAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8C6204DE64D007AEB0F /* OWSBackupAPI.swift */; };
+		7D44387622776BD900907033 /* ConversationScrollButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 343A65961FC4CFE6000477A1 /* ConversationScrollButton.m */; };
+		7D44387722776BD900907033 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34386A4D207D0C01009F5D9C /* HomeViewController.m */; };
+		7D44387822776BD900907033 /* ConversationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0971F867BFC0066283D /* ConversationViewCell.m */; };
+		7D44387922776BD900907033 /* UIViewController+Permissions.m in Sources */ = {isa = PBXBuildFile; fileRef = EF764C341DB67CC5000D9A87 /* UIViewController+Permissions.m */; };
+		7D44387A22776BD900907033 /* SlugViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705DA12148258100488180 /* SlugViewLayout.swift */; };
+		7D44387B22776BD900907033 /* DictionaryUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517DE211CAE1000F9EF53 /* DictionaryUtil.m */; };
+		7D44387C22776BD900907033 /* SyncPushTokensJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CD81EE1DC030E7004C9430 /* SyncPushTokensJob.swift */; };
+		7D44387D22776BD900907033 /* DebugUIMessagesAssetLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCDC206939B200CB1A14 /* DebugUIMessagesAssetLoader.m */; };
+		7D44387E22776BD900907033 /* CallUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45794E851E00620000066731 /* CallUIService.swift */; };
+		7D44387F22776BD900907033 /* FingerprintViewScanController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89F204DAC8D007AEB0F /* FingerprintViewScanController.m */; };
+		7D44388022776BD900907033 /* StringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517D1211CACA200F9EF53 /* StringUtil.m */; };
+		7D44388122776BD900907033 /* SafetyNumberConfirmationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4585C4671ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift */; };
+		7D44388222776BD900907033 /* ConversationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C20B2B820CA10DE001BAC90 /* ConversationSearchViewController.swift */; };
+		7D44388322776BD900907033 /* RemoteVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 450D19121F85236600970622 /* RemoteVideoView.m */; };
+		7D44388422776BD900907033 /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B9ECFB198B31BA00C620D3 /* PushManager.m */; };
+		7D44388522776BD900907033 /* NeverClearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34386A53207D271C009F5D9C /* NeverClearView.swift */; };
+		7D44388622776BD900907033 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705D992148252400488180 /* NewConversationViewController.swift */; };
+		7D44388722776BD900907033 /* CompareSafetyNumbersActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DF5DF11DDB843F00C936C7 /* CompareSafetyNumbersActivity.swift */; };
+		7D44388822776BD900907033 /* NewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1A107C216C043700A45F19 /* NewAccountViewController.swift */; };
+		7D44388922776BD900907033 /* EvpMessageDigest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E7211CB19B00F9EF53 /* EvpMessageDigest.m */; };
+		7D44388A22776BD900907033 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451166BF1FD86B98000739BA /* AccountManager.swift */; };
+		7D44388B22776BD900907033 /* OWSBackupLazyRestoreJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCD120618B2F00CB1A14 /* OWSBackupLazyRestoreJob.swift */; };
+		7D44388C22776BD900907033 /* GiphyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3430FE171F7751D4000EC51B /* GiphyAPI.swift */; };
+		7D44388D22776BD900907033 /* OWSLinkedDevicesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC882204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.m */; };
+		7D44388E22776BD900907033 /* NotificationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC87C204DAC8C007AEB0F /* NotificationSettingsViewController.m */; };
+		7D44388F22776BD900907033 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C090A1A210FD9C7001FD7F9 /* HapticFeedback.swift */; };
+		7D44389022776BD900907033 /* LongTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3496744E2076ACCE00080B5F /* LongTextViewController.swift */; };
+		7D44389122776BD900907033 /* DataUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517D5211CAD3A00F9EF53 /* DataUtil.m */; };
+		7D44389222776BD900907033 /* OWSAnyTouchGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FD936F1E3BD43A00109093 /* OWSAnyTouchGestureRecognizer.m */; };
+		7D44389322776BD900907033 /* SignalsNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B3F86E1E8DF1700035BE1A /* SignalsNavigationController.m */; };
+		7D44389422776BD900907033 /* FunctionalUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 76EB04EB18170B33006006FC /* FunctionalUtil.m */; };
+		7D44389522776BD900907033 /* OWSBezierPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F308A11ECB469700BB7697 /* OWSBezierPathView.m */; };
+		7D44389622776BD900907033 /* NumberUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517D7211CADDC00F9EF53 /* NumberUtil.m */; };
+		7D44389722776BD900907033 /* DebugUIFileBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B27B852037FFB400A539DF /* DebugUIFileBrowser.swift */; };
+		7D44389822776BD900907033 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CE88E61F2FB9A10098030F /* ProfileViewController.m */; };
+		7D44389922776BD900907033 /* MainAppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B0796B1FCF46B000E248C2 /* MainAppContext.m */; };
+		7D44389A22776BD900907033 /* DebugUIPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E3EF0F1EFC2684007F6822 /* DebugUIPage.m */; };
+		7D44389B22776BD900907033 /* OWSBackupJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8CC20518C76007AEB0F /* OWSBackupJob.m */; };
+		7D44389C22776BD900907033 /* OWSMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0A21F867BFC0066283D /* OWSMessageCell.m */; };
+		7D44389D22776BD900907033 /* EvpSymetricUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E8211CB19B00F9EF53 /* EvpSymetricUtil.m */; };
+		7D44389E22776BD900907033 /* HttpRequestOrResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72F211B7C7100965478 /* HttpRequestOrResponse.m */; };
+		7D44389F22776BD900907033 /* AppUpdateNag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDCC23F21F675C70053A5CA /* AppUpdateNag.swift */; };
+		7D4438A022776BD900907033 /* DismissableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4AEC4420EC343B0020E72B /* DismissableTextField.swift */; };
+		7D4438A122776BD900907033 /* MenuActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF4C0920F55BBA005DA313 /* MenuActionsViewController.swift */; };
+		7D4438A222776BD900907033 /* UIControl+Forsta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */; };
+		7D4438A322776BD900907033 /* MultiDeviceProfileKeyUpdateJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451686AA1F520CDA00AC3D4B /* MultiDeviceProfileKeyUpdateJob.swift */; };
+		7D4438A422776BD900907033 /* SessionResetJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D231761DC7E8F10034FA89 /* SessionResetJob.swift */; };
+		7D4438A522776BD900907033 /* NotificationSettingsOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC87B204DAC8C007AEB0F /* NotificationSettingsOptionsViewController.m */; };
+		7D4438A622776BD900907033 /* ConferenceCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */; };
+		7D4438A722776BD900907033 /* DebugUISessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = 452037D01EE84975004E4CDF /* DebugUISessionState.m */; };
+		7D4438A822776BD900907033 /* CallAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */; };
+		7D4438A922776BD900907033 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D221A099169C9E5E00537ABF /* main.m */; };
+		7D4438AA22776BD900907033 /* HttpResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A732211B7CA500965478 /* HttpResponse.m */; };
+		7D4438AB22776BD900907033 /* AnnouncementDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7DBD10215DB50200AE6C7F /* AnnouncementDetailViewController.m */; };
+		7D4438AC22776BD900907033 /* RegistrationUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5DC8120D8050D00C08145 /* RegistrationUtils.m */; };
+		7D4438AD22776BD900907033 /* AttachmentPointerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452EA09D1EA7ABE00078744B /* AttachmentPointerView.swift */; };
+		7D4438AE22776BD900907033 /* DebugUICalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45638BDB1F3DD0D400128435 /* DebugUICalling.swift */; };
+		7D4438AF22776BD900907033 /* AudioProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E3E5671EC4B19400495BAC /* AudioProgressView.swift */; };
+		7D4438B022776BD900907033 /* GiphyDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0511F7E8EA30066283D /* GiphyDownloader.swift */; };
+		7D4438B122776BD900907033 /* FingerprintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A2204DAC8D007AEB0F /* FingerprintViewController.m */; };
+		7D4438B222776BD900907033 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450DF2041E0D74AC003D14BE /* Platform.swift */; };
+		7D4438B322776BD900907033 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7705C22114D8E600B40BB9 /* LoginViewController.swift */; };
+		7D4438B422776BD900907033 /* AdvancedSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88C204DAC8C007AEB0F /* AdvancedSettingsTableViewController.m */; };
+		7D4438B522776BD900907033 /* SignalApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 346129971FD1E4D900532771 /* SignalApp.m */; };
+		7D4438B622776BD900907033 /* GifPickerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2F1F7ABCF800D7438D /* GifPickerLayout.swift */; };
+		7D4438B722776BD900907033 /* DebugUISyncMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 343A65941FC47D5E000477A1 /* DebugUISyncMessages.m */; };
+		7D4438B822776BD900907033 /* UIStoryboard+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1D1E69011F00E04C47 /* UIStoryboard+OWS.swift */; };
+		7D4438B922776BD900907033 /* ConferenceCallEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC97B5C221773650011588E /* ConferenceCallEvents.swift */; };
+		7D4438BA22776BD900907033 /* PeerConnectionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */; };
+		7D4438BB22776BD900907033 /* MessageFetcherJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452ECA4C1E087E7200E2F016 /* MessageFetcherJob.swift */; };
+		7D4438BC22776BD900907033 /* DebugUIProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4556FA671F54AA9500AF40DD /* DebugUIProfile.swift */; };
+		7D4438BD22776BD900907033 /* ReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A6DAD51EBBF85500893231 /* ReminderView.swift */; };
+		7D4438BE22776BD900907033 /* ConversationViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0721F8678AA0066283D /* ConversationViewLayout.m */; };
+		7D4438BF22776BD900907033 /* DirectionalPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4523149F1F7E9E18003A428C /* DirectionalPanGestureRecognizer.swift */; };
+		7D4438C022776BD900907033 /* OWSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34330AA21E79686200DF2FB9 /* OWSProgressView.m */; };
+		7D4438C122776BD900907033 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4542DF53208D40AC007B4E76 /* LoadingViewController.swift */; };
+		7D4438C222776BD900907033 /* AvatarViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D5CCA81EAE3D30005515DB /* AvatarViewHelper.m */; };
+		7D4438C322776BD900907033 /* OWSGenericAttachmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0B61F87F8850066283D /* OWSGenericAttachmentView.m */; };
+		7D4438C422776BD900907033 /* OWSMessageFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D920E620E179C200D51158 /* OWSMessageFooterView.m */; };
+		7D4438C522776BD900907033 /* ValidationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7705C12114D8E600B40BB9 /* ValidationViewController.swift */; };
+		7D4438C622776BD900907033 /* DebugUINotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457C87B72032645C008D52D6 /* DebugUINotifications.swift */; };
+		7D4438C722776BD900907033 /* Crc32.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517DF211CAE1100F9EF53 /* Crc32.m */; };
+		7D4438C822776BD900907033 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13C9F520E57BA30089A98B /* ColorPickerViewController.swift */; };
+		7D4438C922776BD900907033 /* OWSBackupIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8CE205BF2FA007AEB0F /* OWSBackupIO.m */; };
+		7D4438CA22776BD900907033 /* OWSDeviceProvisioningURLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 458E38361D668EBF0094BD24 /* OWSDeviceProvisioningURLParser.m */; };
+		7D4438CB22776BD900907033 /* FLAnnouncementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7DBD11215DB50200AE6C7F /* FLAnnouncementViewController.m */; };
+		7D4438CC22776BD900907033 /* PeerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CC220E0A1500542694 /* PeerViewCell.swift */; };
+		7D4438CD22776BD900907033 /* SlugCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705DA02148258100488180 /* SlugCell.swift */; };
+		7D4438CE22776BD900907033 /* OWSMessageBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3496744C2076768700080B5F /* OWSMessageBubbleView.m */; };
+		7D4438CF22776BD900907033 /* DebugUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D8C0261ED3673300188D7C /* DebugUITableViewController.m */; };
+		7D4438D022776BD900907033 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 342197FF210612F600C57195 /* iRate.m */; };
+		7D4438D122776BD900907033 /* MediaDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B9EE9B200E91FB005D2F2D /* MediaDetailViewController.m */; };
+		7D4438D222776BD900907033 /* DebugUIMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D8C0241ED3673300188D7C /* DebugUIMessages.m */; };
+		7D4438D322776BD900907033 /* OWSMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBEFFF206BD5A400025978 /* OWSMessageTextView.m */; };
+		7D4438D422776BD900907033 /* ConversationCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0B31F86D31D0066283D /* ConversationCollectionView.m */; };
+		7D4438D522776BD900907033 /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC43CF2225A0900097EE0E /* NotificationsManager.swift */; };
+		7D4438D622776BD900907033 /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D705DA6214827EF00488180 /* DirectoryCell.swift */; };
+		7D4438D722776BD900907033 /* UIResponder+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5360D206DD8BB00D61655 /* UIResponder+OWS.swift */; };
+		7D4438D822776BD900907033 /* UIApplication+OWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0DC1A1E68FE9000E04C47 /* UIApplication+OWS.swift */; };
+		7D4438D922776BD900907033 /* PushRegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539B5851F79348F007141FF /* PushRegistrationManager.swift */; };
+		7D4438DA22776BD900907033 /* OWSBackupExportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8BF204DB7D2007AEB0F /* OWSBackupExportJob.m */; };
+		7D4438DB22776BD900907033 /* MediaPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F32C1D205718B000A300D5 /* MediaPageViewController.swift */; };
+		7D4438DC22776BD900907033 /* OWSLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3466087320E5649700AFFE73 /* OWSLayerView.swift */; };
+		7D4438DD22776BD900907033 /* OWSScreenLockUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCD92062E7D000CB1A14 /* OWSScreenLockUI.m */; };
+		7D4438DE22776BD900907033 /* OWSBackupImportJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8C820517B84007AEB0F /* OWSBackupImportJob.m */; };
+		7D4438DF22776BD900907033 /* OWSConversationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89A204DAC8D007AEB0F /* OWSConversationSettingsViewController.m */; };
+		7D4438E022776BD900907033 /* GifPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2D1F7ABCE000D7438D /* GifPickerViewController.swift */; };
+		7D4438E122776BD900907033 /* MessageRecipientStatusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0BF1F8EC1760066283D /* MessageRecipientStatusUtils.swift */; };
+		7D4438E222776BD900907033 /* OWSQuotedMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34277A5C20751BDC006049F2 /* OWSQuotedMessageView.m */; };
+		7D4438E322776BD900907033 /* ConversationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDA6232090CEB500DE97F8 /* ConversationHeaderView.swift */; };
+		7D4438E422776BD900907033 /* MessageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */; };
+		7D4438E522776BD900907033 /* ConversationInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F06A1F8678AA0066283D /* ConversationInputToolbar.m */; };
+		7D4438E622776BD900907033 /* QuotedReplyPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457F671A20746193000EABCD /* QuotedReplyPreview.swift */; };
+		7D4438E722776BD900907033 /* OWSBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBF001206BD5A500025978 /* OWSBubbleView.m */; };
+		7D4438E822776BD900907033 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 76EB03C318170B33006006FC /* AppDelegate.m */; };
+		7D4438E922776BD900907033 /* ConversationInputTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0681F8678AA0066283D /* ConversationInputTextView.m */; };
+		7D4438EA22776BD900907033 /* OWSQRCodeScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC896204DAC8C007AEB0F /* OWSQRCodeScanningViewController.m */; };
+		7D4438EB22776BD900907033 /* MessageActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5F26820F7D060004D1B42 /* MessageActions.swift */; };
+		7D4438EC22776BD900907033 /* AboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC893204DAC8C007AEB0F /* AboutTableViewController.m */; };
+		7D4438ED22776BD900907033 /* DebugUIStress.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BECE2A1F74C12700D7438D /* DebugUIStress.m */; };
+		7D4438EE22776BD900907033 /* UpdateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89C204DAC8D007AEB0F /* UpdateGroupViewController.m */; };
+		7D4438EF22776BD900907033 /* TextFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4521C3BF1F59F3BA00B4C582 /* TextFieldHelper.swift */; };
+		7D4438F022776BD900907033 /* DebugUIMessagesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2CCDB206939B100CB1A14 /* DebugUIMessagesAction.m */; };
+		7D4438F122776BD900907033 /* PrivacySettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC87E204DAC8C007AEB0F /* PrivacySettingsTableViewController.m */; };
+		7D4438F222776BD900907033 /* DebugUIBackup.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8C4204DE223007AEB0F /* DebugUIBackup.m */; };
+		7D4438F322776BD900907033 /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11AA4F20FD59C700351FBD /* MessageStatusView.swift */; };
+		7D4438F422776BD900907033 /* OWSSoundSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC883204DAC8C007AEB0F /* OWSSoundSettingsViewController.m */; };
+		7D4438F522776BD900907033 /* Pastelog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4579431D1E7C8CE9008ED0C0 /* Pastelog.m */; };
+		7D4438F622776BD900907033 /* AppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88D204DAC8C007AEB0F /* AppSettingsViewController.m */; };
+		7D4438F722776BD900907033 /* CropScaleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346B66301F4E29B200E5122F /* CropScaleImageViewController.swift */; };
+		7D4438F822776BD900907033 /* MarqueeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E5A6981F61E6DD001E4A8A /* MarqueeLabel.swift */; };
+		7D4438F922776BD900907033 /* OWSBackup.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A9105F1FFEB114000C4745 /* OWSBackup.m */; };
+		7D4438FA22776BD900907033 /* OWSSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F0A61F867BFC0066283D /* OWSSystemMessageCell.m */; };
+		7D4438FB22776BD900907033 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A663C41F92EC760027B59E /* GroupTableViewCell.swift */; };
+		7D4438FC22776BD900907033 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
+		7D4438FD22776BD900907033 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1F06E1F8678AA0066283D /* ConversationViewController.m */; };
+		7D4438FE22776BD900907033 /* OWSMessageTimerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3427C64220F500DF00EEC730 /* OWSMessageTimerView.m */; };
+		7D4438FF22776BD900907033 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B90418E5183E9DD40038554A /* DateUtil.m */; };
+		7D44390022776BD900907033 /* ShowGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8A6204DAC8D007AEB0F /* ShowGroupMembersViewController.m */; };
+		7D44390122776BD900907033 /* OWSDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 459311FB1D75C948008DD4F0 /* OWSDeviceTableViewCell.m */; };
+		7D44390222776BD900907033 /* CryptoTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517CD211CAC0D00F9EF53 /* CryptoTools.m */; };
+		7D44390422776BD900907033 /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4509E7991DD653700025A59F /* WebRTC.framework */; };
+		7D44390522776BD900907033 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455A16DB1F1FEA0000F86704 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		7D44390622776BD900907033 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455A16DC1F1FEA0000F86704 /* MetalKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		7D44390722776BD900907033 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45847E861E4283C30080EAB3 /* Intents.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		7D44390822776BD900907033 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451DE9F11DC1585F00810E42 /* PromiseKit.framework */; };
+		7D44390922776BD900907033 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4520D8D41D417D8E00123472 /* Photos.framework */; };
+		7D44390A22776BD900907033 /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B226961BE4B7D200860F4D /* ContactsUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		7D44390B22776BD900907033 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BD60811DE9547E00A8F436 /* Contacts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		7D44390C22776BD900907033 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6FE7EB61ADD62FA00A6D22F /* PushKit.framework */; };
+		7D44390D22776BD900907033 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC3BD9871A30A790005B96BB /* Social.framework */; };
+		7D44390E22776BD900907033 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB11D8B1A129A76002F93FB /* CoreMedia.framework */; };
+		7D44390F22776BD900907033 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70377AAA1918450100CAF501 /* MobileCoreServices.framework */; };
+		7D44391022776BD900907033 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EB5ABC1884C002007CBB57 /* MessageUI.framework */; };
+		7D44391122776BD900907033 /* RelayMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 453518921FC63DBF00210559 /* RelayMessaging.framework */; };
+		7D44391222776BD900907033 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76C87F18181EFCE600C4ACAB /* MediaPlayer.framework */; };
+		7D44391322776BD900907033 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 768A1A2A17FC9CD300E00ED8 /* libz.dylib */; };
+		7D44391422776BD900907033 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A11CD70C17FA230600A2D1B1 /* QuartzCore.framework */; };
+		7D44391522776BD900907033 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A163E8AA16F3F6A90094D68B /* Security.framework */; };
+		7D44391622776BD900907033 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C32D4D17A0652C000A904E /* AddressBook.framework */; };
+		7D44391722776BD900907033 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C32D4F17A06537000A904E /* AddressBookUI.framework */; };
+		7D44391822776BD900907033 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AEACDB16C426DA00C364C0 /* CFNetwork.framework */; };
+		7D44391922776BD900907033 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2179CFD16BB0B480006F3AB /* SystemConfiguration.framework */; };
+		7D44391A22776BD900907033 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2179CFB16BB0B3A0006F3AB /* CoreTelephony.framework */; };
+		7D44391B22776BD900907033 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D221A08D169C9E5E00537ABF /* UIKit.framework */; };
+		7D44391C22776BD900907033 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D221A08F169C9E5E00537ABF /* Foundation.framework */; };
+		7D44391D22776BD900907033 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D221A0E7169DFFC500537ABF /* AVFoundation.framework */; };
+		7D44391E22776BD900907033 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D24B5BD4169F568C00681372 /* AudioToolbox.framework */; };
+		7D44392122776BD900907033 /* SignalTSan.supp in Resources */ = {isa = PBXBuildFile; fileRef = 4C63CBFF210A620B003AE45C /* SignalTSan.supp */; };
+		7D44392222776BD900907033 /* SignalUBSan.supp in Resources */ = {isa = PBXBuildFile; fileRef = 4C6F527B20FFE8400097DEEE /* SignalUBSan.supp */; };
+		7D44392322776BD900907033 /* end_call_tone_cept.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0786203E6B78005C4D61 /* end_call_tone_cept.caf */; };
+		7D44392422776BD900907033 /* audio_pause_button_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF381A73426500B5C81A /* audio_pause_button_blue.png */; };
+		7D44392522776BD900907033 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A591E7875FB00DF2FB9 /* fontawesome-webfont.ttf */; };
+		7D44392622776BD900907033 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5509EC91A69AB8B00ABA4BC /* Main.storyboard */; };
+		7D44392722776BD900907033 /* audio_play_button.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF3B1A73426500B5C81A /* audio_play_button.png */; };
+		7D44392822776BD900907033 /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
+		7D44392922776BD900907033 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D7121012118D7E800C56034 /* Login.storyboard */; };
+		7D44392A22776BD900907033 /* mute_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C5421A1D190B0059AC12 /* mute_on@2x.png */; };
+		7D44392B22776BD900907033 /* quit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C54C1A1D190B0059AC12 /* quit@2x.png */; };
+		7D44392C22776BD900907033 /* audio_pause_button.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF3D1A73426500B5C81A /* audio_pause_button.png */; };
+		7D44392D22776BD900907033 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B6F509951AA53F760068F56A /* Localizable.strings */; };
+		7D44392E22776BD900907033 /* endcall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C51B1A1D190B0059AC12 /* endcall@2x.png */; };
+		7D44392F22776BD900907033 /* error_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC5CDF371A3393DD00B47253 /* error_white@2x.png */; };
+		7D44393022776BD900907033 /* savephoto@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C5501A1D190B0059AC12 /* savephoto@2x.png */; };
+		7D44393122776BD900907033 /* play_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B10C9B5D1A7049EC00ECA2BF /* play_icon.png */; };
+		7D44393222776BD900907033 /* audio_pause_button_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF391A73426500B5C81A /* audio_pause_button_blue@2x.png */; };
+		7D44393322776BD900907033 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B66DBF4919D5BBC8006EA940 /* Images.xcassets */; };
+		7D44393422776BD900907033 /* ringback_tone_ansi.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0784203E6B77005C4D61 /* ringback_tone_ansi.caf */; };
+		7D44393522776BD900907033 /* sonarping.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 34C3C78E2040A4F70000134C /* sonarping.mp3 */; };
+		7D44393622776BD900907033 /* audio_play_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF3C1A73426500B5C81A /* audio_play_button@2x.png */; };
+		7D44393722776BD900907033 /* message_sent.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 34661FB720C1C0D60056EDD6 /* message_sent.aiff */; };
+		7D44393822776BD900907033 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45CB2FA71CB7146C00E1B343 /* Launch Screen.storyboard */; };
+		7D44393922776BD900907033 /* mute_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C5411A1D190B0059AC12 /* mute_off@2x.png */; };
+		7D44393A22776BD900907033 /* audio_play_button_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF3A1A73426500B5C81A /* audio_play_button_blue@2x.png */; };
+		7D44393B22776BD900907033 /* Opening.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 34C3C78C20409F320000134C /* Opening.m4r */; };
+		7D44393C22776BD900907033 /* warning_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC5CDF381A3393DD00B47253 /* warning_white@2x.png */; };
+		7D44393D22776BD900907033 /* contact_default_feed.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C50B1A1D190B0059AC12 /* contact_default_feed.png */; };
+		7D44393E22776BD900907033 /* play_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B10C9B5E1A7049EC00ECA2BF /* play_icon@2x.png */; };
+		7D44393F22776BD900907033 /* call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B633C5041A1D190B0059AC12 /* call@2x.png */; };
+		7D44394022776BD900907033 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B67EBF5C19194AC60084CCFD /* Settings.bundle */; };
+		7D44394122776BD900907033 /* pause_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B10C9B5C1A7049EC00ECA2BF /* pause_icon@2x.png */; };
+		7D44394222776BD900907033 /* qr@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC91203F1A39EFB70074545C /* qr@2x.png */; };
+		7D44394322776BD900907033 /* busy_tone_ansi.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0783203E6B77005C4D61 /* busy_tone_ansi.caf */; };
+		7D44394422776BD900907033 /* pause_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B10C9B5B1A7049EC00ECA2BF /* pause_icon.png */; };
+		7D44394522776BD900907033 /* audio_play_button_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF461A73428300B5C81A /* audio_play_button_blue.png */; };
+		7D44394622776BD900907033 /* ElegantIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5D1E787BD800DF2FB9 /* ElegantIcons.ttf */; };
+		7D44394722776BD900907033 /* audio_pause_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AD83FF3E1A73426500B5C81A /* audio_pause_button@2x.png */; };
+		7D44394822776BD900907033 /* NewMessage.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45A2F004204473A3002E978A /* NewMessage.aifc */; };
+		7D44394922776BD900907033 /* aurora.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A6F2044AAB500CD42F8 /* aurora.aifc */; };
+		7D44394A22776BD900907033 /* aurora-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5B2044AAB300CD42F8 /* aurora-quiet.aifc */; };
+		7D44394B22776BD900907033 /* bamboo.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A6C2044AAB500CD42F8 /* bamboo.aifc */; };
+		7D44394C22776BD900907033 /* bamboo-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5F2044AAB400CD42F8 /* bamboo-quiet.aifc */; };
+		7D44394D22776BD900907033 /* chord.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A622044AAB400CD42F8 /* chord.aifc */; };
+		7D44394E22776BD900907033 /* chord-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A682044AAB500CD42F8 /* chord-quiet.aifc */; };
+		7D44394F22776BD900907033 /* circles.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A6A2044AAB500CD42F8 /* circles.aifc */; };
+		7D44395022776BD900907033 /* circles-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A702044AAB500CD42F8 /* circles-quiet.aifc */; };
+		7D44395122776BD900907033 /* classic.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 4503F1BC20470A5B00CEE724 /* classic.aifc */; };
+		7D44395222776BD900907033 /* classic-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 4503F1BB20470A5B00CEE724 /* classic-quiet.aifc */; };
+		7D44395322776BD900907033 /* complete.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A652044AAB400CD42F8 /* complete.aifc */; };
+		7D44395422776BD900907033 /* Forsta-values.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBD6CEE72146CD6A0088B4A4 /* Forsta-values.plist */; };
+		7D44395522776BD900907033 /* complete-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A6E2044AAB500CD42F8 /* complete-quiet.aifc */; };
+		7D44395622776BD900907033 /* hello.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5E2044AAB400CD42F8 /* hello.aifc */; };
+		7D44395722776BD900907033 /* hello-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A632044AAB400CD42F8 /* hello-quiet.aifc */; };
+		7D44395822776BD900907033 /* input.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A602044AAB400CD42F8 /* input.aifc */; };
+		7D44395922776BD900907033 /* forsta_splash2.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D7705C72114E5C300B40BB9 /* forsta_splash2.png */; };
+		7D44395A22776BD900907033 /* input-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A732044AAB600CD42F8 /* input-quiet.aifc */; };
+		7D44395B22776BD900907033 /* keys.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A612044AAB400CD42F8 /* keys.aifc */; };
+		7D44395C22776BD900907033 /* keys-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5D2044AAB400CD42F8 /* keys-quiet.aifc */; };
+		7D44395D22776BD900907033 /* note.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A6D2044AAB500CD42F8 /* note.aifc */; };
+		7D44395E22776BD900907033 /* note-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A662044AAB400CD42F8 /* note-quiet.aifc */; };
+		7D44395F22776BD900907033 /* popcorn.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A6B2044AAB500CD42F8 /* popcorn.aifc */; };
+		7D44396022776BD900907033 /* popcorn-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A642044AAB400CD42F8 /* popcorn-quiet.aifc */; };
+		7D44396122776BD900907033 /* pulse.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A692044AAB500CD42F8 /* pulse.aifc */; };
+		7D44396222776BD900907033 /* pulse-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A672044AAB500CD42F8 /* pulse-quiet.aifc */; };
+		7D44396322776BD900907033 /* synth.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A722044AAB600CD42F8 /* synth.aifc */; };
+		7D44396422776BD900907033 /* synth-quiet.aifc in Resources */ = {isa = PBXBuildFile; fileRef = 45B74A5C2044AAB300CD42F8 /* synth-quiet.aifc */; };
+		7D44396922776BD900907033 /* RelayMessaging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 453518921FC63DBF00210559 /* RelayMessaging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7D44397522776EDE00907033 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535186A1FC635DD00210559 /* ShareViewController.swift */; };
+		7D44397622776EDE00907033 /* ShareAppExtensionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 34480B351FD0929200BC14EF /* ShareAppExtensionContext.m */; };
+		7D44397722776EDE00907033 /* SAEScreenLockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34641E1E2088DA6D00E2EDE5 /* SAEScreenLockViewController.m */; };
+		7D44397822776EDE00907033 /* SAELoadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3461284A1FD0B93F00532771 /* SAELoadViewController.swift */; };
+		7D44397922776EDE00907033 /* SAEFailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347850561FD86544007B8332 /* SAEFailedViewController.swift */; };
+		7D44397B22776EDE00907033 /* RelayMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 453518921FC63DBF00210559 /* RelayMessaging.framework */; };
+		7D44397C22776EDE00907033 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451DE9F11DC1585F00810E42 /* PromiseKit.framework */; };
+		7D44397F22776EDE00907033 /* ElegantIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5D1E787BD800DF2FB9 /* ElegantIcons.ttf */; };
+		7D44398022776EDE00907033 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4535186C1FC635DD00210559 /* MainInterface.storyboard */; };
+		7D44398122776EDE00907033 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B6F509951AA53F760068F56A /* Localizable.strings */; };
+		7D44398222776EDE00907033 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A591E7875FB00DF2FB9 /* fontawesome-webfont.ttf */; };
+		7D44398322776EDE00907033 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B66DBF4919D5BBC8006EA940 /* Images.xcassets */; };
+		7D44398422776EDE00907033 /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
+		7D44398B2277750400907033 /* RelaySherpanyShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D44398922776EDE00907033 /* RelaySherpanyShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7D6564F42113BD8B00365A19 /* SelectThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564E42113BD8900365A19 /* SelectThreadViewController.m */; };
 		7D6565002113BD8B00365A19 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */; };
 		7D6565022113BD8B00365A19 /* SelectThreadViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -768,7 +1047,7 @@
 		DBF235BA2208F6FC00E5EC3E /* CallAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */; };
 		DBF235BB2208F6FC00E5EC3E /* CallAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */; };
 		E1368CBE18A1C36B00109378 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EB5ABC1884C002007CBB57 /* MessageUI.framework */; };
-		E6431F0E7EAC0CB73D75A38B /* Pods_Relay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE34D2C7844709C73962401 /* Pods_Relay.framework */; };
+		EE5078C69459C478B66CA1E0 /* Pods_RelaySherpany.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C124DF7D1C0036915813021 /* Pods_RelaySherpany.framework */; };
 		EF764C351DB67CC5000D9A87 /* UIViewController+Permissions.m in Sources */ = {isa = PBXBuildFile; fileRef = EF764C341DB67CC5000D9A87 /* UIViewController+Permissions.m */; };
 		F619590C79CB11695ED108A9 /* Pods_RelayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3982FE81613EA6D4D796702 /* Pods_RelayTests.framework */; };
 		FC3BD9881A30A790005B96BB /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC3BD9871A30A790005B96BB /* Social.framework */; };
@@ -828,6 +1107,27 @@
 			remoteGlobalIDString = 7D2CD669214C46BC004E957A;
 			remoteInfo = RelayDevShareExtension;
 		};
+		7D44385822776BD900907033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D221A080169C9E5E00537ABF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 453518911FC63DBF00210559;
+			remoteInfo = RelayMessaging;
+		};
+		7D44397222776EDE00907033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D221A080169C9E5E00537ABF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 453518911FC63DBF00210559;
+			remoteInfo = RelayMessaging;
+		};
+		7D44398C2277750400907033 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D221A080169C9E5E00537ABF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7D44397022776EDE00907033;
+			remoteInfo = "RelaySherpanyShareExtension copy";
+		};
 		B6AFCEBA19A93DA60098CFCB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D221A080169C9E5E00537ABF /* Project object */;
@@ -882,18 +1182,42 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7D44396822776BD900907033 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7D44396922776BD900907033 /* RelayMessaging.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D44398E2277750500907033 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7D44398B2277750400907033 /* RelaySherpanyShareExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00B0C1C254310E207F4F8169 /* Pods_RelayShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelayShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		04F98C3E458646751D685473 /* Pods_RelayMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelayMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C124DF7D1C0036915813021 /* Pods_RelaySherpany.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelaySherpany.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EB06AC3F26DB309BD8C3952 /* Pods-RelayTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests.debug.xcconfig"; sourceTree = "<group>"; };
 		0F7E17B4EFBB2600D9AEEA8E /* Pods_RelayDevShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelayDevShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F94C85CB0B235DA37F68ED0 /* Pods_SignalShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10671F24073579F438DE29BA /* Pods-Common-RelayDevShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayDevShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayDevShareExtension/Pods-Common-RelayDevShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
-		1109BE332A1FE87763659499 /* Pods-RelayShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayShareExtension/Pods-RelayShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
+		139C549CF654F96579C75970 /* Pods-Relay.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Relay.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Relay/Pods-Relay.app store release.xcconfig"; sourceTree = "<group>"; };
 		178982DE3528460F66DED5C2 /* Pods_Common_RelayDev_RelayDevShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_RelayDev_RelayDevShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1956251241E9DBBA9072D5C5 /* Pods_Common_RelayDevShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_RelayDevShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D3B60B2D2CEDD33EA1331B2 /* Pods-RelaySherpany.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelaySherpany.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelaySherpany/Pods-RelaySherpany.debug.xcconfig"; sourceTree = "<group>"; };
 		25497741DB03737D754FC3D5 /* Pods-RelayDev.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDev.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDev/Pods-RelayDev.app store release.xcconfig"; sourceTree = "<group>"; };
 		264242150E87D10A357DB07B /* Pods_RelayMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelayMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26FC1CC898AA01489780EA0D /* Pods-RelayDevShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDevShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDevShareExtension/Pods-RelayDevShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1335,9 +1659,11 @@
 		4CB5F26820F7D060004D1B42 /* MessageActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageActions.swift; sourceTree = "<group>"; };
 		4CC0B59B20EC5F2E00CF6EE0 /* ConversationConfigurationSyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationConfigurationSyncOperation.swift; sourceTree = "<group>"; };
 		4CFF4C0920F55BBA005DA313 /* MenuActionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuActionsViewController.swift; sourceTree = "<group>"; };
-		53B4BAFE3F3D8E5CFB79BF26 /* Pods-Relay.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Relay.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Relay/Pods-Relay.app store release.xcconfig"; sourceTree = "<group>"; };
+		54BB622B4FB87E10A946562C /* Pods-RelaySherpanyShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelaySherpanyShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelaySherpanyShareExtension/Pods-RelaySherpanyShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		5A2B077BFDF8200C7FA161B7 /* Pods-RelayShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayShareExtension/Pods-RelayShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
 		6379CFB6BBE57E2F9746654B /* Pods-Common-RelayDev.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayDev.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayDev/Pods-Common-RelayDev.app store release.xcconfig"; sourceTree = "<group>"; };
 		6423314F94372ED068A02504 /* Pods-RelayDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDev.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDev/Pods-RelayDev.debug.xcconfig"; sourceTree = "<group>"; };
+		6AF2F812C075328B50B16D5B /* Pods_RelaySherpanyShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelaySherpanyShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F5AC463F739F55FA0A2353F /* Pods-RelayMessaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayMessaging.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayMessaging/Pods-RelayMessaging.debug.xcconfig"; sourceTree = "<group>"; };
 		70377AAA1918450100CAF501 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		748A5CAEDD7C919FC64C6807 /* Pods_SignalTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1355,6 +1681,12 @@
 		7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RelayDevShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D2CD683214C491B004E957A /* RelayDevShareExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RelayDevShareExtension.entitlements; sourceTree = "<group>"; };
 		7D2CD688214C5F74004E957A /* RelayDevShareExtension-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RelayDevShareExtension-Info.plist"; sourceTree = "<group>"; };
+		7D44396E22776BD900907033 /* RelaySherpany.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelaySherpany.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D44396F22776BDA00907033 /* RelaySherpany-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RelaySherpany-Info.plist"; path = "/Users/markd/Forsta/Relay-iOS-App/RelaySherpany-Info.plist"; sourceTree = "<absolute>"; };
+		7D44398922776EDE00907033 /* RelaySherpanyShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RelaySherpanyShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D44398A22776EDE00907033 /* RelaySherpanyShareExtension-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RelaySherpanyShareExtension-Info.plist"; path = "/Users/markd/Forsta/Relay-iOS-App/RelaySherpanyShareExtension-Info.plist"; sourceTree = "<absolute>"; };
+		7D44398F2277799500907033 /* RelaySherpany.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelaySherpany.entitlements; sourceTree = "<group>"; };
+		7D44399222777A1D00907033 /* RelaySherpanyShareExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RelaySherpanyShareExtension.entitlements; sourceTree = "<group>"; };
 		7D6564C12113B1C200365A19 /* Relay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Relay.entitlements; sourceTree = "<group>"; };
 		7D6564C22113B74900365A19 /* RelayShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelayShareExtension.entitlements; sourceTree = "<group>"; };
 		7D6564E42113BD8900365A19 /* SelectThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectThreadViewController.m; sourceTree = "<group>"; };
@@ -1417,8 +1749,10 @@
 		7DDCC23F21F675C70053A5CA /* AppUpdateNag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateNag.swift; sourceTree = "<group>"; };
 		7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Forsta.swift"; sourceTree = "<group>"; };
 		7DF2E98E212360B400855424 /* FLContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLContactsManager.swift; sourceTree = "<group>"; };
+		7F79EEA6C7793CCE9106DDF1 /* Pods-RelayShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayShareExtension/Pods-RelayShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		8300824C7D94C76E7FEA1BED /* Pods-Common-RelayMessaging.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayMessaging.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayMessaging/Pods-Common-RelayMessaging.app store release.xcconfig"; sourceTree = "<group>"; };
 		8BDF00953362DF77BCB051B3 /* Pods-Common-Relay-RelayShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-Relay-RelayShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-Relay-RelayShareExtension/Pods-Common-Relay-RelayShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
+		8BE5A2E47BE0081EA9CDB114 /* Pods-RelaySherpanyShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelaySherpanyShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelaySherpanyShareExtension/Pods-RelaySherpanyShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
 		954AEE681DF33D32002E5410 /* ContactsPickerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsPickerTest.swift; sourceTree = "<group>"; };
 		99E02BE899268A9B58496A20 /* Pods-Common-RelayShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayShareExtension/Pods-Common-RelayShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
 		9B2870E9E12F0EDBB933814C /* Pods-Common-RelayDev-RelayDevShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayDev-RelayDevShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayDev-RelayDevShareExtension/Pods-Common-RelayDev-RelayDevShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
@@ -1430,7 +1764,6 @@
 		A47172A1E54ABB679F975561 /* Pods_Common_RelayShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_RelayShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4ECBEE8FF9C81EA4FFCD5E6 /* Pods_Common_Relay_RelayShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_Relay_RelayShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5509EC91A69AB8B00ABA4BC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Storyboard/Main.storyboard; sourceTree = "<group>"; };
-		A656FD71C7A3C79B7AEB3801 /* Pods-Relay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Relay.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Relay/Pods-Relay.debug.xcconfig"; sourceTree = "<group>"; };
 		ACE34D2C7844709C73962401 /* Pods_Relay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Relay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD83FF381A73426500B5C81A /* audio_pause_button_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = audio_pause_button_blue.png; sourceTree = "<group>"; };
 		AD83FF391A73426500B5C81A /* audio_pause_button_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_pause_button_blue@2x.png"; sourceTree = "<group>"; };
@@ -1481,6 +1814,7 @@
 		B9EB5ABC1884C002007CBB57 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		BA2141586A66096DBB8776DA /* Pods-Common-RelayDevShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayDevShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayDevShareExtension/Pods-Common-RelayDevShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		BAD0779E4941F181876C6C8D /* Pods-Common-Relay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-Relay.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Common-Relay/Pods-Common-Relay.debug.xcconfig"; sourceTree = "<group>"; };
+		BD265CD7DA97819F635E3E97 /* Pods-RelaySherpany.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelaySherpany.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelaySherpany/Pods-RelaySherpany.app store release.xcconfig"; sourceTree = "<group>"; };
 		D17BB5C25D615AB49813100C /* Pods_Signal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Signal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2179CFB16BB0B3A0006F3AB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D2179CFD16BB0B480006F3AB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1499,6 +1833,7 @@
 		D3982FE81613EA6D4D796702 /* Pods_RelayTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RelayTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D562B853DF3F1C3D5A1CB00B /* Pods-RelayTests.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayTests.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests.app store release.xcconfig"; sourceTree = "<group>"; };
 		D7BCBE6C7CD3E58FF656F0AC /* Pods-RelayDevShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayDevShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-RelayDevShareExtension/Pods-RelayDevShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
+		DAD674B91E1E81472330E51C /* Pods-Relay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Relay.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Relay/Pods-Relay.debug.xcconfig"; sourceTree = "<group>"; };
 		DB2326AF2200DF440063CB09 /* PeerConnectionClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConnectionClient.swift; sourceTree = "<group>"; };
 		DBC97B5C221773650011588E /* ConferenceCallEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallEvents.swift; sourceTree = "<group>"; };
 		DBCF627D220B8F4C00D710D2 /* TurnServerInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurnServerInfo.swift; sourceTree = "<group>"; };
@@ -1506,7 +1841,6 @@
 		DBEB8B9121FF7C24005D4FE2 /* ConferenceCallService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCallService.swift; sourceTree = "<group>"; };
 		DBEB8B9421FF7C5E005D4FE2 /* ConferenceCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceCall.swift; sourceTree = "<group>"; };
 		DBF235B92208F6FC00E5EC3E /* CallAudioService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallAudioService.swift; sourceTree = "<group>"; };
-		DD2F0E9696373921805C505E /* Pods-RelayShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayShareExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayShareExtension/Pods-RelayShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		E1A0AD8B16E13FDD0071E604 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		EDECD29AA2892699CD63E5D8 /* Pods_Common_RelayMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Common_RelayMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF764C331DB67CC5000D9A87 /* UIViewController+Permissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Permissions.h"; path = "util/UIViewController+Permissions.h"; sourceTree = "<group>"; };
@@ -1526,6 +1860,7 @@
 				453518A21FC63E2900210559 /* RelayMessaging.framework in Frameworks */,
 				346129731FD1E01700532771 /* PromiseKit.framework in Frameworks */,
 				042AE02FEBA302AB373774E6 /* Pods_RelayShareExtension.framework in Frameworks */,
+				37F36DB75C443B9F130041FA /* Pods_RelayShareExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1569,7 +1904,6 @@
 				7D2CD613214C3C9C004E957A /* Foundation.framework in Frameworks */,
 				7D2CD614214C3C9C004E957A /* AVFoundation.framework in Frameworks */,
 				7D2CD615214C3C9C004E957A /* AudioToolbox.framework in Frameworks */,
-				7D2CD616214C3C9C004E957A /* Pods_Relay.framework in Frameworks */,
 				93B5A7A62605C8DB0E8C6399 /* Pods_RelayDev.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1581,6 +1915,51 @@
 				7D2CD674214C46BC004E957A /* RelayMessaging.framework in Frameworks */,
 				7D2CD675214C46BC004E957A /* PromiseKit.framework in Frameworks */,
 				41C4E0A535335A9B427A5840 /* Pods_RelayDevShareExtension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D44390322776BD900907033 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D44390422776BD900907033 /* WebRTC.framework in Frameworks */,
+				7D44390522776BD900907033 /* Metal.framework in Frameworks */,
+				7D44390622776BD900907033 /* MetalKit.framework in Frameworks */,
+				7D44390722776BD900907033 /* Intents.framework in Frameworks */,
+				7D44390822776BD900907033 /* PromiseKit.framework in Frameworks */,
+				7D44390922776BD900907033 /* Photos.framework in Frameworks */,
+				7D44390A22776BD900907033 /* ContactsUI.framework in Frameworks */,
+				7D44390B22776BD900907033 /* Contacts.framework in Frameworks */,
+				7D44390C22776BD900907033 /* PushKit.framework in Frameworks */,
+				7D44390D22776BD900907033 /* Social.framework in Frameworks */,
+				7D44390E22776BD900907033 /* CoreMedia.framework in Frameworks */,
+				7D44390F22776BD900907033 /* MobileCoreServices.framework in Frameworks */,
+				7D44391022776BD900907033 /* MessageUI.framework in Frameworks */,
+				7D44391122776BD900907033 /* RelayMessaging.framework in Frameworks */,
+				7D44391222776BD900907033 /* MediaPlayer.framework in Frameworks */,
+				7D44391322776BD900907033 /* libz.dylib in Frameworks */,
+				7D44391422776BD900907033 /* QuartzCore.framework in Frameworks */,
+				7D44391522776BD900907033 /* Security.framework in Frameworks */,
+				7D44391622776BD900907033 /* AddressBook.framework in Frameworks */,
+				7D44391722776BD900907033 /* AddressBookUI.framework in Frameworks */,
+				7D44391822776BD900907033 /* CFNetwork.framework in Frameworks */,
+				7D44391922776BD900907033 /* SystemConfiguration.framework in Frameworks */,
+				7D44391A22776BD900907033 /* CoreTelephony.framework in Frameworks */,
+				7D44391B22776BD900907033 /* UIKit.framework in Frameworks */,
+				7D44391C22776BD900907033 /* Foundation.framework in Frameworks */,
+				7D44391D22776BD900907033 /* AVFoundation.framework in Frameworks */,
+				7D44391E22776BD900907033 /* AudioToolbox.framework in Frameworks */,
+				EE5078C69459C478B66CA1E0 /* Pods_RelaySherpany.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D44397A22776EDE00907033 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D44397B22776EDE00907033 /* RelayMessaging.framework in Frameworks */,
+				7D44397C22776EDE00907033 /* PromiseKit.framework in Frameworks */,
+				4D8A5F28999062744F4AB774 /* Pods_RelaySherpanyShareExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1615,7 +1994,7 @@
 				D221A090169C9E5E00537ABF /* Foundation.framework in Frameworks */,
 				D221A0E8169DFFC500537ABF /* AVFoundation.framework in Frameworks */,
 				D24B5BD5169F568C00681372 /* AudioToolbox.framework in Frameworks */,
-				E6431F0E7EAC0CB73D75A38B /* Pods_Relay.framework in Frameworks */,
+				267398C9F0A6C04B7D2C841D /* Pods_Relay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2240,8 +2619,10 @@
 			children = (
 				7D6564C22113B74900365A19 /* RelayShareExtension.entitlements */,
 				7D2CD683214C491B004E957A /* RelayDevShareExtension.entitlements */,
-				7D2CD688214C5F74004E957A /* RelayDevShareExtension-Info.plist */,
+				7D44399222777A1D00907033 /* RelaySherpanyShareExtension.entitlements */,
 				4535186F1FC635DD00210559 /* RelayShareExtension-Info.plist */,
+				7D2CD688214C5F74004E957A /* RelayDevShareExtension-Info.plist */,
+				7D44398A22776EDE00907033 /* RelaySherpanyShareExtension-Info.plist */,
 				4535186C1FC635DD00210559 /* MainInterface.storyboard */,
 				347850561FD86544007B8332 /* SAEFailedViewController.swift */,
 				3461284A1FD0B93F00532771 /* SAELoadViewController.swift */,
@@ -2529,12 +2910,8 @@
 		9404664EC513585B05DF1350 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A656FD71C7A3C79B7AEB3801 /* Pods-Relay.debug.xcconfig */,
-				53B4BAFE3F3D8E5CFB79BF26 /* Pods-Relay.app store release.xcconfig */,
 				6F5AC463F739F55FA0A2353F /* Pods-RelayMessaging.debug.xcconfig */,
 				B8F9072AC883E99EAC2AA0A3 /* Pods-RelayMessaging.app store release.xcconfig */,
-				DD2F0E9696373921805C505E /* Pods-RelayShareExtension.debug.xcconfig */,
-				1109BE332A1FE87763659499 /* Pods-RelayShareExtension.app store release.xcconfig */,
 				0EB06AC3F26DB309BD8C3952 /* Pods-RelayTests.debug.xcconfig */,
 				D562B853DF3F1C3D5A1CB00B /* Pods-RelayTests.app store release.xcconfig */,
 				6423314F94372ED068A02504 /* Pods-RelayDev.debug.xcconfig */,
@@ -2555,6 +2932,14 @@
 				99E02BE899268A9B58496A20 /* Pods-Common-RelayShareExtension.app store release.xcconfig */,
 				26FC1CC898AA01489780EA0D /* Pods-RelayDevShareExtension.debug.xcconfig */,
 				D7BCBE6C7CD3E58FF656F0AC /* Pods-RelayDevShareExtension.app store release.xcconfig */,
+				DAD674B91E1E81472330E51C /* Pods-Relay.debug.xcconfig */,
+				139C549CF654F96579C75970 /* Pods-Relay.app store release.xcconfig */,
+				7F79EEA6C7793CCE9106DDF1 /* Pods-RelayShareExtension.debug.xcconfig */,
+				5A2B077BFDF8200C7FA161B7 /* Pods-RelayShareExtension.app store release.xcconfig */,
+				1D3B60B2D2CEDD33EA1331B2 /* Pods-RelaySherpany.debug.xcconfig */,
+				BD265CD7DA97819F635E3E97 /* Pods-RelaySherpany.app store release.xcconfig */,
+				54BB622B4FB87E10A946562C /* Pods-RelaySherpanyShareExtension.debug.xcconfig */,
+				8BE5A2E47BE0081EA9CDB114 /* Pods-RelaySherpanyShareExtension.app store release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -2694,6 +3079,8 @@
 				453518921FC63DBF00210559 /* RelayMessaging.framework */,
 				7D2CD666214C3C9C004E957A /* Forsta.app */,
 				7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */,
+				7D44396E22776BD900907033 /* RelaySherpany.app */,
+				7D44398922776EDE00907033 /* RelaySherpanyShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2749,6 +3136,8 @@
 				1956251241E9DBBA9072D5C5 /* Pods_Common_RelayDevShareExtension.framework */,
 				A47172A1E54ABB679F975561 /* Pods_Common_RelayShareExtension.framework */,
 				0F7E17B4EFBB2600D9AEEA8E /* Pods_RelayDevShareExtension.framework */,
+				0C124DF7D1C0036915813021 /* Pods_RelaySherpany.framework */,
+				6AF2F812C075328B50B16D5B /* Pods_RelaySherpanyShareExtension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2758,6 +3147,7 @@
 			children = (
 				7D6564C12113B1C200365A19 /* Relay.entitlements */,
 				7D2CD668214C3DE4004E957A /* RelayDev.entitlements */,
+				7D44398F2277799500907033 /* RelaySherpany.entitlements */,
 				34330A581E7875FB00DF2FB9 /* Fonts */,
 				B633C4FD1A1D190B0059AC12 /* Images */,
 				B66DBF4919D5BBC8006EA940 /* Images.xcassets */,
@@ -2781,6 +3171,7 @@
 				D221A099169C9E5E00537ABF /* main.m */,
 				D221A095169C9E5E00537ABF /* Relay-Info.plist */,
 				7D95D84B215C5E99000E783D /* RelayDev-Info.plist */,
+				7D44396F22776BDA00907033 /* RelaySherpany-Info.plist */,
 				D221A09B169C9E5E00537ABF /* Relay-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -2972,6 +3363,51 @@
 			productReference = 7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		7D44385422776BD900907033 /* RelaySherpany */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7D44396B22776BD900907033 /* Build configuration list for PBXNativeTarget "RelaySherpany" */;
+			buildPhases = (
+				3D06DFF475C41C070DC6D8C6 /* [CP] Check Pods Manifest.lock */,
+				7D44385A22776BD900907033 /* Swift Lint */,
+				7D44385B22776BD900907033 /* Sources */,
+				7D44390322776BD900907033 /* Frameworks */,
+				7D44392022776BD900907033 /* Resources */,
+				7D44396822776BD900907033 /* Embed Frameworks */,
+				7D44396A22776BD900907033 /* Fabric script */,
+				7D44398E2277750500907033 /* Embed App Extensions */,
+				038DEB2CC87E8ACF990D8479 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7D44385722776BD900907033 /* PBXTargetDependency */,
+				7D44398D2277750400907033 /* PBXTargetDependency */,
+			);
+			name = RelaySherpany;
+			productName = RedPhone;
+			productReference = 7D44396E22776BD900907033 /* RelaySherpany.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7D44397022776EDE00907033 /* RelaySherpanyShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7D44398622776EDE00907033 /* Build configuration list for PBXNativeTarget "RelaySherpanyShareExtension" */;
+			buildPhases = (
+				68F5D4D230CC1D963EAEBF4B /* [CP] Check Pods Manifest.lock */,
+				7D44397422776EDE00907033 /* Sources */,
+				7D44397A22776EDE00907033 /* Frameworks */,
+				7D44397E22776EDE00907033 /* Resources */,
+				7D44398522776EDE00907033 /* Fabrics script */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7D44397122776EDE00907033 /* PBXTargetDependency */,
+			);
+			name = RelaySherpanyShareExtension;
+			productName = SignalShareExtension;
+			productReference = 7D44398922776EDE00907033 /* RelaySherpanyShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		D221A088169C9E5E00537ABF /* Relay */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D221A0BC169C9E5F00537ABF /* Build configuration list for PBXNativeTarget "Relay" */;
@@ -3095,6 +3531,24 @@
 							};
 						};
 					};
+					7D44385422776BD900907033 = {
+						DevelopmentTeam = THHR8L4QV3;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					7D44397022776EDE00907033 = {
+						DevelopmentTeam = THHR8L4QV3;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 					D221A088169C9E5E00537ABF = {
 						DevelopmentTeam = THHR8L4QV3;
 						LastSwiftMigration = 0930;
@@ -3197,9 +3651,11 @@
 			targets = (
 				D221A088169C9E5E00537ABF /* Relay */,
 				7D2CD532214C3C9C004E957A /* RelayDev */,
+				7D44385422776BD900907033 /* RelaySherpany */,
 				D221A0A9169C9E5F00537ABF /* RelayTests */,
 				453518671FC635DD00210559 /* RelayShareExtension */,
 				7D2CD669214C46BC004E957A /* RelayDevShareExtension */,
+				7D44397022776EDE00907033 /* RelaySherpanyShareExtension */,
 				453518911FC63DBF00210559 /* RelayMessaging */,
 			);
 		};
@@ -3317,6 +3773,94 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7D44392022776BD900907033 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D44392122776BD900907033 /* SignalTSan.supp in Resources */,
+				7D44392222776BD900907033 /* SignalUBSan.supp in Resources */,
+				7D44392322776BD900907033 /* end_call_tone_cept.caf in Resources */,
+				7D44392422776BD900907033 /* audio_pause_button_blue.png in Resources */,
+				7D44392522776BD900907033 /* fontawesome-webfont.ttf in Resources */,
+				7D44392622776BD900907033 /* Main.storyboard in Resources */,
+				7D44392722776BD900907033 /* audio_play_button.png in Resources */,
+				7D44392822776BD900907033 /* dripicons-v2.ttf in Resources */,
+				7D44392922776BD900907033 /* Login.storyboard in Resources */,
+				7D44392A22776BD900907033 /* mute_on@2x.png in Resources */,
+				7D44392B22776BD900907033 /* quit@2x.png in Resources */,
+				7D44392C22776BD900907033 /* audio_pause_button.png in Resources */,
+				7D44392D22776BD900907033 /* Localizable.strings in Resources */,
+				7D44392E22776BD900907033 /* endcall@2x.png in Resources */,
+				7D44392F22776BD900907033 /* error_white@2x.png in Resources */,
+				7D44393022776BD900907033 /* savephoto@2x.png in Resources */,
+				7D44393122776BD900907033 /* play_icon.png in Resources */,
+				7D44393222776BD900907033 /* audio_pause_button_blue@2x.png in Resources */,
+				7D44393322776BD900907033 /* Images.xcassets in Resources */,
+				7D44393422776BD900907033 /* ringback_tone_ansi.caf in Resources */,
+				7D44393522776BD900907033 /* sonarping.mp3 in Resources */,
+				7D44393622776BD900907033 /* audio_play_button@2x.png in Resources */,
+				7D44393722776BD900907033 /* message_sent.aiff in Resources */,
+				7D44393822776BD900907033 /* Launch Screen.storyboard in Resources */,
+				7D44393922776BD900907033 /* mute_off@2x.png in Resources */,
+				7D44393A22776BD900907033 /* audio_play_button_blue@2x.png in Resources */,
+				7D44393B22776BD900907033 /* Opening.m4r in Resources */,
+				7D44393C22776BD900907033 /* warning_white@2x.png in Resources */,
+				7D44393D22776BD900907033 /* contact_default_feed.png in Resources */,
+				7D44393E22776BD900907033 /* play_icon@2x.png in Resources */,
+				7D44393F22776BD900907033 /* call@2x.png in Resources */,
+				7D44394022776BD900907033 /* Settings.bundle in Resources */,
+				7D44394122776BD900907033 /* pause_icon@2x.png in Resources */,
+				7D44394222776BD900907033 /* qr@2x.png in Resources */,
+				7D44394322776BD900907033 /* busy_tone_ansi.caf in Resources */,
+				7D44394422776BD900907033 /* pause_icon.png in Resources */,
+				7D44394522776BD900907033 /* audio_play_button_blue.png in Resources */,
+				7D44394622776BD900907033 /* ElegantIcons.ttf in Resources */,
+				7D44394722776BD900907033 /* audio_pause_button@2x.png in Resources */,
+				7D44394822776BD900907033 /* NewMessage.aifc in Resources */,
+				7D44394922776BD900907033 /* aurora.aifc in Resources */,
+				7D44394A22776BD900907033 /* aurora-quiet.aifc in Resources */,
+				7D44394B22776BD900907033 /* bamboo.aifc in Resources */,
+				7D44394C22776BD900907033 /* bamboo-quiet.aifc in Resources */,
+				7D44394D22776BD900907033 /* chord.aifc in Resources */,
+				7D44394E22776BD900907033 /* chord-quiet.aifc in Resources */,
+				7D44394F22776BD900907033 /* circles.aifc in Resources */,
+				7D44395022776BD900907033 /* circles-quiet.aifc in Resources */,
+				7D44395122776BD900907033 /* classic.aifc in Resources */,
+				7D44395222776BD900907033 /* classic-quiet.aifc in Resources */,
+				7D44395322776BD900907033 /* complete.aifc in Resources */,
+				7D44395422776BD900907033 /* Forsta-values.plist in Resources */,
+				7D44395522776BD900907033 /* complete-quiet.aifc in Resources */,
+				7D44395622776BD900907033 /* hello.aifc in Resources */,
+				7D44395722776BD900907033 /* hello-quiet.aifc in Resources */,
+				7D44395822776BD900907033 /* input.aifc in Resources */,
+				7D44395922776BD900907033 /* forsta_splash2.png in Resources */,
+				7D44395A22776BD900907033 /* input-quiet.aifc in Resources */,
+				7D44395B22776BD900907033 /* keys.aifc in Resources */,
+				7D44395C22776BD900907033 /* keys-quiet.aifc in Resources */,
+				7D44395D22776BD900907033 /* note.aifc in Resources */,
+				7D44395E22776BD900907033 /* note-quiet.aifc in Resources */,
+				7D44395F22776BD900907033 /* popcorn.aifc in Resources */,
+				7D44396022776BD900907033 /* popcorn-quiet.aifc in Resources */,
+				7D44396122776BD900907033 /* pulse.aifc in Resources */,
+				7D44396222776BD900907033 /* pulse-quiet.aifc in Resources */,
+				7D44396322776BD900907033 /* synth.aifc in Resources */,
+				7D44396422776BD900907033 /* synth-quiet.aifc in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D44397E22776EDE00907033 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D44397F22776EDE00907033 /* ElegantIcons.ttf in Resources */,
+				7D44398022776EDE00907033 /* MainInterface.storyboard in Resources */,
+				7D44398122776EDE00907033 /* Localizable.strings in Resources */,
+				7D44398222776EDE00907033 /* fontawesome-webfont.ttf in Resources */,
+				7D44398322776EDE00907033 /* Images.xcassets in Resources */,
+				7D44398422776EDE00907033 /* dripicons-v2.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D221A087169C9E5E00537ABF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3407,6 +3951,78 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		038DEB2CC87E8ACF990D8479 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RelaySherpany/Pods-RelaySherpany-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/Curve25519Kit/Curve25519Kit.framework",
+				"${PODS_ROOT}/GRKOpenSSLFramework/OpenSSL-iOS/bin/openssl.framework",
+				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
+				"${BUILT_PRODUCTS_DIR}/HKDFKit/HKDFKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
+				"${BUILT_PRODUCTS_DIR}/NSAttributedString-DDHTML/NSAttributedString_DDHTML.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/ProtocolBuffers/ProtocolBuffers.framework",
+				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
+				"${BUILT_PRODUCTS_DIR}/ReCaptcha/ReCaptcha.framework",
+				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/RelayServiceKit/RelayServiceKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SAMKeychain/SAMKeychain.framework",
+				"${BUILT_PRODUCTS_DIR}/SQLCipher/SQLCipher.framework",
+				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
+				"${BUILT_PRODUCTS_DIR}/SignalCoreKit/SignalCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/UIImageView+Extension/UIImageView_Extension.framework",
+				"${BUILT_PRODUCTS_DIR}/URLEmbeddedView/URLEmbeddedView.framework",
+				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
+				"${BUILT_PRODUCTS_DIR}/YapDatabase/YapDatabase.framework",
+				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AxolotlKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curve25519Kit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HKDFKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAttributedString_DDHTML.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtocolBuffers.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReCaptcha.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RelayServiceKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SAMKeychain.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLCipher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SignalCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageView_Extension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLEmbeddedView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YapDatabase.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RelaySherpany/Pods-RelaySherpany-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		1460156AE01E0DB0949D61FE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3437,6 +4053,28 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-RelayShareExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3D06DFF475C41C070DC6D8C6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RelaySherpany-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3479,7 +4117,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Relay/Pods-Relay-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Relay/Pods-Relay-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
@@ -3538,7 +4176,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Relay/Pods-Relay-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Relay/Pods-Relay-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6565655F4068F9E5CDC5687F /* [CP] Check Pods Manifest.lock */ = {
@@ -3553,6 +4191,28 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-RelayTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		68F5D4D230CC1D963EAEBF4B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RelaySherpanyShareExtension-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3597,7 +4257,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-RelayDev/Pods-RelayDev-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-RelayDev/Pods-RelayDev-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
@@ -3656,7 +4316,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RelayDev/Pods-RelayDev-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RelayDev/Pods-RelayDev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7D2CD66C214C46BC004E957A /* [CP] Check Pods Manifest.lock */ = {
@@ -3676,6 +4336,50 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		7D44385A22776BD900907033 /* Swift Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Lint";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n# disabled for now. too many lint errors outside of the scope of this branch\n#(cd Signal && swiftlint)\n# never fail.\nexit 0\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		7D44396A22776BD900907033 /* Fabric script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Fabric script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "APIKey=`defaults read ${PROJECT_DIR}/Relay/Forsta-values FabricAPIKey`\nBuildSecret=`defaults read ${PROJECT_DIR}/Relay/Forsta-values FabricBuildSecret`\n\"${PODS_ROOT}/Fabric/run\" ${APIKey} ${BuildSecret}\n";
+		};
+		7D44398522776EDE00907033 /* Fabrics script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Fabrics script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "APIKey=`defaults read ${PROJECT_DIR}/Relay/Forsta-values FabricAPIKey`\nBuildSecret=`defaults read ${PROJECT_DIR}/Relay/Forsta-values FabricBuildSecret`\n\"${PODS_ROOT}/Fabric/run\" ${APIKey} ${BuildSecret}\n";
 		};
 		7D6D681F21ED1334006DB446 /* Fabric script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3743,7 +4447,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-RelayTests/Pods-RelayTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/AxolotlKit/AxolotlKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
@@ -3798,7 +4502,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RelayTests/Pods-RelayTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RelayTests/Pods-RelayTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F4C416F20E3CB0B25DC10C56 /* [CP] Check Pods Manifest.lock */ = {
@@ -4122,6 +4826,192 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7D44385B22776BD900907033 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D44385C22776BD900907033 /* Conversions.m in Sources */,
+				7D44385D22776BD900907033 /* TurnServerInfo.swift in Sources */,
+				7D44385E22776BD900907033 /* ConversationConfigurationSyncOperation.swift in Sources */,
+				7D44385F22776BD900907033 /* AttachmentUploadView.m in Sources */,
+				7D44386022776BD900907033 /* MediaGalleryViewController.swift in Sources */,
+				7D44386122776BD900907033 /* HomeViewCell.m in Sources */,
+				7D44386222776BD900907033 /* PeerViewsLayout.swift in Sources */,
+				7D44386322776BD900907033 /* ArrayUtil.m in Sources */,
+				7D44386422776BD900907033 /* OWSBubbleShapeView.m in Sources */,
+				7D44386522776BD900907033 /* OWSAudioMessageView.m in Sources */,
+				7D44386622776BD900907033 /* DebugUIContacts.m in Sources */,
+				7D44386722776BD900907033 /* GifPickerCell.swift in Sources */,
+				7D44386822776BD900907033 /* HttpRequest.m in Sources */,
+				7D44386922776BD900907033 /* AddToGroupViewController.m in Sources */,
+				7D44386A22776BD900907033 /* DebugUIMisc.m in Sources */,
+				7D44386B22776BD900907033 /* ConferenceCallService.swift in Sources */,
+				7D44386C22776BD900907033 /* OWSLinkDeviceViewController.m in Sources */,
+				7D44386D22776BD900907033 /* DebugUIDiskUsage.m in Sources */,
+				7D44386E22776BD900907033 /* MediaTileViewController.swift in Sources */,
+				7D44386F22776BD900907033 /* OWSBackupSettingsViewController.m in Sources */,
+				7D44387022776BD900907033 /* ConversationViewItem.m in Sources */,
+				7D44387122776BD900907033 /* AppStoreRating.m in Sources */,
+				7D44387222776BD900907033 /* CallNotificationsAdapter.swift in Sources */,
+				7D44387322776BD900907033 /* OWSMessageHeaderView.m in Sources */,
+				7D44387422776BD900907033 /* UserNotificationsAdaptee.swift in Sources */,
+				7D44387522776BD900907033 /* OWSBackupAPI.swift in Sources */,
+				7D44387622776BD900907033 /* ConversationScrollButton.m in Sources */,
+				7D44387722776BD900907033 /* HomeViewController.m in Sources */,
+				7D44387822776BD900907033 /* ConversationViewCell.m in Sources */,
+				7D44387922776BD900907033 /* UIViewController+Permissions.m in Sources */,
+				7D44387A22776BD900907033 /* SlugViewLayout.swift in Sources */,
+				7D44387B22776BD900907033 /* DictionaryUtil.m in Sources */,
+				7D44387C22776BD900907033 /* SyncPushTokensJob.swift in Sources */,
+				7D44387D22776BD900907033 /* DebugUIMessagesAssetLoader.m in Sources */,
+				7D44387E22776BD900907033 /* CallUIService.swift in Sources */,
+				7D44387F22776BD900907033 /* FingerprintViewScanController.m in Sources */,
+				7D44388022776BD900907033 /* StringUtil.m in Sources */,
+				7D44388122776BD900907033 /* SafetyNumberConfirmationAlert.swift in Sources */,
+				7D44388222776BD900907033 /* ConversationSearchViewController.swift in Sources */,
+				7D44388322776BD900907033 /* RemoteVideoView.m in Sources */,
+				7D44388422776BD900907033 /* PushManager.m in Sources */,
+				7D44388522776BD900907033 /* NeverClearView.swift in Sources */,
+				7D44388622776BD900907033 /* NewConversationViewController.swift in Sources */,
+				7D44388722776BD900907033 /* CompareSafetyNumbersActivity.swift in Sources */,
+				7D44388822776BD900907033 /* NewAccountViewController.swift in Sources */,
+				7D44388922776BD900907033 /* EvpMessageDigest.m in Sources */,
+				7D44388A22776BD900907033 /* AccountManager.swift in Sources */,
+				7D44388B22776BD900907033 /* OWSBackupLazyRestoreJob.swift in Sources */,
+				7D44388C22776BD900907033 /* GiphyAPI.swift in Sources */,
+				7D44388D22776BD900907033 /* OWSLinkedDevicesTableViewController.m in Sources */,
+				7D44388E22776BD900907033 /* NotificationSettingsViewController.m in Sources */,
+				7D44388F22776BD900907033 /* HapticFeedback.swift in Sources */,
+				7D44389022776BD900907033 /* LongTextViewController.swift in Sources */,
+				7D44389122776BD900907033 /* DataUtil.m in Sources */,
+				7D44389222776BD900907033 /* OWSAnyTouchGestureRecognizer.m in Sources */,
+				7D44389322776BD900907033 /* SignalsNavigationController.m in Sources */,
+				7D44389422776BD900907033 /* FunctionalUtil.m in Sources */,
+				7D44389522776BD900907033 /* OWSBezierPathView.m in Sources */,
+				7D44389622776BD900907033 /* NumberUtil.m in Sources */,
+				7D44389722776BD900907033 /* DebugUIFileBrowser.swift in Sources */,
+				7D44389822776BD900907033 /* ProfileViewController.m in Sources */,
+				7D44389922776BD900907033 /* MainAppContext.m in Sources */,
+				7D44389A22776BD900907033 /* DebugUIPage.m in Sources */,
+				7D44389B22776BD900907033 /* OWSBackupJob.m in Sources */,
+				7D44389C22776BD900907033 /* OWSMessageCell.m in Sources */,
+				7D44389D22776BD900907033 /* EvpSymetricUtil.m in Sources */,
+				7D44389E22776BD900907033 /* HttpRequestOrResponse.m in Sources */,
+				7D44389F22776BD900907033 /* AppUpdateNag.swift in Sources */,
+				7D4438A022776BD900907033 /* DismissableTextField.swift in Sources */,
+				7D4438A122776BD900907033 /* MenuActionsViewController.swift in Sources */,
+				7D4438A222776BD900907033 /* UIControl+Forsta.swift in Sources */,
+				7D4438A322776BD900907033 /* MultiDeviceProfileKeyUpdateJob.swift in Sources */,
+				7D4438A422776BD900907033 /* SessionResetJob.swift in Sources */,
+				7D4438A522776BD900907033 /* NotificationSettingsOptionsViewController.m in Sources */,
+				7D4438A622776BD900907033 /* ConferenceCall.swift in Sources */,
+				7D4438A722776BD900907033 /* DebugUISessionState.m in Sources */,
+				7D4438A822776BD900907033 /* CallAudioService.swift in Sources */,
+				7D4438A922776BD900907033 /* main.m in Sources */,
+				7D4438AA22776BD900907033 /* HttpResponse.m in Sources */,
+				7D4438AB22776BD900907033 /* AnnouncementDetailViewController.m in Sources */,
+				7D4438AC22776BD900907033 /* RegistrationUtils.m in Sources */,
+				7D4438AD22776BD900907033 /* AttachmentPointerView.swift in Sources */,
+				7D4438AE22776BD900907033 /* DebugUICalling.swift in Sources */,
+				7D4438AF22776BD900907033 /* AudioProgressView.swift in Sources */,
+				7D4438B022776BD900907033 /* GiphyDownloader.swift in Sources */,
+				7D4438B122776BD900907033 /* FingerprintViewController.m in Sources */,
+				7D4438B222776BD900907033 /* Platform.swift in Sources */,
+				7D4438B322776BD900907033 /* LoginViewController.swift in Sources */,
+				7D4438B422776BD900907033 /* AdvancedSettingsTableViewController.m in Sources */,
+				7D4438B522776BD900907033 /* SignalApp.m in Sources */,
+				7D4438B622776BD900907033 /* GifPickerLayout.swift in Sources */,
+				7D4438B722776BD900907033 /* DebugUISyncMessages.m in Sources */,
+				7D4438B822776BD900907033 /* UIStoryboard+OWS.swift in Sources */,
+				7D4438B922776BD900907033 /* ConferenceCallEvents.swift in Sources */,
+				7D4438BA22776BD900907033 /* PeerConnectionClient.swift in Sources */,
+				7D4438BB22776BD900907033 /* MessageFetcherJob.swift in Sources */,
+				7D4438BC22776BD900907033 /* DebugUIProfile.swift in Sources */,
+				7D4438BD22776BD900907033 /* ReminderView.swift in Sources */,
+				7D4438BE22776BD900907033 /* ConversationViewLayout.m in Sources */,
+				7D4438BF22776BD900907033 /* DirectionalPanGestureRecognizer.swift in Sources */,
+				7D4438C022776BD900907033 /* OWSProgressView.m in Sources */,
+				7D4438C122776BD900907033 /* LoadingViewController.swift in Sources */,
+				7D4438C222776BD900907033 /* AvatarViewHelper.m in Sources */,
+				7D4438C322776BD900907033 /* OWSGenericAttachmentView.m in Sources */,
+				7D4438C422776BD900907033 /* OWSMessageFooterView.m in Sources */,
+				7D4438C522776BD900907033 /* ValidationViewController.swift in Sources */,
+				7D4438C622776BD900907033 /* DebugUINotifications.swift in Sources */,
+				7D4438C722776BD900907033 /* Crc32.m in Sources */,
+				7D4438C822776BD900907033 /* ColorPickerViewController.swift in Sources */,
+				7D4438C922776BD900907033 /* OWSBackupIO.m in Sources */,
+				7D4438CA22776BD900907033 /* OWSDeviceProvisioningURLParser.m in Sources */,
+				7D4438CB22776BD900907033 /* FLAnnouncementViewController.m in Sources */,
+				7D4438CC22776BD900907033 /* PeerViewCell.swift in Sources */,
+				7D4438CD22776BD900907033 /* SlugCell.swift in Sources */,
+				7D4438CE22776BD900907033 /* OWSMessageBubbleView.m in Sources */,
+				7D4438CF22776BD900907033 /* DebugUITableViewController.m in Sources */,
+				7D4438D022776BD900907033 /* iRate.m in Sources */,
+				7D4438D122776BD900907033 /* MediaDetailViewController.m in Sources */,
+				7D4438D222776BD900907033 /* DebugUIMessages.m in Sources */,
+				7D4438D322776BD900907033 /* OWSMessageTextView.m in Sources */,
+				7D4438D422776BD900907033 /* ConversationCollectionView.m in Sources */,
+				7D4438D522776BD900907033 /* NotificationsManager.swift in Sources */,
+				7D4438D622776BD900907033 /* DirectoryCell.swift in Sources */,
+				7D4438D722776BD900907033 /* UIResponder+OWS.swift in Sources */,
+				7D4438D822776BD900907033 /* UIApplication+OWS.swift in Sources */,
+				7D4438D922776BD900907033 /* PushRegistrationManager.swift in Sources */,
+				7D4438DA22776BD900907033 /* OWSBackupExportJob.m in Sources */,
+				7D4438DB22776BD900907033 /* MediaPageViewController.swift in Sources */,
+				7D4438DC22776BD900907033 /* OWSLayerView.swift in Sources */,
+				7D4438DD22776BD900907033 /* OWSScreenLockUI.m in Sources */,
+				7D4438DE22776BD900907033 /* OWSBackupImportJob.m in Sources */,
+				7D4438DF22776BD900907033 /* OWSConversationSettingsViewController.m in Sources */,
+				7D4438E022776BD900907033 /* GifPickerViewController.swift in Sources */,
+				7D4438E122776BD900907033 /* MessageRecipientStatusUtils.swift in Sources */,
+				7D4438E222776BD900907033 /* OWSQuotedMessageView.m in Sources */,
+				7D4438E322776BD900907033 /* ConversationHeaderView.swift in Sources */,
+				7D4438E422776BD900907033 /* MessageDetailViewController.swift in Sources */,
+				7D4438E522776BD900907033 /* ConversationInputToolbar.m in Sources */,
+				7D4438E622776BD900907033 /* QuotedReplyPreview.swift in Sources */,
+				7D4438E722776BD900907033 /* OWSBubbleView.m in Sources */,
+				7D4438E822776BD900907033 /* AppDelegate.m in Sources */,
+				7D4438E922776BD900907033 /* ConversationInputTextView.m in Sources */,
+				7D4438EA22776BD900907033 /* OWSQRCodeScanningViewController.m in Sources */,
+				7D4438EB22776BD900907033 /* MessageActions.swift in Sources */,
+				7D4438EC22776BD900907033 /* AboutTableViewController.m in Sources */,
+				7D4438ED22776BD900907033 /* DebugUIStress.m in Sources */,
+				7D4438EE22776BD900907033 /* UpdateGroupViewController.m in Sources */,
+				7D4438EF22776BD900907033 /* TextFieldHelper.swift in Sources */,
+				7D4438F022776BD900907033 /* DebugUIMessagesAction.m in Sources */,
+				7D4438F122776BD900907033 /* PrivacySettingsTableViewController.m in Sources */,
+				7D4438F222776BD900907033 /* DebugUIBackup.m in Sources */,
+				7D4438F322776BD900907033 /* MessageStatusView.swift in Sources */,
+				7D4438F422776BD900907033 /* OWSSoundSettingsViewController.m in Sources */,
+				7D4438F522776BD900907033 /* Pastelog.m in Sources */,
+				7D4438F622776BD900907033 /* AppSettingsViewController.m in Sources */,
+				7D4438F722776BD900907033 /* CropScaleImageViewController.swift in Sources */,
+				7D4438F822776BD900907033 /* MarqueeLabel.swift in Sources */,
+				7D4438F922776BD900907033 /* OWSBackup.m in Sources */,
+				7D4438FA22776BD900907033 /* OWSSystemMessageCell.m in Sources */,
+				7D4438FB22776BD900907033 /* GroupTableViewCell.swift in Sources */,
+				7D4438FC22776BD900907033 /* ConferenceCallViewController.swift in Sources */,
+				7D4438FD22776BD900907033 /* ConversationViewController.m in Sources */,
+				7D4438FE22776BD900907033 /* OWSMessageTimerView.m in Sources */,
+				7D4438FF22776BD900907033 /* DateUtil.m in Sources */,
+				7D44390022776BD900907033 /* ShowGroupMembersViewController.m in Sources */,
+				7D44390122776BD900907033 /* OWSDeviceTableViewCell.m in Sources */,
+				7D44390222776BD900907033 /* CryptoTools.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D44397422776EDE00907033 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D44397522776EDE00907033 /* ShareViewController.swift in Sources */,
+				7D44397622776EDE00907033 /* ShareAppExtensionContext.m in Sources */,
+				7D44397722776EDE00907033 /* SAEScreenLockViewController.m in Sources */,
+				7D44397822776EDE00907033 /* SAELoadViewController.swift in Sources */,
+				7D44397922776EDE00907033 /* SAEFailedViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D221A085169C9E5E00537ABF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4370,6 +5260,21 @@
 			target = 7D2CD669214C46BC004E957A /* RelayDevShareExtension */;
 			targetProxy = 7D2CD685214C52AD004E957A /* PBXContainerItemProxy */;
 		};
+		7D44385722776BD900907033 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 453518911FC63DBF00210559 /* RelayMessaging */;
+			targetProxy = 7D44385822776BD900907033 /* PBXContainerItemProxy */;
+		};
+		7D44397122776EDE00907033 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 453518911FC63DBF00210559 /* RelayMessaging */;
+			targetProxy = 7D44397222776EDE00907033 /* PBXContainerItemProxy */;
+		};
+		7D44398D2277750400907033 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7D44397022776EDE00907033 /* RelaySherpanyShareExtension */;
+			targetProxy = 7D44398C2277750400907033 /* PBXContainerItemProxy */;
+		};
 		B6AFCEBB19A93DA60098CFCB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D221A088169C9E5E00537ABF /* Relay */;
@@ -4399,7 +5304,7 @@
 /* Begin XCBuildConfiguration section */
 		453518731FC635DD00210559 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DD2F0E9696373921805C505E /* Pods-RelayShareExtension.debug.xcconfig */;
+			baseConfigurationReference = 7F79EEA6C7793CCE9106DDF1 /* Pods-RelayShareExtension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -4453,7 +5358,7 @@
 		};
 		453518751FC635DD00210559 /* App Store Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1109BE332A1FE87763659499 /* Pods-RelayShareExtension.app store release.xcconfig */;
+			baseConfigurationReference = 5A2B077BFDF8200C7FA161B7 /* Pods-RelayShareExtension.app store release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -4924,6 +5829,267 @@
 			};
 			name = "App Store Release";
 		};
+		7D44396C22776BD900907033 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D3B60B2D2CEDD33EA1331B2 /* Pods-RelaySherpany.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = YES;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
+				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY = YES;
+				CODE_SIGN_ENTITLEMENTS = Relay/RelaySherpany.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 318;
+				DEVELOPMENT_TEAM = THHR8L4QV3;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Relay/Relay-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEVELOPMENT=0",
+				);
+				GCC_STRICT_ALIASING = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = NO;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/libtommath\"",
+					"\"$(SRCROOT)/libtomcrypt/headers\"",
+					"\"$(SRCROOT)/MMDrawerController\"",
+					"\"$(SRCROOT)/Libraries\"/**",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/RelaySherpany-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
+				LLVM_LTO = NO;
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relaySherpany;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Relay/src/Relay-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Relay-Swift.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
+				TEST_AFTER_BUILD = YES;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7D44396D22776BD900907033 /* App Store Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD265CD7DA97819F635E3E97 /* Pods-RelaySherpany.app store release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Relay/RelaySherpany.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 318;
+				DEVELOPMENT_TEAM = THHR8L4QV3;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Relay/Relay-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEVELOPMENT=0",
+				);
+				GCC_STRICT_ALIASING = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = NO;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/libtommath\"",
+					"\"$(SRCROOT)/libtomcrypt/headers\"",
+					"\"$(SRCROOT)/MMDrawerController\"",
+					"\"$(SRCROOT)/Libraries\"/**",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/RelaySherpany-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
+				LLVM_LTO = NO;
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relaySherpany;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Relay/src/Relay-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Relay-Swift.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
+				TEST_AFTER_BUILD = YES;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = "App Store Release";
+		};
+		7D44398722776EDE00907033 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54BB622B4FB87E10A946562C /* Pods-RelaySherpanyShareExtension.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "RelaySherpanyShareExtension copy.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = THHR8L4QV3;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RelayShareExtension/RelayShareExtension-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"SQLITE_HAS_CODEC=1",
+					"DEVELOPMENT=0",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "$(SRCROOT)/RelaySherpanyShareExtension-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relaySherpany.shareextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "RelayShareExtension/RelayShareExtension-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
+			};
+			name = Debug;
+		};
+		7D44398822776EDE00907033 /* App Store Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BE5A2E47BE0081EA9CDB114 /* Pods-RelaySherpanyShareExtension.app store release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "RelaySherpanyShareExtension copy.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = THHR8L4QV3;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RelayShareExtension/RelayShareExtension-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"$(inherited)",
+					"SQLITE_HAS_CODEC=1",
+					"DEVELOPMENT=0",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/RelaySherpanyShareExtension-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.forsta.relaySherpany.shareextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "RelayShareExtension/RelayShareExtension-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
+			};
+			name = "App Store Release";
+		};
 		D221A0BA169C9E5F00537ABF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5068,7 +6234,7 @@
 		};
 		D221A0BD169C9E5F00537ABF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A656FD71C7A3C79B7AEB3801 /* Pods-Relay.debug.xcconfig */;
+			baseConfigurationReference = DAD674B91E1E81472330E51C /* Pods-Relay.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -5103,8 +6269,6 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${SRCROOT}/RedPhone/lib/ogg/include\"",
-					"\"${SRCROOT}/RedPhone/lib/debug/include\"",
 					"\"$(SRCROOT)/libtommath\"",
 					"\"$(SRCROOT)/libtomcrypt/headers\"",
 					"\"$(SRCROOT)/MMDrawerController\"",
@@ -5138,7 +6302,7 @@
 		};
 		D221A0BE169C9E5F00537ABF /* App Store Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53B4BAFE3F3D8E5CFB79BF26 /* Pods-Relay.app store release.xcconfig */;
+			baseConfigurationReference = 139C549CF654F96579C75970 /* Pods-Relay.app store release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -5171,8 +6335,6 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${SRCROOT}/RedPhone/lib/ogg/include\"",
-					"\"${SRCROOT}/RedPhone/lib/debug/include\"",
 					"\"$(SRCROOT)/libtommath\"",
 					"\"$(SRCROOT)/libtomcrypt/headers\"",
 					"\"$(SRCROOT)/MMDrawerController\"",
@@ -5355,6 +6517,24 @@
 			buildConfigurations = (
 				7D2CD67F214C46BC004E957A /* Debug */,
 				7D2CD680214C46BC004E957A /* App Store Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "App Store Release";
+		};
+		7D44396B22776BD900907033 /* Build configuration list for PBXNativeTarget "RelaySherpany" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D44396C22776BD900907033 /* Debug */,
+				7D44396D22776BD900907033 /* App Store Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "App Store Release";
+		};
+		7D44398622776EDE00907033 /* Build configuration list for PBXNativeTarget "RelaySherpanyShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D44398722776EDE00907033 /* Debug */,
+				7D44398822776EDE00907033 /* App Store Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "App Store Release";

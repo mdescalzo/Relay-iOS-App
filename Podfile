@@ -39,6 +39,11 @@ target 'RelayDev' do
     pod 'SSZipArchive', :inhibit_warnings => true
 end
 
+target 'RelaySherpany' do
+  shared_pods
+  pod 'ReCaptcha', '1.4.2', :inhibit_warnings => true
+  pod 'SSZipArchive', :inhibit_warnings => true
+end
 
 target 'Relay' do
     shared_pods
@@ -57,6 +62,10 @@ end
 
 target 'RelayShareExtension' do
     shared_pods
+end
+
+target 'RelaySherpanyShareExtension' do
+  shared_pods
 end
 
 target 'RelayMessaging' do

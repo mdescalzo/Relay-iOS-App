@@ -26,34 +26,5 @@
 //#define FLCCSMTagsUpdated @"FLCCSMTagsUpdated"
 //#define FLRegistrationStatusUpdateNotification @"FLRegistrationStatusUpdateNotification"
 //
-//// Superman IDs - used for provisioning.
-//#define FLSupermanDevID @"1e1116aa-31b3-4fb2-a4db-21e8136d4f3a"
-//#define FLSupermanStageID @"88e7165e-d2da-4c3f-a14a-bb802bb0cefb"
-//#define FLSupermanProdID @"cf40fca2-dfa8-4356-8ae7-45f56f7551ca"
-//
-// Forsta CCSM home URLs
-#define FLForstaDevURL @"https://atlas-dev.forsta.io"
-#define FLForstaStageURL @"https://ccsm-stage-api.forsta.io"
-#define FLForstaProdURL @"https://api.forsta.io"
-//
-//
-//// Forsta support URL
-//#define FLForstaSupportURL @"https://support.forsta.io"
-
-// Domain creation URLs
-#define FLDomainCreateDevURL @"https://ccsm-dev.forsta.io/create"
-#define FLDomainCreateStageURL @"https://ccsm-stage.forsta.io/create"
-#define FLDomainCreateProdURL @"https://console.forsta.io/create"
-
-// Forsta SMS invitation URL
-#define FLSMSInvitationURL @"https://www.forsta.io"
-
-#if DEVELOPMENT
-#define FLDomainCreateURL FLDomainCreateDevURL
-#define FLHomeURL FLForstaDevURL
-#else
-#define FLDomainCreateURL FLDomainCreateProdURL
-#define FLHomeURL FLForstaProdURL
-#endif
 
 #endif
