@@ -15,19 +15,19 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Icon29.png",
+      "filename" : "Icon-Small-1.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Icon29@2x.png",
+      "filename" : "Icon-Small@2x-1.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Icon29@3x.png",
+      "filename" : "Icon-Small@3x.png",
       "scale" : "3x"
     },
     {
@@ -57,7 +57,7 @@
     {
       "size" : "20x20",
       "idiom" : "ipad",
-      "filename" : "Icon20.png",
+      "filename" : "SherpanyPOC-20.png",
       "scale" : "1x"
     },
     {
