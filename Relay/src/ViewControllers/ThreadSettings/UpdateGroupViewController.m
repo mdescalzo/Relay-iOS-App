@@ -247,7 +247,7 @@ OWSNavigationView>
 //         addItem:[OWSTableItem
 //                  itemWithCustomCellBlock:^{
 //                      UpdateGroupViewController *strongSelf = weakSelf;
-//                      OWSCAssert(strongSelf);
+//                      OWSCAssertDebug(strongSelf);
 //
 //                      ContactTableViewCell *cell = [ContactTableViewCell new];
 //                      BOOL isPreviousMember = [strongSelf.previousMemberRecipientIds containsObject:recipientId];
