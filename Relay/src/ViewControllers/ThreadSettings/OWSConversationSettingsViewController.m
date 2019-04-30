@@ -278,7 +278,7 @@ ColorPickerDelegate>
                           itemWithCustomCellBlock:^{
                               UITableViewCell *cell = [OWSTableItem newCell];
                               OWSConversationSettingsViewController *strongSelf = weakSelf;
-                              OWSCAssert(strongSelf);
+                              OWSCAssertDebug(strongSelf);
                               cell.preservesSuperviewLayoutMargins = YES;
                               cell.contentView.preservesSuperviewLayoutMargins = YES;
                               cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -332,7 +332,7 @@ ColorPickerDelegate>
                   itemWithCustomCellBlock:^{
                       UITableViewCell *cell = [OWSTableItem newCell];
                       OWSConversationSettingsViewController *strongSelf = weakSelf;
-                      OWSCAssert(strongSelf);
+                      OWSCAssertDebug(strongSelf);
                       cell.preservesSuperviewLayoutMargins = YES;
                       cell.contentView.preservesSuperviewLayoutMargins = YES;
                       cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -422,7 +422,7 @@ ColorPickerDelegate>
                   [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
                   [OWSTableItem configureCell:cell];
                   OWSConversationSettingsViewController *strongSelf = weakSelf;
-                  OWSCAssert(strongSelf);
+                  OWSCAssertDebug(strongSelf);
                   cell.preservesSuperviewLayoutMargins = YES;
                   cell.contentView.preservesSuperviewLayoutMargins = YES;
                   cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -461,7 +461,7 @@ ColorPickerDelegate>
                   [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
                   [OWSTableItem configureCell:cell];
                   OWSConversationSettingsViewController *strongSelf = weakSelf;
-                  OWSCAssert(strongSelf);
+                  OWSCAssertDebug(strongSelf);
                   cell.preservesSuperviewLayoutMargins = YES;
                   cell.contentView.preservesSuperviewLayoutMargins = YES;
                   cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -535,7 +535,7 @@ ColorPickerDelegate>
                   [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
                   [OWSTableItem configureCell:cell];
                   OWSConversationSettingsViewController *strongSelf = weakSelf;
-                  OWSCAssert(strongSelf);
+                  OWSCAssertDebug(strongSelf);
                   cell.preservesSuperviewLayoutMargins = YES;
                   cell.contentView.preservesSuperviewLayoutMargins = YES;
                   cell.accessoryType = UITableViewCellAccessoryNone;
@@ -558,7 +558,7 @@ ColorPickerDelegate>
                   [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
                   [OWSTableItem configureCell:cell];
                   OWSConversationSettingsViewController *strongSelf = weakSelf;
-                  OWSCAssert(strongSelf);
+                  OWSCAssertDebug(strongSelf);
                   cell.preservesSuperviewLayoutMargins = YES;
                   cell.contentView.preservesSuperviewLayoutMargins = YES;
                   cell.accessoryType = UITableViewCellAccessoryNone;
@@ -583,7 +583,7 @@ ColorPickerDelegate>
                   [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
                   [OWSTableItem configureCell:cell];
                   OWSConversationSettingsViewController *strongSelf = weakSelf;
-                  OWSCAssert(strongSelf);
+                  OWSCAssertDebug(strongSelf);
                   cell.preservesSuperviewLayoutMargins = YES;
                   cell.contentView.preservesSuperviewLayoutMargins = YES;
                   cell.accessoryType = UITableViewCellAccessoryNone;
