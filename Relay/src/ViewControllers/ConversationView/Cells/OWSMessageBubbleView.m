@@ -749,7 +749,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (!strongSelf) {
             return;
         }
-        OWSCAssert(strongSelf.bodyMediaView == stillImageView);
+        OWSCAssertDebug(strongSelf.bodyMediaView == stillImageView);
         if (stillImageView.image) {
             return;
         }
@@ -760,7 +760,7 @@ NS_ASSUME_NONNULL_BEGIN
         BOOL shouldSkipCache =
             [OWSFileSystem fileSizeOfPath:strongSelf.attachmentStream.filePath].unsignedIntegerValue < kMaxCachableSize;
         stillImageView.image = [strongSelf tryToLoadCellMedia:^{
-            OWSCAssert([strongSelf.attachmentStream isImage]);
+            OWSCAssertDebug([strongSelf.attachmentStream isImage]);
             return strongSelf.attachmentStream.image;
         }
                                                     mediaView:stillImageView
@@ -772,7 +772,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (!strongSelf) {
             return;
         }
-        OWSCAssert(strongSelf.bodyMediaView == stillImageView);
+        OWSCAssertDebug(strongSelf.bodyMediaView == stillImageView);
         stillImageView.image = nil;
     };
 
@@ -797,12 +797,12 @@ NS_ASSUME_NONNULL_BEGIN
         if (!strongSelf) {
             return;
         }
-        OWSCAssert(strongSelf.bodyMediaView == animatedImageView);
+        OWSCAssertDebug(strongSelf.bodyMediaView == animatedImageView);
         if (animatedImageView.image) {
             return;
         }
         animatedImageView.image = [strongSelf tryToLoadCellMedia:^{
-            OWSCAssert([strongSelf.attachmentStream isAnimated]);
+            OWSCAssertDebug([strongSelf.attachmentStream isAnimated]);
 
             NSString *_Nullable filePath = [strongSelf.attachmentStream filePath];
             YYImage *_Nullable animatedImage = nil;
@@ -820,7 +820,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (!strongSelf) {
             return;
         }
-        OWSCAssert(strongSelf.bodyMediaView == animatedImageView);
+        OWSCAssertDebug(strongSelf.bodyMediaView == animatedImageView);
         animatedImageView.image = nil;
     };
 
@@ -878,12 +878,12 @@ NS_ASSUME_NONNULL_BEGIN
         if (!strongSelf) {
             return;
         }
-        OWSCAssert(strongSelf.bodyMediaView == stillImageView);
+        OWSCAssertDebug(strongSelf.bodyMediaView == stillImageView);
         if (stillImageView.image) {
             return;
         }
         stillImageView.image = [strongSelf tryToLoadCellMedia:^{
-            OWSCAssert([strongSelf.attachmentStream isVideo]);
+            OWSCAssertDebug([strongSelf.attachmentStream isVideo]);
 
             return strongSelf.attachmentStream.image;
         }
@@ -896,7 +896,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (!strongSelf) {
             return;
         }
-        OWSCAssert(strongSelf.bodyMediaView == stillImageView);
+        OWSCAssertDebug(strongSelf.bodyMediaView == stillImageView);
         stillImageView.image = nil;
     };
 

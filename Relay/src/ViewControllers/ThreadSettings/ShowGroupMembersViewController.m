@@ -161,7 +161,7 @@ NS_ASSUME_NONNULL_BEGIN
         [section addItem:[OWSTableItem
                              itemWithCustomCellBlock:^{
                                  ShowGroupMembersViewController *strongSelf = weakSelf;
-                                 OWSCAssert(strongSelf);
+                                 OWSCAssertDebug(strongSelf);
 
                                  ContactTableViewCell *cell = [ContactTableViewCell new];
                                  OWSVerificationState verificationState =
