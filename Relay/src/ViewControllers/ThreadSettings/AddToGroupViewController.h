@@ -2,7 +2,7 @@
 //  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 
-#import "SelectRecipientViewController.h"
+#import "SelectUserViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark -
 
-@interface AddToGroupViewController : SelectRecipientViewController
+@interface AddToGroupViewController : SelectUserViewController
 
 @property (nonatomic, weak) id<AddToGroupViewControllerDelegate> addToGroupDelegate;
 

@@ -8,6 +8,9 @@
 // TODO: Merge functionality with ThreadUtil?
 
 import Foundation
+import RelayStorage
+import SignalCoreKit
+import CoreData
 
 // Manager to handle thead update notifications in background
 @objc public class ThreadManager : NSObject {
@@ -17,53 +20,58 @@ import Foundation
 
     fileprivate let imageCache = NSCache<NSString, UIImage>()
     
-    fileprivate let dbReadConnection  = { () -> YapDatabaseConnection in
-        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
-        aConnection.beginLongLivedReadTransaction()
-        return aConnection
+    fileprivate lazy var moc: NSManagedObjectContext = {
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.parent = StorageManager.shared.mainContext
+        context.automaticallyMergesChangesFromParent = true
+        return context
     }()
-    fileprivate let dbReadWriteConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     
     @objc public override init() {
         super.init()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(threadExpressionUpdated(notification:)),
-                                               name: NSNotification.Name.TSThreadExpressionChanged,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(yapDatabaseModified),
-                                               name: NSNotification.Name.YapDatabaseModified,
-                                               object: nil)
+        // FIXME: Replace this notification
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(threadExpressionUpdated(notification:)),
+//                                               name: NSNotification.Name.TSThreadExpressionChanged,
+//                                               object: nil)
+        // FIXME: Replace this notification
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(yapDatabaseModified),
+//                                               name: NSNotification.Name.YapDatabaseModified,
+//                                               object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
+    @objc public func fetchThread(uuid: String, context: NSManagedObjectContext) -> FLIThread? {
+        return StorageManager.shared.fetchObject(uuid: uuid, context: context) as? FLIThread
+    }
+
     @objc public func image(threadId: String) -> UIImage? {
         if let image = self.imageCache.object(forKey: threadId as NSString) {
             return image
         } else {
-            var thread: TSThread?
-            self.dbReadConnection.read { (transaction) in
-                thread = TSThread.fetch(uniqueId: threadId, transaction: transaction)
-            }
-            guard thread != nil else {
+            // FIXME: Thread lookup here
+
+            guard let thread = fetchThread(uuid: threadId, context: moc) else {
                 Logger.debug("Attempt to retrieve unknown thread: \(threadId)")
                 return nil
             }
             
-            if let image = thread!.image {
+            if thread.avatar != nil,
+                let image = UIImage(data: thread.avatar! as Data) {
                 // thread has assigned image
-                self.imageCache.setObject(image, forKey: threadId as NSString)
+                imageCache.setObject(image, forKey: threadId as NSString)
                 return image
-            } else if thread!.type == FLThreadTypeAnnouncement {
+            } else if thread.type == "annoucement" {  // FIXME: This shouldn't be
                 if let image = UIImage(named: "Announcement") {
                     self.imageCache.setObject(image, forKey: threadId as NSString)
                     return image
                 }
-            } else if thread!.isOneOnOne {
+            } else if thread.isOneOnOne() {
                 // one-on-one, use other avatar
                 if let image = TextSecureKitEnv.shared().contactsManager.avatarImageRecipientId(thread!.otherParticipantId!) {
                     self.imageCache.setObject(image, forKey: threadId as NSString)

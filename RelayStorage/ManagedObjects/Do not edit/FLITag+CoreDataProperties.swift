@@ -2,7 +2,7 @@
 //  FLITag+CoreDataProperties.swift
 //  
 //
-//  Created by Mark Descalzo on 4/18/19.
+//  Created by Mark Descalzo on 5/1/19.
 //
 //
 
@@ -18,8 +18,8 @@ extension FLITag {
 
     @NSManaged public var avatar: NSData?
     @NSManaged public var hiddenDate: NSDate?
-    @NSManaged public var nameSlug: String?
     @NSManaged public var orgUrl: String?
+    @NSManaged public var orgSlug: String?
     @NSManaged public var slug: String?
     @NSManaged public var tagDescription: String?
     @NSManaged public var url: String?

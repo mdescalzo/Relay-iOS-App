@@ -20,7 +20,7 @@ extension FLIUser {
     @NSManaged public var devices: NSObject?
     @NSManaged public var emailAddress: String?
     @NSManaged public var firstName: String?
-    @NSManaged public var gravtarHash: String?
+    @NSManaged public var gravatarHash: String?
     @NSManaged public var hiddenDate: NSDate?
     @NSManaged public var isActive: Bool
     @NSManaged public var isMonitor: Bool

@@ -30,7 +30,7 @@
     <entity name="FLITag" representedClassName="FLITag" parentEntity="BaseChatObject" syncable="YES">
         <attribute name="avatar" optional="YES" attributeType="Binary" storedInTruthFile="YES" syncable="YES"/>
         <attribute name="hiddenDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="nameSlug" attributeType="String" syncable="YES"/>
+        <attribute name="orgSlug" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="orgUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="slug" attributeType="String" syncable="YES"/>
         <attribute name="tagDescription" optional="YES" attributeType="String" syncable="YES"/>
@@ -58,7 +58,7 @@
         <attribute name="devices" attributeType="Transformable" syncable="YES"/>
         <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="gravtarHash" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gravatarHash" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hiddenDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isMonitor" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -82,9 +82,9 @@
         <element name="EncryptedEnvelope" positionX="-4411.86328125" positionY="-3109.0703125" width="128" height="73"/>
         <element name="FLIAttachment" positionX="-4391.4765625" positionY="-3326.70703125" width="128" height="88"/>
         <element name="FLIMessage" positionX="-4571.04296875" positionY="-3634.38671875" width="128" height="178"/>
-        <element name="FLITag" positionX="-4683.1953125" positionY="-3357.2421875" width="128" height="163"/>
+        <element name="FLITag" positionX="-4684.6796875" positionY="-3357.2421875" width="128" height="163"/>
         <element name="FLIThread" positionX="-4367.50390625" positionY="-3620.12890625" width="128" height="255"/>
-        <element name="FLIUser" positionX="-4962.84375" positionY="-3667.6796875" width="128" height="300"/>
+        <element name="FLIUser" positionX="-4962.84375" positionY="-3667.6796875" width="128" height="298"/>
         <element name="ProtocolObject" positionX="-4644.6171875" positionY="-3103.515625" width="128" height="73"/>
     </elements>
 </model>

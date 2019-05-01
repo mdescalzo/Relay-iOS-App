@@ -45,7 +45,6 @@
 #import <RelayMessaging/ContactTableViewCell.h>
 #import <RelayMessaging/Environment.h>
 #import <RelayMessaging/OWSAudioPlayer.h>
-#import <RelayMessaging/OWSContactAvatarBuilder.h>
 #import <RelayMessaging/OWSFormat.h>
 #import <RelayMessaging/OWSPreferences.h>
 #import <RelayMessaging/OWSProfileManager.h>

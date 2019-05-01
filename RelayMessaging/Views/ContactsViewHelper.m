@@ -90,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Contacts
 -(NSArray<FLTag *> *)relayTags
 {
-    if ([self.delegate respondsToSelector:@selector(shouldHideLocalNumber)] && [self.delegate shouldHideLocalNumber]) {
+    if ([self.delegate respondsToSelector:@selector(shouldHideLocalUsershouldHideLocalUser)] && [self.delegate shouldHideLocalNumber]) {
         NSMutableArray<FLTag *> *tags = [FLContactsManager.shared.allTags mutableCopy];
         [tags removeObject:TSAccountManager.selfRecipient.flTag];
         return [NSArray arrayWithArray:tags];
@@ -101,7 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSArray<RelayRecipient *> *)relayRecipients
 {
-    if ([self.delegate respondsToSelector:@selector(shouldHideLocalNumber)] && [self.delegate shouldHideLocalNumber]) {
+    if ([self.delegate respondsToSelector:@selector(shouldHideLocalUsershouldHideLocalUser)] && [self.delegate shouldHideLocalNumber]) {
         NSMutableArray<RelayRecipient *> *recipients = [FLContactsManager.shared.allRecipients mutableCopy];
         [recipients removeObject:TSAccountManager.selfRecipient];
         return [NSArray arrayWithArray:recipients];

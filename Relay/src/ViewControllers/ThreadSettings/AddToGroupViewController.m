@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (BOOL)shouldHideLocalNumber
+- (BOOL)shouldHideLocalUser
 {
     return YES;
 }

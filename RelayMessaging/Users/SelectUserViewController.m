@@ -2,7 +2,7 @@
 //  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 
-#import "SelectRecipientViewController.h"
+#import "SelectUserViewController.h"
 #import <RelayMessaging/ContactTableViewCell.h>
 #import <RelayMessaging/ContactsViewHelper.h>
 #import <RelayMessaging/Environment.h>
@@ -12,7 +12,8 @@
 #import <RelayMessaging/UIUtil.h>
 #import <RelayMessaging/UIView+OWS.h>
 
-@import RelayServiceKit;
+@import RelayStorage;
+@import CoreData;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,13 +21,13 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
 
 #pragma mark -
 
-@interface SelectRecipientViewController () <ContactsViewHelperDelegate,
+@interface SelectUserViewController () <ContactsViewHelperDelegate,
     OWSTableViewControllerDelegate,
     UITextFieldDelegate>
 
 @property (nonatomic) UITextField *phoneNumberTextField;
 
-@property (nonatomic) OWSFlatButton *phoneNumberButton;
+@property (nonatomic) UIButton *phoneNumberButton;
 
 @property (nonatomic) UILabel *examplePhoneNumberLabel;
 
@@ -38,7 +39,7 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
 
 #pragma mark -
 
-@implementation SelectRecipientViewController
+@implementation SelectUserViewController
 
 - (void)loadView
 {
@@ -390,7 +391,7 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
 - (void)updateTableContents
 {
     OWSTableContents *contents = [OWSTableContents new];
-    __weak SelectRecipientViewController *weakSelf = self;
+    __weak SelectUserViewController *weakSelf = self;
     ContactsViewHelper *helper = self.contactsViewHelper;
 
     if (![self.delegate shouldHideContacts]) {
@@ -411,7 +412,7 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
                 [contactsSection
                     addItem:[OWSTableItem
                                 itemWithCustomCellBlock:^{
-                                    SelectRecipientViewController *strongSelf = weakSelf;
+                                    SelectUserViewController *strongSelf = weakSelf;
                                     OWSCAssertDebug(strongSelf);
 
                                     ContactTableViewCell *cell = [ContactTableViewCell new];
@@ -479,7 +480,7 @@ NSString *const kSelectRecipientViewControllerCellIdentifier = @"kSelectRecipien
 
 - (BOOL)shouldHideLocalNumber
 {
-    return [self.delegate shouldHideLocalNumber];
+    return [self.delegate shouldHideLocalUser];
 }
 
 @end

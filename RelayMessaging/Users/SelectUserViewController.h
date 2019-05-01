@@ -6,17 +6,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class RelayRecipient;
-@class FLTag;
+@class FLIUser;
+@class FLITag;
 
 @protocol SelectRecipientViewControllerDelegate <NSObject>
 
 - (NSString *)contactsSectionTitle;
 
--(void)relayTagWasSelected:(FLTag *)relayTag;
--(void)relayRecipientWasSelected:(RelayRecipient *)relayRecipient;
+-(void)relayTagWasSelected:(FLITag *)relayTag;
+-(void)relayRecipientWasSelected:(FLIUser *)relayRecipient;
 
-- (BOOL)shouldHideLocalNumber;
+- (BOOL)shouldHideLocalUser;
 
 - (BOOL)shouldHideContacts;
 
@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class ContactsViewHelper;
 
-@interface SelectRecipientViewController : OWSViewController
+@interface SelectUserViewController : OWSViewController
 
 @property (nonatomic, weak) id<SelectRecipientViewControllerDelegate> delegate;
 

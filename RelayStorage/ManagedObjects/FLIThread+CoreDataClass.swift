@@ -9,10 +9,11 @@
 import Foundation
 import CoreData
 
+
 @objc(FLIThread)
 public class FLIThread: BaseChatObject {
     
-    enum FLIThreadType : String {
+    public enum FLIThreadType : String {
         case FLIThreadTypeAnnouncement = "announcement"
         case FLIThreadTypeConversation = "conversation"
     }

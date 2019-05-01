@@ -202,7 +202,7 @@ public class ConversationSearcher: NSObject {
 //        return self.indexingString(recipientId: recipientId)
 //    }
 
-    private var contactsManager: FLIUserManager {
+    private var contactsManager: UserManager {
         return Environment.current()!.contactsManager
     }
 

@@ -1,5 +1,5 @@
 //
-//  FLContactsManager.swift
+//  UserManager.swift
 //  RelayMessaging
 //
 //  Created by Mark Descalzo on 8/14/18.
@@ -10,24 +10,26 @@ import Foundation
 import RelayStorage
 import SignalCoreKit
 import CoreData
+import LetterAvatarKit
 
-@objc public class FLIUserManager: NSObject {
+@objc public class UserManager: NSObject {
 
-    private static let shared = FLIUserManager()
+    private static let shared = UserManager()
 
-    private let avatarCache: NSCache<NSString, UIImage>
-    private let userCache: NSCache<NSString, FLIUser>
-    private let tagCache: NSCache<NSString, FLITag>
+    private let avatarCache = NSCache<NSString, UIImage>()
+//    private let userCache: NSCache<NSString, FLIUser>
+//    private let tagCache: NSCache<NSString, FLITag>
     
     private lazy var localContext: NSManagedObjectContext = {
-        let aContext = StorageManager.shared.persistentContainer.newBackgroundContext()
+        let aContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        aContext.parent = StorageManager.shared.mainContext
         aContext.automaticallyMergesChangesFromParent = true
         return aContext
     }()
 
     @objc
     public class func displayName(userId: String) -> String {
-        if let user: FLIUser = FLIUserManager.shared.user(uuid: userId, context: FLIUserManager.shared.localContext) {
+        if let user: FLIUser = UserManager.shared.fetchUser(uuid: userId, context: UserManager.shared.localContext) {
             return user.fullName()
         } else {
             return NSLocalizedString("UNKNOWN_CONTACT_NAME", comment: "")
@@ -47,7 +49,7 @@ import CoreData
         return comparisonResult
     }
     
-    public class func avatarImage(userId: String) -> UIImage? {
+    public class func image(userId: String) -> UIImage? {
         
         var cacheKey: NSString? = nil
         
@@ -60,50 +62,38 @@ import CoreData
         }
         
         // Check the avatarCache...
-        if let image = FLIUserManager.shared.avatarCache.object(forKey: cacheKey!) {
-//            Logger.debug("Avatar cache hit!")
+        if let image = shared.avatarCache.object(forKey: cacheKey!) {
             return image;
         }
         
         // Check local storage
-        guard let recipient = self.recipient(withId: recipientId) else {
-            Logger.debug("Attempt to get avatar image for unknown recipient: \(recipientId)")
+        guard let user = shared.fetchUser(uuid: userId, context: shared.localContext) else {
+            Logger.debug("Attempt to get avatar image for unknown recipient: \(userId)")
             return nil
         }
 
-        var image: UIImage?
         if useGravatars {
             // Post a notification to fetch the gravatar image so it doesn't block and then fall back to default
-            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientNeedsGravatarFetched),
-                                                                 object: self,
-                                                                 userInfo: ["recipientId" : recipientId ])
+            // FIXME: Wire this notification back up
+//            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientNeedsGravatarFetched),
+//                                                                 object: self,
+//                                                                 userInfo: ["userId" : recipientId ])
         }
-        if useGravatars && recipient.gravatarImage != nil {
-            image = recipient.gravatarImage
-        } else if recipient.avatarImage != nil {
-            image = recipient.avatarImage
-        } else if recipient.defaultImage != nil {
-            image = recipient.defaultImage
+        
+        if user.avatar != nil,
+            let image = UIImage(data: user.avatar! as Data) {
+            shared.avatarCache.setObject(image, forKey: cacheKey!)
+            return image
+        } else if let image = UIImage.makeLetterAvatar(withUsername: user.fullName(), size: CGSize(width: 128.0, height: 128.0)) {
+            shared.avatarCache.setObject(image, forKey: cacheKey!)
+            return image
         } else {
-            image = OWSContactAvatarBuilder.init(nonSignalName: recipient.fullName(),
-                                                 colorSeed: recipient.uniqueId,
-                                                 diameter: 128,
-                                                 contactsManager: self).build()
-            recipient.defaultImage = image
-            self.save(recipient: recipient)
+            return nil
         }
-        self.avatarCache.setObject(image!, forKey: cacheKey!)
-        return image
     }
     
     private let serialLookupQueue = DispatchQueue(label: "contactsManagerLookupQueue")
     
-    private let readConnection = { () -> YapDatabaseConnection in 
-        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
-        aConnection.beginLongLivedReadTransaction()
-        return aConnection
-    }()
-    private let readWriteConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
     private var latestRecipientsById: [AnyHashable : Any] = [:]
     private var activeRecipientsBacker: [ FLIUser ] = []
     private var visibleRecipientsPredicate: NSCompoundPredicate?
@@ -115,54 +105,52 @@ import CoreData
     }
 
     override init() {
-        avatarCache = NSCache<NSString, UIImage>()
-        userCache = NSCache<NSString, FLIUser>()
-        tagCache = NSCache<NSString, FLTag>()
 
         super.init()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.processRecipientsBlob),
-                                               name: NSNotification.Name(rawValue: FLCCSMUsersUpdated),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.processTagsBlob),
-                                               name: NSNotification.Name(rawValue: FLCCSMTagsUpdated),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.handleRecipientRefresh(notification:)),
-                                               name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.handleTagRefresh(notification:)),
-                                               name: NSNotification.Name(rawValue: FLTagsNeedRefreshNotification),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.fetchGravtarForRecipient(notification:)),
-                                               name: NSNotification.Name(rawValue: FLRecipientNeedsGravatarFetched),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(yapDatabaseModified),
-                                               name: NSNotification.Name.YapDatabaseModified,
-                                               object: nil)
+        // FIXME: Bring these back as necessary
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(self.processRecipientsBlob),
+//                                               name: NSNotification.Name(rawValue: FLCCSMUsersUpdated),
+//                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(self.processTagsBlob),
+//                                               name: NSNotification.Name(rawValue: FLCCSMTagsUpdated),
+//                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(self.handleRecipientRefresh(notification:)),
+//                                               name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+//                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(self.handleTagRefresh(notification:)),
+//                                               name: NSNotification.Name(rawValue: FLTagsNeedRefreshNotification),
+//                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(self.fetchGravtarForRecipient(notification:)),
+//                                               name: NSNotification.Name(rawValue: FLRecipientNeedsGravatarFetched),
+//                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(yapDatabaseModified),
+//                                               name: NSNotification.Name.YapDatabaseModified,
+//                                               object: nil)
         avatarCache.delegate = self
-        userCache.delegate = self
-        tagCache.delegate = self
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc public func allTags() -> [FLTag] {
-        return FLTag.allObjectsInCollection() as! [FLTag]
+    // FIXME: Replace usage of this with FetchedResultsController
+    @objc public func allTags() -> [FLITag] {
+        return [FLITag]()
     }
     
-    @objc public func allRecipients() -> [FLIUser] {
-        return FLIUser.allObjectsInCollection() as! [FLIUser]
+    // FIXME: Replace usage of this with FetchedResultsController
+    @objc public func allUsers() -> [FLIUser] {
+        return [FLIUser]()
     }
 
-    @objc public func selfRecipient() -> FLIUser? {
+    @objc public func localUserId() -> String? {
         guard let selfId = TSAccountManager.localUID() else {
             Logger.debug("\(self.logTag): No stored localUID.")
             return nil
@@ -209,15 +197,15 @@ import CoreData
     }
     
     fileprivate func updateRecipients(userIds: Array<String>) {
-        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                             object: self,
-                                                             userInfo: ["userIds" : userIds])
+        NotificationCenter.default.post(NSNotification.Name(rawValue: FLIRecipientsNeedRefreshNotification),
+                                        object: self,
+                                        userInfo: ["userIds" : userIds])
     }
-
+    
     fileprivate func updateTags(tagIds: Array<String>) {
-        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLTagsNeedRefreshNotification),
-                                                             object: self,
-                                                             userInfo: ["tagIds" : tagIds])
+        NotificationCenter.default.post(NSNotification.Name(rawValue: FLITagsNeedRefreshNotification),
+                                        object: self,
+                                        userInfo: ["tagIds" : tagIds])
     }
 
     fileprivate func ccsmFetchTag(tagId: String) {
@@ -306,124 +294,105 @@ import CoreData
         }
     }
     
-    @objc public func tag(withId uuid: String) -> FLTag? {
-        
-        // Check the cache
-        if let atag:FLTag = tagCache.object(forKey: uuid as NSString) {
-            return atag
-        } else if let atag = FLTag.fetch(uniqueId: uuid) {
-            self.tagCache.setObject(atag, forKey: atag.uniqueId as NSString);
-            return atag
+    @objc public func fetchTag(uuid: String, context: NSManagedObjectContext) -> FLITag? {
+        if let aTag = StorageManager.shared.fetchObject(uuid: uuid, context: context) as? FLITag {
+            return aTag
         } else {
-            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                            object: self, userInfo: [ "tagIds" : [uuid] ])
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FLITagsNeedRefreshNotification"),
+                                            object: self,
+                                            userInfo: [ "tagIds" : [uuid] ])
             return nil
         }
     }
     
-    @objc public func tag(withId uuid: String, transaction: YapDatabaseReadTransaction) -> FLTag? {
-        
-        // Check the cache
-        if let atag:FLTag = tagCache.object(forKey: uuid as NSString) {
-            return atag
-        } else if let atag: FLTag = FLTag.fetch(uniqueId: uuid, transaction: transaction) {
-            tagCache.setObject(atag, forKey: uuid as NSString)
-            return atag
+    @objc public func fetchUser(uuid: String, context: NSManagedObjectContext) -> FLIUser? {
+        if let user = StorageManager.shared.fetchObject(uuid: uuid, context: context) as? FLIUser {
+            return user
         } else {
-            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLTagsNeedRefreshNotification),
-                                                                 object: self, userInfo: [ "tagIds" : [uuid] ])
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "FLIUsersNeedRefreshNotification"),
+                                            object: self,
+                                            userInfo: [ "userIds" : [uuid] ])
             return nil
         }
     }
-
-    @objc public func user(uuid: String, context: NSManagedObjectContext) -> FLIUser? {
-
-        let userFetch = FLIUser.fetchRequest()
-        userFetch.predicate = NSPredicate.init(format: "uuid == %@)", uuid)
-        
-        var result: [ FLIUser ]
-        do {
-            result = try (context.fetch(fetchRequest))
-        } catch {
-            // FIXME: Add error handling
-            return nil
-        }
-        
-        if result.count > 0 {
-            return result.last
-        } else {
-            return nil
-        }
-    }
-    
-    @objc public func tag(uuid: String, context: NSManagedObjectContext) -> FLITag? {
-        
-        let userFetch = FLITag.fetchRequest()
-        userFetch.predicate = NSPredicate.init(format: "uuid == %@)", uuid)
-        
-        var result: [ FLITag ]
-        do {
-            result = try (context.fetch(fetchRequest))
-        } catch {
-            // FIXME: Add error handling
-            return nil
-        }
-        
-        if result.count > 0 {
-            return result.last
-        } else {
-            return nil
-        }
-    }
-
     
     @objc public func refreshCCSMRecipients() {
         DispatchQueue.global(qos: .background).async {
             self.userCache.removeAllObjects()
             self.tagCache.removeAllObjects()
             CCSMCommManager.refreshCCSMData()
-            self.validateNonOrgRecipients()
+            self.validateNonOrgUsers()
         }
     }
     
-    private func validateNonOrgRecipients() {
-        let nonOrgRecipients = FLIUser.allObjectsInCollection().filter() {
-            if let recipient = ($0 as? FLIUser) {
-                return (recipient.orgID != TSAccountManager.selfRecipient().orgID ||
-                    recipient.orgID == "public" ||
-                    recipient.orgID == "forsta" )
-            } else {
-                return false
-            }
-            } as! [FLIUser]
+    private func validateNonOrgUsers() {
+        // FIXME: Get local user orgId string
+        let localOrgId = "anId"
+        let workingContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        workingContext.parent = self.localContext
+        workingContext.automaticallyMergesChangesFromParent = true
+
+        let fetchRequest: NSFetchRequest<FLIUser> = FLIUser.fetchRequest()
+        fetchRequest.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [
+            NSPredicate(format: "orgId != %@", localOrgId),
+            NSPredicate(format: "orgId == %@", "forsta"),
+            NSPredicate(format: "orgId == %@", "public"),
+            ])
+//            NSPredicate(format: "uuid = %@", uuid)
         
-        if nonOrgRecipients.count > 0 {
-            var recipientIds = [String]()
-            for recipient in nonOrgRecipients {
-                recipientIds.append(recipient.uniqueId)
+        var results = [FLIUser]()
+        do {
+            results = try workingContext.fetch(fetchRequest)
+        } catch {
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
+        if results.count > 0 {
+            var userIds = [String]()
+            for user in results {
+                userIds.append(user.uuid!)
             }
-            NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+            NotificationCenter.default.post(NSNotification.Name(rawValue: FLIRecipientsNeedRefreshNotification),
                                                                  object: self,
-                                                                 userInfo: ["userIds" : recipientIds])
+                                                                 userInfo: ["userIds" : userIds])
         }
     }
 
-    
-    @objc public func setAvatarImage(image: UIImage, recipientId: String) {
-        if let recipient = self.recipient(withId: recipientId) {
-            recipient.avatarImage = image
-            self.avatarCache.setObject(image, forKey: recipientId as NSString)
+    // MARK: - User management
+    @objc public func user(dictionary: [String: AnyObject], context: NSManagedObjectContext) -> FLIUser? {
+        guard let userId = dictionary["id"] as? String else {
+            Logger.debug("\(self.logTag): Attempt to create user with missing userId.")
+            return nil
         }
+        
+        var user: FLIUser?
+        user = self.fetchUser(uuid: userId, context: context)
+        if user == nil {
+            user = FLIUser(context: context)
+            user!.uuid = userId
+        }
+        guard user != nil else {
+            Logger.debug("\(self.logTag): Failed to create or fetch a user with id: \(userId).")
+            return nil
+        }
+
+        // Set properties
+        if dictionary["is_active"] as? NSNumber == 0 {
+            user?.isActive = false
+        } else {
+            user?.isActive = true
+        }
+        if let firstname = dictionary["first_name"] as? String { user?.firstName = firstname }
+        if let lastname = dictionary["last_name"] as? String { user?.lastName = lastname }
+        if let email = dictionary["email"] as? String { user?.emailAddress = email }
+        if let phone = dictionary["phone"] as? String { user?.phoneNumber = phone }
+        if let gravatar = dictionary["gravatar_hash"] as? String { user?.gravtarHash = gravatar }
+
+        StorageManager.shared.saveContext(context)
+        return user
     }
     
-//    @objc public func image(forRecipientId uid: String) -> UIImage? {
-//    }
-    
-//    @objc public func nameString(forRecipientId uid: String) -> String? {
-//
-//    }
-    
-    // MARK: - Recipient management
     @objc public func processRecipientsBlob() {
         let recipientsBlob: NSDictionary = CCSMStorage.sharedInstance().getUsers()! as NSDictionary
         DispatchQueue.global(qos: .background).async {
@@ -437,35 +406,71 @@ import CoreData
         }
     }
 
-    @objc public func save(recipient: FLIUser) {
-        self.readWriteConnection.readWrite { (transaction) in
-            self.save(recipient: recipient, with: transaction)
-        }
-    }
-    
-    @objc public func save(recipient: FLIUser, with transaction: YapDatabaseReadWriteTransaction) {
-        recipient.save(with: transaction)
-        if let aTag = recipient.flTag {
-            aTag.save(with: transaction)
-            self.tagCache.setObject(aTag, forKey: aTag.uniqueId as NSString)
-        }
-        self.userCache.setObject(recipient, forKey: recipient.uniqueId as NSString)
-    }
-    
+
     @objc public func remove(recipient: FLIUser) {
         self.readWriteConnection .readWrite { (transaction) in
             self.remove(recipient: recipient, with: transaction)
         }
     }
     
-    @objc public func remove(recipient: FLIUser, with transaction: YapDatabaseReadWriteTransaction) {
-        if let aTag = recipient.flTag {
-            aTag.remove(with: transaction)
-        }
-        recipient.remove(with: transaction)
-    }
-    
     // MARK: - Tag management
+    @objc public func tag(dictionary: [String: AnyObject], context: NSManagedObjectContext) -> FLITag? {
+        // Check for existing tag with id
+        guard let tagId = dictionary[FLITagIdKey] as? String else {
+            Logger.debug("\(self.logTag): Attempt to create tag with missing tagId.")
+            return nil
+        }
+        var aTag: FLITag?
+        aTag = self.fetchTag(uuid: tagId, context: context)
+        if aTag == nil {
+            aTag = FLITag(context: context)
+            aTag.uuid = tagId
+        }
+        guard aTag != nil else {
+            Logger.debug("\(self.logTag): Failed to create or fetch a tag id: \(tagId).")
+            return nil
+        }
+        
+        // Set properties
+        if let tagUrl = dictionary[FLITagURLKey] as? String { aTag.url = tagUrl }
+        if let tagDescription = dictionary[FLITagDescriptionKey] as? String { aTag?.tagDescription = tagDescription }
+        if let tagSlug = dictionary[FLITagSlugKey] as? String { aTag?.slug = tagSlug }
+        if let orgDict = dictionary[FLTagOrgKey] {
+            if let orgSlug = orgDict[FLTagSlugKey] { aTag?.orgSlug = orgSlug }
+            if let orgUrl = orgDict[FLTagURLKey] { aTag?.orgUrl = orgSlug }
+        }
+
+        // Build User association
+        var userIds = [String]()
+        if let object = dictionary["user"] as? Dictionary<AnyHashable, AnyObject> {
+            if let uid = object[FLTagIdKey] as? String {
+                userIds.append(uid)
+            }
+        }
+        if let users = dictionary[FLTagUsersKey] as? Dictionary<AnyHashable, AnyObject> {
+            for object in users {
+                if let dict = object as? [String: AnyObject] {
+                    if let associationType = dict["association_type"] as? String {
+                        if associationType == "MEMBEROF" {
+                            if let userId = dict["user"] as? String {
+                                userIds.append(userId)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for userId in userIds {
+            if let user = self.fetchUser(uuid: userId, context: context) {
+                if !(aTag?.users?.contains(user))! {
+                    aTag?.addToUsers(user)
+                }
+            }
+        }
+        StorageManager.shared.saveContext(context)
+        return aTag
+    }
+
     @objc public func processTagsBlob() {
         let tagsBlob: NSDictionary = CCSMStorage.sharedInstance().getTags()! as NSDictionary
         DispatchQueue.global(qos: .background).async {
@@ -482,32 +487,15 @@ import CoreData
         }
     }
 
-    @objc public func save(tag: FLTag) {
-        self.readWriteConnection.readWrite { (transaction) in
-            self.save(tag: tag, with: transaction)
-        }
-    }
-    
-    @objc public func save(tag: FLTag, with transaction: YapDatabaseReadWriteTransaction) {
-        tag.save(with: transaction)
-        self.tagCache.setObject(tag, forKey: tag.uniqueId as NSString)
-    }
-    
     @objc public func remove(tag: FLTag) {
         self.readWriteConnection.readWrite { (transaction) in
             self.remove(tag: tag, with: transaction)
         }
     }
     
-    @objc public func remove(tag: FLTag, with transaction: YapDatabaseReadWriteTransaction) {
-        self.tagCache.removeObject(forKey: tag.uniqueId as NSString)
-        tag.remove(with: transaction)
-    }
     
 
     @objc public func nukeAndPave() {
-        self.tagCache.removeAllObjects()
-        self.userCache.removeAllObjects()
         FLIUser.removeAllObjectsInCollection()
         FLTag.removeAllObjectsInCollection()
     }
@@ -522,14 +510,15 @@ import CoreData
     
     @objc public func formattedDisplayName(forTagId tagId: String, font: UIFont) -> NSAttributedString? {
 
-        if let aTag = self.tag(withId:tagId) {
+        if let aTag = self.fetchTag(uuid: tagId, context: localContext) {
             var rawName: String
-            if aTag.recipientIds?.count == 1 {
-                rawName = self.displayName(forRecipientId: aTag.recipientIds?.anyObject() as! String)!
+            if aTag.users?.count == 1,
+                let user = aTag.users?.anyObject() as? FLIUser {
+                rawName = user.fullName()
             } else if aTag.tagDescription != nil {
                 rawName = aTag.tagDescription!
             } else {
-                rawName = aTag.displaySlug
+                rawName = aTag.slug!
             }
             
             let normalFontAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: Theme.primaryColor]
@@ -540,15 +529,12 @@ import CoreData
     }
 
     
-    @objc public func formattedFullName(forRecipientId recipientId: String, font: UIFont) -> NSAttributedString? {
+    @objc public func formattedDisplayName(userId: String, font: UIFont) -> NSAttributedString? {
         
-        if let recipient = self.recipient(withId: recipientId) {
-            let rawName = recipient.fullName()
-            
+        if let user = self.fetchUser(uuid: userId, context: localContext) {
+            let rawName = user.fullName()
             let normalFontAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: Theme.primaryColor]
-            
             let attrName = NSAttributedString(string: rawName, attributes: normalFontAttributes as [NSAttributedStringKey : Any])
-
             return attrName
         }
         return nil
@@ -560,19 +546,23 @@ import CoreData
     @objc public func fetchGravtarForRecipient(notification: Notification) {
         
         DispatchQueue.global(qos: .background).async {
-            guard let recipientId = notification.userInfo!["recipientId"] as? String else {
-                Logger.debug("Request to fetch gravatar without recipientId")
+            let workingContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            workingContext.parent = self.localContext
+            workingContext.automaticallyMergesChangesFromParent = true
+            
+            guard let userId = notification.userInfo!["userId"] as? String else {
+                Logger.debug("Request to fetch gravatar without userId")
                 return
             }
-            guard let recipient = self.recipient(withId: recipientId) else {
-                Logger.debug("Request to fetch gravatar for unknown recipientId: \(recipientId)")
+            guard let user = self.fetchUser(uuid: userId, context: workingContext) else {
+                Logger.debug("Request to fetch gravatar for unknown recipientId: \(userId)")
                 return
             }
-            guard let gravatarHash = recipient.gravatarHash else {
-                Logger.debug("No gravatar hash for recipient: \(recipientId)")
+            guard let gravatarHash = user.gravtarHash else {
+                Logger.debug("No gravatar hash for recipient: \(userId)")
                 return
             }
-            let gravatarURLString = String(format: FLIUserManager.kGravatarURLFormat, gravatarHash)
+            let gravatarURLString = String(format: UserManager.kGravatarURLFormat, gravatarHash)
             guard let aURL = URL.init(string: gravatarURLString) else {
                 Logger.debug("Unable to form URL from gravatar string: \(gravatarURLString)")
                 return
@@ -582,22 +572,13 @@ import CoreData
                 return
             }
             guard let gravatarImage = UIImage(data: gravarData) else {
-                Logger.debug("Failed to generate image from fetched gravatar data for recipient: \(recipientId)")
+                Logger.debug("Failed to generate image from fetched gravatar data for recipient: \(userId)")
                 return
             }
-            let cacheKey = "gravatar:\(recipientId)" as NSString
+            let cacheKey = "gravatar:\(userId)" as NSString
             self.avatarCache.setObject(gravatarImage, forKey: cacheKey)
             
-            OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
-                recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
-                    if let theRecipient = obj as? FLIUser {
-                        theRecipient.gravatarImage = gravatarImage
-                    }
-                })
-            });
-            
-//            recipient.gravatarImage = gravatarImage
-//            self.save(recipient: recipient)
+            // FIXME: Add the gravatar image the local store or post a notification that the gravatar download is complete
         }
     }
     
@@ -642,7 +623,7 @@ import CoreData
 
 
 
-extension FLIUserManager : NSCacheDelegate {
+extension UserManager : NSCacheDelegate {
 
     public func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any) {
         // called when objects evicted from any of the caches

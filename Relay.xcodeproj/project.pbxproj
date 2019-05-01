@@ -70,7 +70,7 @@
 		34480B641FD0A98800BC14EF /* UIView+OWS.m in Sources */ = {isa = PBXBuildFile; fileRef = 34480B601FD0A98800BC14EF /* UIView+OWS.m */; };
 		34480B671FD0AA9400BC14EF /* UIFont+OWS.m in Sources */ = {isa = PBXBuildFile; fileRef = 34480B651FD0AA9400BC14EF /* UIFont+OWS.m */; };
 		34480B681FD0AA9400BC14EF /* UIFont+OWS.h in Headers */ = {isa = PBXBuildFile; fileRef = 34480B661FD0AA9400BC14EF /* UIFont+OWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		344D6CEA20069E070042AF96 /* SelectRecipientViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 344D6CE620069E060042AF96 /* SelectRecipientViewController.h */; };
+		344D6CEA20069E070042AF96 /* SelectUserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 344D6CE620069E060042AF96 /* SelectUserViewController.h */; };
 		344F248D2007CCD600CFB4F4 /* DisplayableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344F248C2007CCD600CFB4F4 /* DisplayableText.swift */; };
 		344F2499200FD03300CFB4F4 /* SharingThreadPickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 344F2495200FD03200CFB4F4 /* SharingThreadPickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		344F249B200FD03300CFB4F4 /* SharingThreadPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344F2497200FD03200CFB4F4 /* SharingThreadPickerViewController.m */; };
@@ -605,6 +605,7 @@
 		7D2CD67D214C46BC004E957A /* dripicons-v2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34330A5B1E787A9800DF2FB9 /* dripicons-v2.ttf */; };
 		7D2CD687214C5A3F004E957A /* RelayDevShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D2CD681214C46BC004E957A /* RelayDevShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7D4438532277561900907033 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4438522277561900907033 /* UserViewModel.swift */; };
+		7D44399B227A11D600907033 /* FLITag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D44399A227A11D600907033 /* FLITag+CoreDataProperties.swift */; };
 		7D6430C4226912390000DE32 /* FLIThread+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */; };
 		7D6430C5226912390000DE32 /* ProtocolObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */; };
 		7D6430C8226912410000DE32 /* FLIThread+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */; };
@@ -623,7 +624,7 @@
 		7D6430DE2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */; };
 		7D6430E2226926DB0000DE32 /* FLITag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */; };
 		7D6564F42113BD8B00365A19 /* SelectThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564E42113BD8900365A19 /* SelectThreadViewController.m */; };
-		7D6565002113BD8B00365A19 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */; };
+		7D6565002113BD8B00365A19 /* SelectUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6564F02113BD8A00365A19 /* SelectUserViewController.m */; };
 		7D6565022113BD8B00365A19 /* SelectThreadViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D6565042113BDF500365A19 /* MessageApprovalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6565032113BDF400365A19 /* MessageApprovalViewController.swift */; };
 		7D65650E2113C53C00365A19 /* AttachmentApprovalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D65650D2113C53C00365A19 /* AttachmentApprovalViewController.swift */; };
@@ -657,7 +658,6 @@
 		7D8517EC211CB19C00F9EF53 /* EvpMessageDigest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E7211CB19B00F9EF53 /* EvpMessageDigest.m */; };
 		7D8517ED211CB19C00F9EF53 /* EvpSymetricUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517E8211CB19B00F9EF53 /* EvpSymetricUtil.m */; };
 		7D86A3EF223A1354004436A0 /* OWSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D99C8B1F27B13B00D284D6 /* OWSViewController.m */; };
-		7D8DE66F226E208900C35844 /* FLITag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8DE66E226E208900C35844 /* FLITag+CoreDataClass.swift */; };
 		7D92E4CE220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
 		7D92E4CF220E0A1600542694 /* ConferenceCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */; };
 		7D92E4D0220E0A1600542694 /* PeerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D92E4CC220E0A1500542694 /* PeerViewCell.swift */; };
@@ -685,7 +685,7 @@
 		7DDCC24121F675C70053A5CA /* AppUpdateNag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDCC23F21F675C70053A5CA /* AppUpdateNag.swift */; };
 		7DDED1AE21AC977400CB7361 /* UIControl+Forsta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */; };
 		7DDED1AF21AC977400CB7361 /* UIControl+Forsta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */; };
-		7DF2E98F212360B400855424 /* FLIUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF2E98E212360B400855424 /* FLIUserManager.swift */; };
+		7DF2E98F212360B400855424 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF2E98E212360B400855424 /* UserManager.swift */; };
 		93B5A7A62605C8DB0E8C6399 /* Pods_RelayDev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B8661366C8D98511544433B /* Pods_RelayDev.framework */; };
 		954AEE6A1DF33E01002E5410 /* ContactsPickerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954AEE681DF33D32002E5410 /* ContactsPickerTest.swift */; };
 		A10FDF79184FB4BB007FF963 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76C87F18181EFCE600C4ACAB /* MediaPlayer.framework */; };
@@ -1030,8 +1030,8 @@
 		34480B601FD0A98800BC14EF /* UIView+OWS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+OWS.m"; sourceTree = "<group>"; };
 		34480B651FD0AA9400BC14EF /* UIFont+OWS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+OWS.m"; sourceTree = "<group>"; };
 		34480B661FD0AA9400BC14EF /* UIFont+OWS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+OWS.h"; sourceTree = "<group>"; };
-		344D6CE620069E060042AF96 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectRecipientViewController.h; path = RelayMessaging/contacts/SelectRecipientViewController.h; sourceTree = SOURCE_ROOT; };
-		344D6CE720069E060042AF96 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectRecipientViewController.m; path = RelayMessaging/contacts/SelectRecipientViewController.m; sourceTree = SOURCE_ROOT; };
+		344D6CE620069E060042AF96 /* SelectUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectUserViewController.h; path = RelayMessaging/contacts/SelectUserViewController.h; sourceTree = SOURCE_ROOT; };
+		344D6CE720069E060042AF96 /* SelectUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectUserViewController.m; path = RelayMessaging/contacts/SelectUserViewController.m; sourceTree = SOURCE_ROOT; };
 		344F248C2007CCD600CFB4F4 /* DisplayableText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayableText.swift; sourceTree = "<group>"; };
 		344F2495200FD03200CFB4F4 /* SharingThreadPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharingThreadPickerViewController.h; path = RelayMessaging/attachments/SharingThreadPickerViewController.h; sourceTree = SOURCE_ROOT; };
 		344F2497200FD03200CFB4F4 /* SharingThreadPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SharingThreadPickerViewController.m; path = RelayMessaging/attachments/SharingThreadPickerViewController.m; sourceTree = SOURCE_ROOT; };
@@ -1353,6 +1353,7 @@
 		7D2CD683214C491B004E957A /* RelayDevShareExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RelayDevShareExtension.entitlements; sourceTree = "<group>"; };
 		7D2CD688214C5F74004E957A /* RelayDevShareExtension-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RelayDevShareExtension-Info.plist"; sourceTree = "<group>"; };
 		7D4438522277561900907033 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		7D44399A227A11D600907033 /* FLITag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLITag+CoreDataProperties.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/Do not edit/FLITag+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FLIThread+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProtocolObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FLIThread+CoreDataProperties.swift"; path = "RelayStorage/ManagedObjects/FLIThread+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
@@ -1370,8 +1371,8 @@
 		7D6564C12113B1C200365A19 /* Relay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Relay.entitlements; sourceTree = "<group>"; };
 		7D6564C22113B74900365A19 /* RelayShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelayShareExtension.entitlements; sourceTree = "<group>"; };
 		7D6564E42113BD8900365A19 /* SelectThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectThreadViewController.m; sourceTree = "<group>"; };
-		7D6564EE2113BD8A00365A19 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRecipientViewController.h; sourceTree = "<group>"; };
-		7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRecipientViewController.m; sourceTree = "<group>"; };
+		7D6564EE2113BD8A00365A19 /* SelectUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectUserViewController.h; sourceTree = "<group>"; };
+		7D6564F02113BD8A00365A19 /* SelectUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectUserViewController.m; sourceTree = "<group>"; };
 		7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectThreadViewController.h; sourceTree = "<group>"; };
 		7D6565032113BDF400365A19 /* MessageApprovalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageApprovalViewController.swift; sourceTree = "<group>"; };
 		7D65650D2113C53C00365A19 /* AttachmentApprovalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentApprovalViewController.swift; sourceTree = "<group>"; };
@@ -1411,7 +1412,6 @@
 		7D8517E9211CB19B00F9EF53 /* EvpMessageDigest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpMessageDigest.h; sourceTree = "<group>"; };
 		7D8517EA211CB19C00F9EF53 /* EvpUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpUtil.h; sourceTree = "<group>"; };
 		7D8517EB211CB19C00F9EF53 /* EvpSymetricUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvpSymetricUtil.h; sourceTree = "<group>"; };
-		7D8DE66E226E208900C35844 /* FLITag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FLITag+CoreDataClass.swift"; path = "/Users/markd/Forsta/Relay-iOS-App/RelayStorage/ManagedObjects/FLITag+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		7D92E4CB220E0A1500542694 /* ConferenceCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConferenceCallViewController.swift; sourceTree = "<group>"; };
 		7D92E4CC220E0A1500542694 /* PeerViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerViewCell.swift; sourceTree = "<group>"; };
 		7D92E4CD220E0A1600542694 /* PeerViewsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerViewsLayout.swift; sourceTree = "<group>"; };
@@ -1437,7 +1437,7 @@
 		7DD5A732211B7CA500965478 /* HttpResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpResponse.m; sourceTree = "<group>"; };
 		7DDCC23F21F675C70053A5CA /* AppUpdateNag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateNag.swift; sourceTree = "<group>"; };
 		7DDED1AD21AC977400CB7361 /* UIControl+Forsta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Forsta.swift"; sourceTree = "<group>"; };
-		7DF2E98E212360B400855424 /* FLIUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLIUserManager.swift; sourceTree = "<group>"; };
+		7DF2E98E212360B400855424 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		7E75823A4CD0DBCCCA43D496 /* Pods-RelayStorage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RelayStorage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RelayStorage/Pods-RelayStorage.debug.xcconfig"; sourceTree = "<group>"; };
 		8300824C7D94C76E7FEA1BED /* Pods-Common-RelayMessaging.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-RelayMessaging.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-RelayMessaging/Pods-Common-RelayMessaging.app store release.xcconfig"; sourceTree = "<group>"; };
 		8BDF00953362DF77BCB051B3 /* Pods-Common-Relay-RelayShareExtension.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-Relay-RelayShareExtension.app store release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-Relay-RelayShareExtension/Pods-Common-Relay-RelayShareExtension.app store release.xcconfig"; sourceTree = "<group>"; };
@@ -1988,17 +1988,17 @@
 			path = migrations;
 			sourceTree = "<group>";
 		};
-		346129A11FD1F09100532771 /* contacts */ = {
+		346129A11FD1F09100532771 /* Users */ = {
 			isa = PBXGroup;
 			children = (
 				7D65650F2113C5DD00365A19 /* ModalActivityIndicatorViewController.swift */,
-				7D6564EE2113BD8A00365A19 /* SelectRecipientViewController.h */,
-				7D6564F02113BD8A00365A19 /* SelectRecipientViewController.m */,
+				7D6564EE2113BD8A00365A19 /* SelectUserViewController.h */,
+				7D6564F02113BD8A00365A19 /* SelectUserViewController.m */,
 				7D6564F22113BD8A00365A19 /* SelectThreadViewController.h */,
 				7D6564E42113BD8900365A19 /* SelectThreadViewController.m */,
-				7DF2E98E212360B400855424 /* FLIUserManager.swift */,
+				7DF2E98E212360B400855424 /* UserManager.swift */,
 			);
-			path = contacts;
+			path = Users;
 			sourceTree = "<group>";
 		};
 		346129B01FD1F7E800532771 /* profiles */ = {
@@ -2041,8 +2041,8 @@
 				346129DD1FD5C02900532771 /* LockInteractionController.m */,
 				34641E1A2088DA4000E2EDE5 /* ScreenLockViewController.h */,
 				34641E192088DA3F00E2EDE5 /* ScreenLockViewController.m */,
-				344D6CE620069E060042AF96 /* SelectRecipientViewController.h */,
-				344D6CE720069E060042AF96 /* SelectRecipientViewController.m */,
+				344D6CE620069E060042AF96 /* SelectUserViewController.h */,
+				344D6CE720069E060042AF96 /* SelectUserViewController.m */,
 				344F2495200FD03200CFB4F4 /* SharingThreadPickerViewController.h */,
 				344F2497200FD03200CFB4F4 /* SharingThreadPickerViewController.m */,
 			);
@@ -2268,7 +2268,7 @@
 			children = (
 				454A96571FD600B4008D2A0E /* attachments */,
 				34480B5C1FD0A98800BC14EF /* categories */,
-				346129A11FD1F09100532771 /* contacts */,
+				346129A11FD1F09100532771 /* Users */,
 				3461293F1FD1D74B00532771 /* environment */,
 				453518951FC63DBF00210559 /* Info.plist */,
 				34219803210619D300C57195 /* Libraries */,
@@ -2494,7 +2494,7 @@
 			children = (
 				7D6430DD2269232B0000DE32 /* FLIAttachment+CoreDataProperties.swift */,
 				7D6430D7226922BB0000DE32 /* FLIMessage+CoreDataProperties.swift */,
-				7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */,
+				7D44399A227A11D600907033 /* FLITag+CoreDataProperties.swift */,
 				7D6430D3226915BF0000DE32 /* FLIUser+CoreDataProperties.swift */,
 				7D6430CA226912E90000DE32 /* BaseChatObject+CoreDataProperties.swift */,
 				7D6430C6226912410000DE32 /* FLIThread+CoreDataProperties.swift */,
@@ -2577,8 +2577,8 @@
 				7D6430C1226911E80000DE32 /* Do not edit */,
 				7D6430CC226912F00000DE32 /* BaseChatObject+CoreDataClass.swift */,
 				7D6430DB226923220000DE32 /* FLIAttachment+CoreDataClass.swift */,
-				7D8DE66E226E208900C35844 /* FLITag+CoreDataClass.swift */,
 				7D6430D8226922BB0000DE32 /* FLIMessage+CoreDataClass.swift */,
+				7D6430DF226926DB0000DE32 /* FLITag+CoreDataClass.swift */,
 				7D6430C2226912390000DE32 /* FLIThread+CoreDataClass.swift */,
 				7D6430D4226915BF0000DE32 /* FLIUser+CoreDataClass.swift */,
 				7D6430C3226912390000DE32 /* ProtocolObject+CoreDataClass.swift */,
@@ -2896,7 +2896,7 @@
 				451F8A3A1FD711D9005CB9DA /* ContactsViewHelper.h in Headers */,
 				34480B491FD0A60200BC14EF /* OWSMath.h in Headers */,
 				34641E1C2088DA4100E2EDE5 /* ScreenLockViewController.h in Headers */,
-				344D6CEA20069E070042AF96 /* SelectRecipientViewController.h in Headers */,
+				344D6CEA20069E070042AF96 /* SelectUserViewController.h in Headers */,
 				459B775D207BA4810071D0AB /* OWSQuotedReplyModel.h in Headers */,
 				450C800D20AD193100F3A091 /* OWSNavigationController.h in Headers */,
 				346129A91FD1F0E000532771 /* OWSFormat.h in Headers */,
@@ -3977,11 +3977,11 @@
 				348BB25B209CF8E50047AEC2 /* TappableView.swift in Sources */,
 				348BB25A209CF8E50047AEC2 /* TappableStackView.swift in Sources */,
 				7D6565042113BDF500365A19 /* MessageApprovalViewController.swift in Sources */,
-				7DF2E98F212360B400855424 /* FLIUserManager.swift in Sources */,
+				7DF2E98F212360B400855424 /* UserManager.swift in Sources */,
 				344F248D2007CCD600CFB4F4 /* DisplayableText.swift in Sources */,
 				450998651FD8A34D00D89EB3 /* DeviceSleepManager.swift in Sources */,
 				3466087220E550F400AFFE73 /* ConversationStyle.swift in Sources */,
-				7D6565002113BD8B00365A19 /* SelectRecipientViewController.m in Sources */,
+				7D6565002113BD8B00365A19 /* SelectUserViewController.m in Sources */,
 				3478506B1FD9B78A007B8332 /* NoopCallMessageHandler.swift in Sources */,
 				452D1AF320810B6F00A67F7F /* String+OWS.swift in Sources */,
 				451F8A3D1FD713CA005CB9DA /* ThreadViewHelper.m in Sources */,
@@ -4232,8 +4232,8 @@
 				7D6430C5226912390000DE32 /* ProtocolObject+CoreDataClass.swift in Sources */,
 				7D6430D1226915340000DE32 /* BigDummy.swift in Sources */,
 				7DC452D52267AEB500FC6CAB /* SignalAddress.swift in Sources */,
+				7D44399B227A11D600907033 /* FLITag+CoreDataProperties.swift in Sources */,
 				7DC452C622666EF500FC6CAB /* ForstaRelay1.xcdatamodeld in Sources */,
-				7D8DE66F226E208900C35844 /* FLITag+CoreDataClass.swift in Sources */,
 				7D6430D6226915BF0000DE32 /* FLIUser+CoreDataProperties.swift in Sources */,
 				7D6430E2226926DB0000DE32 /* FLITag+CoreDataClass.swift in Sources */,
 				7D6430C9226912410000DE32 /* ProtocolObject+CoreDataProperties.swift in Sources */,

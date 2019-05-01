@@ -11,12 +11,27 @@ import CoreData
 import SignalProtocol
 
 @objc
-class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
+public class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
     
-    @objc static let shared = StorageManager()
+    @objc public static let shared = StorageManager()
     
-    @objc let persistentContainer: NSPersistentContainer
-    @objc let viewContext: NSManagedObjectContext
+    @objc lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "ForstaRelay1")
+        container.loadPersistentStores(completionHandler: {
+            (storeDescription, error) in
+            print("\(storeDescription)")
+            if let error = error as NSError? {
+                fatalError("Fatal error loading CoreData persistent store: \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
+    @objc public lazy var mainContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        return context
+    }()
     
     private static let PrekeyStoreSpace = "PrekeyStoreSpace"
     private static let SessionRecordSpace = "SessionRecordSpace"
@@ -24,28 +39,36 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
     private static let SignedPreKeyStoreSpace = "SignedPreKeyStoreSpace"
 
     
-    override init() {
-        persistentContainer = NSPersistentContainer(name: "ForstaRelay1")
-        persistentContainer.loadPersistentStores(completionHandler: {
-            (storeDescription, error) in
-            print("\(storeDescription)")
-            if let error = error as NSError? {
-                fatalError("Fatal error loading CoreData persistent store: \(error), \(error.userInfo)")
-            }
-        })
-        
-        viewContext = persistentContainer.viewContext
-        viewContext.automaticallyMergesChangesFromParent = true
-        
-        super.init()
+    @objc override init() {
+         super.init()
     }
     
-    deinit {
+    @objc deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - External interface
-    @objc func set(namespace: String, key: AnyHashable, content: Data, protocolContext: Any?) throws {
+    @objc public func fetchObject(uuid: String, context: NSManagedObjectContext) -> BaseChatObject? {
+
+        let fetchRequest: NSFetchRequest<BaseChatObject> = BaseChatObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "uuid = %@", uuid)
+        
+        var object: BaseChatObject? = nil
+        do {
+            let results = try context.fetch(fetchRequest)
+            if results.count == 1 {
+                object = results.first!
+            } else if results.count > 1 {
+                fatalError("\(#function): should never return more than one object: \(results)")
+            }
+        } catch {
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        return object
+    }
+
+    @objc public func set(namespace: String, key: AnyHashable, content: Data, protocolContext: Any? = nil) throws {
         var context: NSManagedObjectContext? = protocolContext as? NSManagedObjectContext
         if protocolContext == nil {
             context = self.persistentContainer.newBackgroundContext()
@@ -78,7 +101,7 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
         saveContext(context!)
     }
     
-    @objc func get(namespace: String, key: AnyHashable, protocolContext: Any?) -> Data? {
+    @objc public func get(namespace: String, key: AnyHashable, protocolContext: Any? = nil) -> Data? {
         var context: NSManagedObjectContext? = protocolContext as? NSManagedObjectContext
         if protocolContext == nil {
             context = self.persistentContainer.newBackgroundContext()
@@ -104,7 +127,7 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
         return object?.data as Data?
     }
     
-    @objc func allKeys(namespace: String, protocolContext: Any?) -> [AnyHashable] {
+    @objc public func allKeys(namespace: String, protocolContext: Any? = nil) -> [AnyHashable] {
         var context: NSManagedObjectContext? = protocolContext as? NSManagedObjectContext
         if protocolContext == nil {
             context = self.persistentContainer.newBackgroundContext()
@@ -113,7 +136,7 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
         return [AnyHashable]()
     }
     
-    @objc func has(namespace: String, key: AnyHashable, protocolContext: Any?) -> Bool {
+    @objc public func has(namespace: String, key: AnyHashable, protocolContext: Any? = nil) -> Bool {
         var context: NSManagedObjectContext? = protocolContext as? NSManagedObjectContext
         if protocolContext == nil {
             context = self.persistentContainer.newBackgroundContext()
@@ -132,10 +155,9 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
             // FIXME: Throw error here
             return false
         }
-        return false
     }
     
-    @objc func remove(namespace: String, key: AnyHashable, protocolContext: Any?) throws {
+    @objc public func remove(namespace: String, key: AnyHashable, protocolContext: Any? = nil) throws {
         var context: NSManagedObjectContext? = protocolContext as? NSManagedObjectContext
         if protocolContext == nil {
             context = self.persistentContainer.newBackgroundContext()
@@ -166,7 +188,7 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
         saveContext(context!)
     }
     
-    @objc public func saveViewContext() {
+    @objc public func saveMainContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
@@ -192,6 +214,7 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
         }
     }
     
+    // FIXME: This is probably a bad approach.  Make whatever uses this build a child context of this main context.
     @objc public func newBackgroundContext() -> NSManagedObjectContext {
         let context: NSManagedObjectContext = persistentContainer.newBackgroundContext()
         context.automaticallyMergesChangesFromParent = true
@@ -199,71 +222,71 @@ class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyStore {
     }
     
     // MARK: - PreKeyStore protocol
-    var lastId: UInt32 = 0
+    public var lastId: UInt32 = 0
     
-    func preKey(for id: UInt32) throws -> Data {
+    public func preKey(for id: UInt32) throws -> Data {
         guard let keyData = get(namespace: StorageManager.PrekeyStoreSpace, key: id, protocolContext: nil) else {
             throw SignalError(.storageError, "No pre key for id \(id)")
         }
         return keyData
     }
     
-    func store(preKey: Data, for id: UInt32) throws {
+    public func store(preKey: Data, for id: UInt32) throws {
         try set(namespace: StorageManager.PrekeyStoreSpace, key: id, content: preKey, protocolContext: nil)
         lastId = id
     }
     
-    func containsPreKey(for id: UInt32) -> Bool {
+    public func containsPreKey(for id: UInt32) -> Bool {
         return has(namespace: StorageManager.PrekeyStoreSpace, key: id, protocolContext: nil)
     }
     
-    func removePreKey(for id: UInt32) throws {
+    public func removePreKey(for id: UInt32) throws {
         try remove(namespace: StorageManager.PrekeyStoreSpace, key: id, protocolContext: nil)
     }
 
     // MARK: - SessionStore protocol
-    typealias Address = SignalAddress
+    public typealias Address = SignalAddress
     
-    func loadSession(for address: StorageManager.Address) throws -> Data? {
+    public func loadSession(for address: StorageManager.Address) throws -> Data? {
         guard let storedSessionData = get(namespace: StorageManager.SessionRecordSpace, key: address, protocolContext: nil) else {
             throw SignalError(.storageError, "No session for id \(address)")
         }
         return storedSessionData
     }
     
-    func store(session: Data, for address: StorageManager.Address) throws {
+    public func store(session: Data, for address: StorageManager.Address) throws {
         try set(namespace: StorageManager.SessionRecordSpace, key: address, content: session, protocolContext: nil)
     }
     
-    func containsSession(for address: StorageManager.Address) -> Bool {
+    public func containsSession(for address: StorageManager.Address) -> Bool {
         return has(namespace: StorageManager.SessionRecordSpace, key: address, protocolContext: nil)
     }
     
-    func deleteSession(for address: StorageManager.Address) throws {
+    public func deleteSession(for address: StorageManager.Address) throws {
         try remove(namespace: StorageManager.SessionRecordSpace, key: address, protocolContext: nil)
     }
 
     // MARK: - SignedPreKeyStore protocol
-    func store(signedPreKey: Data, for id: UInt32) throws {
+    public func store(signedPreKey: Data, for id: UInt32) throws {
         try set(namespace: StorageManager.SignedPreKeyStoreSpace, key: id, content: signedPreKey, protocolContext: nil)
     }
     
-    func signedPreKey(for id: UInt32) throws -> Data {
+    public func signedPreKey(for id: UInt32) throws -> Data {
         guard let key = get(namespace: StorageManager.SignedPreKeyStoreSpace, key: id, protocolContext: nil) else {
             throw SignalError(.invalidId, "No signed pre key for id \(id)")
         }
         return key
     }
     
-    func containsSignedPreKey(for id: UInt32) throws -> Bool {
+    public func containsSignedPreKey(for id: UInt32) throws -> Bool {
         return has(namespace: StorageManager.SignedPreKeyStoreSpace, key: id, protocolContext: nil)
     }
     
-    func removeSignedPreKey(for id: UInt32) throws {
+    public func removeSignedPreKey(for id: UInt32) throws {
         try remove(namespace: StorageManager.SignedPreKeyStoreSpace, key: id, protocolContext: nil)
     }
     
-    func allIds() throws -> [UInt32] {
+    public func allIds() throws -> [UInt32] {
         if let allIds = allKeys(namespace: StorageManager.SignedPreKeyStoreSpace, protocolContext: nil) as? [UInt32] {
             return allIds
         } else {

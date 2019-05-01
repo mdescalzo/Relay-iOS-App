@@ -6,17 +6,12 @@
 #import "AppDelegate.h"
 #import "AppSettingsViewController.h"
 #import "HomeViewCell.h"
-//#import "NewContactThreadViewController.h"
 #import "OWSNavigationController.h"
-#import "OWSPrimaryStorage.h"
 #import "ProfileViewController.h"
 #import "PushManager.h"
 #import "RegistrationUtils.h"
 #import "Relay-Swift.h"
 #import "RelayApp.h"
-#import "TSAccountManager.h"
-#import "TSDatabaseView.h"
-#import "TSThread.h"
 #import "FLAnnouncementViewController.h"
 
 @import PromiseKit;
@@ -79,9 +74,9 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 // Dependencies
 
-@property (nonatomic, readonly) AccountManager *accountManager;
-@property (nonatomic, readonly) FLContactsManager *contactsManager;
-@property (nonatomic, readonly) MessageSender *messageSender;
+//@property (nonatomic, readonly) AccountManager *accountManager;
+//@property (nonatomic, readonly) FLContactsManager *contactsManager;
+//@property (nonatomic, readonly) MessageSender *messageSender;
 
 // Views
 
@@ -91,7 +86,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic, readonly) UIView *outageView;
 @property (nonatomic, readonly) UIView *archiveReminderView;
 
-@property (nonatomic) TSThread *lastThread;
+@property (nonatomic) FLIThread *lastThread;
 
 @property (nonatomic) BOOL hasArchivedThreadsRow;
 @property (nonatomic) BOOL hasThemeChanged;
@@ -519,7 +514,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     [previewingContext setSourceRect:[self.tableView rectForRowAtIndexPath:indexPath]];
 
     ConversationViewController *vc = [ConversationViewController new];
-    TSThread *thread = [self threadForIndexPath:indexPath];
+    FLIThread *thread = [self.currentResultsContoller objectAtIndexPath:indexPath];
     self.lastThread = thread;
     [vc configureForThread:thread action:ConversationViewActionNone focusMessageId:nil];
     [vc peekSetup];
@@ -567,17 +562,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 {
     [super viewWillAppear:animated];
 
-    __block BOOL hasAnyMessages;
-    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction * _Nonnull transaction) {
-        hasAnyMessages = [self hasAnyMessagesWithTransaction:transaction];
-    }];
-//    if (hasAnyMessages) {
-//        [self.contactsManager requestSystemContactsOnceWithCompletion:^(NSError *_Nullable error) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self updateReminderViews];
-//            });
-//        }];
-//    }
+    BOOL hasAnyMessages = [self hasAnyMessagesWithTransaction:transaction];
 
     self.isViewVisible = YES;
 
@@ -696,6 +681,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (BOOL)hasAnyMessagesWithTransaction:(YapDatabaseReadTransaction *)transaction
 {
+    
     return [TSThread numberOfKeysInCollectionWithTransaction:transaction] > 0;
 }
 
@@ -703,20 +689,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 {
     [self updateShouldObserveDBModifications];
 
-    // It's possible a thread was created while we where in the background. But since we don't honor contact
-    // requests unless the app is in the foregrond, we must check again here upon becoming active.
-    __block BOOL hasAnyMessages;
-    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction * _Nonnull transaction) {
-        hasAnyMessages = [self hasAnyMessagesWithTransaction:transaction];
-    }];
     
-//    if (hasAnyMessages) {
-//        [self.contactsManager requestSystemContactsOnceWithCompletion:^(NSError *_Nullable error) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self updateReminderViews];
-//            });
-//        }];
-//    }
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
