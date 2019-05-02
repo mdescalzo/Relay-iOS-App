@@ -7,7 +7,6 @@
 #import "AppSettingsViewController.h"
 #import "HomeViewCell.h"
 #import "OWSNavigationController.h"
-#import "ProfileViewController.h"
 #import "PushManager.h"
 #import "RegistrationUtils.h"
 #import "Relay-Swift.h"
@@ -52,6 +51,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     UITableViewDataSource,
     UIViewControllerPreviewingDelegate,
     UISearchBarDelegate,
+    NSFetchedResultsControllerDelegate,
     ConversationSearchViewDelegate>
 
 @property (nonatomic) UITableView *tableView;
@@ -137,10 +137,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     _messageSender = [Environment current].messageSender;
     _threadViewModelCache = [NSCache new];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(signalAccountsDidChange:)
-//                                                 name:OWSContactsManagerSignalAccountsDidChangeNotification
-//                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationWillEnterForeground:)
                                                  name:OWSApplicationWillEnterForegroundNotification
@@ -154,20 +150,8 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                                                  name:OWSApplicationWillResignActiveNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(yapDatabaseModified:)
-                                                 name:YapDatabaseModifiedNotification
-                                               object:OWSPrimaryStorage.sharedManager.dbNotificationObject];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(yapDatabaseModifiedExternally:)
-                                                 name:YapDatabaseModifiedExternallyNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(deregistrationStateDidChange:)
                                                  name:DeregistrationStateDidChangeNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(outageStateDidChange:)
-                                                 name:OutageDetection.outageStateDidChange
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(themeDidChange:)
@@ -205,6 +189,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                                                                            managedObjectContext:self.context
                                                                              sectionNameKeyPath:@"type"
                                                                                       cacheName:@"threadCache"];
+        _threadResultsController.delegate = self;
     }
     return _threadResultsController;
 }
@@ -221,6 +206,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                                                                            managedObjectContext:self.context
                                                                              sectionNameKeyPath:@"type"
                                                                                       cacheName:@"threadCache"];
+        _archivedResultsController.delegate = self;
     }
     return _archivedResultsController;
 }
@@ -369,7 +355,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     // Create the database connection.
     [self uiDatabaseConnection];
 
-    [self updateMappings];
     [self checkIfEmptyView];
     [self updateReminderViews];
 
@@ -1091,6 +1076,20 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     OWSAssertDebug(!self.searchBar.isFirstResponder);
 }
 
+// MARK: _ NSFetchedResultsControllerDelegate
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    self.tableView performBatchUpdates:^{
+        <#code#>
+    } completion:^(BOOL finished) {
+        DDLogInfo(@"%@: Fininished section change.", self.logTag);
+    }
+
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    
+}
+
 #pragma mark - HomeFeedTableViewCellDelegate
 
 - (void)tableViewCellTappedDelete:(NSIndexPath *)indexPath
@@ -1116,7 +1115,7 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     });
 }
 
-- (void)deleteThread:(TSThread *)thread
+- (void)deleteThread:(FLIThread *)thread
 {
     OutgoingControlMessage *message = [[OutgoingControlMessage alloc] initWithThread:thread
                                                                          controlType:FLControlMessageThreadUpdateKey
@@ -1125,18 +1124,16 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
                               toRecipients:[NSCountedSet setWithArray:thread.participantIds]
                                    success:^{
                                        DDLogDebug(@"Sent delete thread control message.");
-                                       [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                                           [thread removeWithTransaction:transaction];
-                                       }];
+                                       [self.context deleteObject:thread];
+                                       [StorageManage.shared saveMainContext];
                                        
                                    }
                                    failure:^(NSError * _Nonnull error) {
                                        DDLogDebug(@"Failed to send delete thread control message.  Error: %@", error.localizedDescription);
-                                       [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                                           [thread removeWithTransaction:transaction];
-                                       }];
-                                       
+                                       [self.context deleteObject:thread];
+                                       [StorageManage.shared saveMainContext];
                                    }];
+    
     [self checkIfEmptyView];
 }
 
@@ -1404,29 +1401,6 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 }
 
 #pragma mark Database delegates
-
--(YapDatabaseConnection *)editingDbConnection {
-    
-//    NSAssert(![NSThread isMainThread], @"editingDbConnection must not be access on the main thread!");
-    if (_editingDbConnection == nil) {
-        _editingDbConnection = [OWSPrimaryStorage.sharedManager newDatabaseConnection];
-    }
-    return _editingDbConnection;
-}
-
-- (YapDatabaseConnection *)uiDatabaseConnection
-{
-    OWSAssertIsOnMainThread();
-
-    if (!_uiDatabaseConnection) {
-        _uiDatabaseConnection = [OWSPrimaryStorage.sharedManager newDatabaseConnection];
-        // default is 250
-        _uiDatabaseConnection.objectCacheLimit = 500;
-        [_uiDatabaseConnection beginLongLivedReadTransaction];
-    }
-    return _uiDatabaseConnection;
-}
-
 - (void)yapDatabaseModifiedExternally:(NSNotification *)notification
 {
     OWSAssertIsOnMainThread();

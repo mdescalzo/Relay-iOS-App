@@ -141,7 +141,6 @@
 		34C6B0AE1FA0E4AA00D35993 /* test-jpg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 34C6B0AD1FA0E4AA00D35993 /* test-jpg.jpg */; };
 		34C82E5120F8E1F300E9688D /* Theme.h in Headers */ = {isa = PBXBuildFile; fileRef = 34C82E4F20F8E1F000E9688D /* Theme.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		34C82E5220F8E1F300E9688D /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C82E5020F8E1F100E9688D /* Theme.m */; };
-		34CE88E71F2FB9A10098030F /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CE88E61F2FB9A10098030F /* ProfileViewController.m */; };
 		34CF0787203E6B78005C4D61 /* busy_tone_ansi.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0783203E6B77005C4D61 /* busy_tone_ansi.caf */; };
 		34CF0788203E6B78005C4D61 /* ringback_tone_ansi.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0784203E6B77005C4D61 /* ringback_tone_ansi.caf */; };
 		34CF078A203E6B78005C4D61 /* end_call_tone_cept.caf in Resources */ = {isa = PBXBuildFile; fileRef = 34CF0786203E6B78005C4D61 /* end_call_tone_cept.caf */; };
@@ -397,7 +396,6 @@
 		7D2CD577214C3C9C004E957A /* OWSBezierPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F308A11ECB469700BB7697 /* OWSBezierPathView.m */; };
 		7D2CD578214C3C9C004E957A /* NumberUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8517D7211CADDC00F9EF53 /* NumberUtil.m */; };
 		7D2CD579214C3C9C004E957A /* DebugUIFileBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B27B852037FFB400A539DF /* DebugUIFileBrowser.swift */; };
-		7D2CD57A214C3C9C004E957A /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CE88E61F2FB9A10098030F /* ProfileViewController.m */; };
 		7D2CD57C214C3C9C004E957A /* MainAppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B0796B1FCF46B000E248C2 /* MainAppContext.m */; };
 		7D2CD57D214C3C9C004E957A /* DebugUIPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E3EF0F1EFC2684007F6822 /* DebugUIPage.m */; };
 		7D2CD57E214C3C9C004E957A /* OWSBackupJob.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC8CC20518C76007AEB0F /* OWSBackupJob.m */; };
@@ -1116,8 +1114,6 @@
 		34C82E5020F8E1F100E9688D /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Theme.m; sourceTree = "<group>"; };
 		34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageDetailViewController.swift; sourceTree = "<group>"; };
 		34CA1C281F7164F700E51C51 /* MediaMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaMessageView.swift; sourceTree = "<group>"; };
-		34CE88E51F2FB9A10098030F /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
-		34CE88E61F2FB9A10098030F /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		34CF0783203E6B77005C4D61 /* busy_tone_ansi.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = busy_tone_ansi.caf; path = Relay/AudioFiles/busy_tone_ansi.caf; sourceTree = SOURCE_ROOT; };
 		34CF0784203E6B77005C4D61 /* ringback_tone_ansi.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ringback_tone_ansi.caf; path = Relay/AudioFiles/ringback_tone_ansi.caf; sourceTree = SOURCE_ROOT; };
 		34CF0786203E6B78005C4D61 /* end_call_tone_cept.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = end_call_tone_cept.caf; path = Relay/AudioFiles/end_call_tone_cept.caf; sourceTree = SOURCE_ROOT; };
@@ -2072,8 +2068,6 @@
 				454A84032059C787008B8C75 /* MediaTileViewController.swift */,
 				4CFF4C0920F55BBA005DA313 /* MenuActionsViewController.swift */,
 				34CA1C261F7156F300E51C51 /* MessageDetailViewController.swift */,
-				34CE88E51F2FB9A10098030F /* ProfileViewController.h */,
-				34CE88E61F2FB9A10098030F /* ProfileViewController.m */,
 				340FC875204DAC8C007AEB0F /* Registration */,
 				4585C4671ED8F8D200896AEA /* SafetyNumberConfirmationAlert.swift */,
 				34B3F86D1E8DF1700035BE1A /* SignalsNavigationController.h */,
@@ -4101,7 +4095,6 @@
 				7D2CD577214C3C9C004E957A /* OWSBezierPathView.m in Sources */,
 				7D2CD578214C3C9C004E957A /* NumberUtil.m in Sources */,
 				7D2CD579214C3C9C004E957A /* DebugUIFileBrowser.swift in Sources */,
-				7D2CD57A214C3C9C004E957A /* ProfileViewController.m in Sources */,
 				7D2CD57C214C3C9C004E957A /* MainAppContext.m in Sources */,
 				7D2CD57D214C3C9C004E957A /* DebugUIPage.m in Sources */,
 				7D2CD57E214C3C9C004E957A /* OWSBackupJob.m in Sources */,
@@ -4321,7 +4314,6 @@
 				34F308A21ECB469700BB7697 /* OWSBezierPathView.m in Sources */,
 				7D8517DB211CADDE00F9EF53 /* NumberUtil.m in Sources */,
 				45B27B862037FFB400A539DF /* DebugUIFileBrowser.swift in Sources */,
-				34CE88E71F2FB9A10098030F /* ProfileViewController.m in Sources */,
 				34B0796D1FCF46B100E248C2 /* MainAppContext.m in Sources */,
 				34E3EF101EFC2684007F6822 /* DebugUIPage.m in Sources */,
 				340FC8CD20518C77007AEB0F /* OWSBackupJob.m in Sources */,
