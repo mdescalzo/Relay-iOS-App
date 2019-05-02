@@ -365,7 +365,12 @@ import LetterAvatarKit
             Logger.debug("\(self.logTag): Attempt to create user with missing userId.")
             return nil
         }
-        
+        guard let tagDict = dictionary["tag"] as? [String:AnyObject],
+        let aTag = tag(dictionary: tagDict, context: context) else {
+            Logger.debug("\(self.logTag): Missing/malformed tag(s) for userId: \(userId).")
+            return nil
+        }
+
         var user: FLIUser?
         user = self.fetchUser(uuid: userId, context: context)
         if user == nil {
@@ -376,6 +381,8 @@ import LetterAvatarKit
             Logger.debug("\(self.logTag): Failed to create or fetch a user with id: \(userId).")
             return nil
         }
+        
+        user?.addToTags(aTag)
 
         // Set properties
         if dictionary["is_active"] as? NSNumber == 0 {
@@ -387,7 +394,11 @@ import LetterAvatarKit
         if let lastname = dictionary["last_name"] as? String { user?.lastName = lastname }
         if let email = dictionary["email"] as? String { user?.emailAddress = email }
         if let phone = dictionary["phone"] as? String { user?.phoneNumber = phone }
-        if let gravatar = dictionary["gravatar_hash"] as? String { user?.gravtarHash = gravatar }
+        if let gravatar = dictionary["gravatar_hash"] as? String { user?.gravatarHash = gravatar }
+        if let orgDict = dictionary["org"] as? [String: AnyObject] {
+            if let orgId = orgDict["id"] as? String { user?.orgId = orgId }
+            if let orgSlug = orgDict["slug"] as? String { user?.orgSlug = orgSlug }
+        }
 
         StorageManager.shared.saveContext(context)
         return user
