@@ -35,11 +35,6 @@ import CoreData
 //                                               selector: #selector(threadExpressionUpdated(notification:)),
 //                                               name: NSNotification.Name.TSThreadExpressionChanged,
 //                                               object: nil)
-        // FIXME: Replace this notification
-//        NotificationCenter.default.addObserver(self,
-//                                               selector: #selector(yapDatabaseModified),
-//                                               name: NSNotification.Name.YapDatabaseModified,
-//                                               object: nil)
     }
     
     deinit {
@@ -73,7 +68,7 @@ import CoreData
                 }
             } else if thread.isOneOnOne() {
                 // one-on-one, use other avatar
-                if let image = TextSecureKitEnv.shared().contactsManager.avatarImageRecipientId(thread!.otherParticipantId!) {
+                if let image = UserManager.image(userId: thread.otherParticipant()!.uuid!) {
                     self.imageCache.setObject(image, forKey: threadId as NSString)
                     return image
                 }
@@ -87,21 +82,24 @@ import CoreData
         imageCache.removeAllObjects()
     }
     
+    // FIXME: Pass threadId, not the actual thread
     @objc func threadExpressionUpdated(notification: Notification?) {
         Logger.debug("notification: \(String(describing: notification))")
-        if (notification?.object is TSThread) {
-            if let thread = notification?.object as? TSThread {
-                self.validate(thread: thread)
-            }
+        if let threadId = notification?.userInfo?["threadId"] as? String {
+            self.validate(threadId: threadId)
         }
     }
     
-    @objc public func validate(thread: TSThread) {
-        
+    @objc public func validate(threadId: String) {
+       
+        guard let thread = fetchThread(uuid: threadId, context: moc) else {
+            Logger.debug("\(self.logTag): Thread doesn't exist for id: \(threadId)")
+            return
+        }
         var lookupString: String
-        if thread.universalExpression != nil {
-            lookupString = thread.universalExpression!
-        } else if thread.participantIds.count > 0 {
+        if thread.expression != nil {
+            lookupString = thread.expression!
+        } else if thread.currentParticipants!.count > 0 {
             lookupString = FLCCSMJSONService.expression(forIds: thread.participantIds)
         } else {
             Logger.debug("Aborting attept to validate thread with missing universal expression.")
@@ -137,28 +135,4 @@ import CoreData
             Logger.debug("\(self.logTag): TagMath query failed for expression: \(lookupString).  Error: \(error.localizedDescription)")
         })
     }
-    
-//    // MARK: - KVO
-//    @objc override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//        if keyPath == "useGravatars" {
-//            for obj in TSThread.allObjectsInCollection() {
-//                let thread = obj as! TSThread
-//                thread.touch()
-//            }
-//        }
-//    }
-    
-    @objc func yapDatabaseModified(notification: Notification?) {
-        
-        DispatchQueue.global(qos: .background).async {
-            let notifications = self.dbReadConnection.beginLongLivedReadTransaction()
-            self.dbReadConnection.enumerateChangedKeys(inCollection: TSThread.collection(),
-                                                     in: notifications) { (threadId, stop) in
-                                                        // Remove cached image
-                                                        self.imageCache.removeObject(forKey: threadId as NSString)
-            }
-        }
-    }
-
-
 }
