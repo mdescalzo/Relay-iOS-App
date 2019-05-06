@@ -34,7 +34,7 @@ NSString *const OWSPrimaryStorageExceptionName_CouldNotCreateDatabaseDirectory
 
 void RunSyncRegistrationsForStorage(OWSStorage *storage)
 {
-    OWSCAssert(storage);
+    OWSCAssertDebug(storage);
 
     // Synchronously register extensions which are essential for views.
 //    [TSDatabaseView registerCrossProcessNotifier:storage];
@@ -42,8 +42,8 @@ void RunSyncRegistrationsForStorage(OWSStorage *storage)
 
 void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t completion)
 {
-    OWSCAssert(storage);
-    OWSCAssert(completion);
+    OWSCAssertDebug(storage);
+    OWSCAssertDebug(completion);
 
     // Asynchronously register other extensions.
     //
@@ -79,14 +79,14 @@ void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t compl
 
 void VerifyRegistrationsForPrimaryStorage(OWSStorage *storage)
 {
-    OWSCAssert(storage);
+    OWSCAssertDebug(storage);
 
     [[storage newDatabaseConnection] asyncReadWithBlock:^(YapDatabaseReadTransaction *transaction) {
         for (NSString *extensionName in storage.registeredExtensionNames) {
             DDLogVerbose(@"Verifying database extension: %@", extensionName);
             YapDatabaseViewTransaction *_Nullable viewTransaction = [transaction ext:extensionName];
             if (!viewTransaction) {
-                OWSCFail(@"VerifyRegistrationsForPrimaryStorage missing database extension: %@", extensionName);
+                OWSCFailDebug(@"VerifyRegistrationsForPrimaryStorage missing database extension: %@", extensionName);
 
                 [OWSStorage incrementVersionOfDatabaseExtension:extensionName];
             }

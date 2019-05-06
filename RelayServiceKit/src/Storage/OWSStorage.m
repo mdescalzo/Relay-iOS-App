@@ -427,13 +427,13 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
         // (e.g. by using OWSAssertDebug()) or this database will contain a
         // circular reference and will leak.
         OWSStorage *strongSelf = weakSelf;
-        OWSCAssert(strongSelf);
+        OWSCAssertDebug(strongSelf);
 
         // Rather than compute this once and capture the value of the key
         // in the closure, we prefer to fetch the key from the keychain multiple times
         // in order to keep the key out of application memory.
         NSData *databaseKeySpec = [strongSelf databaseKeySpec];
-        OWSCAssert(databaseKeySpec.length == kSQLCipherKeySpecLength);
+        OWSCAssertDebug(databaseKeySpec.length == kSQLCipherKeySpecLength);
         return databaseKeySpec;
     };
 

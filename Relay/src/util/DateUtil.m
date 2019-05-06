@@ -235,7 +235,7 @@ static NSString *const DATE_FORMAT_WEEKDAY = @"EEEE";
 
 + (NSString *)formatPastTimestampRelativeToNow:(uint64_t)pastTimestamp
 {
-    OWSCAssert(pastTimestamp > 0);
+    OWSCAssertDebug(pastTimestamp > 0);
 
     uint64_t nowTimestamp = [NSDate ows_millisecondTimeStamp];
     BOOL isFutureTimestamp = pastTimestamp >= nowTimestamp;
