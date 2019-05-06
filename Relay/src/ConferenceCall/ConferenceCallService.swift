@@ -58,19 +58,25 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         
         return firstly {
             SignalApp.shared().accountManager.getTurnServerInfo()
-            }.map { turnServerInfo -> [RTCIceServer] in
-                Logger.debug("got turn server urls: \(turnServerInfo.urls)")
+            }.map { turnServersInfo -> [RTCIceServer] in
+                Logger.debug("got turn server urls: \(turnServersInfo)")
                 
-                return turnServerInfo.urls.map { url in
-                    if url.hasPrefix("turn") {
-                        // Only "turn:" servers require authentication. Don't include the credentials to other ICE servers
-                        // as 1.) they aren't used, and 2.) the non-turn servers might not be under our control.
-                        // e.g. we use a public fallback STUN server.
-                        return RTCIceServer(urlStrings: [url], username: turnServerInfo.username, credential: turnServerInfo.password)
-                    } else {
-                        return RTCIceServer(urlStrings: [url])
+                var servers = [RTCIceServer]()
+                for info in turnServersInfo {
+                    for url in info.urls {
+                        if url.hasPrefix("turn") {
+                            // Only "turn:" servers require authentication. Don't include the credentials to other ICE servers
+                            // as 1.) they aren't used, and 2.) the non-turn servers might not be under our control.
+                            // e.g. we use a public fallback STUN server.
+                            servers.append(RTCIceServer(urlStrings: [url], username: info.username, credential: info.password))
+                        } else {
+                            servers.append(RTCIceServer(urlStrings: [url]))
+                        }
                     }
-                    } + [RTCIceServer(urlStrings: [fallbackIceServerUrl])]
+                }
+                servers.append(RTCIceServer(urlStrings: [fallbackIceServerUrl]))
+                
+                return servers
             }.recover { (error: Error) -> Guarantee<[RTCIceServer]> in
                 Logger.error("fetching ICE servers failed with error: \(error)")
                 Logger.warn("using fallback ICE Server")

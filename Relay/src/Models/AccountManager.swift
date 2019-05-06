@@ -6,6 +6,9 @@ import Foundation
 import PromiseKit
 import RelayServiceKit
 
+extension String: Error {}
+
+
 /**
  * Signal is actually two services - textSecure for messages and red phone (for calls). 
  * AccountManager delegates to both.
@@ -118,28 +121,25 @@ public class AccountManager: NSObject {
     }
 
     // MARK: Turn Server
-
-    func getTurnServerInfo() -> Promise<TurnServerInfo> {
+    
+    func getTurnServerInfo() -> Promise<[TurnServerInfo]> {
         return Promise { resolver in
-            let request = OWSRequestFactory.turnServerInfoRequest()
-            self.networkManager.makeRequest(request,
-                                            success: { (_: URLSessionDataTask, responseObject: Any?) in
-                                                guard responseObject != nil else {
-                                                    return resolver.reject(OWSErrorMakeUnableToProcessServerResponseError())
-                                                }
-                                                
-                                                if let responseDictionary = responseObject as? [String: AnyObject] {
-                                                    if let turnServerInfo = TurnServerInfo(attributes: responseDictionary) {
-                                                        return resolver.fulfill(turnServerInfo)
-                                                    }
-                                                    Logger.error("\(self.TAG) unexpected server response:\(responseDictionary)")
-                                                }
-                                                return resolver.reject(OWSErrorMakeUnableToProcessServerResponseError())
-            },
-                                            failure: { (_: URLSessionDataTask, error: Error) in
-                                                return resolver.reject(error)
+            guard let urlBase = Bundle.main.object(forInfoDictionaryKey: "CCSM_Home_URL") as? String else {
+                return resolver.reject("internal, can't get url base for atlas")
+            }
+            CCSMCommManager.getThings(urlBase+"/v1/rtc/servers", success: { things in
+                var infos = [TurnServerInfo]()
+                for thing in things ?? [] {
+                    if let dict = thing as? [String: AnyObject] {
+                        if let turnServerInfo = TurnServerInfo(attributes: dict) {
+                            infos.append(turnServerInfo)
+                        }
+                    }
+                }
+                return resolver.fulfill(infos)
+            }, failure:{ error in
+                return resolver.reject(error ?? "internal error in getTurnServerInfo")
             })
         }
     }
-
 }

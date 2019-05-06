@@ -34,6 +34,10 @@
         success:(void (^_Nullable)(NSDictionary *_Nullable))successBlock
         failure:(void (^_Nullable)(NSError * _Nullable error))failureBlock;
 
++(void)getThings:(NSString *_Nonnull)urlString
+         success:(void (^_Nullable)(NSArray *_Nullable))successBlock
+         failure:(void (^_Nullable)(NSError * _Nullable error))failureBlock;
+
 +(void)checkAccountRegistrationWithCompletion:(void (^_Nullable)(NSDictionary * _Nullable response, NSError * _Nullable error))completionBlock;
 
 +(void)registerDeviceWithParameters:(NSDictionary *_Nonnull)parameters
