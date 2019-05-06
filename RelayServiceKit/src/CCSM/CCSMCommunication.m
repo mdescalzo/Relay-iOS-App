@@ -360,6 +360,31 @@
                                    }] resume];
 }
 
+
++(void)getThings:(NSString *)urlString
+         success:(void (^)(NSArray *))successBlock
+         failure:(void (^)(NSError *error))failureBlock;
+{
+    NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+    NSMutableURLRequest *request = [self authRequestWithURL:url];
+    [request setHTTPMethod:@"GET"];
+    
+    [[NSURLSession.sharedSession dataTaskWithRequest:request
+                                   completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable connectionError) {
+                                       
+                                       if (data.length > 0 && connectionError == nil)
+                                       {
+                                           NSArray *result = [NSJSONSerialization JSONObjectWithData:data
+                                                                                             options:0
+                                                                                               error:NULL];
+                                           successBlock(result);
+                                       }
+                                       else if (connectionError != nil) {
+                                           failureBlock(connectionError);
+                                       }
+                                   }] resume];
+}
+
 #pragma mark - Refresh methods
 +(void)storeLocalUserDataWithPayload:(NSDictionary *)payload
 {

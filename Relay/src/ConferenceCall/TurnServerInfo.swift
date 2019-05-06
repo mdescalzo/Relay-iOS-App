@@ -11,20 +11,13 @@ struct TurnServerInfo {
     let urls: [String]
 
     init?(attributes: [String: AnyObject]) {
-        if let passwordAttribute = (attributes["password"] as? String) {
-            password = passwordAttribute
-        } else {
-            return nil
-        }
-
-        if let usernameAttribute = attributes["username"] as? String {
-            username = usernameAttribute
-        } else {
-            return nil
-        }
-
-        if let urlsAttribute = attributes["urls"] as? [String] {
-            urls = urlsAttribute
+        username = (attributes["username"] as? String) ?? ""
+        password = (attributes["credential"] as? String) ?? ""
+        
+        if let singular = attributes["urls"] as? String {
+            urls = [singular]
+        } else if let plural = attributes["urls"] as? [String] {
+            urls = plural
         } else {
             return nil
         }
