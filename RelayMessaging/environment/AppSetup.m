@@ -10,8 +10,8 @@
 #import <RelayMessaging/OWSProfileManager.h>
 #import <RelayMessaging/RelayMessaging-Swift.h>
 
-@import RelayServiceKit;
-@import AxolotlKit;
+@import RelayStorage
+@import SignalCoreKit
 
 NS_ASSUME_NONNULL_BEGIN
 

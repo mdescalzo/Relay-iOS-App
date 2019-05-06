@@ -4,6 +4,7 @@
 
 
 import RelayStorage
+import SignalCoreKit
 
 @objc
 public class NoopNotificationsManager: NSObject, NotificationsProtocol {

@@ -16,7 +16,7 @@
 extern NSString *const FLRelayWipeAndReturnToRegistrationNotification;
 
 @class ContactsUpdater;
-@class FLContactsManager;
+@class UserManager;
 @class MessageSender;
 @class OWSNavigationController;
 @class TSNetworkManager;
@@ -28,7 +28,7 @@ extern NSString *const FLRelayWipeAndReturnToRegistrationNotification;
                          networkManager:(TSNetworkManager *)networkManager
                           messageSender:(MessageSender *)messageSender;
 
-@property (nonatomic, readonly) FLContactsManager *contactsManager;
+@property (nonatomic, readonly) UserManager *userManager;
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
 @property (nonatomic, readonly) MessageSender *messageSender;
 @property (nonatomic, readonly) ThreadManager *threadManager;

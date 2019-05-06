@@ -15,6 +15,8 @@ public class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyS
     
     @objc public static let shared = StorageManager()
     
+    @objc public var isStorageReady: Bool = false
+    
     @objc lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "ForstaRelay1")
         container.loadPersistentStores(completionHandler: {
@@ -22,6 +24,8 @@ public class StorageManager : NSObject, PreKeyStore, SessionStore, SignedPreKeyS
             print("\(storeDescription)")
             if let error = error as NSError? {
                 fatalError("Fatal error loading CoreData persistent store: \(error), \(error.userInfo)")
+            } else {
+                self.isStorageReady = true
             }
         })
         return container

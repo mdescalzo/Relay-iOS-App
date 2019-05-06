@@ -12,8 +12,8 @@
 #import "UIView+OWS.h"
 #import <RelayMessaging/RelayMessaging-Swift.h>
 
-@import RelayServiceKit;
-@import YapDatabase;
+@import RelayStorage
+@import SignalCoreKit
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -163,7 +163,7 @@ NS_ASSUME_NONNULL_BEGIN
     OWSTableSection *recentChatsSection = [OWSTableSection new];
     recentChatsSection.headerTitle = NSLocalizedString(
         @"SELECT_THREAD_TABLE_RECENT_CHATS_TITLE", @"Table section header for recently active conversations");
-    for (TSThread *thread in [self filteredThreadsWithSearchText]) {
+    for (FLIThread *thread in [self filteredThreadsWithSearchText]) {
         [recentChatsSection
             addItem:[OWSTableItem
                         itemWithCustomCellBlock:^{
@@ -218,8 +218,8 @@ NS_ASSUME_NONNULL_BEGIN
     OWSTableSection *otherContactsSection = [OWSTableSection new];
     otherContactsSection.headerTitle = NSLocalizedString(
         @"SELECT_THREAD_TABLE_OTHER_CHATS_TITLE", @"Table section header for conversations you haven't recently used.");
-    NSArray<FLTag *> *filteredRelayTags = [self filteredRelayTagsWithSearchText];
-    for (FLTag *relayTag in filteredRelayTags) {
+    NSArray<FLITag *> *filteredRelayTags = [self filteredRelayTagsWithSearchText];
+    for (FLITag *relayTag in filteredRelayTags) {
         [otherContactsSection
             addItem:[OWSTableItem
                         itemWithCustomCellBlock:^{
@@ -227,11 +227,6 @@ NS_ASSUME_NONNULL_BEGIN
                             OWSCAssertDebug(strongSelf);
 
                             ContactTableViewCell *cell = [ContactTableViewCell new];
-//                            BOOL isBlocked = [helper isRecipientIdBlocked:signalAccount.recipientId];
-//                            if (isBlocked) {
-//                                cell.accessoryMessage = NSLocalizedString(
-//                                    @"CONTACT_CELL_IS_BLOCKED", @"An indicator that a contact has been blocked.");
-//                            }
                             [cell configureWithTagId:relayTag.uniqueId
                                            contactsManager:helper.contactsManager];
                             return cell;
@@ -258,16 +253,16 @@ NS_ASSUME_NONNULL_BEGIN
     self.tableViewController.contents = contents;
 }
 
--(void)relayTagWasSelected:(FLTag *)relayTag
+-(void)relayTagWasSelected:(FLITag *)relayTag
 {
     OWSAssertDebug(relayTag);
     OWSAssertDebug(self.selectThreadViewDelegate);
     
-    __block TSThread *thread = nil;
+    __block FLIThread *thread = nil;
     __block NSCountedSet<NSString *> *participants = [relayTag recipientIds];
     [participants addObject:[TSAccountManager localUID]];
     [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-        thread = [TSThread getOrCreateThreadWithParticipants:[participants allObjects] transaction:transaction];
+        thread = [FLIThread getOrCreateThreadWithParticipants:[participants allObjects] transaction:transaction];
     }];
     OWSAssertDebug(thread);
     
@@ -276,18 +271,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Filter
 
-- (NSArray<TSThread *> *)filteredThreadsWithSearchText
+- (NSArray<FLIThread *> *)filteredThreadsWithSearchText
 {
     NSString *searchTerm = [[self.searchBar text] ows_stripped];
 
     return [self.conversationSearcher filterThreads:self.threadViewHelper.threads withSearchText:searchTerm];
 }
 
-- (NSArray<FLTag *> *)filteredRelayTagsWithSearchText
+- (NSArray<FLITag *> *)filteredRelayTagsWithSearchText
 {
     NSString *searchString = self.searchBar.text;
     
-    NSArray<FLTag *>*matchingTags = [self.contactsViewHelper relayTagsMatchingSearchString:searchString];
+    NSArray<FLITag *>*matchingTags = [self.contactsViewHelper relayTagsMatchingSearchString:searchString];
     
     return matchingTags;
 }

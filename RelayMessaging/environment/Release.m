@@ -6,7 +6,7 @@
 #import "Environment.h"
 #import <RelayMessaging/RelayMessaging-Swift.h>
 
-@import RelayServiceKit;
+@import RelayStorage
 
 @implementation Release
 
@@ -16,9 +16,9 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         // Order matters here.
-        OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
+        StorageManager *primaryStorage = [StorageManager shared];
         TSNetworkManager *networkManager = [TSNetworkManager sharedManager];
-        FLContactsManager *contactsManager = [FLContactsManager shared];
+        UserManager *userManager = [UserManager shared];
         MessageSender *messageSender = [[MessageSender alloc] initWithNetworkManager:networkManager
                                                                             primaryStorage:primaryStorage
                                                                            contactsManager:contactsManager];

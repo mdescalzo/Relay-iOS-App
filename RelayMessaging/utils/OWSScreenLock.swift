@@ -4,6 +4,9 @@
 
 import Foundation
 import LocalAuthentication
+import RelayStorage
+import SignalCoreKit
+import CoreData
 
 @objc public class OWSScreenLock: NSObject {
 
@@ -26,9 +29,9 @@ import LocalAuthentication
 
     @objc public static let ScreenLockDidChange = Notification.Name("ScreenLockDidChange")
 
-    let primaryStorage: OWSPrimaryStorage
-    let dbConnection: YapDatabaseConnection
-
+    let storage: StorageManager = StorageManager.shared
+    let moc: NSManagedObjectContext = StorageManager.shared.mainContext
+    
     private let OWSScreenLock_Collection = "OWSScreenLock_Collection"
     private let OWSScreenLock_Key_IsScreenLockEnabled = "OWSScreenLock_Key_IsScreenLockEnabled"
     private let OWSScreenLock_Key_ScreenLockTimeoutSeconds = "OWSScreenLock_Key_ScreenLockTimeoutSeconds"
@@ -39,8 +42,6 @@ import LocalAuthentication
     public static let shared = OWSScreenLock()
 
     private override init() {
-        self.primaryStorage = OWSPrimaryStorage.shared()
-        self.dbConnection = self.primaryStorage.newDatabaseConnection()
 
         super.init()
 
@@ -52,7 +53,7 @@ import LocalAuthentication
     @objc public func isScreenLockEnabled() -> Bool {
         AssertIsOnMainThread(file: #function)
 
-        if !OWSStorage.isStorageReady() {
+        if !storage.isStorageReady {
             owsFailDebug("\(logTag) accessed screen lock state before storage is ready.")
             return false
         }

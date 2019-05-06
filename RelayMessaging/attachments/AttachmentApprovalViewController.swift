@@ -5,6 +5,7 @@
 import Foundation
 import AVFoundation
 import MediaPlayer
+import SignalCoreKit
 
 @objc
 public protocol AttachmentApprovalViewControllerDelegate: class {

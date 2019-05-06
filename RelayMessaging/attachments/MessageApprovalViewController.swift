@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import RelayStorage
 
 @objc
 public protocol MessageApprovalViewControllerDelegate: class {
@@ -18,7 +19,7 @@ public class MessageApprovalViewController: OWSViewController, UITextViewDelegat
 
     // MARK: Properties
 
-    let thread: TSThread
+    let thread: FLIThread
     let initialMessageText: String
     let contactsManager: UserManager
 
@@ -33,7 +34,7 @@ public class MessageApprovalViewController: OWSViewController, UITextViewDelegat
     }
 
     @objc
-    required public init(messageText: String, thread: TSThread, contactsManager: UserManager, delegate: MessageApprovalViewControllerDelegate) {
+    required public init(messageText: String, thread: FLIThread, contactsManager: UserManager, delegate: MessageApprovalViewControllerDelegate) {
         self.initialMessageText = messageText
         self.thread = thread
         self.contactsManager = contactsManager
@@ -156,7 +157,7 @@ public class MessageApprovalViewController: OWSViewController, UITextViewDelegat
         
         return recipientRow
         //        }
-        //        guard let contactThread = self.thread as? TSThread else {
+        //        guard let contactThread = self.thread as? FLIThread else {
         //            owsFailDebug("Unexpected thread type")
         //            return recipientRow
         //        }
@@ -185,7 +186,7 @@ public class MessageApprovalViewController: OWSViewController, UITextViewDelegat
 //        return recipientRow
     }
 
-//    private func profileName(contactThread: TSThread) -> String? {
+//    private func profileName(contactThread: FLIThread) -> String? {
 //        let recipientId = contactThread.contactIdentifier()
 //
 //        if contactsManager.hasNameInSystemContacts(forRecipientId: recipientId) {

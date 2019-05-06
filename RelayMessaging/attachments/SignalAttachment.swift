@@ -6,6 +6,7 @@ import Foundation
 import MobileCoreServices
 import PromiseKit
 import AVFoundation
+import SignalCoreKit
 
 enum SignalAttachmentError: Error {
     case missingData

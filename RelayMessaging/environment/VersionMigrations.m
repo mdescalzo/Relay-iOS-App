@@ -10,8 +10,8 @@
 #import "SignalKeyingStorage.h"
 #import "OWSNavigationController.h"
 
-@import RelayServiceKit;
-@import YapDatabase;
+@import RelayStorage
+@import SignalCoreKit
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -147,72 +147,6 @@ NS_ASSUME_NONNULL_BEGIN
     if (error) {
         DDLogError(
             @"An error occured while removing the videos cache folder from old location: %@", error.debugDescription);
-    }
-}
-
-#pragma mark Upgrading to 2.1.3 - Adding VOIP flag on TS Server
-
-+ (void)blockingAttributesUpdate
-{
-    LIControllerBlockingOperation blockingOperation = ^BOOL(void) {
-        [[NSUserDefaults appUserDefaults] setObject:@YES forKey:NEEDS_TO_REGISTER_ATTRIBUTES];
-
-        __block dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-
-        __block BOOL success;
-
-        TSRequest *request = [OWSRequestFactory updateAttributesRequestWithManualMessageFetching:NO];
-        [[TSNetworkManager sharedManager] makeRequest:request
-            success:^(NSURLSessionDataTask *task, id responseObject) {
-                success = YES;
-                dispatch_semaphore_signal(sema);
-            }
-            failure:^(NSURLSessionDataTask *task, NSError *error) {
-                success = NO;
-                DDLogError(@"Updating attributess failed with error: %@", error.description);
-                dispatch_semaphore_signal(sema);
-            }];
-
-
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-
-        return success;
-    };
-
-    LIControllerRetryBlock retryBlock = [LockInteractionController defaultNetworkRetry];
-
-    [LockInteractionController performBlock:blockingOperation
-                            completionBlock:^{
-                                [[NSUserDefaults appUserDefaults] removeObjectForKey:NEEDS_TO_REGISTER_ATTRIBUTES];
-                                DDLogWarn(@"Successfully updated attributes.");
-                            }
-                                 retryBlock:retryBlock
-                                usesNetwork:YES];
-}
-
-#pragma mark Upgrading to 2.3.0
-
-// We removed bloom filter contact discovery. Clean up any local bloom filter data.
-+ (void)clearBloomFilterCache
-{
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSArray *cachesDir = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *bloomFilterPath = [[cachesDir objectAtIndex:0] stringByAppendingPathComponent:@"bloomfilter"];
-
-    if ([fm fileExistsAtPath:bloomFilterPath]) {
-        NSError *deleteError;
-        if ([fm removeItemAtPath:bloomFilterPath error:&deleteError]) {
-            DDLogInfo(@"Successfully removed bloom filter cache.");
-            [OWSPrimaryStorage.dbReadWriteConnection
-                readWriteWithBlock:^(YapDatabaseReadWriteTransaction *_Nonnull transaction) {
-                    [transaction removeAllObjectsInCollection:@"TSRecipient"];
-                }];
-            DDLogInfo(@"Removed all TSRecipient records - will be replaced by SignalRecipients at next address sync.");
-        } else {
-            DDLogError(@"Failed to remove bloom filter cache with error: %@", deleteError.localizedDescription);
-        }
-    } else {
-        DDLogDebug(@"No bloom filter cache to remove.");
     }
 }
 

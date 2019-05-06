@@ -2,6 +2,7 @@
 //  Copyright (c) 2018 Open Whisper Systems. All rights reserved.
 //
 import Foundation
+import SignalCoreKit
 
 @objc
 public extension UIDevice {
@@ -10,7 +11,7 @@ public extension UIDevice {
     }
 
     @objc
-    public var hasIPhoneXNotch: Bool {
+    var hasIPhoneXNotch: Bool {
         switch UIScreen.main.nativeBounds.height {
         case 960:
             //  iPad in iPhone compatibility mode (using old iPhone 4 screen size)
@@ -41,12 +42,12 @@ public extension UIDevice {
     }
 
     @objc
-    public var isShorterThanIPhone5: Bool {
+    var isShorterThanIPhone5: Bool {
         return UIScreen.main.bounds.height < 568
     }
 
     @objc
-    public var isIPad: Bool {
+    var isIPad: Bool {
         let isNativeIPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad
         let isCompatabilityModeIPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone && self.model.hasPrefix("iPad")
 

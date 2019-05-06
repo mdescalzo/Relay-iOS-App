@@ -3,6 +3,7 @@
 //
 
 import RelayStorage
+import SignalCoreKit
 
 @objc
 public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {

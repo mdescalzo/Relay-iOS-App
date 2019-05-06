@@ -4,13 +4,13 @@
 
 #import <RelayMessaging/OWSViewController.h>
 
-@class TSThread;
+@class FLIThread;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol SelectThreadViewControllerDelegate <NSObject>
 
-- (void)threadWasSelected:(TSThread *)thread;
+- (void)threadWasSelected:(FLIThread *)thread;
 
 - (BOOL)canSelectBlockedContact;
 

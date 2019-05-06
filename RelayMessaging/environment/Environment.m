@@ -9,6 +9,7 @@
 NSString *const FLRelayWipeAndReturnToRegistrationNotification = @"FLRelayWipeAndReturnToRegistrationNotification";
 
 @import RelayStorage;
+@import SignalCoreKit
 
 static Environment *sharedEnvironment = nil;
 
