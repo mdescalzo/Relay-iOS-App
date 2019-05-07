@@ -80,7 +80,7 @@ import Foundation
     }
     
     @objc func threadExpressionUpdated(notification: Notification?) {
-        Logger.debug("notification: \(String(describing: notification))")
+        Logger.info("\(self.logTag) called \(#function)")
         if (notification?.object is TSThread) {
             if let thread = notification?.object as? TSThread {
                 self.validate(thread: thread)
@@ -89,7 +89,8 @@ import Foundation
     }
     
     @objc public func validate(thread: TSThread) {
-        
+        Logger.info("\(self.logTag) called \(#function)")
+
         var lookupString: String
         if thread.universalExpression != nil {
             lookupString = thread.universalExpression!
@@ -102,28 +103,37 @@ import Foundation
         
         CCSMCommManager.asyncTagLookup(with: lookupString, success: { lookupDict in
             self.dbReadWriteConnection.asyncReadWrite({ (transaction) in
-                if let userIds = lookupDict["userids"] as? [String] {
-                    thread.participantIds = userIds
-                    NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                                         object: nil,
-                                                                         userInfo: [ "userIds" : userIds ])
-                }
-                if let pretty = lookupDict["pretty"] as? String {
-                    if pretty.count > 0 {
-                        thread.prettyExpression = pretty
+                thread.applyChange(toSelfAndLatestCopy: transaction, change: { (object) in
+                    guard let theThread = object as? TSThread else {
+                        Logger.debug("Aborting attempt to udpate invalid object.")
+                        return
                     }
-                }
-                if let expression = lookupDict["universal"] as? String {
-                    if expression.count > 0 {
-                        thread.universalExpression = expression
+                    if let userIds = lookupDict["userids"] as? [String] {
+                        Logger.debug("Updated userIds on thread: \(theThread.uniqueId)")
+                        thread.participantIds = userIds
+                        NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                                             object: nil,
+                                                                             userInfo: [ "userIds" : userIds ])
                     }
-                }
-                if let monitorids = lookupDict["monitorids"] as? [String] {
-                    if monitorids.count > 0 {
-                        thread.monitorIds = NSCountedSet.init(array: monitorids)
+                    if let pretty = lookupDict["pretty"] as? String {
+                        if pretty.count > 0 {
+                            Logger.debug("Updated pretty on thread: \(theThread.uniqueId)")
+                            thread.prettyExpression = pretty
+                        }
                     }
-                }
-                thread.save(with: transaction)
+                    if let expression = lookupDict["universal"] as? String {
+                        if expression.count > 0 {
+                            Logger.debug("Updated univeral on thread: \(theThread.uniqueId)")
+                            thread.universalExpression = expression
+                        }
+                    }
+                    if let monitorids = lookupDict["monitorids"] as? [String] {
+                        if monitorids.count > 0 {
+                            Logger.debug("Updated monitors on thread: \(theThread.uniqueId)")
+                            thread.monitorIds = NSCountedSet.init(array: monitorids)
+                        }
+                    }
+                })
             })
         }, failure: { error in
             Logger.debug("\(self.logTag): TagMath query failed for expression: \(lookupString).  Error: \(error.localizedDescription)")

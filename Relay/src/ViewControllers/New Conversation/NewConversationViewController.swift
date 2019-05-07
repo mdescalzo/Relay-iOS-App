@@ -481,31 +481,27 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
             // Block to avoid repeating myself
             let createNewThreadBlock: ()->Void = {
                 DispatchQueue.global(qos: .background).async {
-                    var thread: TSThread?
-                    self.searchDBConnection.readWrite({ (transaction) in
-                        thread = TSThread.init(uniqueId: UUID().uuidString.lowercased())
-                        thread?.participantIds = userIds
-                        thread?.type = FLThreadTypeConversation
-                        if let pretty = results.object(forKey: "pretty") as? String {
-                            if pretty.count > 0 {
-                                thread?.prettyExpression = pretty
-                            }
+                    let thread = TSThread.init(uniqueId: UUID().uuidString.lowercased())
+                    thread.participantIds = userIds
+                    thread.type = FLThreadTypeConversation
+                    if let pretty = results.object(forKey: "pretty") as? String {
+                        if pretty.count > 0 {
+                            thread.prettyExpression = pretty
                         }
-                        if let expression = results.object(forKey: "universal") as? String {
-                            if expression.count > 0 {
-                                thread?.universalExpression = expression
-                            }
+                    }
+                    if let expression = results.object(forKey: "universal") as? String {
+                        if expression.count > 0 {
+                            thread.universalExpression = expression
                         }
-                            thread?.save(with: transaction)
-                    })
-                    if thread != nil {
-                        DispatchMainThreadSafe {
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                            object: self, userInfo: ["userIds" : userIds])
-                            self.navigationController?.dismiss(animated: true, completion: {
-                                SignalApp.shared().presentConversation(for: thread!, action: .compose)
-                            })
-                        }
+                    }
+                    thread.save()
+                    
+                    DispatchMainThreadSafe {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                        object: self, userInfo: ["userIds" : userIds])
+                        self.navigationController?.dismiss(animated: true, completion: {
+                            SignalApp.shared().presentConversation(for: thread, action: .compose)
+                        })
                     }
                 }
             }
