@@ -186,7 +186,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
     private weak var delegate: PeerConnectionClientDelegate?
 
-    private var peerConnection: RTCPeerConnection?
+    var peerConnection: RTCPeerConnection?
     
     var audioSender: RTCRtpSender?
     var videoSender: RTCRtpSender?
@@ -250,6 +250,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             if self.peerConnection == nil {
                 throw CallError.other(description: "couldn't acquire peerconnection from rtc factory")
             }
+            
+            self.readyToSendIceCandidatesResolver.fulfill(())
 
             let videoSender = self.peerConnection!.sender(withKind: kVideoTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
             videoSender.track = cc.localVideoTrack
@@ -264,11 +266,11 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             
             return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
         }.then { hardenedSessionDescription -> Promise<Void> in
-            self.sendCallAcceptOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
+            self.addRemoteIceCandidates(cc.releaseRemoteIceCandidates(userId: self.userId, deviceId: self.deviceId))
+            return self.sendCallAcceptOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
         }.then { () -> Promise<Void> in
             self.state = .sentAcceptOffer
-            self.readyToSendIceCandidatesResolver.fulfill(())
-            
+
             let timeout: Promise<Void> = after(seconds: connectingTimeoutSeconds).done {
                 // rejecting a promise by throwing is safely a no-op if the promise has already been fulfilled
                 throw CallError.timeout(description: "timed out waiting for peer connect")
@@ -328,6 +330,8 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
                 throw CallError.other(description: "couldn't acquire peerconnection from rtc factory")
             }
             
+            self.readyToSendIceCandidatesResolver.fulfill(())
+
             let videoSender = self.peerConnection!.sender(withKind: kVideoTrackType, streamId: CCIdentifiers.mediaStream.rawValue)
             videoSender.track = cc.localVideoTrack
             self.videoSender = videoSender
@@ -338,11 +342,11 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
             return self.createSessionDescriptionOffer()
         }.then { (hardenedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
-            self.sendCallOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
+            self.addRemoteIceCandidates(cc.releaseRemoteIceCandidates(userId: self.userId, deviceId: self.deviceId))
+            return self.sendCallOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
         }.then { () -> Promise<Void> in
             self.state = .awaitingAcceptOffer
-            self.readyToSendIceCandidatesResolver.fulfill(())
-            
+
             // Don't let the outgoing call ring forever. We don't support inbound ringing forever anyway.
             let timeout: Promise<Void> = after(seconds: connectingTimeoutSeconds).done {
                 // This code will always be called, whether or not the call has timed out.
@@ -609,7 +613,9 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
     
     public func addRemoteIceCandidates(_ iceCandidates: [Any]) {
-        ConferenceCallEvents.add(.ReceivedRemoteIce(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId, count: iceCandidates.count))
+        if iceCandidates.count > 0 {
+            ConferenceCallEvents.add(.ReceivedRemoteIce(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId, count: iceCandidates.count))
+        }
         for candidate in iceCandidates {
             if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
                 if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,

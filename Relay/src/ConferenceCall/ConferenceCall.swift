@@ -83,6 +83,7 @@ class CallAVPolicy {
     var delegates = [Weak<ConferenceCallDelegate>]()
     var joiners = Set<String>() // indexed by userId.deviceId
     var peerConnectionClients = [String : PeerConnectionClient]() // indexed by peerId
+    var heldRemoteIceCandidates = [String : [Any]]() // indexed by userId.deviceId
 
     var callRecord: TSCall? {
         didSet {
@@ -352,7 +353,29 @@ class CallAVPolicy {
     
     func handleRemoteIceCandidates(userId: String, deviceId: UInt32, iceCandidates: [Any]) {
         let pcc = locatePCC(userId, deviceId)
-        pcc?.addRemoteIceCandidates(iceCandidates)
+        if pcc?.peerConnection != nil {
+            pcc!.addRemoteIceCandidates(iceCandidates)
+        } else {
+            self.holdRemoteIceCandidates(userId: userId, deviceId: deviceId, iceCandidates: iceCandidates)
+        }
+    }
+    
+    func holdRemoteIceCandidates(userId: String, deviceId: UInt32, iceCandidates: [Any]) {
+        ConferenceCallEvents.add(.HeldRemoteIce(callId: self.callId, userId: userId, deviceId: deviceId, count: iceCandidates.count))
+        let idx = "\(userId).\(deviceId)"
+        var held = self.heldRemoteIceCandidates[idx] ?? [Any]()
+        held += iceCandidates
+        self.heldRemoteIceCandidates[idx] = held
+    }
+    
+    func releaseRemoteIceCandidates(userId: String, deviceId: UInt32) -> [Any] {
+        let idx = "\(userId).\(deviceId)"
+        let held = self.heldRemoteIceCandidates[idx] ?? [Any]()
+        self.heldRemoteIceCandidates.removeValue(forKey: idx)
+        if held.count > 0 {
+            ConferenceCallEvents.add(.ReleasedRemoteIce(callId: self.callId, userId: userId, deviceId: deviceId, count: held.count))
+        }
+        return held
     }
     
     // MARK: - Delegate Management
