@@ -168,7 +168,7 @@ NS_ASSUME_NONNULL_BEGIN
             addItem:[OWSTableItem
                         itemWithCustomCellBlock:^{
                             SelectThreadViewController *strongSelf = weakSelf;
-                            OWSCAssert(strongSelf);
+                            OWSCAssertDebug(strongSelf);
 
                             // To be consistent with the threads (above), we use ContactTableViewCell
                             // instead of HomeViewCell to present contacts and threads.
@@ -224,7 +224,7 @@ NS_ASSUME_NONNULL_BEGIN
             addItem:[OWSTableItem
                         itemWithCustomCellBlock:^{
                             SelectThreadViewController *strongSelf = weakSelf;
-                            OWSCAssert(strongSelf);
+                            OWSCAssertDebug(strongSelf);
 
                             ContactTableViewCell *cell = [ContactTableViewCell new];
 //                            BOOL isBlocked = [helper isRecipientIdBlocked:signalAccount.recipientId];
