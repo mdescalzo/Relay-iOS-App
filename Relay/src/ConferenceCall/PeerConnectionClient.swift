@@ -613,7 +613,9 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
     }
     
     public func addRemoteIceCandidates(_ iceCandidates: [Any]) {
-        ConferenceCallEvents.add(.ReceivedRemoteIce(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId, count: iceCandidates.count))
+        if iceCandidates.count > 0 {
+            ConferenceCallEvents.add(.ReceivedRemoteIce(callId: self.callId, peerId: self.peerId, userId: self.userId, deviceId: self.deviceId, count: iceCandidates.count))
+        }
         for candidate in iceCandidates {
             if let candidateDictiontary: Dictionary<String, Any> = candidate as? Dictionary<String, Any> {
                 if let sdpMLineIndex: Int32 = candidateDictiontary["sdpMLineIndex"] as? Int32,
