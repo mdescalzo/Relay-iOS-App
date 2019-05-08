@@ -41,12 +41,14 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
         return control
     }()
     
-    private let uiDBConnection = { () -> YapDatabaseConnection in 
-        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    private lazy var uiDBConnection:OWSDatabaseConnection = {
+        let aConnection: OWSDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
         aConnection.beginLongLivedReadTransaction()
         return aConnection
     }()
-    private let searchDBConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    private lazy var searchDBConnection: OWSDatabaseConnection = {
+        OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
+    }()
     
     private var tagMappings: YapDatabaseViewMappings?
     
@@ -482,27 +484,29 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
             let createNewThreadBlock: ()->Void = {
                 DispatchQueue.global(qos: .background).async {
                     let thread = TSThread.init(uniqueId: UUID().uuidString.lowercased())
-                    thread.participantIds = userIds
-                    thread.type = FLThreadTypeConversation
-                    if let pretty = results.object(forKey: "pretty") as? String {
-                        if pretty.count > 0 {
-                            thread.prettyExpression = pretty
+                    self.searchDBConnection.asyncReadWrite({ (transaction) in
+                        thread.participantIds = userIds
+                        thread.type = FLThreadTypeConversation
+                        if let pretty = results.object(forKey: "pretty") as? String {
+                            if pretty.count > 0 {
+                                thread.prettyExpression = pretty
+                            }
                         }
-                    }
-                    if let expression = results.object(forKey: "universal") as? String {
-                        if expression.count > 0 {
-                            thread.universalExpression = expression
+                        if let expression = results.object(forKey: "universal") as? String {
+                            if expression.count > 0 {
+                                thread.universalExpression = expression
+                            }
                         }
-                    }
-                    thread.save()
-                    
-                    DispatchMainThreadSafe {
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
-                                                        object: self, userInfo: ["userIds" : userIds])
-                        self.navigationController?.dismiss(animated: true, completion: {
-                            SignalApp.shared().presentConversation(for: thread, action: .compose)
-                        })
-                    }
+                        thread.save(with: transaction)
+                    },
+                                                           completionQueue: DispatchQueue.main,
+                                                           completionBlock: {
+                                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
+                                                                                            object: self, userInfo: ["userIds" : userIds])
+                                                            self.navigationController?.dismiss(animated: true, completion: {
+                                                                SignalApp.shared().presentConversation(for: thread, action: .compose)
+                                                            })
+                    })
                 }
             }
             
