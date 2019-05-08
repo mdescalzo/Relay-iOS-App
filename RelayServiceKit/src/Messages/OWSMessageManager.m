@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) OWSIncomingMessageFinder *incomingMessageFinder;
 @property (nonatomic, readonly) OWSIdentityManager *identityManager;
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
-@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *dbConnection;
 
 @end
 
@@ -112,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
     _identityManager = identityManager;
     _messageSender = messageSender;
     
-    _dbConnection = primaryStorage.newDatabaseConnection;
+    _dbConnection = (OWSDatabaseConnection *) primaryStorage.newDatabaseConnection;
     _incomingMessageFinder = [[OWSIncomingMessageFinder alloc] initWithPrimaryStorage:primaryStorage];
     
     OWSSingletonAssert();

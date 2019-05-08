@@ -126,12 +126,14 @@ import RelayServiceKit
     
     private let serialLookupQueue = DispatchQueue(label: "contactsManagerLookupQueue")
     
-    private let readConnection = { () -> YapDatabaseConnection in 
-        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    private lazy var readConnection: OWSDatabaseConnection = {
+        let aConnection: OWSDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
         aConnection.beginLongLivedReadTransaction()
         return aConnection
     }()
-    private let readWriteConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    private lazy var readWriteConnection: OWSDatabaseConnection = {
+        OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
+    }()
     private var latestRecipientsById: [AnyHashable : Any] = [:]
     private var activeRecipientsBacker: [ RelayRecipient ] = []
     private var visibleRecipientsPredicate: NSCompoundPredicate?
