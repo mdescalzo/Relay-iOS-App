@@ -13,12 +13,12 @@ private let reuseIdentifier = "peerCell"
 
 class ConferenceCallViewController: UIViewController, ConferenceCallServiceDelegate , ConferenceCallDelegate, CallAudioServiceDelegate {
     
-    var mainPeerId: String?
-    var secondaryPeerIds = [String]()
-    var peerUIElements = [ String : PeerUIElements ]()
-    var hasDismissed = false
+    fileprivate var mainPeerId: String?
+    fileprivate var secondaryPeerIds = [String]()
+    fileprivate var peerUIElements = [ String : PeerUIElements ]()
+    fileprivate var hasDismissed = false
     
-    let callKitService = CallUIService.shared
+    fileprivate let callKitService = CallUIService.shared
     
     @IBOutlet weak var cameraFlipButton: UIButton!
     @IBOutlet weak var mainVideoIndicator: UIImageView!
@@ -480,25 +480,25 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     }
     
     private func removePeerFromView(_ peerId: String) {
-        if self.mainPeerId == peerId {
+        if mainPeerId == peerId {
             // Tear down the main peer
-            if let peer = self.call?.peerConnectionClients[peerId] {
-                if let avView = self.peerUIElements[peerId]?.avView {
+            if let peer = call?.peerConnectionClients[peerId] {
+                if let avView = peerUIElements[peerId]?.avView {
                     if let remoteVideoTrack = peer.remoteVideoTrack {
                         remoteVideoTrack.remove(avView)
                     }
                 }
             }
-            self.mainPeerId = nil
-            self.peerUIElements[peerId] = nil
+            mainPeerId = nil
+            peerUIElements[peerId] = nil
             
             // get a new main peer
-            if let peer = self.call?.peerConnectionClients.values.first {
-                self.setPeerIdAsMain(peer.peerId)
-                self.removeSecondaryPeerId(peer.peerId)
+            if let peer = call?.peerConnectionClients.values.first {
+                setPeerIdAsMain(peer.peerId)
+                removeSecondaryPeerId(peer.peerId)
             }
         } else {
-            self.removeSecondaryPeerId(peerId)
+            removeSecondaryPeerId(peerId)
         }
     }
     
