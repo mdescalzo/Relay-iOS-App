@@ -22,7 +22,7 @@ public class NoopCallMessageHandler: NSObject, FLCallMessageHandler {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
 
-    public func receivedIceCandidates(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String, iceCandidates: [Any]) {
+    public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {
         owsFailDebug("\(self.logTag) in \(#function).")
     }
 

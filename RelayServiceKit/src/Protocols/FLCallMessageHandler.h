@@ -30,9 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
                   sessionDescription:(NSString *)sessionDescription;
 
 -(void)receivedIceCandidatesWithThread:(TSThread *)thread
-                              senderId:(NSString *)senderId
-                        senderDeviceId:(UInt32)senderDeviceId
                                 callId:(NSString *)callId
+                                peerId:(NSString *)peerId
                          iceCandidates:(NSArray *)iceCandidates;
 
 -(void)receivedLeaveWithThread:(TSThread *)thread
