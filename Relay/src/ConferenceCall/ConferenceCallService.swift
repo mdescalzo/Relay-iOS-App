@@ -131,12 +131,12 @@ let defaultCallAVPolicy = CallAVPolicy(startAudioMuted: false, allowAudioMuteTog
         conferenceCall!.handleAcceptOffer(peerId: peerId, sessionDescription: sessionDescription)
     }
 
-    public func receivedIceCandidates(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String, iceCandidates: [Any]) {
+    public func receivedIceCandidates(with thread: TSThread, callId: String, peerId: String, iceCandidates: [Any]) {
         if conferenceCall == nil || (conferenceCall != nil && conferenceCall?.callId != callId) {
             Logger.debug("Ignoring ice candidates from/for an unknown call")
             return
         }
-        conferenceCall?.handleRemoteIceCandidates(userId:senderId, deviceId:senderDeviceId, iceCandidates: iceCandidates)
+        conferenceCall?.handleRemoteIceCandidates(peerId:peerId, iceCandidates: iceCandidates)
     }
     
     public func receivedLeave(with thread: TSThread, senderId: String, senderDeviceId: UInt32, callId: String) {
