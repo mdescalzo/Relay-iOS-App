@@ -128,7 +128,6 @@ import RelayServiceKit
     
     private lazy var readConnection: OWSDatabaseConnection = {
         let aConnection: OWSDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
-        aConnection.beginLongLivedReadTransaction()
         return aConnection
     }()
     private lazy var readWriteConnection: OWSDatabaseConnection = {
@@ -181,6 +180,8 @@ import RelayServiceKit
         avatarCache.delegate = self
         recipientCache.delegate = self
         tagCache.delegate = self
+        
+        readConnection.beginLongLivedReadTransaction()
     }
     
     deinit {
@@ -270,7 +271,7 @@ import RelayServiceKit
         CCSMCommManager.getThing(urlString,
                                  success: { (payload) in
                                     if let _: String = payload?["id"] as? String {
-                                        self.readWriteConnection .asyncReadWrite({ (transaction) in
+                                        self.readWriteConnection.asyncReadWrite({ (transaction) in
                                             if let newTag: FLTag = FLTag.getOrCreateTag(with: payload!, transaction: transaction){
                                                 self.save(tag: newTag, with: transaction)
                                             }
@@ -316,7 +317,6 @@ import RelayServiceKit
             
             CCSMCommManager.getThing(url,
                                      success: { (payload) in
-                                        
                                         if let resultsArray: Array = payload?["results"] as? Array<Dictionary<String, Any>> {
                                             self.readWriteConnection.asyncReadWrite({ (transaction) in
                                                 for userDict: Dictionary<String, Any> in resultsArray {
@@ -674,16 +674,13 @@ import RelayServiceKit
             let cacheKey = "gravatar:\(recipientId)" as NSString
             self.avatarCache.setObject(gravatarImage, forKey: cacheKey)
             
-            OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
+            self.readWriteConnection.asyncReadWrite({ (transaction) in
                 recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
                     if let theRecipient = obj as? RelayRecipient {
                         theRecipient.gravatarImage = gravatarImage
                     }
                 })
             });
-            
-//            recipient.gravatarImage = gravatarImage
-//            self.save(recipient: recipient)
         }
     }
     

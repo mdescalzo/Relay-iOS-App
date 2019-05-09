@@ -11,11 +11,11 @@ public class SafetyNumberConfirmationAlert: NSObject {
     let TAG = "[SafetyNumberConfirmationAlert]"
 
     private let contactsManager: FLContactsManager
-    private let primaryStorage: OWSPrimaryStorage
+    private let dbConnection: OWSDatabaseConnection
 
     init(contactsManager: FLContactsManager) {
         self.contactsManager = contactsManager
-        self.primaryStorage = OWSPrimaryStorage.shared()
+        self.dbConnection = OWSPrimaryStorage.shared().dbReadWriteConnection as! OWSDatabaseConnection
     }
 
     @objc
@@ -69,7 +69,7 @@ public class SafetyNumberConfirmationAlert: NSObject {
         let confirmAction = UIAlertAction(title: confirmationText, style: .default) { _ in
             Logger.info("\(self.TAG) Confirmed identity: \(untrustedIdentity)")
 
-        self.primaryStorage.newDatabaseConnection().asyncReadWrite { (transaction) in
+        self.dbConnection.asyncReadWrite { (transaction) in
             OWSIdentityManager.shared().setVerificationState(.default, identityKey: untrustedIdentity.identityKey, recipientId: untrustedIdentity.recipientId, isUserInitiatedChange: true, transaction: transaction)
                 DispatchQueue.main.async {
                     completion(true)
