@@ -195,7 +195,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
 
 @property (nonatomic, readonly) TSNetworkManager *networkManager;
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
-@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *dbConnection;
 @property (nonatomic, readonly) id<ContactsManagerProtocol> contactsManager;
 @property (atomic, readonly) NSMutableDictionary<NSString *, NSOperationQueue *> *sendingQueueMap;
 
@@ -216,7 +216,7 @@ NSString *const MessageSenderRateLimitedException = @"RateLimitedException";
     _primaryStorage = primaryStorage;
     _contactsManager = contactsManager;
     _sendingQueueMap = [NSMutableDictionary new];
-    _dbConnection = primaryStorage.newDatabaseConnection;
+    _dbConnection = (OWSDatabaseConnection *)primaryStorage.newDatabaseConnection;
     
     OWSSingletonAssert();
     

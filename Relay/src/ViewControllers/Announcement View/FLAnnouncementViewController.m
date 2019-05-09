@@ -28,13 +28,15 @@
 
 @property (strong, nonatomic) TSMessage *announcementMessage;
 @property (strong, nonatomic) NSString *htmlBodyString;
-@property (strong, nonatomic) YapDatabaseConnection *dbConnection;
+@property (readonly, nonatomic) OWSDatabaseConnection *dbConnection;
 
 @property (nonatomic, strong) UIButton *infoButton;
 
 @end
 
 @implementation FLAnnouncementViewController
+
+@synthesize dbConnection = _dbConnection;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -145,10 +147,12 @@
     return _infoButton;
 }
 
--(YapDatabaseConnection *)dbConnection
+-(OWSDatabaseConnection *)dbConnection
 {
-    if (_dbConnection == nil) {
-        _dbConnection = [OWSPrimaryStorage.sharedManager newDatabaseConnection];
+    @synchronized (self) {
+        if (_dbConnection == nil) {
+            _dbConnection = (OWSDatabaseConnection *)[OWSPrimaryStorage.sharedManager newDatabaseConnection];
+        }
     }
     return _dbConnection;
 }

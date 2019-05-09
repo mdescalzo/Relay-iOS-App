@@ -253,7 +253,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
 @interface OWSMessageContentQueue : NSObject
 
 @property (nonatomic, readonly) OWSMessageManager *messagesManager;
-@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *dbConnection;
 @property (nonatomic, readonly) OWSMessageContentJobFinder *finder;
 @property (nonatomic) BOOL isDrainingQueue;
 @property (atomic) BOOL isAppInBackground;
@@ -281,7 +281,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
     }
 
     _messagesManager = messagesManager;
-    _dbConnection = [primaryStorage newDatabaseConnection];
+    _dbConnection = (OWSDatabaseConnection *)[primaryStorage newDatabaseConnection];
     _finder = finder;
     _isDrainingQueue = NO;
 
@@ -486,7 +486,7 @@ NSString *const OWSMessageContentJobFinderExtensionGroup = @"OWSMessageContentJo
 - (instancetype)initDefault
 {
     // For concurrency coherency we use the same dbConnection to persist and read the unprocessed envelopes
-    YapDatabaseConnection *dbConnection = [[OWSPrimaryStorage sharedManager] newDatabaseConnection];
+    OWSDatabaseConnection *dbConnection = (OWSDatabaseConnection *)[[OWSPrimaryStorage sharedManager] newDatabaseConnection];
     OWSMessageManager *messagesManager = [OWSMessageManager sharedManager];
     OWSPrimaryStorage *primaryStorage = [OWSPrimaryStorage sharedManager];
 

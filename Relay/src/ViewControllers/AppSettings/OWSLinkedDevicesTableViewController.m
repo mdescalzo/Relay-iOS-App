@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OWSLinkedDevicesTableViewController ()
 
-@property (nonatomic) YapDatabaseConnection *dbConnection;
+@property (nonatomic) OWSDatabaseConnection *dbConnection;
 @property (nonatomic) YapDatabaseViewMappings *deviceMappings;
 @property (nonatomic) NSTimer *pollingRefreshTimer;
 @property (nonatomic) BOOL isExpectingMoreDevices;
@@ -48,7 +48,7 @@ int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
 
     [self.tableView applyScrollViewInsetsFix];
 
-    self.dbConnection = [[OWSPrimaryStorage sharedManager] newDatabaseConnection];
+    self.dbConnection = (OWSDatabaseConnection *)[[OWSPrimaryStorage sharedManager] newDatabaseConnection];
     [self.dbConnection beginLongLivedReadTransaction];
     self.deviceMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[ TSSecondaryDevicesGroup ]
                                                                      view:TSSecondaryDevicesDatabaseViewExtensionName];
