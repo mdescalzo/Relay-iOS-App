@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OWSMessageDecrypter ()
 
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
-@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *dbConnection;
 @property (nonatomic, readonly) OWSIdentityManager *identityManager;
 
 @end
@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
     _primaryStorage = primaryStorage;
     _identityManager = identityManager;
 
-    _dbConnection = primaryStorage.newDatabaseConnection;
+    _dbConnection = (OWSDatabaseConnection *) primaryStorage.newDatabaseConnection;
 
     OWSSingletonAssert();
 

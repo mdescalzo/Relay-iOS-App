@@ -19,7 +19,7 @@ NSString *const OWSIncomingMessageFinderColumnSourceDeviceId = @"OWSIncomingMess
 @interface OWSIncomingMessageFinder ()
 
 @property (nonatomic, readonly) OWSPrimaryStorage *primaryStorage;
-@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *dbConnection;
 
 @end
 
@@ -50,11 +50,11 @@ NSString *const OWSIncomingMessageFinderColumnSourceDeviceId = @"OWSIncomingMess
 
 #pragma mark - properties
 
-- (YapDatabaseConnection *)dbConnection
+- (OWSDatabaseConnection *)dbConnection
 {
     @synchronized (self) {
         if (!_dbConnection) {
-            _dbConnection = [self.primaryStorage newDatabaseConnection];
+            _dbConnection = (OWSDatabaseConnection *)[self.primaryStorage newDatabaseConnection];
         }
     }
     return _dbConnection;

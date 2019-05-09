@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OWSLinkDeviceViewController ()
 
-@property (nonatomic) YapDatabaseConnection *dbConnection;
+@property (nonatomic) OWSDatabaseConnection *dbConnection;
 @property (nonatomic) IBOutlet UIView *qrScanningView;
 @property (nonatomic) IBOutlet UILabel *scanningInstructionsLabel;
 @property (nonatomic) OWSQRCodeScanningViewController *qrScanningController;
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     [super viewDidLoad];
 
-    self.dbConnection = [[OWSPrimaryStorage sharedManager] newDatabaseConnection];
+    self.dbConnection = (OWSDatabaseConnection *)[[OWSPrimaryStorage sharedManager] newDatabaseConnection];
 
     // HACK to get full width preview layer
     CGRect oldFrame = self.qrScanningView.frame;

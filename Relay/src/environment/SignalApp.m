@@ -177,8 +177,6 @@ NS_ASSUME_NONNULL_BEGIN
                               action:(ConversationViewAction)action
                       focusMessageId:(nullable NSString *)focusMessageId
 {
-    OWSAssertIsOnMainThread();
-
     DDLogInfo(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
 
     if (!thread) {

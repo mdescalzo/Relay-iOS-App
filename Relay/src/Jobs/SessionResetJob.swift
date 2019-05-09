@@ -26,7 +26,7 @@ public class SessionResetJob: NSObject {
     func run() {
         Logger.info("\(TAG) Local user reset session.")
 
-        let dbConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+        let dbConnection: OWSDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
         dbConnection.asyncReadWrite { (transaction) in
             Logger.info("\(self.TAG) deleting sessions for recipient: \(self.recipientId)")
             self.primaryStorage.deleteAllSessions(forContact: self.recipientId, protocolContext: transaction)
