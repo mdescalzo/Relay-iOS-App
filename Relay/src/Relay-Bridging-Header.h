@@ -33,7 +33,6 @@
 #import "OWSQuotedMessageView.h"
 #import "OWSWindowManager.h"
 #import "PrivacySettingsTableViewController.h"
-#import "ProfileViewController.h"
 #import "PushManager.h"
 #import "RemoteVideoView.h"
 #import "SignalApp.h"
