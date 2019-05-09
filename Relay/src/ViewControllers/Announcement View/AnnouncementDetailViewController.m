@@ -20,11 +20,13 @@
 
 @property (nonatomic, strong) RelayRecipient *sender;
 @property (nonatomic, strong) NSArray <RelayRecipient *> *recipients;
-@property YapDatabaseConnection *uiConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *uiConnection;
 
 @end
 
 @implementation AnnouncementDetailViewController
+
+@synthesize uiConnection = _uiConnection;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -229,10 +231,12 @@
     return _recipients;
 }
 
--(YapDatabaseConnection *)uiConnection
+-(OWSDatabaseConnection *)uiConnection
 {
-    if (_uiConnection == nil) {
-        _uiConnection = OWSPrimaryStorage.sharedManager.newDatabaseConnection;
+    @synchronized (self) {
+        if (_uiConnection == nil) {
+            _uiConnection = (OWSDatabaseConnection *) OWSPrimaryStorage.sharedManager.newDatabaseConnection;
+        }
     }
     return _uiConnection;
 }
