@@ -266,7 +266,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
             
             return self.negotiateSessionDescription(remoteDescription: offerSessionDescription, constraints: constraints)
         }.then { hardenedSessionDescription -> Promise<Void> in
-            self.addRemoteIceCandidates(cc.releaseRemoteIceCandidates(userId: self.userId, deviceId: self.deviceId))
+            self.addRemoteIceCandidates(cc.releaseRemoteIceCandidates(peerId: self.peerId))
             return self.sendCallAcceptOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
         }.then { () -> Promise<Void> in
             self.state = .sentAcceptOffer
@@ -342,7 +342,7 @@ public class PeerConnectionClient: NSObject, RTCPeerConnectionDelegate {
 
             return self.createSessionDescriptionOffer()
         }.then { (hardenedSessionDescription: HardenedRTCSessionDescription) -> Promise<Void> in
-            self.addRemoteIceCandidates(cc.releaseRemoteIceCandidates(userId: self.userId, deviceId: self.deviceId))
+            self.addRemoteIceCandidates(cc.releaseRemoteIceCandidates(peerId: self.peerId))
             return self.sendCallOfferMessage(hardenedSessionDescription: hardenedSessionDescription)
         }.then { () -> Promise<Void> in
             self.state = .awaitingAcceptOffer

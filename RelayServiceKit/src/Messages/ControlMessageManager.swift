@@ -89,7 +89,7 @@ class ControlMessageManager : NSObject
             let thread = TSThread.getOrCreateThread(withPayload: message.forstaPayload , transaction: transaction),
             let version = dataBlob.object(forKey: "version") as? Int64,
             let callId = dataBlob.object(forKey: "callId") as? String,
-            let _ = dataBlob.object(forKey: "peerId") as? String,
+            let peerId = dataBlob.object(forKey: "peerId") as? String,
             let iceCandidates: [NSDictionary] = dataBlob.object(forKey: "icecandidates") as? [NSDictionary],
             version == ConferenceCallProtocolLevel else {
                 Logger.debug("Received callICECandidates missing requirements.")
@@ -98,9 +98,8 @@ class ControlMessageManager : NSObject
         
         DispatchMainThreadSafe {
             TextSecureKitEnv.shared().callMessageHandler.receivedIceCandidates(with: thread,
-                                                                               senderId: message.authorId,
-                                                                               senderDeviceId: message.sourceDeviceId,
                                                                                callId: callId,
+                                                                               peerId: peerId,
                                                                                iceCandidates: iceCandidates);
         }
     }

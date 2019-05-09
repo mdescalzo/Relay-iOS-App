@@ -126,12 +126,13 @@ import RelayServiceKit
     
     private let serialLookupQueue = DispatchQueue(label: "contactsManagerLookupQueue")
     
-    private let readConnection = { () -> YapDatabaseConnection in 
-        let aConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
-        aConnection.beginLongLivedReadTransaction()
+    private lazy var readConnection: OWSDatabaseConnection = {
+        let aConnection: OWSDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
         return aConnection
     }()
-    private let readWriteConnection: YapDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+    private lazy var readWriteConnection: OWSDatabaseConnection = {
+        OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
+    }()
     private var latestRecipientsById: [AnyHashable : Any] = [:]
     private var activeRecipientsBacker: [ RelayRecipient ] = []
     private var visibleRecipientsPredicate: NSCompoundPredicate?
@@ -179,6 +180,8 @@ import RelayServiceKit
         avatarCache.delegate = self
         recipientCache.delegate = self
         tagCache.delegate = self
+        
+        readConnection.beginLongLivedReadTransaction()
     }
     
     deinit {
@@ -268,7 +271,7 @@ import RelayServiceKit
         CCSMCommManager.getThing(urlString,
                                  success: { (payload) in
                                     if let _: String = payload?["id"] as? String {
-                                        self.readWriteConnection .asyncReadWrite({ (transaction) in
+                                        self.readWriteConnection.asyncReadWrite({ (transaction) in
                                             if let newTag: FLTag = FLTag.getOrCreateTag(with: payload!, transaction: transaction){
                                                 self.save(tag: newTag, with: transaction)
                                             }
@@ -314,7 +317,6 @@ import RelayServiceKit
             
             CCSMCommManager.getThing(url,
                                      success: { (payload) in
-                                        
                                         if let resultsArray: Array = payload?["results"] as? Array<Dictionary<String, Any>> {
                                             self.readWriteConnection.asyncReadWrite({ (transaction) in
                                                 for userDict: Dictionary<String, Any> in resultsArray {
@@ -672,16 +674,13 @@ import RelayServiceKit
             let cacheKey = "gravatar:\(recipientId)" as NSString
             self.avatarCache.setObject(gravatarImage, forKey: cacheKey)
             
-            OWSPrimaryStorage.shared().dbReadWriteConnection.asyncReadWrite({ (transaction) in
+            self.readWriteConnection.asyncReadWrite({ (transaction) in
                 recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
                     if let theRecipient = obj as? RelayRecipient {
                         theRecipient.gravatarImage = gravatarImage
                     }
                 })
             });
-            
-//            recipient.gravatarImage = gravatarImage
-//            self.save(recipient: recipient)
         }
     }
     

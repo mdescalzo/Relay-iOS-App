@@ -845,7 +845,7 @@ static NSTimeInterval launchStartedAt;
             userActivity.activityType);
     }
 
-    // TODO Something like...
+    // TODO: Something like...
     // *phoneNumber = [[[[[[userActivity interaction] intent] contacts] firstObject] personHandle] value]
     // thread = blah
     // [callUIAdapter startCall:thread]
@@ -1056,9 +1056,6 @@ static NSTimeInterval launchStartedAt;
 
     [AppVersion.sharedInstance mainAppLaunchDidComplete];
 
-//    [Environment.current.contactsManager loadSignalAccountsFromCache];
-//    [Environment.current.contactsManager startObserving];
-
     // If there were any messages in our local queue which we hadn't yet processed.
     [[OWSMessageReceiver sharedInstance] handleAnyUnprocessedEnvelopesAsync];
     [[OWSBatchMessageProcessor sharedInstance] handleAnyUnprocessedEnvelopesAsync];
@@ -1075,18 +1072,6 @@ static NSTimeInterval launchStartedAt;
             }];
     }
 
-//#ifdef DEBUG
-//    // A bug in orphan cleanup could be disastrous so let's only
-//    // run it in DEBUG builds for a few releases.
-//    //
-//    // TODO: Release to production once we have analytics.
-//    // TODO: Orphan cleanup is somewhat expensive - not least in doing a bunch
-//    //       of disk access.  We might want to only run it "once per version"
-//    //       or something like that in production.
-//    // [OWSOrphanedDataCleaner auditAndCleanupAsync:nil];
-//#endif
-
-//    [OWSProfileManager.sharedManager fetchLocalUsersProfile];
     [[OWSReadReceiptManager sharedManager] prepareCachedValues];
 
     // Disable the SAE until the main app has successfully completed launch process
@@ -1097,10 +1082,6 @@ static NSTimeInterval launchStartedAt;
 
     [OWSBackup.sharedManager setup];
 
-//#ifdef DEBUG
-//    // Resume lazy restore.
-//    [OWSBackupLazyRestoreJob runAsync];
-//#endif
 }
 
 - (void)registrationStateDidChange
@@ -1116,7 +1097,6 @@ static NSTimeInterval launchStartedAt;
         // Start running the disappearing messages job in case the newly registered user
         // enables this feature
         [[OWSDisappearingMessagesJob sharedJob] startIfNecessary];
-        // [[OWSProfileManager sharedManager] ensureLocalProfileCached];
 
         // For non-legacy users, read receipts are on by default.
         [OWSReadReceiptManager.sharedManager setAreReadReceiptsEnabled:NO];

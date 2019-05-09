@@ -18,7 +18,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
 
     let contactsManager: FLContactsManager
 
-    let uiDatabaseConnection: YapDatabaseConnection
+    let uiDatabaseConnection: OWSDatabaseConnection
 
     var bubbleView: UIView?
 
@@ -54,7 +54,7 @@ class MessageDetailViewController: OWSViewController, MediaGalleryDataSourceDele
         self.viewItem = viewItem
         self.message = message
         self.mode = mode
-        self.uiDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection()
+        self.uiDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
         self.conversationStyle = ConversationStyle(thread: thread)
 
         super.init(nibName: nil, bundle: nil)

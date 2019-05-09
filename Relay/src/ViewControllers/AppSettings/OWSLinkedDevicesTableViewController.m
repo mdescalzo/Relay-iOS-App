@@ -4,7 +4,6 @@
 
 #import "OWSLinkedDevicesTableViewController.h"
 #import "OWSDeviceTableViewCell.h"
-#import "OWSLinkDeviceViewController.h"
 #import "Relay-Swift.h"
 #import "UIViewController+Permissions.h"
 #import <RelayServiceKit/NSTimer+OWS.h>
@@ -20,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OWSLinkedDevicesTableViewController ()
 
-@property (nonatomic) YapDatabaseConnection *dbConnection;
+@property (nonatomic) OWSDatabaseConnection *dbConnection;
 @property (nonatomic) YapDatabaseViewMappings *deviceMappings;
 @property (nonatomic) NSTimer *pollingRefreshTimer;
 @property (nonatomic) BOOL isExpectingMoreDevices;
@@ -28,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 int const OWSLinkedDevicesTableViewControllerSectionExistingDevices = 0;
-int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
 
 @implementation OWSLinkedDevicesTableViewController
 
@@ -48,7 +46,7 @@ int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
 
     [self.tableView applyScrollViewInsetsFix];
 
-    self.dbConnection = [[OWSPrimaryStorage sharedManager] newDatabaseConnection];
+    self.dbConnection = (OWSDatabaseConnection *)[[OWSPrimaryStorage sharedManager] newDatabaseConnection];
     [self.dbConnection beginLongLivedReadTransaction];
     self.deviceMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[ TSSecondaryDevicesGroup ]
                                                                      view:TSSecondaryDevicesDatabaseViewExtensionName];
@@ -276,8 +274,6 @@ int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
     switch (section) {
         case OWSLinkedDevicesTableViewControllerSectionExistingDevices:
             return (NSInteger)[self.deviceMappings numberOfItemsInSection:(NSUInteger)section];
-        case OWSLinkedDevicesTableViewControllerSectionAddDevice:
-            return 1;
         default:
             DDLogError(@"Unknown section: %ld", (long)section);
             return 0;
@@ -286,31 +282,15 @@ int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // TODO: Add device detail view?
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
-
-    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionAddDevice) {
-        [self ows_askForCameraPermissions:^(BOOL granted) {
-            if (!granted) {
-                return;
-            }
-            [self performSegueWithIdentifier:@"LinkDeviceSegue" sender:self];
-        }];
-    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionAddDevice) {
-        UITableViewCell *addNewDeviceCell =
-            [tableView dequeueReusableCellWithIdentifier:@"AddNewDevice" forIndexPath:indexPath];
-        addNewDeviceCell.textLabel.text
-            = NSLocalizedString(@"LINK_NEW_DEVICE_TITLE", @"Navigation title when scanning QR code to add new device.");
-        addNewDeviceCell.detailTextLabel.text
-            = NSLocalizedString(@"LINK_NEW_DEVICE_SUBTITLE", @"Subheading for 'Link New Device' navigation");
-        return addNewDeviceCell;
-    } else if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionExistingDevices) {
+    if (indexPath.section == OWSLinkedDevicesTableViewControllerSectionExistingDevices) {
         OWSDeviceTableViewCell *cell =
-            [tableView dequeueReusableCellWithIdentifier:@"ExistingDevice" forIndexPath:indexPath];
+        [tableView dequeueReusableCellWithIdentifier:@"ExistingDevice" forIndexPath:indexPath];
         OWSDevice *device = [self deviceForRowAtIndexPath:indexPath];
         [cell configureWithDevice:device];
         return cell;
@@ -415,14 +395,6 @@ int const OWSLinkedDevicesTableViewControllerSectionAddDevice = 1;
                                           [self presentViewController:alertController animated:YES completion:nil];
                                       });
                                   }];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(nullable id)sender
-{
-    if ([segue.destinationViewController isKindOfClass:[OWSLinkDeviceViewController class]]) {
-        OWSLinkDeviceViewController *controller = (OWSLinkDeviceViewController *)segue.destinationViewController;
-        controller.linkedDevicesTableViewController = self;
-    }
 }
 
 @end

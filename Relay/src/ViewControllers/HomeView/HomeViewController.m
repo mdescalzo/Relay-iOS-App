@@ -6,10 +6,8 @@
 #import "AppDelegate.h"
 #import "AppSettingsViewController.h"
 #import "HomeViewCell.h"
-//#import "NewContactThreadViewController.h"
 #import "OWSNavigationController.h"
 #import "OWSPrimaryStorage.h"
-#import "ProfileViewController.h"
 #import "PushManager.h"
 #import "RegistrationUtils.h"
 #import "Relay-Swift.h"
@@ -63,8 +61,8 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) UILabel *emptyBoxLabel;
 
-@property (nonatomic) YapDatabaseConnection *editingDbConnection;
-@property (nonatomic) YapDatabaseConnection *uiDatabaseConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *editingDbConnection;
+@property (nonatomic, readonly) OWSDatabaseConnection *uiDatabaseConnection;
 @property (nonatomic) YapDatabaseViewMappings *threadMappings;
 @property (nonatomic) HomeViewMode homeViewMode;
 @property (nonatomic) id previewingContext;
@@ -102,6 +100,9 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 #pragma mark -
 
 @implementation HomeViewController
+
+@synthesize editingDbConnection =  _editingDbConnection;
+@synthesize uiDatabaseConnection = _uiDatabaseConnection;
 
 #pragma mark - Init
 
@@ -1141,25 +1142,11 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (void)deleteThread:(TSThread *)thread
 {
-    OutgoingControlMessage *message = [[OutgoingControlMessage alloc] initWithThread:thread
-                                                                         controlType:FLControlMessageThreadUpdateKey
-                                                                            moreData:nil];
-    [self.messageSender sendControlMessage:message
-                              toRecipients:[NSCountedSet setWithArray:thread.participantIds]
-                                   success:^{
-                                       DDLogDebug(@"Sent delete thread control message.");
-                                       [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                                           [thread removeWithTransaction:transaction];
-                                       }];
-                                       
-                                   }
-                                   failure:^(NSError * _Nonnull error) {
-                                       DDLogDebug(@"Failed to send delete thread control message.  Error: %@", error.localizedDescription);
-                                       [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-                                           [thread removeWithTransaction:transaction];
-                                       }];
-                                       
-                                   }];
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                                           [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+                                               [thread removeWithTransaction:transaction];
+                                           }];
+                                       });
     [self checkIfEmptyView];
 }
 
@@ -1168,48 +1155,50 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
     NSInteger section = indexPath.section;
     
     if (!(section == HomeViewControllerSectionAnnouncements ||
-         section == HomeViewControllerSectionPinned ||
-         section == HomeViewControllerSectionConversations)) {
+          section == HomeViewControllerSectionPinned ||
+          section == HomeViewControllerSectionConversations)) {
         OWSFailDebug(@"%@ failure: unexpected section: %lu", self.logTag, (unsigned long)indexPath.section);
         return;
     }
-
     __block TSThread *thread = [self threadForIndexPath:indexPath];
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-    [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
-        switch (self.homeViewMode) {
-            case HomeViewMode_Inbox:
-                [thread archiveThreadWithTransaction:transaction];
-                break;
-            case HomeViewMode_Archive:
-                [thread unarchiveThreadWithTransaction:transaction];
-                break;
-        }
-    } completionBlock:^{
-        OutgoingControlMessage *controlMessage = nil;
-        switch (self.homeViewMode) {
-            case HomeViewMode_Inbox:
-                controlMessage = [[OutgoingControlMessage alloc] initWithThread:thread controlType:FLControlMessageThreadArchiveKey moreData:nil];
-                break;
-            case HomeViewMode_Archive:
-                controlMessage = [[OutgoingControlMessage alloc] initWithThread:thread controlType:FLControlMessageThreadRestoreKey moreData:nil];
-                break;
-        }
-        
-        if (controlMessage != nil) {
-            [self.messageSender sendControlMessage:controlMessage
-                                      toRecipients:[NSCountedSet setWithObject:[TSAccountManager localUID]]
-                                           success:^{
-                                               DDLogDebug(@"Archive toggle control message successfully sent.");
-                                           }
-                                           failure:^(NSError * _Nonnull error) {
-                                               DDLogDebug(@"Achive toggle control message send failed with error: %@", error.localizedDescription);
-                                           }];
-        }
-        [self checkIfEmptyView];
-    }];
-        });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
+            switch (self.homeViewMode) {
+                case HomeViewMode_Inbox:
+                    [thread archiveThreadWithTransaction:transaction];
+                    break;
+                case HomeViewMode_Archive:
+                    [thread unarchiveThreadWithTransaction:transaction];
+                    break;
+            }
+        } completionBlock:^{
+            OutgoingControlMessage *controlMessage = nil;
+            switch (self.homeViewMode) {
+                case HomeViewMode_Inbox:
+                    controlMessage = [[OutgoingControlMessage alloc] initWithThread:thread
+                                                                        controlType:FLControlMessageThreadArchiveKey
+                                                                           moreData:nil];
+                    break;
+                case HomeViewMode_Archive:
+                    controlMessage = [[OutgoingControlMessage alloc] initWithThread:thread
+                                                                        controlType:FLControlMessageThreadRestoreKey
+                                                                           moreData:nil];
+                    break;
+            }
+            
+            if (controlMessage != nil) {
+                [self.messageSender sendControlMessage:controlMessage
+                                          toRecipients:[NSCountedSet setWithObject:[TSAccountManager localUID]]
+                                               success:^{
+                                                   DDLogDebug(@"Archive toggle control message successfully sent.");
+                                               }
+                                               failure:^(NSError * _Nonnull error) {
+                                                   DDLogDebug(@"Achive toggle control message send failed with error: %@", error.localizedDescription);
+                                               }];
+            }
+            [self checkIfEmptyView];
+        }];
+    });
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1414,21 +1403,23 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 #pragma mark Database delegates
 
--(YapDatabaseConnection *)editingDbConnection {
+-(OWSDatabaseConnection *)editingDbConnection {
     
-//    NSAssert(![NSThread isMainThread], @"editingDbConnection must not be access on the main thread!");
-    if (_editingDbConnection == nil) {
-        _editingDbConnection = [OWSPrimaryStorage.sharedManager newDatabaseConnection];
+    OWSAssertDebug(![NSThread isMainThread]);
+    @synchronized (self) {
+        if (_editingDbConnection == nil) {
+            _editingDbConnection = (OWSDatabaseConnection *)[OWSPrimaryStorage.sharedManager newDatabaseConnection];
+        }
     }
     return _editingDbConnection;
 }
 
-- (YapDatabaseConnection *)uiDatabaseConnection
+- (OWSDatabaseConnection *)uiDatabaseConnection
 {
     OWSAssertIsOnMainThread();
 
     if (!_uiDatabaseConnection) {
-        _uiDatabaseConnection = [OWSPrimaryStorage.sharedManager newDatabaseConnection];
+        _uiDatabaseConnection = (OWSDatabaseConnection *)[OWSPrimaryStorage.sharedManager newDatabaseConnection];
         // default is 250
         _uiDatabaseConnection.objectCacheLimit = 500;
         [_uiDatabaseConnection beginLongLivedReadTransaction];
@@ -1585,21 +1576,23 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 - (void)checkIfEmptyView
 {
-    NSUInteger inboxCount = self.numberOfInboxThreads;
-    NSUInteger archiveCount = self.numberOfArchivedThreads;
-
-    if (self.homeViewMode == HomeViewMode_Inbox && inboxCount == 0 && archiveCount == 0) {
-        [self updateEmptyBoxText];
-        [_tableView setHidden:YES];
-        [_emptyBoxLabel setHidden:NO];
-    } else if (self.homeViewMode == HomeViewMode_Archive && archiveCount == 0) {
-        [self updateEmptyBoxText];
-        [_tableView setHidden:YES];
-        [_emptyBoxLabel setHidden:NO];
-    } else {
-        [_emptyBoxLabel setHidden:YES];
-        [_tableView setHidden:NO];
-    }
+    DispatchMainThreadSafe(^{
+        NSUInteger inboxCount = self.numberOfInboxThreads;
+        NSUInteger archiveCount = self.numberOfArchivedThreads;
+        
+        if (self.homeViewMode == HomeViewMode_Inbox && inboxCount == 0 && archiveCount == 0) {
+            [self updateEmptyBoxText];
+            [self.tableView setHidden:YES];
+            [self.emptyBoxLabel setHidden:NO];
+        } else if (self.homeViewMode == HomeViewMode_Archive && archiveCount == 0) {
+            [self updateEmptyBoxText];
+            [self.tableView setHidden:YES];
+            [self.emptyBoxLabel setHidden:NO];
+        } else {
+            [self.emptyBoxLabel setHidden:YES];
+            [self.tableView setHidden:NO];
+        }
+    });
 }
 
 - (void)updateEmptyBoxText
@@ -1653,22 +1646,22 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
 
 -(void)togglePinningForThreadAtIndexPath:(NSIndexPath *)indexPath
 {
-
     __block TSThread *thread = [self threadForIndexPath:indexPath];
-    
-    if (thread) {
-        __block NSNumber *newPosition;
-        if (thread.pinPosition) {
-            newPosition = nil;
-        } else {
-            newPosition = [NSNumber numberWithInteger:[self.tableView numberOfRowsInSection:HomeViewControllerSectionPinned] + 1];
-        }
-        [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-            [thread applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *theThread) {
-                theThread.pinPosition = newPosition;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (thread) {
+            __block NSNumber *newPosition;
+            if (thread.pinPosition) {
+                newPosition = nil;
+            } else {
+                newPosition = [NSNumber numberWithInteger:[self.tableView numberOfRowsInSection:HomeViewControllerSectionPinned] + 1];
+            }
+            [self.editingDbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+                [thread applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSThread *theThread) {
+                    theThread.pinPosition = newPosition;
+                }];
             }];
-        }];
-    }
+        }
+    });
 }
 
 @end

@@ -151,14 +151,12 @@ enum ConferenceCallEvent {
     )
     case HeldRemoteIce(
         callId: String,
-        userId: String,
-        deviceId: UInt32,
+        peerId: String,
         count: Int
     )
     case ReleasedRemoteIce(
         callId: String,
-        userId: String,
-        deviceId: UInt32,
+        peerId: String,
         count: Int
     )
     case GeneratedLocalIce(
@@ -288,17 +286,17 @@ extension CCEContext {
             case .long: return "\(prefix)\(timestamp.msFromEpoch) received \(count) remote ice: peer \(peerId) user.device \(userId).\(deviceId) call \(callId)\n"
             case .brief: return "\(timestamp.msFromEpoch) received \(count) remote ice from peer \(peerId)\n"
             }
-        case .HeldRemoteIce(let callId, let userId, let deviceId, let count):
+        case .HeldRemoteIce(let callId, let peerId, let count):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) held \(count) remote ice: user.device \(userId).\(deviceId) call \(callId) thread \(thread)\n"
-            case .long: return "\(prefix)\(timestamp.msFromEpoch) held \(count) remote ice: user.device \(userId).\(deviceId) call \(callId)\n"
-            case .brief: return "\(timestamp.msFromEpoch) held \(count) remote ice from user.device \(userId).\(deviceId)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) held \(count) remote ice: peer \(peerId) call \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) held \(count) remote ice: peer \(peerId) call \(callId)\n"
+            case .brief: return "\(timestamp.msFromEpoch) held \(count) remote ice from peer \(peerId)\n"
             }
-        case .ReleasedRemoteIce(let callId, let userId, let deviceId, let count):
+        case .ReleasedRemoteIce(let callId, let peerId, let count):
             switch level {
-            case .full: return "\(prefix)\(timestamp.msFromEpoch) released \(count) remote ice: user.device \(userId).\(deviceId) call \(callId) thread \(thread)\n"
-            case .long: return "\(prefix)\(timestamp.msFromEpoch) released \(count) remote ice: user.device \(userId).\(deviceId) call \(callId)\n"
-            case .brief: return "\(timestamp.msFromEpoch) released \(count) remote ice from user.device \(userId).\(deviceId)\n"
+            case .full: return "\(prefix)\(timestamp.msFromEpoch) released \(count) remote ice: peer \(peerId) call \(callId) thread \(thread)\n"
+            case .long: return "\(prefix)\(timestamp.msFromEpoch) released \(count) remote ice: peer \(peerId) call \(callId)\n"
+            case .brief: return "\(timestamp.msFromEpoch) released \(count) remote ice from peer \(peerId)\n"
             }
         case .GeneratedLocalIce(let callId, let peerId, let userId, let deviceId):
             switch level {
@@ -328,8 +326,8 @@ extension CCEContext {
         case .PeerDeinit(let callId, _, _, _): return callId
         case .PeerStateChange(let callId, _, _, _, _, _): return callId
         case .ReceivedRemoteIce(let callId, _, _, _, _): return callId
-        case .HeldRemoteIce(let callId, _, _, _): return callId
-        case .ReleasedRemoteIce(let callId, _, _, _): return callId
+        case .HeldRemoteIce(let callId, _, _): return callId
+        case .ReleasedRemoteIce(let callId, _, _): return callId
         case .GeneratedLocalIce(let callId, _, _, _): return callId
         case .SentLocalIce(let callId, _, _, _, _): return callId
         }
@@ -341,6 +339,8 @@ extension CCEContext {
         case .CallDeinit(_): return nil
         case .SentCallJoin(_): return nil
         case .SentCallLeave(_): return nil
+        case .HeldRemoteIce(_): return nil
+        case .ReleasedRemoteIce(_): return nil
         case .ReceivedCallJoin(_, let userId, let deviceId): return "\(userId).\(deviceId)"
         case .ReceivedCallLeave(_, let userId, let deviceId): return "\(userId).\(deviceId)"
         case .CallStateChange(_, _, _): return nil
@@ -348,8 +348,6 @@ extension CCEContext {
         case .PeerDeinit(_, _, let userId, let deviceId): return "\(userId).\(deviceId)"
         case .PeerStateChange(_, _, let userId, let deviceId, _, _): return "\(userId).\(deviceId)"
         case .ReceivedRemoteIce(_, _, let userId, let deviceId, _): return "\(userId).\(deviceId)"
-        case .HeldRemoteIce(_, let userId, let deviceId, _): return "\(userId).\(deviceId)"
-        case .ReleasedRemoteIce(_, let userId, let deviceId, _): return "\(userId).\(deviceId)"
         case .GeneratedLocalIce(_, _, let userId, let deviceId): return "\(userId).\(deviceId)"
         case .SentLocalIce(_, _, let userId, let deviceId, _): return "\(userId).\(deviceId)"
         }
