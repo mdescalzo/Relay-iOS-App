@@ -16,7 +16,6 @@
 		340FC8AC204DAC8D007AEB0F /* PrivacySettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC87E204DAC8C007AEB0F /* PrivacySettingsTableViewController.m */; };
 		340FC8AD204DAC8D007AEB0F /* OWSLinkedDevicesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC882204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.m */; };
 		340FC8AE204DAC8D007AEB0F /* OWSSoundSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC883204DAC8C007AEB0F /* OWSSoundSettingsViewController.m */; };
-		340FC8AF204DAC8D007AEB0F /* OWSLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC885204DAC8C007AEB0F /* OWSLinkDeviceViewController.m */; };
 		340FC8B2204DAC8D007AEB0F /* AdvancedSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88C204DAC8C007AEB0F /* AdvancedSettingsTableViewController.m */; };
 		340FC8B3204DAC8D007AEB0F /* AppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88D204DAC8C007AEB0F /* AppSettingsViewController.m */; };
 		340FC8B4204DAC8D007AEB0F /* OWSBackupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88E204DAC8C007AEB0F /* OWSBackupSettingsViewController.m */; };
@@ -385,7 +384,6 @@
 		7D2CD546214C3C9C004E957A /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5A72C211B7B1000965478 /* HttpRequest.m */; };
 		7D2CD548214C3C9C004E957A /* AddToGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC89B204DAC8D007AEB0F /* AddToGroupViewController.m */; };
 		7D2CD549214C3C9C004E957A /* DebugUIMisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 341F2C0E1F2B8AE700D07D6B /* DebugUIMisc.m */; };
-		7D2CD54A214C3C9C004E957A /* OWSLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC885204DAC8C007AEB0F /* OWSLinkDeviceViewController.m */; };
 		7D2CD54B214C3C9C004E957A /* DebugUIDiskUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E3EF0C1EFC235B007F6822 /* DebugUIDiskUsage.m */; };
 		7D2CD54C214C3C9C004E957A /* MediaTileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A84032059C787008B8C75 /* MediaTileViewController.swift */; };
 		7D2CD54D214C3C9C004E957A /* OWSBackupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FC88E204DAC8C007AEB0F /* OWSBackupSettingsViewController.m */; };
@@ -916,7 +914,6 @@
 		340FC882204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSLinkedDevicesTableViewController.m; sourceTree = "<group>"; };
 		340FC883204DAC8C007AEB0F /* OWSSoundSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSSoundSettingsViewController.m; sourceTree = "<group>"; };
 		340FC884204DAC8C007AEB0F /* AboutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutTableViewController.h; sourceTree = "<group>"; };
-		340FC885204DAC8C007AEB0F /* OWSLinkDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSLinkDeviceViewController.m; sourceTree = "<group>"; };
 		340FC888204DAC8C007AEB0F /* OWSQRCodeScanningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSQRCodeScanningViewController.h; sourceTree = "<group>"; };
 		340FC88A204DAC8C007AEB0F /* NotificationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSettingsViewController.h; sourceTree = "<group>"; };
 		340FC88B204DAC8C007AEB0F /* NotificationSettingsOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSettingsOptionsViewController.h; sourceTree = "<group>"; };
@@ -924,7 +921,6 @@
 		340FC88D204DAC8C007AEB0F /* AppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppSettingsViewController.m; sourceTree = "<group>"; };
 		340FC88E204DAC8C007AEB0F /* OWSBackupSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OWSBackupSettingsViewController.m; sourceTree = "<group>"; };
 		340FC88F204DAC8C007AEB0F /* PrivacySettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivacySettingsTableViewController.h; sourceTree = "<group>"; };
-		340FC891204DAC8C007AEB0F /* OWSLinkDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSLinkDeviceViewController.h; sourceTree = "<group>"; };
 		340FC893204DAC8C007AEB0F /* AboutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutTableViewController.m; sourceTree = "<group>"; };
 		340FC894204DAC8C007AEB0F /* OWSSoundSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSSoundSettingsViewController.h; sourceTree = "<group>"; };
 		340FC895204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OWSLinkedDevicesTableViewController.h; sourceTree = "<group>"; };
@@ -1720,8 +1716,6 @@
 				340FC87C204DAC8C007AEB0F /* NotificationSettingsViewController.m */,
 				340FC87F204DAC8C007AEB0F /* OWSBackupSettingsViewController.h */,
 				340FC88E204DAC8C007AEB0F /* OWSBackupSettingsViewController.m */,
-				340FC891204DAC8C007AEB0F /* OWSLinkDeviceViewController.h */,
-				340FC885204DAC8C007AEB0F /* OWSLinkDeviceViewController.m */,
 				340FC895204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.h */,
 				340FC882204DAC8C007AEB0F /* OWSLinkedDevicesTableViewController.m */,
 				340FC888204DAC8C007AEB0F /* OWSQRCodeScanningViewController.h */,
@@ -3956,7 +3950,6 @@
 				7D2CD548214C3C9C004E957A /* AddToGroupViewController.m in Sources */,
 				7D2CD549214C3C9C004E957A /* DebugUIMisc.m in Sources */,
 				DBEB8B9321FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */,
-				7D2CD54A214C3C9C004E957A /* OWSLinkDeviceViewController.m in Sources */,
 				7D2CD54B214C3C9C004E957A /* DebugUIDiskUsage.m in Sources */,
 				7D2CD54C214C3C9C004E957A /* MediaTileViewController.swift in Sources */,
 				7D2CD54D214C3C9C004E957A /* OWSBackupSettingsViewController.m in Sources */,
@@ -4142,7 +4135,6 @@
 				340FC8B8204DAC8D007AEB0F /* AddToGroupViewController.m in Sources */,
 				341F2C0F1F2B8AE700D07D6B /* DebugUIMisc.m in Sources */,
 				DBEB8B9221FF7C24005D4FE2 /* ConferenceCallService.swift in Sources */,
-				340FC8AF204DAC8D007AEB0F /* OWSLinkDeviceViewController.m in Sources */,
 				34E3EF0D1EFC235B007F6822 /* DebugUIDiskUsage.m in Sources */,
 				454A84042059C787008B8C75 /* MediaTileViewController.swift in Sources */,
 				340FC8B4204DAC8D007AEB0F /* OWSBackupSettingsViewController.m in Sources */,

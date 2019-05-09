@@ -630,6 +630,9 @@ NSString *const kNSNotification_SocketManagerStateDidChange = @"kNSNotification_
                 // failing due to 403, but let's be thorough.
                 [TSAccountManager.sharedInstance setIsDeregistered:YES];
             }
+            if (responseStatus == 409) {
+                // TODO: add extraDevices/missingDevices handling here.
+            }
 
             NSError *error = OWSErrorWithCodeDescription(OWSErrorCodeMessageResponseFailed,
                 NSLocalizedString(
