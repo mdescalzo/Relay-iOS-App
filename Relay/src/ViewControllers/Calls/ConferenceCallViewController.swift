@@ -139,9 +139,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         if self.call?.state == .ringing {
             self.call?.joinCall()
         }
-        
         self.updateSecondaryPeerViews()
         DeviceSleepManager.sharedInstance.addBlock(blockObject: self)
+        self.spinner.startAnimating()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -902,7 +902,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 spinner.startAnimating()
             }
         case .ringing:
-            do { /* TODO */ }
+            do {
+                spinner.startAnimating()
+            }
         case .rejected:
             do { /* TODO */ }
         case .joined:
