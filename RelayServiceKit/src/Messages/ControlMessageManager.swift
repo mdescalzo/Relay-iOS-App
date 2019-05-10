@@ -220,7 +220,10 @@ class ControlMessageManager : NSObject
                     if thread.title != threadTitle {
                         
                         thread.applyChange(toSelfAndLatestCopy: transaction) { (object) in
-                            let aThread = object as! TSThread
+                            guard let aThread = object as? TSThread else {
+                                owsFailDebug("\(self.logTag): Attempt to apply changes to invalid object.")
+                                return
+                            }
                             aThread.title = threadTitle
                         }
                         
