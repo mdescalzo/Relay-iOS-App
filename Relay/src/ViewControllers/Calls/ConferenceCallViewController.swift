@@ -43,6 +43,7 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
     @IBOutlet weak var audioOutButton: UIButton!
     @IBOutlet weak var leaveCallButton: UIButton!
     @IBOutlet weak var peopleButton: UIButton!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     lazy var allAudioSources = Set(self.callKitService.audioService.availableInputs)
     
@@ -856,7 +857,10 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                     }
                 }
             }
+        } else if newState == .connected {
+            spinner.stopAnimating()
         }
+        
         self.updatePeerUIElement(pcc.peerId, animated: true)
         
         // Clean up the video track if its going away
@@ -894,7 +898,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
         
         switch newState {
         case .undefined:
-            do { /* TODO */ }
+            do {
+                spinner.startAnimating()
+            }
         case .ringing:
             do { /* TODO */ }
         case .rejected:
@@ -904,7 +910,9 @@ class ConferenceCallViewController: UIViewController, ConferenceCallServiceDeleg
                 self.updateUIForCallPolicy()
             }
         case .leaving:
-            do { /* TODO */ }
+            do {
+                spinner.startAnimating()
+            }
         case .left:
             do {
                 self.call = nil

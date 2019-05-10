@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -125,7 +125,7 @@
                                         </constraints>
                                     </view>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_devices_ios" translatesAutoresizingMaskIntoConstraints="NO" id="zl7-KG-ma4">
-                                        <rect key="frame" x="86" y="86" width="171.5" height="114.5"/>
+                                        <rect key="frame" x="86" y="85.999999999999986" width="171.5" height="114.50000000000004"/>
                                         <color key="tintColor" red="0.67450980392156867" green="0.67450980392156867" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="zl7-KG-ma4" secondAttribute="height" multiplier="3:2" id="RKt-hc-iWB"/>
@@ -607,10 +607,14 @@
                                             <constraint firstAttribute="width" constant="80" id="Kdj-CT-hsU"/>
                                         </constraints>
                                     </view>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="xcc-Yb-UIR">
+                                        <rect key="frame" x="169" y="265" width="37" height="37"/>
+                                    </activityIndicatorView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
+                                    <constraint firstItem="xcc-Yb-UIR" firstAttribute="centerY" secondItem="oYr-aF-2qo" secondAttribute="centerY" id="3uX-Zh-JAI"/>
                                     <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                     <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
                                     <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
@@ -618,6 +622,7 @@
                                     <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
                                     <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
                                     <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="gOX-xr-nqU" secondAttribute="trailing" constant="50" id="pjr-IV-Dna"/>
+                                    <constraint firstItem="xcc-Yb-UIR" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="ucc-Yb-IpK"/>
                                     <constraint firstItem="r63-pw-tiD" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" id="yag-wN-0wD"/>
                                     <constraint firstItem="gOX-xr-nqU" firstAttribute="centerY" secondItem="oYr-aF-2qo" secondAttribute="centerY" id="zPO-bl-C8e"/>
                                 </constraints>
@@ -959,6 +964,7 @@
                         <outlet property="mainVideoIndicator" destination="glc-1A-mux" id="B5N-jM-LJP"/>
                         <outlet property="muteButton" destination="GtN-JB-ZxO" id="11a-da-rcO"/>
                         <outlet property="peopleButton" destination="KSX-g7-fZd" id="GsH-cE-6b1"/>
+                        <outlet property="spinner" destination="xcc-Yb-UIR" id="yQ3-vb-Rnt"/>
                         <outlet property="videoToggleButton" destination="uUf-7R-4b2" id="L9r-Z2-IUa"/>
                         <outlet property="xPhoneSpacerConstraint" destination="ZLq-qi-Pkc" id="wnp-Lg-IAz"/>
                     </connections>
@@ -979,21 +985,21 @@
         </scene>
     </scenes>
     <resources>
-        <image name="audio-call-mute-active" width="79.919998168945312" height="79.919998168945312"/>
-        <image name="audio-call-mute-inactive" width="79.919998168945312" height="79.919998168945312"/>
-        <image name="audio-call-speaker-active" width="79.919998168945312" height="79.919998168945312"/>
-        <image name="audio-call-speaker-inactive" width="79.919998168945312" height="79.919998168945312"/>
-        <image name="audio-call-video-active" width="79.919998168945312" height="79.919998168945312"/>
-        <image name="audio-call-video-inactive" width="79.919998168945312" height="79.919998168945312"/>
+        <image name="audio-call-mute-active" width="333" height="333"/>
+        <image name="audio-call-mute-inactive" width="333" height="333"/>
+        <image name="audio-call-speaker-active" width="333" height="333"/>
+        <image name="audio-call-speaker-inactive" width="333" height="333"/>
+        <image name="audio-call-video-active" width="333" height="333"/>
+        <image name="audio-call-video-inactive" width="333" height="333"/>
         <image name="avatar" width="16" height="16"/>
         <image name="call-active-wide" width="200" height="200"/>
         <image name="cameraflip-200" width="200" height="200"/>
         <image name="check" width="36" height="36"/>
         <image name="contact_default_feed.png" width="242" height="242"/>
-        <image name="group-avatar-white" width="53" height="53"/>
+        <image name="group-avatar-white" width="1023" height="1023"/>
         <image name="hangup-active-wide" width="200" height="200"/>
         <image name="ic_devices_ios" width="180" height="119.5"/>
-        <image name="video-mute-selected" width="79.919998168945312" height="79.919998168945312"/>
-        <image name="video-video-unselected" width="79.919998168945312" height="79.919998168945312"/>
+        <image name="video-mute-selected" width="333" height="333"/>
+        <image name="video-video-unselected" width="333" height="333"/>
     </resources>
 </document>
