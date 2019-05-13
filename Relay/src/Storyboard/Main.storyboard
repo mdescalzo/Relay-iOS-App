@@ -125,7 +125,7 @@
                                         </constraints>
                                     </view>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_devices_ios" translatesAutoresizingMaskIntoConstraints="NO" id="zl7-KG-ma4">
-                                        <rect key="frame" x="86" y="86" width="171.5" height="114.5"/>
+                                        <rect key="frame" x="86" y="85.999999999999986" width="171.5" height="114.50000000000004"/>
                                         <color key="tintColor" red="0.67450980392156867" green="0.67450980392156867" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="zl7-KG-ma4" secondAttribute="height" multiplier="3:2" id="RKt-hc-iWB"/>
@@ -607,10 +607,24 @@
                                             <constraint firstAttribute="width" constant="80" id="Kdj-CT-hsU"/>
                                         </constraints>
                                     </view>
+                                    <activityIndicatorView hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="xcc-Yb-UIR">
+                                        <rect key="frame" x="162.5" y="258.5" width="50" height="50"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="xcc-Yb-UIR" secondAttribute="height" multiplier="1:1" id="5nb-rd-XO3"/>
+                                            <constraint firstAttribute="width" constant="50" id="LWI-5y-uQ6"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </activityIndicatorView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="r63-pw-tiD" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" id="1Zv-y9-3kc"/>
+                                    <constraint firstItem="xcc-Yb-UIR" firstAttribute="centerY" secondItem="oYr-aF-2qo" secondAttribute="centerY" id="3uX-Zh-JAI"/>
                                     <constraint firstItem="gOX-xr-nqU" firstAttribute="leading" secondItem="NKH-TQ-vyc" secondAttribute="leading" constant="50" id="CS5-ne-ZB2"/>
                                     <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="r63-pw-tiD" secondAttribute="trailing" id="DBd-7i-Zsd"/>
                                     <constraint firstItem="gOX-xr-nqU" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="LoG-jD-NHJ"/>
@@ -618,6 +632,7 @@
                                     <constraint firstItem="NKH-TQ-vyc" firstAttribute="bottom" secondItem="r63-pw-tiD" secondAttribute="bottom" id="jWL-Yc-he8"/>
                                     <constraint firstItem="DG6-Oy-9VV" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" constant="8" id="oNu-O4-ID7"/>
                                     <constraint firstItem="NKH-TQ-vyc" firstAttribute="trailing" secondItem="gOX-xr-nqU" secondAttribute="trailing" constant="50" id="pjr-IV-Dna"/>
+                                    <constraint firstItem="xcc-Yb-UIR" firstAttribute="centerX" secondItem="oYr-aF-2qo" secondAttribute="centerX" id="ucc-Yb-IpK"/>
                                     <constraint firstItem="r63-pw-tiD" firstAttribute="top" secondItem="NKH-TQ-vyc" secondAttribute="top" id="yag-wN-0wD"/>
                                     <constraint firstItem="gOX-xr-nqU" firstAttribute="centerY" secondItem="oYr-aF-2qo" secondAttribute="centerY" id="zPO-bl-C8e"/>
                                 </constraints>
@@ -641,7 +656,7 @@
                                         <rect key="frame" x="37" y="0.0" width="338" height="17"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -959,6 +974,7 @@
                         <outlet property="mainVideoIndicator" destination="glc-1A-mux" id="B5N-jM-LJP"/>
                         <outlet property="muteButton" destination="GtN-JB-ZxO" id="11a-da-rcO"/>
                         <outlet property="peopleButton" destination="KSX-g7-fZd" id="GsH-cE-6b1"/>
+                        <outlet property="spinner" destination="xcc-Yb-UIR" id="yQ3-vb-Rnt"/>
                         <outlet property="videoToggleButton" destination="uUf-7R-4b2" id="L9r-Z2-IUa"/>
                         <outlet property="xPhoneSpacerConstraint" destination="ZLq-qi-Pkc" id="wnp-Lg-IAz"/>
                     </connections>
