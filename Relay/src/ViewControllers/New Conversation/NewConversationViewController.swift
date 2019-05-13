@@ -54,7 +54,7 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
     
     // Properties
     private var selectedSlugs: Array<String> = Array()
-    
+    private var pendingLookup: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -314,10 +314,14 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                 threadSlugs.append(" + \(slug)")
             }
         }
+        pendingLookup = true
+        updateGoButton()
         CCSMCommManager.asyncTagLookup(with: threadSlugs,
                                        success: { results in
                                         self.storeUsersIn(results: results as NSDictionary)
                                         self.buildThreadWith(results: results as NSDictionary)
+                                        self.pendingLookup = false
+                                        self.updateGoButton()
         },
                                        failure: { error in
                                         Logger.debug(String(format: "Tag Lookup failed with error: %@", error.localizedDescription))
@@ -328,7 +332,10 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
                                             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""),
                                                                           style: .default,
                                                                           handler: nil))
-                                            self.navigationController?.present(alert, animated: true, completion: nil)
+                                            self.navigationController?.present(alert, animated: true, completion: {
+                                                self.pendingLookup = false
+                                                self.updateGoButton()
+                                            })
                                         }
         })
         
@@ -676,7 +683,7 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
     
     private func updateGoButton() {
         DispatchQueue.main.async {
-            if self.selectedSlugs.count == 0 {
+            if self.selectedSlugs.count == 0 || self.pendingLookup {
                 self.goButton?.isEnabled = false
             } else {
                 self.goButton?.isEnabled = true
