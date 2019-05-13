@@ -110,7 +110,7 @@ import Foundation
                     }
                     if let userIds = lookupDict["userids"] as? [String] {
                         Logger.debug("Updated userIds on thread: \(theThread.uniqueId)")
-                        thread.participantIds = userIds
+                        theThread.participantIds = userIds
                         NotificationCenter.default.postNotificationNameAsync(NSNotification.Name(rawValue: FLRecipientsNeedRefreshNotification),
                                                                              object: nil,
                                                                              userInfo: [ "userIds" : userIds ])
@@ -118,19 +118,19 @@ import Foundation
                     if let pretty = lookupDict["pretty"] as? String {
                         if pretty.count > 0 {
                             Logger.debug("Updated pretty on thread: \(theThread.uniqueId)")
-                            thread.prettyExpression = pretty
+                            theThread.prettyExpression = pretty
                         }
                     }
                     if let expression = lookupDict["universal"] as? String {
                         if expression.count > 0 {
                             Logger.debug("Updated univeral on thread: \(theThread.uniqueId)")
-                            thread.universalExpression = expression
+                            theThread.universalExpression = expression
                         }
                     }
                     if let monitorids = lookupDict["monitorids"] as? [String] {
                         if monitorids.count > 0 {
                             Logger.debug("Updated monitors on thread: \(theThread.uniqueId)")
-                            thread.monitorIds = NSCountedSet.init(array: monitorids)
+                            theThread.monitorIds = NSCountedSet.init(array: monitorids)
                         }
                     }
                 })
