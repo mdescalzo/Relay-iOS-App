@@ -676,9 +676,11 @@ import RelayServiceKit
             
             self.readWriteConnection.asyncReadWrite({ (transaction) in
                 recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
-                    if let theRecipient = obj as? RelayRecipient {
-                        theRecipient.gravatarImage = gravatarImage
-                    }
+                    guard let theRecipient = obj as? RelayRecipient else {
+                        owsFailDebug("\(self.logTag): Attempt to apply changes to invalid object.")
+                        return
+                    }                    
+                    theRecipient.gravatarImage = gravatarImage
                 })
             });
         }

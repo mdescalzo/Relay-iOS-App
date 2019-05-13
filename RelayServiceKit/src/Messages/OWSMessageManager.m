@@ -288,8 +288,6 @@ NS_ASSUME_NONNULL_BEGIN
             [[OWSDeviceManager sharedManager] setHasReceivedSyncMessage];
         } else if (content.hasDataMessage) {
             [self handleIncomingEnvelope:envelope withDataMessage:content.dataMessage transaction:transaction];
-        } else if (content.hasCallMessage) {
-            [self handleIncomingEnvelope:envelope withCallMessage:content.callMessage];
         } else if (content.hasNullMessage) {
             DDLogInfo(@"%@ Received null message.", self.logTag);
         } else if (content.hasReceiptMessage) {
@@ -398,53 +396,6 @@ NS_ASSUME_NONNULL_BEGIN
             return;
     }
 }
-
-- (void)handleIncomingEnvelope:(SSKEnvelope *)envelope
-               withCallMessage:(OWSSignalServiceProtosCallMessage *)callMessage
-{
-    // This should not be called in Forsta environment
-    // handled by control message
-    DDLogDebug(@"Received unhandled callMessage.  This should be handled with a control message.  Source: %@", envelope.source);
-}
-
-// TODO:  Handled by control message
-//- (void)handleReceivedGroupAvatarUpdateWithEnvelope:(SSKEnvelope *)envelope
-//                                        dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
-//                                        transaction:(YapDatabaseReadWriteTransaction *)transaction
-//{
-//    OWSAssertDebug(envelope);
-//    OWSAssertDebug(dataMessage);
-//    OWSAssertDebug(transaction);
-//
-//    TSGroupThread *_Nullable groupThread =
-//        [TSGroupThread threadWithGroupId:dataMessage.group.id transaction:transaction];
-//    if (!groupThread) {
-//        OWSFailDebug(@"%@ Missing group for group avatar update", self.logTag);
-//        return;
-//    }
-//
-//    OWSAssertDebug(groupThread);
-//    OWSAttachmentsProcessor *attachmentsProcessor =
-//        [[OWSAttachmentsProcessor alloc] initWithAttachmentProtos:@[ dataMessage.group.avatar ]
-//                                                   networkManager:self.networkManager
-//                                                      transaction:transaction];
-//
-//    if (!attachmentsProcessor.hasSupportedAttachments) {
-//        DDLogWarn(@"%@ received unsupported group avatar envelope", self.logTag);
-//        return;
-//    }
-//    [attachmentsProcessor fetchAttachmentsForMessage:nil
-//        transaction:transaction
-//        success:^(TSAttachmentStream *attachmentStream) {
-//            [groupThread updateAvatarWithAttachmentStream:attachmentStream];
-//        }
-//        failure:^(NSError *error) {
-//            DDLogError(@"%@ failed to fetch attachments for group avatar sent at: %llu. with error: %@",
-//                self.logTag,
-//                envelope.timestamp,
-//                error);
-//        }];
-//}
 
 - (void)handleReceivedMediaWithEnvelope:(SSKEnvelope *)envelope
                             dataMessage:(OWSSignalServiceProtosDataMessage *)dataMessage
