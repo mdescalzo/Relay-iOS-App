@@ -35,10 +35,13 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             return @"OWSMessageCellType_GenericAttachment";
         case OWSMessageCellType_DownloadingAttachment:
             return @"OWSMessageCellType_DownloadingAttachment";
-        case OWSMessageCellType_Unknown:
-            return @"OWSMessageCellType_Unknown";
         case MessageCellType_WebPreview:
             return @"MessageCellType_WebPreview";
+        case MessageCellType_WebGiphy:
+            return @"MessageCellType_WebGiphy";
+        case OWSMessageCellType_Unknown:
+        default:
+            return @"OWSMessageCellType_Unknown";
     }
 }
 
@@ -117,53 +120,45 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
     [self ensureViewState:transaction];
 }
 
--(BOOL)hasUrl
+-(BOOL)hasWebGiphy
 {
-    return (self.urlString.length > 0);
+    TSMessage *message = (TSMessage *)self.interaction;
+    return message.isGiphy;
 }
 
--(nullable NSString *)urlString
+-(BOOL)hasUrl
 {
-    if (_urlString == nil) {
-        
-        _urlString = @"";
-        
-        TSMessage *message = (TSMessage *)self.interaction;
-        
-        NSString *messageString = [message htmlTextBody];
-        if (messageString.length == 0) {
-            messageString = [message plainTextBody];
-        }
-        
-        if (messageString.length > 0) {
-            
-            NSDataDetector *linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
-            NSArray *matches = [linkDetector matchesInString:messageString options:0 range:NSMakeRange(0, messageString.length)];
-            
-            for (NSTextCheckingResult *match in matches) {
-                
-                if ([match resultType] == NSTextCheckingTypeLink) {
-                    NSString *aString = match.URL.absoluteString;
-                    if ([aString containsString:@"http://"] || [aString containsString:@"https://"]) {
-                        _urlString = [aString stringByReplacingOccurrencesOfString:@"http://" withString:@"https://"];
-                    }
-                    break;
-                }
-            }
-            
-//            // SOURCE: https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
-//            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\"(ftp:\\/\\/|www\\.|https?:\\/\\/){1}[a-zA-Z0-9u00a1-\\uffff0-]{2,}\\.[a-zA-Z0-9u00a1-\\uffff0-]{2,}(\\S*)\""
-//                                                                                   options:(NSRegularExpressionCaseInsensitive | NSRegularExpressionAnchorsMatchLines)
-//                                                                                     error:nil];
-//            NSArray *matches = [regex matchesInString:htmlString options:0 range:NSMakeRange(0, htmlString.length)];
-//            for (NSTextCheckingResult *result in matches) {
-//                _urlString = [htmlString substringWithRange:result.range];
-//                _urlString = [_urlString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
-//            }
-        }
-    }
-    return _urlString;
+    TSMessage *message = (TSMessage *)self.interaction;
+    return (message.urlString.length > 0);
 }
+
+//-(nullable NSString *)urlString
+//{
+//    if (_urlString == nil) {
+//        _urlString = @"";
+//        TSMessage *message = (TSMessage *)self.interaction;
+//        NSString *messageString = [message htmlTextBody];
+//        if (messageString.length == 0) {
+//            messageString = [message plainTextBody];
+//        }
+//        if (messageString.length > 0) {
+//            NSDataDetector *linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+//            NSArray *matches = [linkDetector matchesInString:messageString options:0 range:NSMakeRange(0, messageString.length)];
+//
+//            for (NSTextCheckingResult *match in matches) {
+//
+//                if ([match resultType] == NSTextCheckingTypeLink) {
+//                    NSString *aString = match.URL.absoluteString;
+//                    if ([aString containsString:@"http://"] || [aString containsString:@"https://"]) {
+//                        _urlString = [aString stringByReplacingOccurrencesOfString:@"http://" withString:@"https://"];
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//    return _urlString;
+//}
 
 - (BOOL)hasBodyText
 {
@@ -349,9 +344,6 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
     OWSAssertDebug(self.interaction);
 
     switch (self.interaction.interactionType) {
-        case OWSInteractionType_Unknown:
-            OWSFailDebug(@"%@ Unknown interaction type.", self.logTag);
-            return nil;
         case OWSInteractionType_IncomingMessage:
         case OWSInteractionType_OutgoingMessage:
             return [collectionView dequeueReusableCellWithReuseIdentifier:[OWSMessageCell cellReuseIdentifier]
@@ -361,6 +353,10 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSInteractionType_Call:
             return [collectionView dequeueReusableCellWithReuseIdentifier:[OWSSystemMessageCell cellReuseIdentifier]
                                                              forIndexPath:indexPath];
+        case OWSInteractionType_Unknown:
+        default:
+            OWSFailDebug(@"%@ Unknown interaction type.", self.logTag);
+            return nil;
     }
 }
 
@@ -530,6 +526,18 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         } else {
             OWSFailDebug(@"%@ Unknown attachment type", self.logTag);
         }
+    } else if (self.hasWebGiphy) {
+        self.messageCellType = MessageCellType_WebGiphy;
+        if (message.giphyImageData == nil) {
+            self.mediaSize = [UIImage imageNamed:@"giphy_logo"].size;
+        } else {
+            UIImage *image = [UIImage imageWithData:message.giphyImageData];
+            if (image != nil) {
+                self.mediaSize = image.size;
+            } else {
+                self.mediaSize = [UIImage imageNamed:@"giphy_logo"].size;
+            }
+        }
     } else if (self.hasUrl && Environment.preferences.showWebPreviews) {
         self.messageCellType = MessageCellType_WebPreview;
     }
@@ -637,12 +645,14 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (void)copyTextAction
 {
     switch (self.messageCellType) {
+        case MessageCellType_WebPreview:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_Video:
+        case MessageCellType_WebGiphy:
         case OWSMessageCellType_GenericAttachment: {
             OWSAssertDebug(self.displayableBodyText);
             [UIPasteboard.generalPasteboard setString:self.displayableBodyText.fullText];
@@ -683,6 +693,12 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
             [UIPasteboard.generalPasteboard setData:data forPasteboardType:utiType];
             break;
         }
+        case MessageCellType_WebPreview:
+        case MessageCellType_WebGiphy: {
+            TSMessage *message = (TSMessage *)self.interaction;
+            [UIPasteboard.generalPasteboard setString:message.urlString];
+            break;
+        }
         case OWSMessageCellType_DownloadingAttachment: {
             OWSFailDebug(@"%@ Can't copy not-yet-downloaded attachment", self.logTag);
             break;
@@ -699,8 +715,9 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_Video:
-        case OWSMessageCellType_GenericAttachment: {
+        case OWSMessageCellType_GenericAttachment:
         case MessageCellType_WebPreview:
+        case MessageCellType_WebGiphy: {
             OWSAssertDebug(self.displayableBodyText);
             [AttachmentSharing showShareUIForText:self.displayableBodyText.fullText];
             break;
@@ -723,6 +740,13 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
+            break;
+        case MessageCellType_WebGiphy: {
+            TSMessage *message = (TSMessage *)self.interaction;
+            [AttachmentSharing showShareUIForText:message.urlString];
+
+            break;
+        }
         case OWSMessageCellType_StillImage:
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
@@ -756,6 +780,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_GenericAttachment:
         case OWSMessageCellType_DownloadingAttachment:
         case MessageCellType_WebPreview:
+        case MessageCellType_WebGiphy:
             return NO;
             break;
     }
@@ -767,6 +792,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case OWSMessageCellType_OversizeTextMessage:
+        case MessageCellType_WebGiphy:
         case MessageCellType_WebPreview:
             OWSFailDebug(@"%@ Cannot save text data.", self.logTag);
             break;
@@ -854,6 +880,8 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
 - (BOOL)hasMediaActionContent
 {
     switch (self.messageCellType) {
+        case MessageCellType_WebGiphy:
+            return YES;
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
         case MessageCellType_WebPreview:

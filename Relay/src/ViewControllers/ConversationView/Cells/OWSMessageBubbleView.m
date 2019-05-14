@@ -162,7 +162,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable TSAttachmentStream *)attachmentStream
 {
     // This should always be valid for the appropriate cell types.
-    OWSAssertDebug(self.viewItem.attachmentStream);
+//    OWSAssertDebug(self.viewItem.attachmentStream);
 
     return self.viewItem.attachmentStream;
 }
@@ -232,12 +232,13 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Audio:
         case MessageCellType_WebPreview:
+        case MessageCellType_WebGiphy:
         case OWSMessageCellType_Video:
             // Is there a caption?
             return self.hasBodyText;
             break;
         default:
-            OWSFailDebug(@"%@: unknown celltype: %@", self.logTag, self.cellType);
+            OWSFailDebug(@"%@: unknown celltype: %@", self.logTag, NSStringForOWSMessageCellType(self.cellType));
     }
     return NO;
 }
@@ -304,6 +305,11 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_StillImage:
             OWSAssertDebug(self.viewItem.attachmentStream);
             bodyMediaView = [self loadViewForStillImage];
+            break;
+        case MessageCellType_WebGiphy:
+            OWSAssertDebug(self.viewItem.hasWebGiphy);
+#warning FIXME
+            bodyMediaView = [self loadViewForWebGiphy];
             break;
         case OWSMessageCellType_AnimatedImage:
             OWSAssertDebug(self.viewItem.attachmentStream);
@@ -512,6 +518,7 @@ NS_ASSUME_NONNULL_BEGIN
         case OWSMessageCellType_AnimatedImage:
         case OWSMessageCellType_Video:
         case MessageCellType_WebPreview:
+        case MessageCellType_WebGiphy:
             return YES;
         case OWSMessageCellType_Audio:
         case OWSMessageCellType_GenericAttachment:
@@ -903,20 +910,55 @@ NS_ASSUME_NONNULL_BEGIN
     return stillImageView;
 }
 
+-(UIView *)loadViewForWebGiphy
+{
+    OWSAssertDebug(self.viewItem.hasWebGiphy);
+ 
+    __block YYAnimatedImageView *giphyImageView = [[YYAnimatedImageView alloc] init];
+    // We need to specify a contentMode since the size of the image
+    // might not match the aspect ratio of the view.
+    giphyImageView.contentMode =  UIViewContentModeScaleAspectFit; //  UIViewContentModeScaleAspectFill;
+    giphyImageView.backgroundColor = [UIColor grayColor];
+    
+    __weak OWSMessageBubbleView *weakSelf = self;
+    self.loadCellContentBlock = ^{
+        OWSMessageBubbleView *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+
+        YYImage *giphyImage = [strongSelf.cellMediaCache objectForKey:strongSelf.viewItem.interaction.uniqueId];
+        if (giphyImage == nil) {
+            TSMessage *message = (TSMessage *)strongSelf.viewItem.interaction;
+            NSData *giphyData = message.giphyImageData;
+            if (giphyData != nil) {
+                giphyImage = [[YYImage alloc] initWithData:giphyData];
+                if (giphyImage != nil) {
+                    [strongSelf.cellMediaCache setObject:giphyImage forKey:strongSelf.viewItem.interaction.uniqueId];
+                }
+            } else {
+                giphyImage = [YYImage imageNamed:@"giphy_logo"];
+            }
+        }
+        giphyImageView.image = giphyImage;
+    };
+    
+    self.unloadCellContentBlock = ^{
+        giphyImageView.image = nil;
+    };
+
+    return giphyImageView;
+}
+
 -(UIView *)loadViewForWebPreview
 {
     OWSAssertDebug(self.viewItem.hasUrl);
     
     URLEmbeddedView *webView = URLEmbeddedView.new;
-    [webView loadWithURLString:self.viewItem.urlString completion:nil];
+    TSMessage *message = (TSMessage *)self.viewItem.interaction;
+    [webView loadWithURLString:message.urlString completion:nil];
     webView.backgroundColor = UIColor.lightGrayColor;
     
-//    WKWebView *webView = [WKWebView new];
-//    webView.contentMode = UIViewContentModeScaleAspectFill;
-//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.viewItem.urlString]];
-//    [webView loadRequest:request];
-
-//    __weak OWSMessageBubbleView *weakSelf = self;
     self.loadCellContentBlock = ^{
         // Do nothing.
     };
@@ -1044,7 +1086,7 @@ NS_ASSUME_NONNULL_BEGIN
     switch (self.cellType) {
         case OWSMessageCellType_Unknown:
         case OWSMessageCellType_TextMessage:
-        case OWSMessageCellType_OversizeTextMessage: {
+         case OWSMessageCellType_OversizeTextMessage: {
             return nil;
         }
         case OWSMessageCellType_StillImage:
@@ -1101,6 +1143,21 @@ NS_ASSUME_NONNULL_BEGIN
         case MessageCellType_WebPreview:
             result = CGSizeRound(CGSizeMake(maxMessageWidth, maxMessageWidth * 0.3));
             break;
+        case MessageCellType_WebGiphy: {
+            YYImage *image = [self.cellMediaCache objectForKey:self.viewItem.interaction.uniqueId];
+            if (image == nil) {
+                TSMessage *message = (TSMessage *)self.viewItem.interaction;
+                image = [YYImage imageWithData:message.giphyImageData];
+            }
+            if (image == nil) {
+                result = CGSizeRound([UIImage imageNamed:@"giphy_logo"].size);
+            } else if (image.size.width < maxMessageWidth) {
+                result = CGSizeRound(image.size);
+            } else {
+                result = CGSizeRound(CGSizeMake(maxMessageWidth, image.size.height*(maxMessageWidth/image.size.width)));
+            }
+            break;
+        }
     }
 
     OWSAssertDebug(result.width <= maxMessageWidth);
@@ -1455,9 +1512,12 @@ NS_ASSUME_NONNULL_BEGIN
         }
         case MessageCellType_WebPreview:
             OWSAssertDebug(self.viewItem.hasUrl);
-            
             [self.delegate didTapWebPreviewViewItem:self.viewItem];
             break;
+        case MessageCellType_WebGiphy: {
+            // TODO: Add full screen akin to image attachment view
+            break;
+        }
     }
 }
 

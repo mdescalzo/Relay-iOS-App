@@ -133,6 +133,42 @@ NS_ASSUME_NONNULL_BEGIN
                                              selector:@selector(yapDatabaseModified:)
                                                  name:YapDatabaseModifiedExternallyNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fetchGiphyImage:)
+                                                 name:FLMessageNeedsGiphyRetrievalNotification
+                                               object:nil];
+}
+
+-(void)fetchGiphyImage:(NSNotification *)notification
+{
+    // fetch giphy image in background and store the data on the message
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),^{
+        NSString *messageId = [notification.userInfo objectForKey:@"messageId"];
+        if (messageId != nil) {
+            TSMessage *message = [TSMessage fetchObjectWithUniqueID:messageId];
+            if (message != nil && message.isGiphy) {
+                NSString *rawString = message.urlString;
+                NSError *error = nil;
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"//media[0-9]+."
+                                                                                       options:0
+                                                                                         error:&error];
+                NSString *aString = [regex stringByReplacingMatchesInString:rawString
+                                                                    options:0
+                                                                      range:NSMakeRange(0, rawString.length)
+                                                               withTemplate:@"//i."];
+                NSString *cleanString = [aString stringByReplacingOccurrencesOfString:@".mp4" withString:@".webp"];
+                NSURL *giphyUrl = [NSURL URLWithString:cleanString];
+                __block NSData *giphyData = [NSData dataWithContentsOfURL:giphyUrl];
+                if (giphyData != nil) {
+                    [self.dbConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
+                        [message applyChangeToSelfAndLatestCopy:transaction changeBlock:^(TSMessage *theMessage) {
+                            theMessage.giphyImageData = giphyData;
+                        }];
+                    }];
+                }
+            }
+        }
+    });
 }
 
 - (void)yapDatabaseModified:(NSNotification *)notification
