@@ -1515,7 +1515,7 @@ NS_ASSUME_NONNULL_BEGIN
             [self.delegate didTapWebPreviewViewItem:self.viewItem];
             break;
         case MessageCellType_WebGiphy: {
-#warning FIXME
+            // TODO: Add full screen akin to image attachment view
             break;
         }
     }
