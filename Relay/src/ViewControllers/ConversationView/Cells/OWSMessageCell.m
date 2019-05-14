@@ -440,7 +440,11 @@ NS_ASSUME_NONNULL_BEGIN
             break;
         }
         case OWSMessageGestureLocation_Media: {
-            [self.delegate conversationCell:self didLongpressMediaViewItem:self.viewItem];
+            if (self.viewItem.hasWebGiphy) {
+                [self.delegate conversationCell:self didLongpressGiphyViewItem:self.viewItem];
+            } else {
+                [self.delegate conversationCell:self didLongpressMediaViewItem:self.viewItem];
+            }
             break;
         }
         case OWSMessageGestureLocation_QuotedReply: {

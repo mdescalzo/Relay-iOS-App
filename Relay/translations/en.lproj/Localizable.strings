@@ -1123,6 +1123,9 @@
 "MESSAGE_ACTION_COPY_MEDIA" = "Copy Media";
 
 /* Action sheet button title */
+"MESSAGE_ACTION_COPY_URL" = "Copy URL";
+
+/* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "Copy Message Text";
 
 /* Action sheet button title */

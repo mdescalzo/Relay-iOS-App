@@ -1862,6 +1862,12 @@ typedef enum : NSUInteger {
 
 #pragma mark - ConversationViewCellDelegate
 
+- (void)conversationCell:(ConversationViewCell *)cell didLongpressGiphyViewItem:(ConversationViewItem *)viewItem
+{
+    NSArray<MenuAction *> *messageActions = [viewItem giphyActionsWithDelegate:self];
+    [self presentMessageActions:messageActions withFocusedCell:cell];
+}
+
 - (void)conversationCell:(ConversationViewCell *)cell didLongpressMediaViewItem:(ConversationViewItem *)viewItem
 {
     NSArray<MenuAction *> *messageActions = [viewItem mediaActionsWithDelegate:self];
@@ -2011,8 +2017,8 @@ typedef enum : NSUInteger {
 {
     OWSAssertDebug(conversationItem);
     OWSAssertDebug(conversationItem.hasUrl);
-    
-    [UIApplication.sharedApplication openURL:[NSURL URLWithString:conversationItem.urlString]
+    TSMessage *message = (TSMessage *)conversationItem.interaction;
+    [UIApplication.sharedApplication openURL:[NSURL URLWithString:message.urlString]
                                      options:@{}
                            completionHandler:nil];
 }

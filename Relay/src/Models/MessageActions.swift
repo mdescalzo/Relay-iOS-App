@@ -65,6 +65,16 @@ struct MessageActionBuilder {
                             conversationViewItem.saveMediaAction()
         })
     }
+    
+    static func copyUrl(conversationViewItem: ConversationViewItem, delegate: MessageActionsDelegate) -> MenuAction {
+        return MenuAction(image: #imageLiteral(resourceName: "ic_copy"),
+                          title: NSLocalizedString("MESSAGE_ACTION_COPY_URL", comment: "Action sheet button title"),
+                          subtitle: nil,
+                          block: { (_) in
+                            conversationViewItem.copyMediaAction()
+        })
+    }
+
 }
 
 extension ConversationViewItem {
@@ -87,6 +97,27 @@ extension ConversationViewItem {
         let showDetailsAction = MessageActionBuilder.showDetails(conversationViewItem: self, delegate: delegate)
         actions.append(showDetailsAction)
 
+        return actions
+    }
+    
+    @objc
+    func giphyActions(delegate: MessageActionsDelegate) -> [MenuAction] {
+        var actions: [MenuAction] = []
+        
+        let replyAction = MessageActionBuilder.reply(conversationViewItem: self, delegate: delegate)
+        actions.append(replyAction)
+        
+        if self.hasWebGiphy {
+            let copyTextAction = MessageActionBuilder.copyUrl(conversationViewItem: self, delegate: delegate)
+            actions.append(copyTextAction)
+        }
+        
+        let deleteAction = MessageActionBuilder.deleteMessage(conversationViewItem: self, delegate: delegate)
+        actions.append(deleteAction)
+        
+        let showDetailsAction = MessageActionBuilder.showDetails(conversationViewItem: self, delegate: delegate)
+        actions.append(showDetailsAction)
+        
         return actions
     }
 
