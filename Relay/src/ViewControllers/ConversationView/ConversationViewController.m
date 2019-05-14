@@ -1862,6 +1862,12 @@ typedef enum : NSUInteger {
 
 #pragma mark - ConversationViewCellDelegate
 
+- (void)conversationCell:(ConversationViewCell *)cell didLongpressGiphyViewItem:(ConversationViewItem *)viewItem
+{
+    NSArray<MenuAction *> *messageActions = [viewItem giphyActionsWithDelegate:self];
+    [self presentMessageActions:messageActions withFocusedCell:cell];
+}
+
 - (void)conversationCell:(ConversationViewCell *)cell didLongpressMediaViewItem:(ConversationViewItem *)viewItem
 {
     NSArray<MenuAction *> *messageActions = [viewItem mediaActionsWithDelegate:self];

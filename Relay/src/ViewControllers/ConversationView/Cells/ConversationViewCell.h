@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ConversationViewCellDelegate <NSObject>
 
+- (void)conversationCell:(ConversationViewCell *)cell didLongpressGiphyViewItem:(ConversationViewItem *)viewItem;
 - (void)conversationCell:(ConversationViewCell *)cell didLongpressTextViewItem:(ConversationViewItem *)viewItem;
 - (void)conversationCell:(ConversationViewCell *)cell didLongpressMediaViewItem:(ConversationViewItem *)viewItem;
 - (void)conversationCell:(ConversationViewCell *)cell didLongpressQuoteViewItem:(ConversationViewItem *)viewItem;
