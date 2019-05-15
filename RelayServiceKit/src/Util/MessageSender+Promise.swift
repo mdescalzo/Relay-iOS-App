@@ -11,7 +11,7 @@ public extension MessageSender {
      */
     func sendPromise(message: TSOutgoingMessage) -> Promise<Void> {
         let promise: Promise<Void> = Promise { resolver in
-            self.enqueue(message, success: { resolver.fulfill() }, failure: { (error) in resolver.reject(error) })
+            self.enqueue(message, success: { resolver.fulfill(()) }, failure: { (error) in resolver.reject(error) })
         }
         
         // Ensure sends complete before they're GC'd.
@@ -28,7 +28,7 @@ public extension MessageSender {
     func sendPromise(message: OutgoingControlMessage, recipientIds: [String]) -> Promise<Void> {
         let foo = NSCountedSet(array: recipientIds)
         let promise: Promise<Void> = Promise { resolver in
-            self.send(message, toRecipients: foo, success: { resolver.fulfill() }, failure: { (error) in resolver.reject(error) })
+            self.send(message, toRecipients: foo, success: { resolver.fulfill(()) }, failure: { (error) in resolver.reject(error) })
         }
         
         // Ensure sends complete before they're GC'd.
@@ -48,7 +48,7 @@ public extension MessageSender {
                                     recipientId: recipientId,
                                     onlyDeviceId: NSNumber(value: recipientDeviceId),
                                     attempts: 3,
-                                    success: { resolver.fulfill() },
+                                    success: { resolver.fulfill(()) },
                                     failure: { (error) in resolver.reject(error) })
         }
         

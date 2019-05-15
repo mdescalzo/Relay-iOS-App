@@ -45,13 +45,12 @@ An Objective-C library for communicating with the Signal messaging service.
   s.dependency 'Mantle'
   s.dependency 'YapDatabase/SQLCipher'
   s.dependency 'SocketRocket'
-#  s.dependency 'libPhoneNumber-iOS'
   s.dependency 'GRKOpenSSLFramework'
   s.dependency 'SAMKeychain'
   s.dependency 'Reachability'
   s.dependency 'SwiftProtobuf'
   s.dependency 'ProtocolBuffers'
   s.dependency 'SignalCoreKit'
-  s.dependency 'PromiseKit', "= 6.7.1"
+  s.dependency 'PromiseKit', "~> 6.0"
 
 end

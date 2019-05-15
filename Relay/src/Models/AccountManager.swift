@@ -84,7 +84,7 @@ public class AccountManager: NSObject {
             self.textSecureAccountManager.verifyAccount(withCode: verificationCode,
                                                         pin: pin,
                                                         success: {
-                                                            resolver.fulfill()
+                                                            resolver.fulfill(())
             },
                                                         failure: { (error) in
                                                             resolver.reject(error)
@@ -110,7 +110,7 @@ public class AccountManager: NSObject {
         return Promise { resolver in
             self.textSecureAccountManager.registerForPushNotifications(pushToken: pushToken,
                                                                        voipToken: voipToken,
-                                                                       success: { resolver.fulfill() },
+                                                                       success: { resolver.fulfill(()) },
                                                                        failure: { (error) in resolver.reject(error) })
         }
     }
