@@ -27,13 +27,8 @@ extern NSString *const OWSUIDatabaseConnectionNotificationsKey;
 + (YapDatabaseConnection *)dbReadConnection;
 + (YapDatabaseConnection *)dbReadWriteConnection;
 
-+ (nullable NSError *)migrateToSharedData;
-
 + (NSString *)databaseFilePath;
 
-+ (NSString *)legacyDatabaseFilePath;
-+ (NSString *)legacyDatabaseFilePath_SHM;
-+ (NSString *)legacyDatabaseFilePath_WAL;
 + (NSString *)sharedDataDatabaseFilePath;
 + (NSString *)sharedDataDatabaseFilePath_SHM;
 + (NSString *)sharedDataDatabaseFilePath_WAL;
