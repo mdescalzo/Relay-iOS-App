@@ -1381,6 +1381,18 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
 {
     OWSAssertIsOnMainThread();
     
+    __block BOOL viewExtNotReady = YES;
+    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        if ([transaction ext:TSThreadDatabaseViewExtensionName] != nil) {
+            viewExtNotReady = NO;
+        }
+    }];
+    
+    if (viewExtNotReady) {
+        DDLogDebug(@"%@: TSThreadDatabaseViewExtensionName not ready.", self.logTag);
+        return;
+    }
+
     if (self.homeViewMode == HomeViewMode_Inbox) {
         self.threadMappings = [[YapDatabaseViewMappings alloc]
                                initWithGroups:@[ kReminderViewPseudoGroup, FLAnnouncementsGroup, FLPinnedGroup, self.currentGrouping, kArchiveButtonPseudoGroup ]
@@ -1449,6 +1461,12 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
     OWSAssertIsOnMainThread();
 
     if (!self.shouldObserveDBModifications) {
+        return;
+    }
+
+    if (self.threadMappings == nil) {
+        [self updateMappings];
+        [self.tableView reloadData];
         return;
     }
 
