@@ -385,11 +385,6 @@ NS_ASSUME_NONNULL_BEGIN
         [self handleReceivedMediaWithEnvelope:envelope dataMessage:dataMessage transaction:transaction];
     } else {
         [self handleReceivedTextMessageWithEnvelope:envelope dataMessage:dataMessage transaction:transaction];
-        
-        if ([self isDataMessageGroupAvatarUpdate:dataMessage]) {
-            DDLogVerbose(@"%@ Data message had group avatar attachment.  WE SHOULD'T GET THESE IN FORSTA LAND!", self.logTag);
-            //            [self handleReceivedGroupAvatarUpdateWithEnvelope:envelope dataMessage:dataMessage transaction:transaction];
-        }
     }
 }
 
@@ -737,11 +732,9 @@ NS_ASSUME_NONNULL_BEGIN
                                          attachmentIds:(NSArray<NSString *> *)attachmentIds
                                            transaction:(YapDatabaseReadWriteTransaction *)transaction
 {
-    ////////////////////
     OWSAssertDebug(envelope);
     OWSAssertDebug(dataMessage);
     OWSAssertDebug(transaction);
-    
     
     //  Catch incoming messages and process the new way.
     NSString *body = dataMessage.body;
@@ -793,46 +786,55 @@ NS_ASSUME_NONNULL_BEGIN
     TSThread *thread = [TSThread getOrCreateThreadWithPayload:jsonPayload transaction:transaction];
 
     // Check to see if we already have this message
-    TSIncomingMessage *incomingMessage = [TSIncomingMessage fetchObjectWithUniqueID:[jsonPayload objectForKey:FLMessageIdKey] transaction:transaction];
-    
-    if (incomingMessage == nil) {
-        // Quoted/Replay message handling
-        NSString *messageRefString = [jsonPayload objectForKey:@"messageRef"];
-        TSQuotedMessage *quotedMessage = nil;
-        if (messageRefString.length > 0) {
-            TSMessage *parentMessage = [TSMessage fetchObjectWithUniqueID:messageRefString transaction:transaction];
-            
-            if (parentMessage != nil) {
-                NSString *authorId = @"Unknown user";
-                if ([parentMessage isKindOfClass:[TSOutgoingMessage class]]) {
-                    authorId = [TSAccountManager localUID];
-                } else if ([parentMessage isKindOfClass:[TSIncomingMessage class]]) {
-                    authorId = [(TSIncomingMessage *)parentMessage authorId];
-                }
-                
-                quotedMessage = [[TSQuotedMessage alloc] initWithTimestamp:parentMessage.timestamp
-                                                                  authorId:authorId
-                                                                 messageId:messageRefString
-                                                                      body:parentMessage.plainTextBody
-                                             receivedQuotedAttachmentInfos:nil];
-            }
-        }
-        
-        // Build the message
-        incomingMessage = [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:envelope.timestamp
-                                                                            serverAge:envelope.age
-                                                                             inThread:thread
-                                                                             authorId:envelope.source
-                                                                       sourceDeviceId:envelope.sourceDevice
-                                                                          messageBody:dataMessage.body
-                                                                        attachmentIds:attachmentIds
-                                                                     expiresInSeconds:dataMessage.expireTimer
-                                                                        quotedMessage:quotedMessage];
-        
-        incomingMessage.uniqueId = [jsonPayload objectForKey:FLMessageIdKey];
-        incomingMessage.messageType = [jsonPayload objectForKey:FLMessageTypeKey];
+    NSString *messageId = [jsonPayload objectForKey:FLMessageIdKey];
+    if (messageId.length == 0) {
+        DDLogError(@"%@: received message with no id.", self.logTag);
+        return nil;
     }
-    incomingMessage.forstaPayload = [jsonPayload copy];
+    
+    TSIncomingMessage *incomingMessage = [TSIncomingMessage fetchObjectWithUniqueID:messageId transaction:transaction];
+    
+    if (incomingMessage != nil) {
+        DDLogError(@"%@: received duplicate message id: %@", self.logTag, messageId);
+        return nil;
+    }
+    
+    // Quoted/Replay message handling
+    NSString *messageRefString = [jsonPayload objectForKey:@"messageRef"];
+    TSQuotedMessage *quotedMessage = nil;
+    if (messageRefString.length > 0) {
+        TSMessage *parentMessage = [TSMessage fetchObjectWithUniqueID:messageRefString transaction:transaction];
+        
+        if (parentMessage != nil) {
+            NSString *authorId = @"Unknown user";
+            if ([parentMessage isKindOfClass:[TSOutgoingMessage class]]) {
+                authorId = [TSAccountManager localUID];
+            } else if ([parentMessage isKindOfClass:[TSIncomingMessage class]]) {
+                authorId = [(TSIncomingMessage *)parentMessage authorId];
+            }
+            
+            quotedMessage = [[TSQuotedMessage alloc] initWithTimestamp:parentMessage.timestamp
+                                                              authorId:authorId
+                                                             messageId:messageRefString
+                                                                  body:parentMessage.plainTextBody
+                                         receivedQuotedAttachmentInfos:nil];
+        }
+    }
+    
+    // Build the message
+    incomingMessage = [[TSIncomingMessage alloc] initIncomingMessageWithTimestamp:envelope.timestamp
+                                                                        serverAge:envelope.age
+                                                                         inThread:thread
+                                                                         authorId:envelope.source
+                                                                   sourceDeviceId:envelope.sourceDevice
+                                                                      messageBody:dataMessage.body
+                                                                    attachmentIds:attachmentIds
+                                                                 expiresInSeconds:dataMessage.expireTimer
+                                                                    quotedMessage:quotedMessage];
+    
+    incomingMessage.uniqueId = [jsonPayload objectForKey:FLMessageIdKey];
+    incomingMessage.messageType = [jsonPayload objectForKey:FLMessageTypeKey];
+    incomingMessage.forstaPayload = jsonPayload;
     [incomingMessage saveWithTransaction:transaction];
     
     if (incomingMessage && thread) {
