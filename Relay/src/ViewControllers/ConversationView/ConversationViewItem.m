@@ -531,7 +531,7 @@ NSString *NSStringForOWSMessageCellType(OWSMessageCellType cellType)
         if (message.giphyImageData == nil) {
             self.mediaSize = [UIImage imageNamed:@"giphy_logo"].size;
         } else {
-            UIImage *image = [UIImage imageWithData:message.giphyImageData];
+            YYImage *image = [YYImage imageWithData:message.giphyImageData];
             if (image != nil) {
                 self.mediaSize = image.size;
             } else {
