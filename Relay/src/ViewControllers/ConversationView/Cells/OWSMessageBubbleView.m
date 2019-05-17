@@ -937,7 +937,7 @@ NS_ASSUME_NONNULL_BEGIN
                     [strongSelf.cellMediaCache setObject:giphyImage forKey:strongSelf.viewItem.interaction.uniqueId];
                 }
             } else {
-                giphyImage = [YYImage imageNamed:@"giphy_logo"];
+                giphyImage = (YYImage *)[UIImage imageNamed:@"giphy_logo"];
             }
         }
         giphyImageView.image = giphyImage;
