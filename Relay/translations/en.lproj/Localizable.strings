@@ -2368,3 +2368,6 @@
 "NEW_THREAD" = "New Conversation";
 
 "FOUND_DUPLICATE_THREAD_ALERT_MESSAGE" = "Found matching conversation(s)\n\nWould you like to continue an existing conversation or start a new one?";
+
+"YES" = "Yes";
+"NO" = "No";

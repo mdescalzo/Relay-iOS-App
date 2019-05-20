@@ -365,6 +365,45 @@ typedef enum : NSUInteger {
     [self hideInputIfNeeded];
 }
 
+-(void)setupMappings {
+    __block BOOL viewExtNotReady = YES;
+    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        if ([transaction ext:TSMessageDatabaseViewExtensionName] != nil) {
+            viewExtNotReady = NO;
+        }
+    }];
+    
+    if (viewExtNotReady) {
+        DDLogDebug(@"%@: TSMessageDatabaseViewExtensionName not ready.", self.logTag);
+        return;
+    }
+    
+    if (self.thread.uniqueId.length > 0) {
+        self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[ self.thread.uniqueId.lowercaseString ]
+                                                                          view:TSMessageDatabaseViewExtensionName];
+    } else {
+        OWSFailDebug(@"uniqueId unexpectedly empty for thread: %@", self.thread);
+        self.messageMappings =
+        [[YapDatabaseViewMappings alloc] initWithGroups:@[] view:TSMessageDatabaseViewExtensionName];
+        return;
+    }
+    // Cells' appearance can depend on adjacent cells in b oth directions.
+    [self.messageMappings setCellDrawingDependencyOffsets:[NSSet setWithArray:@[
+                                                                                @(-1),
+                                                                                @(+1),
+                                                                                ]]
+                                                 forGroup:self.thread.uniqueId.lowercaseString];
+    
+    // We need to impose the range restrictions on the mappings immediately to avoid
+    // doing a great deal of unnecessary work and causing a perf hotspot.
+    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        
+        [self.messageMappings updateWithTransaction:transaction];
+    }];
+    [self updateMessageMappingRangeOptions];
+    [self updateShouldObserveDBModifications];
+}
+
 - (void)configureForThread:(TSThread *)thread
                     action:(ConversationViewAction)action
             focusMessageId:(nullable NSString *)focusMessageId
@@ -385,30 +424,7 @@ typedef enum : NSUInteger {
     [self ensureDynamicInteractions];
     [[OWSPrimaryStorage sharedManager] updateUIDatabaseConnectionToLatest];
 
-    if (thread.uniqueId.length > 0) {
-        self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[ thread.uniqueId.lowercaseString ]
-                                                                          view:TSMessageDatabaseViewExtensionName];
-    } else {
-        OWSFailDebug(@"uniqueId unexpectedly empty for thread: %@", thread);
-        self.messageMappings =
-            [[YapDatabaseViewMappings alloc] initWithGroups:@[] view:TSMessageDatabaseViewExtensionName];
-        return;
-    }
-
-    // Cells' appearance can depend on adjacent cells in both directions.
-    [self.messageMappings setCellDrawingDependencyOffsets:[NSSet setWithArray:@[
-        @(-1),
-        @(+1),
-    ]]
-                                                 forGroup:self.thread.uniqueId.lowercaseString];
-
-    // We need to impose the range restrictions on the mappings immediately to avoid
-    // doing a great deal of unnecessary work and causing a perf hotspot.
-    [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        [self.messageMappings updateWithTransaction:transaction];
-    }];
-    [self updateMessageMappingRangeOptions];
-    [self updateShouldObserveDBModifications];
+    [self setupMappings];
 
     self.reloadTimer = [NSTimer weakScheduledTimerWithTimeInterval:1.f
                                                             target:self
@@ -2911,6 +2927,11 @@ typedef enum : NSUInteger {
     }
     
 //    DDLogVerbose(@"%@ %s", self.logTag, __PRETTY_FUNCTION__);
+    if (self.messageMappings == nil) {
+        [self setupMappings];
+        [self.collectionView reloadData];
+        return;
+    }
 
     NSArray *notifications = notification.userInfo[OWSUIDatabaseConnectionNotificationsKey];
     OWSAssertDebug([notifications isKindOfClass:[NSArray class]]);
