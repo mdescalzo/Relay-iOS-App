@@ -5,7 +5,7 @@ use_frameworks!
 
 def shared_pods
     # OWS Pods
-    pod 'AxolotlKit', git: 'https://github.com/signalapp/SignalProtocolKit.git', branch: 'master', inhibit_warnings: true
+    pod 'AxolotlKit', git: 'https://github.com/signalapp/SignalProtocolKit.git', commit: 'aa4b0a7bfac4053769ce3dfc8187c696ec045c6a',  inhibit_warnings: true
     pod 'HKDFKit', git: 'https://github.com/signalapp/HKDFKit.git', inhibit_warnings: true
     pod 'GRKOpenSSLFramework', git: 'https://github.com/signalapp/GRKOpenSSLFramework', inhibit_warnings: true
     pod 'SocketRocket', :git => 'https://github.com/signalapp/SocketRocket.git', branch: 'mkirk/handle-sec-err', inhibit_warnings: true
