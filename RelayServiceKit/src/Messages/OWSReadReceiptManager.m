@@ -505,12 +505,9 @@ NSString *const OWSReadReceiptManagerAreReadReceiptsEnabled = @"areReadReceiptsE
                   BOOL *stop) {
          
          if (![object conformsToProtocol:@protocol(OWSReadTracking)]) {
-             OWSFailDebug(
-                     @"Expected to conform to OWSReadTracking: object with class: %@ collection: %@ "
-                     @"key: %@",
-                     [object class],
-                     collection,
-                     key);
+             [NSNotificationCenter.defaultCenter postNotificationNameAsync:FLICorruptViewExtensionNotification
+                                                                    object:nil
+                                                                  userInfo:@{@"viewName" : TSUnseenDatabaseViewExtensionName}];
              return;
          }
          id<OWSReadTracking> possiblyRead = (id<OWSReadTracking>)object;

@@ -659,16 +659,21 @@ class NewConversationViewController: UIViewController, UISearchBarDelegate, UITa
     }
     
     private func objectForIndexPath(indexPath: IndexPath) -> NSObject {
-        
         var viewExtensionName = FLTagDatabaseViewExtensionName
         if searchBar?.text?.count ?? 0 > 0 {
             viewExtensionName = FLFilteredTagDatabaseViewExtensionName
         }
-
         var object = NSObject()
         self.uiDBConnection.read { transaction in
             let viewTransaction: YapDatabaseViewTransaction = transaction.ext(viewExtensionName) as! YapDatabaseViewTransaction
-            object = viewTransaction.object(at: indexPath, with: self.tagMappings!) as! NSObject
+            if let tmpObject = viewTransaction.object(at: indexPath, with: self.tagMappings!) as? NSObject {
+                object = tmpObject
+            } else {
+                NotificationCenter.default.postNotificationNameAsync(NSNotification.Name.FLICorruptViewExtension,
+                                                                     object: nil,
+                                                                     userInfo: ["viewName" : TSThreadDatabaseViewExtensionName])
+                
+            }
         }
         return object
     }

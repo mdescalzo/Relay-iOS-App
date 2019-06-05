@@ -437,7 +437,10 @@ NS_ASSUME_NONNULL_BEGIN
                   usingBlock:^(
                       NSString *collection, NSString *key, id object, id metadata, NSUInteger index, BOOL *stop) {
                       if (![object isKindOfClass:[TSInteraction class]]) {
-                          OWSFailDebug(@"Expected a TSInteraction: %@", [object class]);
+                          [NSNotificationCenter.defaultCenter postNotificationNameAsync:FLICorruptViewExtensionNotification
+                                                                                 object:nil
+                                                                               userInfo:@{@"viewName" : TSMessageDatabaseViewExtensionName}];
+
                           return;
                       }
 

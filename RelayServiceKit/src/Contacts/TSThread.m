@@ -158,8 +158,9 @@ NSString *const TSThread_NotificationKey_UniqueId = @"TSThread_NotificationKey_U
                                     }];
     
     if (didDetectCorruption) {
-        DDLogWarn(@"%@ incrementing version of: %@", self.logTag, TSMessageDatabaseViewExtensionName);
-        [OWSPrimaryStorage incrementVersionOfDatabaseExtension:TSMessageDatabaseViewExtensionName];
+        [NSNotificationCenter.defaultCenter postNotificationNameAsync:FLICorruptViewExtensionNotification
+                                                               object:nil
+                                                             userInfo:@{@"viewName" : TSMessageDatabaseViewExtensionName}];
     }
     
     for (NSString *interactionId in interactionIds) {

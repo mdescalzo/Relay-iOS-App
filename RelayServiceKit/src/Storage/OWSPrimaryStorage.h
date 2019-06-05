@@ -12,6 +12,9 @@ extern NSString *const OWSUIDatabaseConnectionWillUpdateExternallyNotification;
 extern NSString *const OWSUIDatabaseConnectionDidUpdateExternallyNotification;
 extern NSString *const OWSUIDatabaseConnectionNotificationsKey;
 
+extern NSString *const FLICorruptViewExtensionNotification;
+
+
 @interface OWSPrimaryStorage : OWSStorage
 
 - (instancetype)init NS_UNAVAILABLE;
