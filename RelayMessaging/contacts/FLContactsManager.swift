@@ -674,15 +674,15 @@ import RelayServiceKit
             let cacheKey = "gravatar:\(recipientId)" as NSString
             self.avatarCache.setObject(gravatarImage, forKey: cacheKey)
             
-            self.readWriteConnection.asyncReadWrite({ (transaction) in
-                recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
-                    guard let theRecipient = obj as? RelayRecipient else {
-                        owsFailDebug("\(self.logTag): Attempt to apply changes to invalid object.")
-                        return
-                    }                    
-                    theRecipient.gravatarImage = gravatarImage
-                })
-            });
+//            self.readWriteConnection.asyncReadWrite({ (transaction) in
+//                recipient.applyChange(toSelfAndLatestCopy: transaction, change: { (obj) in
+//                    guard let theRecipient = obj as? RelayRecipient else {
+//                        owsFailDebug("\(self.logTag): Attempt to apply changes to invalid object.")
+//                        return
+//                    }                    
+//                    theRecipient.gravatarImage = gravatarImage
+//                })
+//            });
         }
     }
     

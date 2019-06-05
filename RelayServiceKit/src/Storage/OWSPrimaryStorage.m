@@ -32,6 +32,9 @@ NSString *const OWSUIDatabaseConnectionNotificationsKey = @"OWSUIDatabaseConnect
 NSString *const OWSPrimaryStorageExceptionName_CouldNotCreateDatabaseDirectory
     = @"TSStorageManagerExceptionName_CouldNotCreateDatabaseDirectory";
 
+NSString *const FLICorruptViewExtensionNotification = @"FLICorruptViewExtensionNotification";
+
+
 void RunSyncRegistrationsForStorage(OWSStorage *storage)
 {
     OWSCAssertDebug(storage);
@@ -141,16 +144,29 @@ void VerifyRegistrationsForPrimaryStorage(OWSStorage *storage)
                                                  selector:@selector(yapDatabaseModified:)
                                                      name:YapDatabaseModifiedNotification
                                                    object:self.dbNotificationObject];
-
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(yapDatabaseModifiedExternally:)
                                                      name:YapDatabaseModifiedExternallyNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(corruptViewExtensionDetected:)
+                                                     name:FLICorruptViewExtensionNotification
                                                    object:nil];
 
         OWSSingletonAssert();
     }
 
     return self;
+}
+
+-(void)corruptViewExtensionDetected:(NSNotification *)notification {
+    if (notification.userInfo != nil) {
+        NSString *viewName = notification.userInfo[@"viewName"];
+        if (viewName.length > 0) {
+            DDLogWarn(@"CORRUPTION DETECTED: %@ incrementing version of: %@", self.logTag, viewName);
+            [OWSPrimaryStorage incrementVersionOfDatabaseExtension:viewName];
+        }
+    }
 }
 
 - (void)yapDatabaseModifiedExternally:(NSNotification *)notification

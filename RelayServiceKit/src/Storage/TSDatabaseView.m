@@ -69,9 +69,8 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
                                      storage:(nonnull OWSStorage *)storage
 {
     YapDatabaseView *existingView = [storage registeredExtension:viewName];
-    if (!existingView) {
-        OWSFailDebug(@"Reregistering an unregistered view: %@", viewName);
-        return;
+    if (existingView) {
+        [storage unregisterExtension:existingView withName:viewName];
     }
     [storage registerExtension:existingView withName:viewName];
 }

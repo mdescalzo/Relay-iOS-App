@@ -609,6 +609,13 @@ NSString *const kNSUserDefaults_DatabaseExtensionVersionMap = @"kNSUserDefaults_
     return [self.database registerExtension:extension withName:extensionName];
 }
 
+-(void)unregisterExtension:(YapDatabaseExtension *)extension withName:(NSString *)extensionName {
+    if ([self.extensionNames containsObject:extensionName]){
+        [self.extensionNames removeObject:extensionName];
+    }
+    [self.database unregisterExtensionWithName:extensionName];
+}
+
 - (void)asyncRegisterExtension:(YapDatabaseExtension *)extension
                       withName:(NSString *)extensionName
 {

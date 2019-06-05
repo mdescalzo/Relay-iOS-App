@@ -69,6 +69,7 @@ typedef void (^OWSStorageMigrationBlock)(void);
 + (void)incrementVersionOfDatabaseExtension:(NSString *)extensionName;
 
 - (BOOL)registerExtension:(YapDatabaseExtension *)extension withName:(NSString *)extensionName;
+- (void)unregisterExtension:(YapDatabaseExtension *)extension withName:(NSString *)extensionName;
 
 - (void)asyncRegisterExtension:(YapDatabaseExtension *)extension withName:(NSString *)extensionName;
 - (void)asyncRegisterExtension:(YapDatabaseExtension *)extension

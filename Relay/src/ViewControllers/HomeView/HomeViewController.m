@@ -882,6 +882,11 @@ NSString *const kArchivedConversationsReuseIdentifier = @"kArchivedConversations
         thread = [[transaction extension:TSThreadDatabaseViewExtensionName] objectAtIndexPath:indexPath
                                                                                  withMappings:self.threadMappings];
     }];
+    if (thread == nil) {
+        [NSNotificationCenter.defaultCenter postNotificationNameAsync:FLICorruptViewExtensionNotification
+                                                               object:nil
+                                                             userInfo:@{@"viewName" : TSThreadDatabaseViewExtensionName}];
+    }
     return thread;
 }
 

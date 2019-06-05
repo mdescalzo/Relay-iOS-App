@@ -3033,6 +3033,7 @@ typedef enum : NSUInteger {
         // using the more extreme actions in the debug UI.
         OWSFailDebug(@"%@ hasMalformedRowChange", self.logTag);
         // Reregister the view extension which produced the malformed change.
+        [OWSPrimaryStorage incrementVersionOfDatabaseExtension:TSMessageDatabaseViewExtensionName];
         [TSDatabaseView reregisterMessageDatabaseViewWithName:TSMessageDatabaseViewExtensionName
                                                       storage:OWSPrimaryStorage.sharedManager];
         [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
@@ -4356,6 +4357,7 @@ typedef enum : NSUInteger {
 
     uint64_t previousLastTimestamp = self.previousLastTimestamp.unsignedLongLongValue;
     __block NSUInteger addedItemCount = 0;
+    __block BOOL didDetectCorruption = NO;
     [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         [[transaction ext:TSMessageDatabaseViewExtensionName]
          enumerateRowsInGroup:self.thread.uniqueId
@@ -4368,7 +4370,7 @@ typedef enum : NSUInteger {
                       BOOL *stop) {
              
              if (![object isKindOfClass:[TSInteraction class]]) {
-                 OWSFailDebug(@"Expected a TSInteraction: %@", [object class]);
+                 didDetectCorruption = YES;
                  return;
              }
              
@@ -4381,6 +4383,13 @@ typedef enum : NSUInteger {
              addedItemCount++;
          }];
     }];
+    
+    if (didDetectCorruption) {
+        [NSNotificationCenter.defaultCenter postNotificationNameAsync:FLICorruptViewExtensionNotification
+                                                               object:nil
+                                                             userInfo:@{@"viewName" : TSMessageDatabaseViewExtensionName}];
+    }
+
     DDLogInfo(@"%@ extendRangeToIncludeUnobservedItems: %zd", self.logTag, addedItemCount);
     self.lastRangeLength += addedItemCount;
     // We only want to do this once, so clear the "previous last timestamp".
@@ -4443,6 +4452,7 @@ typedef enum : NSUInteger {
     NSUInteger count = [self.messageMappings numberOfItemsInSection:0];
     BOOL isGroupThread = self.isGroupConversation;
 
+    __block BOOL didDetectCorruption = NO;
     [self.uiDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         YapDatabaseViewTransaction *viewTransaction = [transaction ext:TSMessageDatabaseViewExtensionName];
         OWSAssertDebug(viewTransaction);
@@ -4450,8 +4460,7 @@ typedef enum : NSUInteger {
             TSInteraction *interaction =
                 [viewTransaction objectAtRow:row inSection:0 withMappings:self.messageMappings];
             if (!interaction) {
-                OWSFailDebug(@"%@ missing interaction in message mappings: %zd / %zd.", self.logTag, row, count);
-                // TODO: Add analytics.
+                didDetectCorruption = YES;
                 continue;
             }
             if (!interaction.uniqueId) {
@@ -4478,6 +4487,12 @@ typedef enum : NSUInteger {
             viewItemCache[interaction.uniqueId] = viewItem;
         }
     }];
+
+    if (didDetectCorruption) {
+        [NSNotificationCenter.defaultCenter postNotificationNameAsync:FLICorruptViewExtensionNotification
+                                                               object:nil
+                                                             userInfo:@{@"viewName" : TSMessageDatabaseViewExtensionName}];
+    }
 
     // Update the "break" properties (shouldShowDate and unreadIndicator) of the view items.
     BOOL shouldShowDateOnNextViewItem = YES;
