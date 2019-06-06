@@ -18,7 +18,7 @@
 - (PreKeyRecord *)getOrGenerateLastResortKey
 {
     if ([self containsPreKey:kPreKeyOfLastResortId]) {
-        return [self throws_loadPreKey:kPreKeyOfLastResortId];
+        return [self loadPreKey:kPreKeyOfLastResortId];
     } else {
         PreKeyRecord *lastResort =
             [[PreKeyRecord alloc] initWithId:kPreKeyOfLastResortId keyPair:[Curve25519 generateKeyPair]];
@@ -60,18 +60,6 @@
     }
 }
 
-- (PreKeyRecord *)throws_loadPreKey:(int)preKeyId
-{
-    PreKeyRecord *preKeyRecord = [self.dbReadConnection preKeyRecordForKey:[self keyFromInt:preKeyId]
-                                                              inCollection:OWSPrimaryStoragePreKeyStoreCollection];
-
-    if (!preKeyRecord) {
-        OWSRaiseException(InvalidKeyIdException, @"No pre key found matching key id");
-    } else {
-        return preKeyRecord;
-    }
-}
-
 - (void)storePreKey:(int)preKeyId preKeyRecord:(PreKeyRecord *)record
 {
     [self.dbReadWriteConnection setObject:record
@@ -90,6 +78,11 @@
 {
     [self.dbReadWriteConnection removeObjectForKey:[self keyFromInt:preKeyId]
                                       inCollection:OWSPrimaryStoragePreKeyStoreCollection];
+}
+
+- (nullable PreKeyRecord *)loadPreKey:(int)preKeyId {
+    return [self.dbReadConnection preKeyRecordForKey:[self keyFromInt:preKeyId]
+                                        inCollection:OWSPrimaryStoragePreKeyStoreCollection];
 }
 
 - (int)nextPreKeyId

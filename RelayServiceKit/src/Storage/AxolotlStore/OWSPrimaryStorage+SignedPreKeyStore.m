@@ -36,19 +36,6 @@ NSString *const OWSPrimaryStorageKeyPrekeyCurrentSignedPrekeyId = @"currentSigne
         generatedAt:[NSDate date]];
 }
 
-- (SignedPreKeyRecord *)throws_loadSignedPrekey:(int)signedPreKeyId
-{
-    SignedPreKeyRecord *preKeyRecord =
-        [self.dbReadConnection signedPreKeyRecordForKey:[self keyFromInt:signedPreKeyId]
-                                           inCollection:OWSPrimaryStorageSignedPreKeyStoreCollection];
-
-    if (!preKeyRecord) {
-        OWSRaiseException(InvalidKeyIdException, @"No signed pre key found matching key id");
-    } else {
-        return preKeyRecord;
-    }
-}
-
 - (nullable SignedPreKeyRecord *)loadSignedPrekeyOrNil:(int)signedPreKeyId
 {
     return [self.dbReadConnection signedPreKeyRecordForKey:[self keyFromInt:signedPreKeyId]
@@ -91,6 +78,12 @@ NSString *const OWSPrimaryStorageKeyPrekeyCurrentSignedPrekeyId = @"currentSigne
     [self.dbReadWriteConnection removeObjectForKey:[self keyFromInt:signedPrekeyId]
                                       inCollection:OWSPrimaryStorageSignedPreKeyStoreCollection];
 }
+
+- (nullable SignedPreKeyRecord *)loadSignedPreKey:(int)signedPreKeyId {
+    return [self.dbReadConnection signedPreKeyRecordForKey:[self keyFromInt:signedPreKeyId]
+                                              inCollection:OWSPrimaryStorageSignedPreKeyStoreCollection];
+}
+
 
 - (nullable NSNumber *)currentSignedPrekeyId
 {
