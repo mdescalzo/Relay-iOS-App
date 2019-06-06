@@ -1707,7 +1707,7 @@ typedef enum : NSUInteger {
 - (void)tappedCorruptedMessage:(TSErrorMessage *)message
 {
     NSString *alertMessage = [NSString
-        stringWithFormat:NSLocalizedString(@"CORRUPTED_SESSION_DESCRIPTION", @"ActionSheet title"), self.thread.title];
+        stringWithFormat:NSLocalizedString(@"CORRUPTED_SESSION_DESCRIPTION", @"ActionSheet title"), self.thread.displayName];
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:alertMessage
