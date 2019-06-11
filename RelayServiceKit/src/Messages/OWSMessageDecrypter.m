@@ -269,8 +269,7 @@ NS_ASSUME_NONNULL_BEGIN
         TSErrorMessage *errorMessage;
         
         if ([exception.name isEqualToString:NoSessionException]) {
-            // Supressing this messaeg.
-//            errorMessage = [TSErrorMessage missingSessionWithEnvelope:envelope withTransaction:transaction];
+            errorMessage = [TSErrorMessage missingSessionWithEnvelope:envelope withTransaction:transaction];
             return;
         } else if ([exception.name isEqualToString:InvalidKeyException]) {
             errorMessage = [TSErrorMessage invalidKeyExceptionWithEnvelope:envelope withTransaction:transaction];
