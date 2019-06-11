@@ -1717,12 +1717,14 @@ typedef enum : NSUInteger {
 
     UIAlertAction *resetSessionAction = [UIAlertAction
         actionWithTitle:NSLocalizedString(@"FINGERPRINT_SHRED_KEYMATERIAL_BUTTON", @"")
-                  style:UIAlertActionStyleDefault
-                handler:^(UIAlertAction *action) {
-                    [OWSSessionResetJob runWithThread:self.thread
-                                        messageSender:self.messageSender
-                                       primaryStorage:self.primaryStorage];
-                }];
+                                         style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertAction *action) {
+                                             OWSSessionResetJob *job = [[OWSSessionResetJob alloc] initWithRecipientId:message.recipientId
+                                                                                                                thread:self.thread
+                                                                                                         messageSender:self.messageSender
+                                                                                                        primaryStorage:self.primaryStorage];
+                                             [job run];
+                                         }];
     [alertController addAction:resetSessionAction];
 
     [self dismissKeyBoard];
