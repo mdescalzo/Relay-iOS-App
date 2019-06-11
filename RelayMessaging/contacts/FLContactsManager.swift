@@ -692,29 +692,34 @@ import RelayServiceKit
         DispatchQueue.global(qos: .background).async {
             let notifications = self.readConnection.beginLongLivedReadTransaction()
             
+            var changedRecipientIds = [String]()
             self.readConnection.enumerateChangedKeys(inCollection: RelayRecipient.collection(),
-                                                     in: notifications) { (recipientId, stop) in
-                                                        // Remove cached recipient
-                                                        self.recipientCache.removeObject(forKey: recipientId as NSString)
-                                                        
-                                                        // Touch any threads which contain the recipient
-                                                        var threadsToTouch = [TSThread]()
-                                                        for obj in TSThread.allObjectsInCollection() {
-                                                            if let thread = obj as? TSThread {
-                                                                if thread.participantIds.contains(recipientId) {
-                                                                    threadsToTouch.append(thread)
-                                                                }
-                                                            }
-                                                        }
-                                                        if threadsToTouch.count > 0 {
-                                                            self.readWriteConnection.asyncReadWrite({ (transaction) in
-                                                                for thread in threadsToTouch {
-                                                                    thread.touch(with: transaction)
-                                                                }
-                                                            })
-                                                        }
-                                                        
+                                                     in: notifications,
+                                                     using: { (recipientId, stop) in
+                                                        changedRecipientIds.append(recipientId)
+            })
+            
+            if changedRecipientIds.count > 0 {
+                let allThreads = TSThread.allObjectsInCollection() as! [TSThread]
+                var threadsToTouch = [TSThread]()
+                for changedId in changedRecipientIds {
+                    // Remove cached recipient
+                    self.recipientCache.removeObject(forKey: changedId as NSString)
+                    // Touch any threads which contain the recipient
+                    for thread in allThreads {
+                        if thread.participantIds.contains(changedId) {
+                            threadsToTouch.append(thread)
+                        }
+                    }
+                }
+                self.readWriteConnection.asyncReadWrite({ (transaction) in
+                    for thread in threadsToTouch {
+                        thread.touch(with: transaction)
+                    }
+                })
+
             }
+            
             
             self.readConnection.enumerateChangedKeys(inCollection: FLTag.collection(),
                                                      in: notifications) { (recipientId, stop) in
