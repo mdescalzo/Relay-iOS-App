@@ -23,7 +23,7 @@ public class SessionResetJob: NSObject {
         self.primaryStorage = primaryStorage
     }
 
-    func run() {
+    @objc public func run() {
         Logger.info("\(TAG) Local user reset session.")
 
         let dbConnection: OWSDatabaseConnection = OWSPrimaryStorage.shared().newDatabaseConnection() as! OWSDatabaseConnection
