@@ -92,6 +92,8 @@ static NSTimeInterval launchStartedAt;
     if (isLoggingEnabled) {
         [DebugLogger.sharedLogger enableFileLogging];
     }
+    [self startupLogging];
+
 
     DDLogWarn(@"%@ application: didFinishLaunchingWithOptions.", self.logTag);
 
@@ -102,19 +104,18 @@ static NSTimeInterval launchStartedAt;
 
     // We need to do this _after_ we set up logging, when the keychain is unlocked,
     // but before we access YapDatabase, files on disk, or NSUserDefaults
-    if (![self ensureIsReadyForAppExtensions]) {
-        // If this method has failed; do nothing.
-        //
-        // ensureIsReadyForAppExtensions will show a failure mode UI that
-        // lets users report this error.
-        DDLogInfo(@"%@ application: didFinishLaunchingWithOptions failed.", self.logTag);
-
-        return YES;
-    }
+//    if (![self ensureIsReadyForAppExtensions]) {
+//        // If this method has failed; do nothing.
+//        //
+//        // ensureIsReadyForAppExtensions will show a failure mode UI that
+//        // lets users report this error.
+//        DDLogInfo(@"%@ application: didFinishLaunchingWithOptions failed.", self.logTag);
+//
+//        return YES;
+//    }
 
     [AppVersion sharedInstance];
 
-    [self startupLogging];
 
     // Prevent the device from sleeping during database view async registration
     // (e.g. long database upgrades).
@@ -210,73 +211,73 @@ static NSTimeInterval launchStartedAt;
     }
 }
 
-- (BOOL)ensureIsReadyForAppExtensions
-{
-    // Given how sensitive this migration is, we verbosely
-    // log the contents of all involved paths before and after.
-    //
-    // TODO: Remove this logging once we have high confidence
-    // in our migration logic.
-    NSArray<NSString *> *paths = @[
-//        OWSPrimaryStorage.legacyDatabaseFilePath,
-//        OWSPrimaryStorage.legacyDatabaseFilePath_SHM,
-//        OWSPrimaryStorage.legacyDatabaseFilePath_WAL,
-        OWSPrimaryStorage.sharedDataDatabaseFilePath,
-        OWSPrimaryStorage.sharedDataDatabaseFilePath_SHM,
-        OWSPrimaryStorage.sharedDataDatabaseFilePath_WAL,
-    ];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    for (NSString *path in paths) {
-        if ([fileManager fileExistsAtPath:path]) {
-            DDLogInfo(@"%@ storage file: %@, %@", self.logTag, path, [OWSFileSystem fileSizeOfPath:path]);
-        }
-    }
-
-    if ([OWSPreferences isReadyForAppExtensions]) {
-        return YES;
-    }
-
-    OWSBackgroundTask *_Nullable backgroundTask = [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];
-    SUPPRESS_DEADSTORE_WARNING(backgroundTask);
-
-//    if ([NSFileManager.defaultManager fileExistsAtPath:OWSPrimaryStorage.legacyDatabaseFilePath]) {
-//        DDLogInfo(@"%@ Legacy Database file size: %@",
-//            self.logTag,
-//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath]);
-//        DDLogInfo(@"%@ \t Legacy SHM file size: %@",
-//            self.logTag,
-//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_SHM]);
-//        DDLogInfo(@"%@ \t Legacy WAL file size: %@",
-//            self.logTag,
-//            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_WAL]);
-//    }
-
-//    NSError *_Nullable error = [self convertDatabaseIfNecessary];
-//
-//    if (!error) {
-//        [NSUserDefaults migrateToSharedUserDefaults];
+//- (BOOL)ensureIsReadyForAppExtensions
+//{
+//    // Given how sensitive this migration is, we verbosely
+//    // log the contents of all involved paths before and after.
+//    //
+//    // TODO: Remove this logging once we have high confidence
+//    // in our migration logic.
+//    NSArray<NSString *> *paths = @[
+////        OWSPrimaryStorage.legacyDatabaseFilePath,
+////        OWSPrimaryStorage.legacyDatabaseFilePath_SHM,
+////        OWSPrimaryStorage.legacyDatabaseFilePath_WAL,
+//        OWSPrimaryStorage.sharedDataDatabaseFilePath,
+//        OWSPrimaryStorage.sharedDataDatabaseFilePath_SHM,
+//        OWSPrimaryStorage.sharedDataDatabaseFilePath_WAL,
+//    ];
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    for (NSString *path in paths) {
+//        if ([fileManager fileExistsAtPath:path]) {
+//            DDLogInfo(@"%@ storage file: %@, %@", self.logTag, path, [OWSFileSystem fileSizeOfPath:path]);
+//        }
 //    }
 //
-//    if (!error) {
-//        error = [OWSPrimaryStorage migrateToSharedData];
-//    }
-//    if (!error) {
-//        error = [OWSUserProfile migrateToSharedData];
-//    }
-//    if (!error) {
-//        error = [TSAttachmentStream migrateToSharedData];
+//    if ([OWSPreferences isReadyForAppExtensions]) {
+//        return YES;
 //    }
 //
-//    if (error) {
-//        OWSFail(@"%@ database conversion failed: %@", self.logTag, error);
-//        [self showLaunchFailureUI:error];
-//        return NO;
-//    }
-
-    backgroundTask = nil;
-
-    return YES;
-}
+//    OWSBackgroundTask *_Nullable backgroundTask = [OWSBackgroundTask backgroundTaskWithLabelStr:__PRETTY_FUNCTION__];
+//    SUPPRESS_DEADSTORE_WARNING(backgroundTask);
+//
+////    if ([NSFileManager.defaultManager fileExistsAtPath:OWSPrimaryStorage.legacyDatabaseFilePath]) {
+////        DDLogInfo(@"%@ Legacy Database file size: %@",
+////            self.logTag,
+////            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath]);
+////        DDLogInfo(@"%@ \t Legacy SHM file size: %@",
+////            self.logTag,
+////            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_SHM]);
+////        DDLogInfo(@"%@ \t Legacy WAL file size: %@",
+////            self.logTag,
+////            [OWSFileSystem fileSizeOfPath:OWSPrimaryStorage.legacyDatabaseFilePath_WAL]);
+////    }
+//
+////    NSError *_Nullable error = [self convertDatabaseIfNecessary];
+////
+////    if (!error) {
+////        [NSUserDefaults migrateToSharedUserDefaults];
+////    }
+////
+////    if (!error) {
+////        error = [OWSPrimaryStorage migrateToSharedData];
+////    }
+////    if (!error) {
+////        error = [OWSUserProfile migrateToSharedData];
+////    }
+////    if (!error) {
+////        error = [TSAttachmentStream migrateToSharedData];
+////    }
+////
+////    if (error) {
+////        OWSFail(@"%@ database conversion failed: %@", self.logTag, error);
+////        [self showLaunchFailureUI:error];
+////        return NO;
+////    }
+//
+//    backgroundTask = nil;
+//
+//    return YES;
+//}
 
 - (void)showLaunchFailureUI:(NSError *)error
 {
