@@ -60,13 +60,21 @@ NS_ASSUME_NONNULL_BEGIN
     // Message touch to reindex due to search bugs
     if ([self isVersion:previousVersion lessThan:@"2.0.4"]) {
         DDLogInfo(@"Touching messages in database.");
-        [OWSPrimaryStorage.dbReadWriteConnection asyncReadWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
-            for (TSIncomingMessage *message in [TSIncomingMessage allObjectsInCollection]) {
-                [message touchWithTransaction:transaction];
-            }
-            for (TSOutgoingMessage *message in [TSOutgoingMessage allObjectsInCollection]) {
-                [message touchWithTransaction:transaction];
-            }
+        [OWSPrimaryStorage.dbReadWriteConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction * _Nonnull transaction) {
+            [transaction enumerateKeysAndObjectsInCollection:[TSIncomingMessage collection]
+                                                  usingBlock:^(NSString *key, id object, BOOL *stop) {
+                                                      if ([object isKindOfClass:[TSIncomingMessage class]]) {
+                                                          TSIncomingMessage *message = (TSIncomingMessage *)object;
+                                                          [message touchWithTransaction:transaction];
+                                                      }
+                                                  }];
+            [transaction enumerateKeysAndObjectsInCollection:[TSOutgoingMessage collection]
+                                                  usingBlock:^(NSString *key, id object, BOOL *stop) {
+                                                      if ([object isKindOfClass:[TSIncomingMessage class]]) {
+                                                          TSOutgoingMessage *message = (TSOutgoingMessage *)object;
+                                                          [message touchWithTransaction:transaction];
+                                                      }
+                                                  }];
         }];
     }
 
