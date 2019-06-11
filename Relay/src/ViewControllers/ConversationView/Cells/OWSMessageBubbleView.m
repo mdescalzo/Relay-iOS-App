@@ -1147,7 +1147,9 @@ NS_ASSUME_NONNULL_BEGIN
             YYImage *image = [self.cellMediaCache objectForKey:self.viewItem.interaction.uniqueId];
             if (image == nil) {
                 TSMessage *message = (TSMessage *)self.viewItem.interaction;
-                image = [YYImage imageWithData:message.giphyImageData];
+                if (message.giphyImageData != nil) {
+                    image = [YYImage imageWithData:message.giphyImageData];
+                }
             }
             if (image == nil) {
                 result = CGSizeRound([UIImage imageNamed:@"giphy_logo"].size);
