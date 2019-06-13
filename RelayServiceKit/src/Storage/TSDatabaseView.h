@@ -47,7 +47,7 @@ extern NSString *const TSLazyRestoreAttachmentsDatabaseViewExtensionName;
 
 #pragma mark - Registration
 
-//+ (void)registerCrossProcessNotifier:(nonnull OWSStorage *)storage;
++ (void)registerCrossProcessNotifier:(nonnull OWSStorage *)storage;
 
 // This method must be called _AFTER_ asyncRegisterThreadInteractionsDatabaseView.
 + (void)asyncRegisterThreadDatabaseView:(nonnull OWSStorage *)storage;
