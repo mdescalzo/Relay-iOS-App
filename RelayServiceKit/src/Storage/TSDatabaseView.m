@@ -54,16 +54,16 @@ NSString *const TSLazyRestoreAttachmentsGroup = @"TSLazyRestoreAttachmentsGroup"
 
 @implementation TSDatabaseView
 
-//+ (void)registerCrossProcessNotifier:(nonnull OWSStorage *)storage
-//{
-//    OWSAssertDebug(storage);
-//
-//    // I don't think the identifier and name of this extension matter for our purposes,
-//    // so long as they don't conflict with any other extension names.
-//    YapDatabaseExtension *extension =
-//        [[YapDatabaseCrossProcessNotification alloc] initWithIdentifier:@"SignalCrossProcessNotifier"];
-//    [storage registerExtension:extension withName:@"SignalCrossProcessNotifier"];
-//}
++ (void)registerCrossProcessNotifier:(nonnull OWSStorage *)storage
+{
+    OWSAssertDebug(storage);
+
+    // I don't think the identifier and name of this extension matter for our purposes,
+    // so long as they don't conflict with any other extension names.
+    YapDatabaseExtension *extension =
+        [[YapDatabaseCrossProcessNotification alloc] initWithIdentifier:@"SignalCrossProcessNotifier"];
+    [storage registerExtension:extension withName:@"SignalCrossProcessNotifier"];
+}
 
 +(void)reregisterMessageDatabaseViewWithName:(nonnull NSString *)viewName
                                      storage:(nonnull OWSStorage *)storage

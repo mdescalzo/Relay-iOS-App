@@ -40,7 +40,7 @@ void RunSyncRegistrationsForStorage(OWSStorage *storage)
     OWSCAssertDebug(storage);
 
     // Synchronously register extensions which are essential for views.
-//    [TSDatabaseView registerCrossProcessNotifier:storage];
+    [TSDatabaseView registerCrossProcessNotifier:storage];
 }
 
 void RunAsyncRegistrationsForStorage(OWSStorage *storage, dispatch_block_t completion)
